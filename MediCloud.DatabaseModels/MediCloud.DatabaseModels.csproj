@@ -1,0 +1,248 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{B39BE293-0B49-49EC-8F44-9F719A91708C}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>MediCloud.DatabaseModels</RootNamespace>
+    <AssemblyName>MediCloud.DatabaseModels</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AUDIOMETRIA.cs" />
+    <Compile Include="BANCOS.cs" />
+    <Compile Include="CARGO.cs" />
+    <Compile Include="CENTROCUSTO.cs" />
+    <Compile Include="CIDADE.cs" />
+    <Compile Include="CLIENTE.cs" />
+    <Compile Include="CLIENTE_CONTATO.cs" />
+    <Compile Include="CLIENTE_CONTRATOFIXO.cs" />
+    <Compile Include="CLIENTE_CREDIARIO.cs" />
+    <Compile Include="CLIENTE_GRUPO.cs" />
+    <Compile Include="CLIENTE_OCUPACIONAL.cs" />
+    <Compile Include="CLIENTE_OUTRASEMP.cs" />
+    <Compile Include="COMPOSICOESCAIXA.cs" />
+    <Compile Include="CONTADOR.cs" />
+    <Compile Include="CONTASBANCARIAS.cs" />
+    <Compile Include="CONTASORC.cs" />
+    <Compile Include="CONTASPAGAR.cs" />
+    <Compile Include="CONTASRECEBER.cs" />
+    <Compile Include="CONTA_ORC.cs" />
+    <Compile Include="CONTA_ORC_GRU.cs" />
+    <Compile Include="CONTRATOSFORNEC.cs" />
+    <Compile Include="CONTRATO_FIXO.cs" />
+    <Compile Include="CONTRATO_FIXO_DET.cs" />
+    <Compile Include="CONT_MOV_CLI.cs" />
+    <Compile Include="EPCMSO.cs" />
+    <Compile Include="EPPRA.cs" />
+    <Compile Include="EXPORTACAO_NF.cs" />
+    <Compile Include="FATURAMENTO.cs" />
+    <Compile Include="FECHAMENTO_CAIXA.cs" />
+    <Compile Include="FORMADEPAGAMENTO.cs" />
+    <Compile Include="FORNECEDOR.cs" />
+    <Compile Include="FORNECEDORXPROCEDIMENTO.cs" />
+    <Compile Include="FORNECEDOR_CONTATO.cs" />
+    <Compile Include="FUNCIONARIO.cs" />
+    <Compile Include="HISCONFIRMACAO.cs" />
+    <Compile Include="LAUDOAUD.cs" />
+    <Compile Include="LAUDOAV.cs" />
+    <Compile Include="LAUDORX.cs" />
+    <Compile Include="LCTOSCAIXA.cs" />
+    <Compile Include="LCTOSCONTAS.cs" />
+    <Compile Include="LOGS.cs" />
+    <Compile Include="MODELOLAUDO.cs" />
+    <Compile Include="MOVIMENTO.cs" />
+    <Compile Include="MOVIMENTO_ARQUIVOS.cs" />
+    <Compile Include="MOVIMENTO_FECHAMENTO.cs" />
+    <Compile Include="MOVIMENTO_PROCEDIMENTO.cs" />
+    <Compile Include="MOVIMENTO_REFERENTE.cs" />
+    <Compile Include="MOV_PROC_COMPLETO.cs" />
+    <Compile Include="NATUREZA.cs" />
+    <Compile Include="NOTAFISCAL.cs" />
+    <Compile Include="PARAMETRO.cs" />
+    <Compile Include="PARAMETRO_TAB.cs" />
+    <Compile Include="PASTASMOV.cs" />
+    <Compile Include="PROCEDIMENTO.cs" />
+    <Compile Include="PROCEDIMENTO_GRUPO.cs" />
+    <Compile Include="PROCEDIMENTO_GRUPO_SUBGRUP.cs" />
+    <Compile Include="PROFISSIONAIS.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QUANTIDADE_NOTAFISCAL.cs" />
+    <Compile Include="RECOMENDACAO.cs" />
+    <Compile Include="RECOMENDACAOXASO.cs" />
+    <Compile Include="RECOMENDACAOXASOXPRO.cs" />
+    <Compile Include="RECOMENDACAOXRISCO.cs" />
+    <Compile Include="RISCO.cs" />
+    <Compile Include="ROTA.cs" />
+    <Compile Include="SEGMENTO.cs" />
+    <Compile Include="SELECTANUAL.cs" />
+    <Compile Include="selectultimomovcli.cs" />
+    <Compile Include="SELECTULTIMOMOVCLIENTE.cs" />
+    <Compile Include="SEQBANCOS.cs" />
+    <Compile Include="SEQCARGO.cs" />
+    <Compile Include="SEQCENTROCUSTO.cs" />
+    <Compile Include="SEQCIDADE.cs" />
+    <Compile Include="SEQCLIENTE.cs" />
+    <Compile Include="SEQCLIENTE_CONTATO.cs" />
+    <Compile Include="SEQCLIENTE_CREDIARIO.cs" />
+    <Compile Include="SEQCLIENTE_GRUPO.cs" />
+    <Compile Include="SEQCLIENTE_OUTRASEMP.cs" />
+    <Compile Include="SEQCOMPOSICOESCAIXA.cs" />
+    <Compile Include="SEQCONTADOR.cs" />
+    <Compile Include="SEQCONTASBANCARIAS.cs" />
+    <Compile Include="SEQCONTASORC.cs" />
+    <Compile Include="SEQCONTASPAGAR.cs" />
+    <Compile Include="SEQCONTASRECEBER.cs" />
+    <Compile Include="SEQCONTA_ORC.cs" />
+    <Compile Include="SEQCONTA_ORC_GRU.cs" />
+    <Compile Include="SEQCONTRATOSFORNEC.cs" />
+    <Compile Include="SEQCONTRATO_FIXO.cs" />
+    <Compile Include="SEQCONTRATO_FIXO_DET.cs" />
+    <Compile Include="SEQEPCMSO.cs" />
+    <Compile Include="SEQEPPRA.cs" />
+    <Compile Include="SEQFATURAMENTO.cs" />
+    <Compile Include="SEQFECHAMENTO_CAIXA.cs" />
+    <Compile Include="SEQFORMADEPAGAMENTO.cs" />
+    <Compile Include="SEQFORNECEDOR.cs" />
+    <Compile Include="SEQFORNECEDOR_CONTATO.cs" />
+    <Compile Include="SEQFUNCIONARIO.cs" />
+    <Compile Include="SEQHISCONFIRMACAO.cs" />
+    <Compile Include="SEQLAUDOAUD.cs" />
+    <Compile Include="SEQLAUDOAV.cs" />
+    <Compile Include="SEQLCTOSCAIXA.cs" />
+    <Compile Include="SEQLCTOSCONTAS.cs" />
+    <Compile Include="SEQLOGS.cs" />
+    <Compile Include="SEQMODELOLAUDO.cs" />
+    <Compile Include="SEQMOVIMENTO.cs" />
+    <Compile Include="SEQMOVIMENTO_ARQUIVOS.cs" />
+    <Compile Include="SEQMOVIMENTO_FECHAMENTO.cs" />
+    <Compile Include="SEQMOVIMENTO_PROCEDIMENTO.cs" />
+    <Compile Include="SEQMOVIMENTO_REFERENTE.cs" />
+    <Compile Include="SEQNATUREZA.cs" />
+    <Compile Include="SEQNOTAFISCAL.cs" />
+    <Compile Include="SEQPARAMETRO.cs" />
+    <Compile Include="SEQPASTASMOV.cs" />
+    <Compile Include="SEQPROCEDIMENTO.cs" />
+    <Compile Include="SEQPROCEDIMENTO_GRUPO.cs" />
+    <Compile Include="SEQPROCEDIMENTO_GRUPO_SUBGRUP.cs" />
+    <Compile Include="SEQRECOMENDACAO.cs" />
+    <Compile Include="SEQRECOMENDACAOXASO.cs" />
+    <Compile Include="SEQRECOMENDACAOXASOXPRO.cs" />
+    <Compile Include="SEQRECOMENDACAOXRISCO.cs" />
+    <Compile Include="SEQRISCO.cs" />
+    <Compile Include="SEQROTA.cs" />
+    <Compile Include="SEQSEGMENTO.cs" />
+    <Compile Include="SEQSETOR.cs" />
+    <Compile Include="SEQSYS_COMSQL.cs" />
+    <Compile Include="SEQSYS_CONSULTA.cs" />
+    <Compile Include="SEQSYS_FICHATECNICA.cs" />
+    <Compile Include="SEQSYS_HELP.cs" />
+    <Compile Include="SEQSYS_KPI.cs" />
+    <Compile Include="SEQSYS_LAYOUT.cs" />
+    <Compile Include="SEQSYS_LOGMSG.cs" />
+    <Compile Include="SEQSYS_LTELA.cs" />
+    <Compile Include="SEQSYS_MAIL.cs" />
+    <Compile Include="SEQSYS_REPORTS.cs" />
+    <Compile Include="SEQSYS_USRCOLUMN.cs" />
+    <Compile Include="SEQSYS_USRCOMPONENT.cs" />
+    <Compile Include="SEQSYS_USRFORM.cs" />
+    <Compile Include="SEQSYS_USRTABLE.cs" />
+    <Compile Include="SEQSYS_USUARIO.cs" />
+    <Compile Include="SEQTABELA.cs" />
+    <Compile Include="SEQTEXTOPADRAO.cs" />
+    <Compile Include="SEQTIPOSCONTRATOS.cs" />
+    <Compile Include="SEQTIPOSDOCTOS.cs" />
+    <Compile Include="SETOR.cs" />
+    <Compile Include="SLCONSULTAMOVIMENTO.cs" />
+    <Compile Include="slmovxrec.cs" />
+    <Compile Include="SLNFCL.cs" />
+    <Compile Include="SLNOTAFISCAL.cs" />
+    <Compile Include="SL_ACOMPANHAMENTO.cs" />
+    <Compile Include="SL_RECOMENDACAO.cs" />
+    <Compile Include="SYS_CAIXA.cs" />
+    <Compile Include="SYS_CATEND.cs" />
+    <Compile Include="SYS_CFGGER.cs" />
+    <Compile Include="SYS_CLASSES.cs" />
+    <Compile Include="SYS_COMSQL.cs" />
+    <Compile Include="SYS_CONCORRENCIA.cs" />
+    <Compile Include="SYS_CONSULTA.cs" />
+    <Compile Include="SYS_FICHATECNICA.cs" />
+    <Compile Include="SYS_HELP.cs" />
+    <Compile Include="SYS_HELPBODY.cs" />
+    <Compile Include="SYS_KPI.cs" />
+    <Compile Include="SYS_LAYOUT.cs" />
+    <Compile Include="SYS_LOGMSG.cs" />
+    <Compile Include="SYS_LTELA.cs" />
+    <Compile Include="SYS_MAIL.cs" />
+    <Compile Include="SYS_REFRULES.cs" />
+    <Compile Include="SYS_REGINI.cs" />
+    <Compile Include="SYS_REGRAS.cs" />
+    <Compile Include="SYS_REPORTS.cs" />
+    <Compile Include="SYS_USRCOLUMN.cs" />
+    <Compile Include="SYS_USRCOMPONENT.cs" />
+    <Compile Include="SYS_USRFORM.cs" />
+    <Compile Include="SYS_USRFORMXTABLE.cs" />
+    <Compile Include="SYS_USRLOG.cs" />
+    <Compile Include="SYS_USRON.cs" />
+    <Compile Include="SYS_USRTABLE.cs" />
+    <Compile Include="SYS_USRXREL.cs" />
+    <Compile Include="SYS_USUARIO.cs" />
+    <Compile Include="TAB.cs" />
+    <Compile Include="TABELA.cs" />
+    <Compile Include="TABELAXFORNECEDORXPROCEDIMENTO.cs" />
+    <Compile Include="TEXTOPADRAO.cs" />
+    <Compile Include="TIPOSCONTRATOS.cs" />
+    <Compile Include="TIPOSDOCTOS.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

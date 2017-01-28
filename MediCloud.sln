@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediCloud.View", "MediCloud\MediCloud.View.csproj", "{B3F38075-90A6-44E4-99E5-906CC004EE5A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediCloud.Persistence", "MediCloud.Persistence\MediCloud.Persistence.csproj", "{2F62E684-EE30-4DC5-BBA5-5608D59A5874}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediCloud.DatabaseModels", "MediCloud.DatabaseModels\MediCloud.DatabaseModels.csproj", "{B39BE293-0B49-49EC-8F44-9F719A91708C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediCloud.BusinessProcess", "MediCloud.BusinessProcess\MediCloud.BusinessProcess.csproj", "{D7C6B9DA-1E57-4968-8766-A206C1BD3912}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B3F38075-90A6-44E4-99E5-906CC004EE5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B3F38075-90A6-44E4-99E5-906CC004EE5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B3F38075-90A6-44E4-99E5-906CC004EE5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B3F38075-90A6-44E4-99E5-906CC004EE5A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2F62E684-EE30-4DC5-BBA5-5608D59A5874}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F62E684-EE30-4DC5-BBA5-5608D59A5874}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F62E684-EE30-4DC5-BBA5-5608D59A5874}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F62E684-EE30-4DC5-BBA5-5608D59A5874}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B39BE293-0B49-49EC-8F44-9F719A91708C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B39BE293-0B49-49EC-8F44-9F719A91708C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B39BE293-0B49-49EC-8F44-9F719A91708C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B39BE293-0B49-49EC-8F44-9F719A91708C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D7C6B9DA-1E57-4968-8766-A206C1BD3912}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D7C6B9DA-1E57-4968-8766-A206C1BD3912}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D7C6B9DA-1E57-4968-8766-A206C1BD3912}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D7C6B9DA-1E57-4968-8766-A206C1BD3912}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
