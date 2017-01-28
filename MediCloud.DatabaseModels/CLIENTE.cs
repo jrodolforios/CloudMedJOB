@@ -10,7 +10,7 @@ namespace MediCloud.DatabaseModels
     public partial class CLIENTE
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public CLIENTE()
+        public CLIENTE() 
         {
             CLIENTE_CONTRATOFIXO = new HashSet<CLIENTE_CONTRATOFIXO>();
             CLIENTE_OCUPACIONAL = new HashSet<CLIENTE_OCUPACIONAL>();
