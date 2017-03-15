@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MediCloud.App_Code;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -10,7 +11,8 @@ namespace MediCloud.View.Controllers
     {
         public ActionResult Index()
         {
-            ViewBag.Title = "Home Page";
+            ControleDeSessao.EstahLogado(this);
+            ViewBag.Title = "Início";
 
             return View();
         }
