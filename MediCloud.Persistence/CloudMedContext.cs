@@ -2,9 +2,9 @@
 {
     using DatabaseModels;
     using System.Data.Entity;
-    public partial class MediCloud : DbContext
+    public partial class CloudMedContext : DbContext
     {
-        public MediCloud()
+        public CloudMedContext()
             : base("name=MediCloudConnection")
         {
         }
