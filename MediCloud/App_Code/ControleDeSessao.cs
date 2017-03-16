@@ -11,18 +11,13 @@ namespace MediCloud.App_Code
 {
     public class ControleDeSessao
     {
-        public const string NOME_SESSAO_USUARIO = "UserSession";
-
-        internal static void EstahLogado(Controller controlador)
-        {
-            if (controlador.Session[NOME_SESSAO_USUARIO] == null)
-                controlador.Response.Redirect("Account");
-        }
-
         internal static void Logar(FormCollection form, Controller controlador)
         {
             string usuario = form["usuario"];
             string senha = form["senha"];
+
+            if (string.IsNullOrEmpty(usuario) || string.IsNullOrEmpty(senha))
+                throw new AccessViolationException("Os campos \"Usuario\" e \"Senha\" devem ser devidamente preenchidos.");
 
             SYS_USUARIO usuarioLogado = ControleDeAcesso.EfetuarLogon(usuario, senha);
 
@@ -47,7 +42,12 @@ namespace MediCloud.App_Code
                 trocaSenhaNoProximoLogon = usuarioLogado.TROCARSENHA == "S"
             };
 
-            controlador.Session[NOME_SESSAO_USUARIO] = sessaoUsuario;
+            controlador.Session[Constantes.NOME_SESSAO_USUARIO] = sessaoUsuario;
+        }
+
+        internal static void Deslogar(Controller controlador)
+        {
+            controlador.Session.Clear();
         }
     }
 }

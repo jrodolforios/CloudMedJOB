@@ -4,13 +4,23 @@ using System.Web.Mvc;
 
 namespace MediCloud.View.Controllers
 {
-    public class AccountController : Controller
+    public class AccountController : BaseController
     {
         public ActionResult Index()
         {
-            ViewBag.Title = "Bem-vindo";
+            try
+            {
+                ViewBag.Title = "Bem-vindo";
 
-            return View();
+                return View();
+            }
+            catch (Exception ex)
+            {
+                base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
+                return View();
+            }
+
+            return null;
         }
 
         [HttpPost]
@@ -26,6 +36,31 @@ namespace MediCloud.View.Controllers
             }
             catch (AccessViolationException ex)
             {
+                base.FlashMessage(ex.Message, MessageType.Error);
+                return View();
+            }
+            catch (Exception ex)
+            {
+                base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
+                return View();
+            }
+
+            return null;
+        }
+
+        public ActionResult Logout()
+        {
+            try
+            {
+                ViewBag.Title = "Bem-vindo";
+
+                ControleDeSessao.Deslogar(this);
+
+                this.Response.Redirect("/Account/Index");
+            }
+            catch (Exception ex)
+            {
+                base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
                 return View();
             }
 

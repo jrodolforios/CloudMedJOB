@@ -7,11 +7,11 @@ using System.Web.Mvc;
 
 namespace MediCloud.View.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
         public ActionResult Index()
         {
-            ControleDeSessao.EstahLogado(this);
+            base.EstahLogado();
             ViewBag.Title = "Início";
 
             return View();

@@ -22,8 +22,15 @@ namespace MediCloud.BusinessProcess.Segurança
             CloudMedContext context = new CloudMedContext();
             MD5Criptor criptor = new MD5Criptor();
             string senhaMD5;
+            SYS_USUARIO usuarioEncontrado;
 
-            SYS_USUARIO usuarioEncontrado = context.SYS_USUARIO.Where(x => x.LOGIN == usuario).First();
+            IQueryable<SYS_USUARIO> usuariosEncontrado = context.SYS_USUARIO.Where(x => x.LOGIN == usuario);
+
+            if (usuariosEncontrado.Any())
+                usuarioEncontrado = usuariosEncontrado.First();
+            else
+                return null;
+
             senhaMD5 = criptor.transform(senha);
 
             //Apenas para primeiro login quando a senha vai ser redefinida para o padrão CoudMed.
