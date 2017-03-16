@@ -49,5 +49,29 @@ namespace MediCloud.BusinessProcess.Segurança
             else
                 return null;
         }
+
+        public static void TrocarSenha(int codigoDoUsuario, string senhaAtual, string novaSenha)
+        {
+            CloudMedContext context = new CloudMedContext();
+            SYS_USUARIO usuarioEncontrado;
+            MD5Criptor criptor = new MD5Criptor();
+            string senhaAtualMD5 = criptor.transform(senhaAtual);
+            string novaSenhaMD5 = criptor.transform(novaSenha);
+
+            IQueryable<SYS_USUARIO> usuariosEncontrado = context.SYS_USUARIO.Where(x => x.CODUSU == codigoDoUsuario);
+
+            if (usuariosEncontrado.Any())
+                usuarioEncontrado = usuariosEncontrado.First();
+            else
+                throw new ArgumentException("Usuário não encontrado, procure-nos para mais informações.");
+
+            if(usuarioEncontrado.SENHA == senhaAtualMD5)
+            {
+                usuarioEncontrado.SENHA = novaSenhaMD5;
+                context.SaveChanges();
+            }
+            else
+                throw new ArgumentException("Sua senha atual é inválida. Tente digitar a sua senha atual corretamente.");
+        }
     }
 }

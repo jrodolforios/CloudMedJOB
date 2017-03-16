@@ -2,7 +2,7 @@
 @using MediCloud.Models.Seguranca;
 @{
     SessaoUsuarioModel UsuarioAtual = (SessaoUsuarioModel)Session["UserSession"];
-        }
+}
 
 
 <!DOCTYPE html>
@@ -336,7 +336,7 @@
 
                         <ul class="user-menu dropdown-menu-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
                             <li>
-                                <a href="#">
+                                <a href="#modalTrocarSenha" data-toggle="modal">
                                     <i class="ace-icon fa fa-cog"></i>
                                     Alterar senha
                                 </a>
@@ -399,7 +399,7 @@
 
             <ul class="nav nav-list">
                 <li class="">
-                    <a href="index.html">
+                    <a href="/Home">
                         <i class="menu-icon fa fa-tachometer"></i>
                         <span class="menu-text"> Início </span>
                     </a>
@@ -926,7 +926,7 @@
                                 <li class="">
                                     <a href="top-menu.html">
                                         <i class="menu-icon fa fa-caret-right"></i>
-                                        Procedimentos de fornecedores 
+                                        Procedimentos de fornecedores
                                     </a>
 
                                     <b class="arrow"></b>
@@ -944,7 +944,9 @@
 
         <div class="main-content">
             <div class="main-content-inner">
-
+                @{
+                    Html.RenderPartial("FlashMessage");
+                }
                 <div class="page-content">
                     <div class="ace-settings-container" id="ace-settings-container">
                         <div class="btn btn-app btn-xs btn-warning ace-settings-btn" id="ace-settings-btn">
@@ -1034,18 +1036,18 @@
 
                     &nbsp; &nbsp;
                     @*<span class="action-buttons">
-                        <a href="#">
-                            <i class="ace-icon fa fa-twitter-square light-blue bigger-150"></i>
-                        </a>
+                            <a href="#">
+                                <i class="ace-icon fa fa-twitter-square light-blue bigger-150"></i>
+                            </a>
 
-                        <a href="#">
-                            <i class="ace-icon fa fa-facebook-square text-primary bigger-150"></i>
-                        </a>
+                            <a href="#">
+                                <i class="ace-icon fa fa-facebook-square text-primary bigger-150"></i>
+                            </a>
 
-                        <a href="#">
-                            <i class="ace-icon fa fa-rss-square orange bigger-150"></i>
-                        </a>
-                    </span>*@
+                            <a href="#">
+                                <i class="ace-icon fa fa-rss-square orange bigger-150"></i>
+                            </a>
+                        </span>*@
                 </div>
             </div>
         </div>
@@ -1073,5 +1075,78 @@
     <script src="assets/js/ace.min.js"></script>
 
     <!-- inline scripts related to this page -->
+    <div id="modalTrocarSenha" class="modal fade" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3 class="smaller lighter blue no-margin">Altere sua senha</h3>
+                </div>
+                <div class="modal-body">
+                    <div id="passwordAlerts"></div>
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Senha atual </label>
+
+                            <div class="col-sm-9">
+                                <input type="password" id="SenhaAtual" name="SenhaAtual" placeholder="Senha atual" class="col-xs-10 col-sm-7" />
+                            </div>
+                        </div>
+                        <div class="hr hr-24"></div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Nova senha </label>
+
+                            <div class="col-sm-9">
+                                <input type="password" id="NovaSenha" name="NovaSenha" placeholder="Nova senha" class="col-xs-10 col-sm-7" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Repita a nova senha </label>
+
+                            <div class="col-sm-9">
+                                <input type="password" id="RepitaNovaSenha" name="RepitaNovaSenha" placeholder="Repita aqui a nova senha digitada" class="col-xs-10 col-sm-7" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-sm btn-success pull-right" id="SalvarSenha">
+                    <i class="ace-icon fa fa-check"></i>
+                    Alterar Senha
+                </button>
+                <button class="btn btn-sm btn-danger pull-right" data-dismiss="modal">
+                    <i class="ace-icon fa fa-times"></i>
+                    Fechar
+                </button>
+                <script type="text/javascript">
+                    $('#SalvarSenha').click(function () {
+                        var senhaAtual = $('#SenhaAtual').val();
+                        var NovaSenha = $('#NovaSenha').val();
+                        var RepitaNovaSenha = $('#RepitaNovaSenha').val();
+
+                        $.ajax({
+                            url: 'Account/TrocarSenha?SenhaAtual=' + senhaAtual + '&NovaSenha=' + NovaSenha + '&RepitaNovaSenha=' + RepitaNovaSenha,
+                            type: "post",
+                            cache: false,
+                            success: function (savingStatus) {
+                                var tipoAlert;
+                                if (savingStatus.trocaBemSucedida)
+                                    tipoAlert = 'alert-success';
+                                else
+                                    tipoAlert = 'alert-danger';
+                                $('#passwordAlerts').html('<div class="alert ' + tipoAlert +'"><a class="close" data-dismiss="alert">×</a><span>' + savingStatus.mensagem + '</span></div>')
+                            },
+                            error: function (xhr, ajaxOptions, thrownError) {
+                                $('#passwordAlerts').html('<div class="alert alert-danger"><a class="close" data-dismiss="alert">×</a><span>Ops! Não conseguimos efetuar sua troca de senha com o servidor. Contate-nos para que possamos ajudar melhor.</span></div>')
+                            }
+                        });
+                    });
+                </script>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+    </div>
 </body>
 </html>

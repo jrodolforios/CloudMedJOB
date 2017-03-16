@@ -1,4 +1,5 @@
 ﻿using MediCloud.App_Code;
+using MediCloud.Models.Seguranca;
 using System;
 using System.Web.Mvc;
 
@@ -20,7 +21,6 @@ namespace MediCloud.View.Controllers
                 return View();
             }
 
-            return null;
         }
 
         [HttpPost]
@@ -65,6 +65,37 @@ namespace MediCloud.View.Controllers
             }
 
             return null;
+        }
+
+        [HttpPost]
+        public JsonResult TrocarSenha(string SenhaAtual, string NovaSenha, string RepitaNovaSenha)
+        {
+            ResultadoTrocaSenhaModel resultado = new ResultadoTrocaSenhaModel();
+            try
+            {
+                ViewBag.Title = "Bem-vindo";
+
+                ControleDeSessao.TrocarASenha(this, SenhaAtual, NovaSenha, RepitaNovaSenha);
+
+                resultado.mensagem = "Troca de senha realizada.";
+                resultado.trocaBemSucedida = true;
+
+                return Json(resultado, JsonRequestBehavior.AllowGet);
+            }
+            catch(ArgumentException ex)
+            {
+                resultado.mensagem = ex.Message;
+                resultado.trocaBemSucedida = false;
+
+                return Json(resultado, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                resultado.mensagem = Constantes.MENSAGEM_GENERICA_DE_ERRO;
+                resultado.trocaBemSucedida = false;
+
+                return Json(resultado, JsonRequestBehavior.AllowGet);
+            }
         }
     }
 }
