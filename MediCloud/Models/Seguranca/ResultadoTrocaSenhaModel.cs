@@ -5,9 +5,9 @@ using System.Web;
 
 namespace MediCloud.Models.Seguranca
 {
-    public class ResultadoTrocaSenhaModel
+    public class ResultadoAjaxGenericoModel
     {
-        public bool trocaBemSucedida { get; set; }
+        public bool acaoBemSucedida { get; set; }
         public string mensagem { get; set; }
     }
 }

@@ -50,6 +50,25 @@ namespace MediCloud.BusinessProcess.Segurança
                 return null;
         }
 
+        public static void BloquearUsuario(int codigoDoUsuario, bool bloquear)
+        {
+            CloudMedContext contexto = new CloudMedContext();
+
+            SYS_USUARIO usuario = contexto.SYS_USUARIO.First(x => x.CODUSU == codigoDoUsuario);
+            usuario.BLOQUEARSESSAO = bloquear ? "S" : "N";
+
+            contexto.SaveChanges();
+        }
+
+        public static void DeletarUsuario(int codigoDoUsuario)
+        {
+            CloudMedContext contexto = new CloudMedContext();
+
+            contexto.SYS_USUARIO.Remove(contexto.SYS_USUARIO.First(x => x.CODUSU == codigoDoUsuario));
+
+            contexto.SaveChanges();
+        }
+
         public static void TrocarSenha(int codigoDoUsuario, string senhaAtual, string novaSenha)
         {
             CloudMedContext context = new CloudMedContext();
@@ -72,6 +91,13 @@ namespace MediCloud.BusinessProcess.Segurança
             }
             else
                 throw new ArgumentException("Sua senha atual é inválida. Tente digitar a sua senha atual corretamente.");
+        }
+
+        public static List<SYS_USUARIO> buscarUsuario (string termo)
+        {
+            CloudMedContext contexto = new CloudMedContext();
+
+            return contexto.SYS_USUARIO.Where(x => x.NOME.Contains(termo) || x.LOGIN.Contains(termo)).ToList();
         }
     }
 }

@@ -36,7 +36,7 @@ namespace MediCloud.DatabaseModels
         [StringLength(50)]
         public string LOGIN { get; set; }
 
-        [Required]
+        [Required(AllowEmptyStrings = true)]
         [StringLength(50)]
         public string SENHA { get; set; }
 
