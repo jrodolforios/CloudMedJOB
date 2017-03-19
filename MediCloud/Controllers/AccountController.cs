@@ -85,6 +85,77 @@ namespace MediCloud.View.Controllers
             }
         }
 
+        public ActionResult DetalhamentoUsuario(int? codigoUsuario)
+        {
+            try
+            {
+                base.EstahLogado();
+                ViewBag.Title = "Usuários";
+
+                UsuarioModel model = CadastroDeUsuarios.RecuperarUsuarioPorID(codigoUsuario);
+
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
+                return View();
+            }
+        }
+
+        public ActionResult ExcluirUsuario(int codigoUsuario)
+        {
+            UsuarioModel modelUsuario = null;
+
+            try
+            {
+                base.EstahLogado();
+                ViewBag.Title = "Usuários";
+
+                CadastroDeUsuarios.DeletarUsuario(this, codigoUsuario);
+
+                base.FlashMessage("Usuário excluído.", MessageType.Success);
+
+                return View("Usuarios");
+            }
+            catch (Exception ex)
+            {
+                modelUsuario = CadastroDeUsuarios.RecuperarUsuarioPorID(Convert.ToInt32(codigoUsuario));
+
+                base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
+                return View(modelUsuario);
+            }
+        }
+
+        [HttpPost]
+        public ActionResult DetalhamentoUsuario(FormCollection form)
+        {
+            UsuarioModel modelUsuario = null;
+            try
+            {
+                base.EstahLogado();
+                ViewBag.Title = "Usuários";
+
+                modelUsuario = CadastroDeUsuarios.SalvarUsuario(form);
+
+                base.FlashMessage("Usuário cadastrado.", MessageType.Success);
+                return View(modelUsuario);
+            }
+            catch (InvalidOperationException ex)
+            {
+                if (!string.IsNullOrEmpty(form["codigoUsuario"]))
+                    modelUsuario = CadastroDeUsuarios.RecuperarUsuarioPorID(Convert.ToInt32(form["codigoUsuario"]));
+
+                base.FlashMessage(ex.Message, MessageType.Error);
+                return View(modelUsuario);
+            }
+            catch (Exception ex)
+            {
+                base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
+                return View();
+            }
+        }
+
         [HttpPost]
         public ActionResult Usuarios(FormCollection form)
         {
@@ -119,7 +190,7 @@ namespace MediCloud.View.Controllers
 
                 return Json(resultado, JsonRequestBehavior.AllowGet);
             }
-            catch(ArgumentException ex)
+            catch (ArgumentException ex)
             {
                 resultado.mensagem = ex.Message;
                 resultado.acaoBemSucedida = false;

@@ -280,6 +280,7 @@
     <Content Include="assets\images\gallery\thumb-4.jpg" />
     <Content Include="assets\images\gallery\thumb-5.jpg" />
     <Content Include="assets\images\gallery\thumb-6.jpg" />
+    <Content Include="assets\images\login-background.jpeg" />
     <Content Include="assets\images\placeholder\165x90.png" />
     <Content Include="assets\images\placeholder\255x150.png" />
     <Content Include="assets\images\placeholder\530x270.png" />
@@ -413,6 +414,7 @@
     <Content Include="Views\Account\Index.cshtml" />
     <Content Include="Views\Shared\FlashMessage.cshtml" />
     <Content Include="Views\Account\Usuarios.cshtml" />
+    <Content Include="Views\Account\DetalhamentoUsuario.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

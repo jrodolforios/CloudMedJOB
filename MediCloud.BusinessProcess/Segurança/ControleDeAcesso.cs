@@ -24,14 +24,18 @@ namespace MediCloud.BusinessProcess.Segurança
             string senhaMD5;
             SYS_USUARIO usuarioEncontrado;
 
-            IQueryable<SYS_USUARIO> usuariosEncontrado = context.SYS_USUARIO.Where(x => x.LOGIN == usuario);
+            IQueryable<SYS_USUARIO> usuariosEncontrado = context.SYS_USUARIO.Where(x => x.LOGIN.ToLower() == usuario.ToLower());
 
             if (usuariosEncontrado.Any())
                 usuarioEncontrado = usuariosEncontrado.First();
             else
                 return null;
 
-            senhaMD5 = criptor.transform(senha);
+
+            if (usuarioEncontrado.DATALTSENHA <= DateTime.Now)
+                usuarioEncontrado.BLOQUEARSESSAO = "S";
+
+                senhaMD5 = criptor.transform(senha);
 
             //Apenas para primeiro login quando a senha vai ser redefinida para o padrão CoudMed.
             if (usuarioEncontrado != null && string.IsNullOrEmpty(usuarioEncontrado.SENHA))
@@ -48,6 +52,39 @@ namespace MediCloud.BusinessProcess.Segurança
             }
             else
                 return null;
+        }
+
+        public static SYS_USUARIO SalvarUsuario(SYS_USUARIO usuario)
+        {
+            CloudMedContext contexto = new CloudMedContext();
+            SYS_USUARIO usuarioSalvo = new SYS_USUARIO();
+            MD5Criptor criptor = new MD5Criptor();
+
+            usuario.RELATSIMULTANEO = "N";
+
+            if (usuario.CODUSU > 0)
+            {
+                usuarioSalvo = contexto.SYS_USUARIO.First(x => x.CODUSU == usuario.CODUSU);
+
+                usuarioSalvo.NOME = usuario.NOME;
+                usuarioSalvo.LOGIN = usuario.LOGIN;
+                usuarioSalvo.BLOQUEARSESSAO = usuario.BLOQUEARSESSAO;
+                usuarioSalvo.DATALTSENHA = usuario.DATALTSENHA;
+                usuarioSalvo.RELATSIMULTANEO = usuario.RELATSIMULTANEO;
+
+                if (!string.IsNullOrEmpty(usuario.SENHA))
+                    usuarioSalvo.SENHA = criptor.transform(usuario.SENHA);
+            }
+            else
+            {
+                usuario.SENHA = criptor.transform(usuario.SENHA);
+
+                usuarioSalvo = contexto.SYS_USUARIO.Add(usuario);
+            }
+
+            contexto.SaveChanges();
+
+            return usuarioSalvo;
         }
 
         public static void BloquearUsuario(int codigoDoUsuario, bool bloquear)
@@ -98,6 +135,13 @@ namespace MediCloud.BusinessProcess.Segurança
             CloudMedContext contexto = new CloudMedContext();
 
             return contexto.SYS_USUARIO.Where(x => x.NOME.Contains(termo) || x.LOGIN.Contains(termo)).ToList();
+        }
+
+        public static SYS_USUARIO buscarUsuario(int codigo)
+        {
+            CloudMedContext contexto = new CloudMedContext();
+
+            return contexto.SYS_USUARIO.Where(x => x.CODUSU == codigo).First();
         }
     }
 }

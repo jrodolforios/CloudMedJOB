@@ -23,7 +23,7 @@
                     </button>
                 </div>
             </div>
-            <button class="btn btn-xs">+ Novo usuário</button>
+            <a href="/Account/DetalhamentoUsuario" class="btn btn-xs">+ Novo usuário</a>
         </div>
     </div>
 </form>
@@ -42,16 +42,16 @@
                 <div class="media-body">
                     <div class="container">
                         <h4 class="media-heading">
-                            <span class="blue">@item.nomeUsuario </span>
+                            <span class="blue">@item.NomeUsuario </span>
                             <span id="bloqueado">
-                                @if (item.acessoBloqueado)
+                                @if (item.AcessoBloqueado)
                                 {
                                     <span class="label label-danger" id="spanBloqueado">Bloqueado</span>
                                 }
                             </span>
                         </h4>
                     </div>
-                    <p><b>Login:</b> @item.loginUsuario <br /> <b>Código interno:</b> @item.Codigo</p>
+                    <p><b>Login:</b> @item.LoginUsuario <br /> <b>Código interno:</b> @item.Codigo</p>
 
                     <div class="search-actions text-center">
                         <span class="blue bolder bigger-110">Ações</span>
@@ -65,7 +65,7 @@
                                 <i class="ace-icon fa fa-ban red"></i>
                             </a>
                         </div>
-                        <a class="search-btn-action btn btn-sm btn-block btn-info">Editar</a>
+                        <a href="/Account/DetalhamentoUsuario?codigoUsuario=@item.Codigo" class="search-btn-action btn btn-sm btn-block btn-info">Editar</a>
                     </div>
                 </div>
             </div>

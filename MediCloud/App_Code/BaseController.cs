@@ -17,7 +17,7 @@ namespace MediCloud.App_Code
         public void EstahLogado()
         {
             if (Session[Constantes.NOME_SESSAO_USUARIO] == null)
-                Response.Redirect("Account");
+                Response.Redirect("/Account");
         }
 
         public SessaoUsuarioModel CurrentUser
