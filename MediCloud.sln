@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26228.4
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediCloud.View", "MediCloud\MediCloud.View.csproj", "{B3F38075-90A6-44E4-99E5-906CC004EE5A}"
 EndProject
@@ -10,6 +10,12 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediCloud.DatabaseModels", "MediCloud.DatabaseModels\MediCloud.DatabaseModels.csproj", "{B39BE293-0B49-49EC-8F44-9F719A91708C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediCloud.BusinessProcess", "MediCloud.BusinessProcess\MediCloud.BusinessProcess.csproj", "{D7C6B9DA-1E57-4968-8766-A206C1BD3912}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1- Persistence", "1- Persistence", "{D04B5D4F-8ACD-4EAA-A34F-113327470662}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2-Business", "2-Business", "{3D30D8FA-2CA6-4221-9DDF-9C1D2B74FE22}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3-View", "3-View", "{1261ECA5-EE04-486A-9FC8-0B8133C93858}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -36,5 +42,11 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{B3F38075-90A6-44E4-99E5-906CC004EE5A} = {1261ECA5-EE04-486A-9FC8-0B8133C93858}
+		{2F62E684-EE30-4DC5-BBA5-5608D59A5874} = {D04B5D4F-8ACD-4EAA-A34F-113327470662}
+		{B39BE293-0B49-49EC-8F44-9F719A91708C} = {D04B5D4F-8ACD-4EAA-A34F-113327470662}
+		{D7C6B9DA-1E57-4968-8766-A206C1BD3912} = {3D30D8FA-2CA6-4221-9DDF-9C1D2B74FE22}
 	EndGlobalSection
 EndGlobal
