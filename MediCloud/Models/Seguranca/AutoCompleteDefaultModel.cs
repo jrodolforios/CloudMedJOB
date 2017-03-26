@@ -5,9 +5,9 @@ using System.Web;
 
 namespace MediCloud.Models.Seguranca
 {
-    public class ResultadoAjaxGenericoModel
+    public class AutoCompleteDefaultModel
     {
-        public bool acaoBemSucedida { get; set; }
-        public string mensagem { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
     }
 }

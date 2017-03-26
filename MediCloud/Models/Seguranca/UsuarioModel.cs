@@ -7,7 +7,7 @@ using System.Web;
 
 namespace MediCloud.Models.Seguranca
 {
-    public class UsuarioModel
+    public class UsuarioModel :IModel
     {
         public UsuarioModel()
         {
@@ -23,6 +23,11 @@ namespace MediCloud.Models.Seguranca
         public string SenhaCriptografada { get; set; }
         public string SenhaDescriptografada { get; set; }
         public string RepetirSenhaDescriptografada { get; set; }
+
+        public string toString()
+        {
+            return $"{NomeUsuario} | {LoginUsuario}";
+        }
 
         public void validar()
         {

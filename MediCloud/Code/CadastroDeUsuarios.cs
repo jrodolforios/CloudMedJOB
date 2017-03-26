@@ -7,8 +7,9 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using MediCloud.View.Controllers;
+using MediCloud.App_Code;
 
-namespace MediCloud.App_Code
+namespace MediCloud.Code
 {
     public class CadastroDeUsuarios
     {
@@ -81,7 +82,7 @@ namespace MediCloud.App_Code
 
         internal static void DeletarUsuario(BaseController controller, int codigoDoUsuario)
         {
-            ControleDeAcesso.DeletarUsuario(codigoDoUsuario);
+            ControleDeAcesso.ExcluirUsuario(codigoDoUsuario);
         }
 
         internal static void BloquearUsuario(AccountController accountController, int codigoDoUsuario, bool bloquear)

@@ -7,8 +7,9 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using MediCloud.View.Controllers;
+using MediCloud.App_Code;
 
-namespace MediCloud.App_Code
+namespace MediCloud.Code
 {
     public class ControleDeSessao
     {

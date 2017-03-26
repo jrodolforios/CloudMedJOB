@@ -1,18 +1,20 @@
-﻿@model List<MediCloud.Models.Seguranca.UsuarioModel>
+﻿@using System.Linq
+
+@model List<MediCloud.Models.Cliente.ClienteModel>
 @{
     ViewBag.Title = "Usuários";
 }
 <div class="page-header">
     <h1>
-        Usuários
+        Clientes
         <small>
             <i class="ace-icon fa fa-angle-double-right"></i>
-            Busca de usuários cadastrados
+            Busca de clientes cadastrados
         </small>
     </h1>
 </div>
 <div id="usuarioAlerts"></div>
-<form method="post" action="@Url.Content("~/Account/Usuarios")">
+<form method="post" action="@Url.Content("~/Cliente")">
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-12">
             <div class="input-group">
@@ -23,49 +25,39 @@
                     </button>
                 </div>
             </div>
-            <a href="/Account/DetalhamentoUsuario" class="btn btn-xs">+ Novo usuário</a>
+            <a href="/Cliente/DetalhamentoCliente" class="btn btn-xs">+ Novo cliente</a>
         </div>
     </div>
 </form>
 <div class="hr"></div>
 @if (Model != null && Model.Any())
 {
-    foreach (MediCloud.Models.Seguranca.UsuarioModel item in Model)
+    foreach (MediCloud.Models.Cliente.ClienteModel item in Model)
     {
-        <div class="col-xs-12" id="@item.Codigo">
+        <div class="col-xs-12" id="@item.IdCliente">
             <div class="media search-media">
                 <div class="media-left">
                     <a href="#">
-                        <img class="media-object" data-src="holder.js/72x72" alt="72x72" src="/assets/images/avatars/user.jpg" data-holder-rendered="true" style="width: 72px; height: 72px;">
+                        <img class="media-object" data-src="holder.js/72x72" alt="72x72" src="/assets/images/avatars/client.png" data-holder-rendered="true" style="width: 72px; height: 72px;">
                     </a>
                 </div>
                 <div class="media-body">
                     <div class="container">
                         <h4 class="media-heading">
-                            <span class="blue">@item.NomeUsuario </span>
-                            <span id="bloqueado">
-                                @if (item.AcessoBloqueado)
-                                {
-                                    <span class="label label-danger" id="spanBloqueado">Bloqueado</span>
-                                }
-                            </span>
+                            <span class="blue">@item.NomeFantasia </span>
                         </h4>
                     </div>
-                    <p><b>Login:</b> @item.LoginUsuario <br /> <b>Código interno:</b> @item.Codigo</p>
+                    <p><b>Razão social:</b> @item.RazaoSocial <br /> <b>CNPJ:</b> @item.CNPJ</p>
 
                     <div class="search-actions text-center">
                         <span class="blue bolder bigger-110">Ações</span>
 
                         <div class="action-buttons bigger-150">
-                            <a href="javascript:excluirUsuario(@item.Codigo);">
+                            <a href="javascript:excluirCliente(@item.IdCliente);">
                                 <i class="ace-icon fa fa-trash"></i>
                             </a>
-                            &nbsp;&nbsp;&nbsp;
-                            <a href="javascript:bloquearUsuario(@item.Codigo);">
-                                <i class="ace-icon fa fa-ban red"></i>
-                            </a>
                         </div>
-                        <a href="/Account/DetalhamentoUsuario?codigoUsuario=@item.Codigo" class="search-btn-action btn btn-sm btn-block btn-info">Editar</a>
+                        <a href="/Cliente/DetalhamentoCliente?codigoCliente=@item.IdCliente" class="search-btn-action btn btn-sm btn-block btn-info">Editar</a>
                     </div>
                 </div>
             </div>
@@ -84,10 +76,10 @@ else
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h3 class="smaller lighter blue no-margin">Excluir usuário</h3>
+                <h3 class="smaller lighter blue no-margin">Excluir cliente</h3>
             </div>
             <div class="modal-body">
-                Tem certeza que deseja excluir este usuário?
+                Tem certeza que deseja excluir este cliente?
             </div>
             <div class="modal-footer">
                 <button type="button" data-dismiss="modal" class="btn btn-primary" id="delete">
@@ -104,21 +96,8 @@ else
 </div>
 
 <script type="text/javascript">
-    function excluirUsuario(codigo) {
+    function excluirCliente(codigo) {
         confirmDeleteModal(codigo);
-    }
-
-    function bloquearUsuario(codigo) {
-        var bloquear = false;
-        if ($("#" + codigo).find("#bloqueado").children().length > 0) {
-            $("#" + codigo).find("#bloqueado").find("#spanBloqueado").remove();
-            bloquear = false;
-        } else {
-            $("#" + codigo).find("#bloqueado").html("<span class=\"label label-danger\" id=\"spanBloqueado\">Bloqueado</span>");
-            bloquear = true;
-        }
-
-        bloquearUsuarioAjax(bloquear, codigo);
     }
 
     function confirmDeleteModal(codigo) {
@@ -127,42 +106,24 @@ else
             keyboard: false
         })
             .one('click', '#delete', function () {
-                deletarUsuario(codigo);
+                deletarCliente(codigo);
             });
     }
 
-    function bloquearUsuarioAjax(bloquear, codigo) {
+    function deletarCliente(codigo) {
         $.ajax({
-            url: '/Account/BloquearUsuario?codigoDoUsuario=' + codigo + "&Bloquear=" + bloquear,
+            url: '/Cliente/DeletarCliente?codigoDoCliente=' + codigo,
             type: "post",
             cache: false,
             success: function (savingStatus) {
                 var tipoAlert;
-                if (savingStatus.acaoBemSucedida)
-                    tipoAlert = 'alert-success';
-                else
-                    tipoAlert = 'alert-danger';
-                $('#usuarioAlerts').html('<div class="alert ' + tipoAlert + '"><a class="close" data-dismiss="alert">×</a><span>' + savingStatus.mensagem + '</span></div>');
-            },
-            error: function (xhr, ajaxOptions, thrownError) {
-                $('#usuarioAlerts').html('<div class="alert alert-danger"><a class="close" data-dismiss="alert">×</a><span>Ops! Não foi possível bloquear este usuário no servidor. Contate-nos para que possamos te ajudar melhor.</span></div>')
-            }
-        });
-    }
-
-    function deletarUsuario(codigo) {
-        $.ajax({
-            url: '/Account/DeletarUsuario?codigoDoUsuario=' + codigo,
-            type: "post",
-            cache: false,
-            success: function (savingStatus) {
-                var tipoAlert;
-                if (savingStatus.acaoBemSucedida){
+                if (savingStatus.acaoBemSucedida) {
                     tipoAlert = 'alert-success';
                     $("#" + codigo).remove();
                 }
                 else
                     tipoAlert = 'alert-danger';
+
                 $('#usuarioAlerts').html('<div class="alert ' + tipoAlert + '"><a class="close" data-dismiss="alert">×</a><span>' + savingStatus.mensagem + '</span></div>');
             },
             error: function (xhr, ajaxOptions, thrownError) {

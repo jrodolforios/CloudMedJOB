@@ -172,9 +172,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Code\BaseController.cs" />
-    <Compile Include="App_Code\CadastroDeUsuarios.cs" />
-    <Compile Include="App_Code\Constantes.cs" />
-    <Compile Include="App_Code\ControleDeSessao.cs" />
+    <Compile Include="Code\CadastroDeUsuarios.cs" />
+    <Compile Include="Code\Clientes\CadastroDeClientes.cs" />
+    <Compile Include="Code\Constantes.cs" />
+    <Compile Include="Code\ControleDeSessao.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
@@ -207,13 +208,33 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
+    <Compile Include="Code\Enum\EnumCliente.cs" />
+    <Compile Include="Code\Fornecedor\CadastroDeContato.cs" />
+    <Compile Include="Code\Parametro\CadastroDeElaboradorPCMSO.cs" />
+    <Compile Include="Code\Parametro\CadastroDeElaboradorPPRA.cs" />
+    <Compile Include="Code\Parametro\CadastroDeSegmento.cs" />
+    <Compile Include="Code\Financeiro\CadastroDeContador.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\ClienteController.cs" />
+    <Compile Include="Controllers\ContadorController.cs" />
+    <Compile Include="Controllers\ContatoController.cs" />
+    <Compile Include="Controllers\ElaboradorPCMSOController.cs" />
+    <Compile Include="Controllers\ElaboradorPPRAController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\SegmentoController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\Seguranca\ResultadoTrocaSenhaModel.cs" />
+    <Compile Include="Models\Cliente\ClienteModel.cs" />
+    <Compile Include="Models\Financeiro\ContadorModel.cs" />
+    <Compile Include="Models\Fornecedor\ContatoModel.cs" />
+    <Compile Include="Models\Parametro\ElaboradorPCMSOModel.cs" />
+    <Compile Include="Models\IModel.cs" />
+    <Compile Include="Models\Parametro\ElaboradorPPRAModel.cs" />
+    <Compile Include="Models\Seguranca\AutoCompleteDefaultModel.cs" />
+    <Compile Include="Models\Seguranca\ResultadoAjaxGenericoModel.cs" />
+    <Compile Include="Models\Parametro\SegmentoModel.cs" />
     <Compile Include="Models\Seguranca\SessaoUsuarioModel.cs" />
     <Compile Include="Models\Seguranca\UsuarioModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -257,6 +278,8 @@
     <Content Include="assets\images\avatars\avatar3.png" />
     <Content Include="assets\images\avatars\avatar4.png" />
     <Content Include="assets\images\avatars\avatar5.png" />
+    <Content Include="assets\images\avatars\client.png" />
+    <Content Include="assets\images\avatars\contact.png" />
     <Content Include="assets\images\avatars\profile-pic.jpg" />
     <Content Include="assets\images\avatars\user.jpg" />
     <Content Include="assets\images\bootstrap-colorpicker\alpha-horizontal.png" />
@@ -415,10 +438,17 @@
     <Content Include="Views\Shared\FlashMessage.cshtml" />
     <Content Include="Views\Account\Usuarios.cshtml" />
     <Content Include="Views\Account\DetalhamentoUsuario.cshtml" />
+    <Content Include="Views\Cliente\index.cshtml" />
+    <Content Include="Views\Cliente\DetalhamentoCliente.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Providers\" />
+    <Folder Include="Views\Contador\" />
+    <Folder Include="Views\Contato\" />
+    <Folder Include="Views\ElaboradorPCMSO\" />
+    <Folder Include="Views\ElaboradorPPRA\" />
+    <Folder Include="Views\Segmento\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

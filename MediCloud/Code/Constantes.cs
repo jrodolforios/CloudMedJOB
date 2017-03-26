@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace MediCloud.App_Code
+namespace MediCloud.Code
 {
     public class Constantes
     {

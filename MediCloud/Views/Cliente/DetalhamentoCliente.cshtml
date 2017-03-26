@@ -1,0 +1,582 @@
+﻿@using System.Linq
+@model MediCloud.Models.Cliente.ClienteModel
+@{
+    string checkedBloqueio = string.Empty;
+    bool clienteNovo = true;
+
+    ViewBag.Title = "Cliente";
+
+    if (Model != null)
+    {
+        clienteNovo = false;
+    }
+}
+<script src="/assets/js/jquery-2.1.4.min.js"></script>
+<div class="page-header">
+    <h1>
+        Detalhamento de cliente
+        <small>
+            <i class="ace-icon fa fa-angle-double-right"></i>
+            Cadastro de cliente
+        </small>
+    </h1>
+</div><!-- /.page-header -->
+<div class="row">
+    <div class="col-xs-12">
+        <div id="user-profile-3" class="user-profile row">
+            <div class="col-sm-offset-1 col-sm-10">
+                <div class="well well-sm">
+                    <!-- -
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    &nbsp; -->
+                    <div class="inline middle blue bigger-110"> <span class="formPercent">0%</span> do cadastro concluído </div>
+
+                    &nbsp; &nbsp; &nbsp;
+                    <div style="width:200px;" data-percent="70%" class="inline middle no-margin progress progress-striped active pos-rel">
+                        <div class="progress-bar progress-bar-success" style="width:70%"></div>
+                    </div>
+
+                </div><!-- /.well -->
+                <div class="row">
+                    <label class="col-sm-4 control-label no-padding-right" for="form-field-username"><span class="badge badge-important mail-tag"></span>Obrigatório</label>
+                </div>
+
+                <div class="space"></div>
+                <form method="post" class="form-horizontal" action="@Url.Content("~/Cliente/DetalhamentoCliente")">
+                    <input type="hidden" id="codigoCliente" name="codigoCliente" value="@Html.ValueFor(x => x.IdCliente)" />
+                    <div class="tabbable">
+                        <ul class="nav nav-tabs padding-16">
+                            <li class="active">
+                                <a data-toggle="tab" href="#edit-basic">
+                                    <i class="green ace-icon fa fa-pencil-square-o bigger-125"></i>
+                                    Cadastro
+                                </a>
+                            </li>
+
+                            <li>
+                                <a data-toggle="tab" href="#edit-settings">
+                                    <i class="purple ace-icon fa fa-user bigger-125"></i>
+                                    Contatos
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="tab-content profile-edit-tab-content">
+                        <div id="edit-basic" class="tab-pane fade in active">
+                            <h4 class="header blue bolder smaller">Dados do cliente </h4>
+
+                            <div class="row">
+                                <div class="vspace-12-sm"></div>
+
+                                <div class="col-xs-12 col-sm-8">
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label no-padding-right" for="form-field-username">Nome Fantasia &nbsp;<span class="badge badge-important mail-tag"></span></label>
+
+                                        <div class="col-sm-8">
+                                            <input class="col-xs-12 col-sm-12 componenteFormulario" type="text" id="nomeFantasia" name="nomeFantasia" placeholder="nome fantasia do cliente" value="@Html.ValueFor(x => x.NomeFantasia)" />
+                                        </div>
+                                    </div>
+
+                                    <div class="space-4"></div>
+
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Razão Social &nbsp;<span class="badge badge-important mail-tag"></span></label>
+
+                                        <div class="col-sm-8">
+                                            <input class="col-xs-12 col-sm-12 componenteFormulario" type="text" id="razaoSocial" name="razaoSocial" placeholder="razão social" value="@Html.ValueFor(x => x.RazaoSocial)" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Tipo &nbsp;<span class="badge badge-important mail-tag"></span></label>
+
+                                        <div class="col-sm-8">
+                                            <select class="form-control" id="tipoEmpresa" name="tipoEmpresa">
+                                                <option value="">..:Selecione:..</option>
+                                                <option value="PessoaJuridica">Pessoa Jurídica</option>
+                                                <option value="PessoaFisica">Pessoa Física</option>
+                                                <option value="CEI">CEI</option>
+                                            </select>
+                                            <script type="text/javascript">
+                                                $('#tipoEmpresa').val('@Html.ValueFor(x => x.TipoEmpresa)');
+                                            </script>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label no-padding-right" for="form-field-first">CPF/CNPJ/CEI &nbsp;<span class="badge badge-important mail-tag"></span></label>
+
+                                        <div class="col-sm-8">
+                                            <input class="col-xs-12 col-sm-8 componenteFormulario" type="text" id="CNPJ" name="CNPJ" placeholder="razão social" value="@Html.ValueFor(x => x.CNPJ)" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="space"></div>
+                            <h4 class="header blue bolder smaller">Endereço</h4>
+
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Rua (com nº) </label>
+
+                                <div class="col-sm-8">
+                                    <textarea class="col-sm-12 componenteFormulario" id="endereco" name="endereco" placeholder="digíte o nome da rua com número e complemento">@Html.ValueFor(x => x.EnderecoCompleto)</textarea>
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Bairro </label>
+
+                                <div class="col-sm-8">
+                                    <input class="col-xs-12 col-sm-6 componenteFormulario" type="text" id="bairro" name="bairro" placeholder="nome do bairro" value="@Html.ValueFor(x => x.Bairro)" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Cidade </label>
+
+                                <div class="col-sm-8">
+                                    <input class="col-xs-12 col-sm-6 componenteFormulario" type="text" id="cidade" name="cidade" placeholder="nome da cidade" value="@Html.ValueFor(x => x.Cidade)" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label no-padding-right" for="form-field-first">CEP </label>
+
+                                <div class="col-sm-8">
+                                    <input class="col-xs-12 col-sm-3 componenteFormulario" type="text" id="CEP" name="CEP" placeholder="número do CEP" value="@Html.ValueFor(x => x.CEP)" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label no-padding-right" for="form-field-first">UF </label>
+
+                                <div class="col-sm-8">
+                                    <input class="col-xs-12 col-sm-1 componenteFormulario" type="text" id="UF" name="UF" placeholder="sigla do UF" value="@Html.ValueFor(x => x.UF)" />
+                                </div>
+                            </div>
+
+                            <div class="space"></div>
+                            <h4 class="header blue bolder smaller">Informações Adicionais</h4>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Número de funcionários </label>
+
+                                <div class="col-sm-8">
+                                    <input class="col-xs-12 col-sm-2 componenteFormulario" type="number" min="0" id="numeroFuncionarios" name="numerofuncionarios" placeholder="Nº" value="@Html.ValueFor(x => x.NumeroDeFuncionarios)" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Contador </label>
+
+                                <div class="col-sm-8">
+                                    <input type="hidden" name="idContador" id="idContador" value="@Html.ValueFor(x => x.Contador.IdContador)" />
+                                    <input class="col-xs-12 col-sm-6 componenteFormulario" type="text" id="Contador" name="Contador" placeholder="Digite o nome do contador" value="@Html.ValueFor(x => x.Contador.NomeContador)" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Elaborador (PCMSO) </label>
+
+                                <div class="col-sm-8">
+                                    <input type="hidden" name="idElaboradorPCMSO" id="idElaboradorPCMSO" value="@Html.ValueFor(x => x.ElaboradorDoPCMSO.IdElaboradorPCMSO)" />
+                                    <input class="col-xs-12 col-sm-6 componenteFormulario" type="text" id="elaboradorPCMSO" name="elaboradorPCMSO" placeholder="Digite o nome do Elaborador (PCMSO)" value="@Html.ValueFor(x => x.ElaboradorDoPCMSO.NomeElaboradorPCMSO)" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Elaborador (PPRA) </label>
+
+                                <div class="col-sm-8">
+                                    <input type="hidden" name="idElaboradorPPRA" id="idElaboradorPPRA" value="@Html.ValueFor(x => x.ElaboradorDoPPRA.IdElaboradorPPRA)" />
+                                    <input class="col-xs-12 col-sm-6 componenteFormulario" type="text" id="elaboradorPPRA" name="elaboradorPPRA" placeholder="Digite o nome do Elaborador (PPRA)" value="@Html.ValueFor(x => x.ElaboradorDoPPRA.NomeElaboradorDoPPRA)" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Segmento </label>
+
+                                <div class="col-sm-8">
+                                    <input type="hidden" name="idSegmento" id="idSegmento" value="@Html.ValueFor(x => x.Segmento.IdSegmento)" />
+                                    <input class="col-xs-12 col-sm-6 componenteFormulario" type="text" id="segmento" name="segmento" placeholder="Digite o nome do segmento" value="@Html.ValueFor(x => x.Segmento.NomeSegmento)" />
+                                </div>
+                            </div>
+
+                            <div class="space"></div>
+                            <h4 class="header blue bolder smaller">Observações</h4>
+
+
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <textarea class="col-sm-12 componenteFormulario" id="observacoes" name="observacoes" placeholder="observações adicionais">@Html.ValueFor(x => x.Observacoes)</textarea>
+                                </div>
+                            </div>
+                            <div class="clearfix form-actions">
+                                <div class="col-md-offset-3 col-md-9">
+                                    <button class="btn btn-info" type="submit">
+                                        <i class="ace-icon fa fa-check bigger-110"></i>
+                                        Salvar
+                                    </button>
+                                    @if (clienteNovo)
+                                    {
+                                        <span>&nbsp; &nbsp;</span>
+                                        <button class="btn" type="reset" id="limparForm">
+                                            <i class="ace-icon fa fa-undo bigger-110"></i>
+                                            Limpar
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <span>&nbsp; &nbsp;</span>
+                                        <a href="javascript:excluirUsuario(@Model.IdCliente)" class="btn btn-danger" type="reset">
+                                            <i class="ace-icon fa fa-times bigger-110"></i>
+                                            Excluir
+                                        </a>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <div id="edit-settings" class="tab-pane fade">
+                            <div class="space-10"></div>
+                            <a href="javascript:detalhamentoDoContato(0)" class="btn btn-xs">+ Novo contato</a>
+                            @if (Model.Contatos != null && Model.Contatos.Any())
+                            {
+                                foreach (MediCloud.Models.Fornecedor.ContatoModel item in Model.Contatos)
+                                {
+                                    <div class="row">
+                                        <div class="col-xs-12" id="@item.IdContato">
+                                            <div class="media search-media">
+                                                <div class="media-left">
+                                                    <a href="#">
+                                                        <img class="media-object" data-src="holder.js/72x72" alt="72x72" src="/assets/images/avatars/contact.png" data-holder-rendered="true" style="width: 72px; height: 72px;">
+                                                    </a>
+                                                </div>
+                                                <div class="media-body">
+                                                    <div class="container">
+                                                        <h4 class="media-heading">
+                                                            <span class="blue">@item.NomeContato </span>
+                                                        </h4>
+                                                    </div>
+                                                    <p><b>Celular:</b> @item.TelfoneMovel <br /> <b>Fixo:</b> @item.TelefoneFixo</p>
+
+                                                    <div class="search-actions text-center">
+                                                        <span class="blue bolder bigger-110">Ações</span>
+
+                                                        <div class="action-buttons bigger-150">
+                                                            <a href="javascript:excluirContato(@item.IdContato);">
+                                                                <i class="ace-icon fa fa-trash"></i>
+                                                            </a>
+                                                        </div>
+                                                        <a href="javascript:detalhamentoDoContato(@item.IdContato)" class="search-btn-action btn btn-sm btn-block btn-info">Editar</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <div class="alert alert-block alert-info">
+                                    Nenhum contato para ser exibido.
+                                </div>
+                            }
+
+                        </div>
+                    </div>
+                </form>
+            </div><!-- /.span -->
+        </div>
+    </div>
+</div>
+
+<div id="confirm" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="smaller lighter blue no-margin">Excluir cliente</h3>
+            </div>
+            <div class="modal-body">
+                Tem certeza que deseja excluir este cliente?
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-primary" id="delete">
+                    <i class="ace-icon fa fa-check"></i>
+                    Sim
+                </button>
+                <button type="button" data-dismiss="modal" class="btn">
+                    <i class="ace-icon fa fa-times"></i>
+                    Não
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="confirmContato" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="smaller lighter blue no-margin">Excluir contato</h3>
+            </div>
+            <div class="modal-body">
+                Tem certeza que deseja excluir este contato?
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-primary" id="deleteContato">
+                    <i class="ace-icon fa fa-check"></i>
+                    Sim
+                </button>
+                <button type="button" data-dismiss="modal" class="btn">
+                    <i class="ace-icon fa fa-times"></i>
+                    Não
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="detalhamentoContato" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="smaller lighter blue no-margin">Contato de cliente</h3>
+            </div>
+            <div class="modal-body">
+                Aqui vai ficar o formulário do contato
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-primary" id="salvarContato">
+                    <i class="ace-icon fa fa-check"></i>
+                    Salvar
+                </button>
+                <button type="button" data-dismiss="modal" class="btn">
+                    <i class="ace-icon fa fa-times"></i>
+                    Cancelar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    if ('ontouchstart' in document.documentElement) document.write("<script src='/assets/js/jquery.mobile.custom.min.js'>" + "<" + "/script>");
+</script>
+
+<script src="/assets/js/jquery-ui.min.js"></script>
+<script src="/assets/js/bootstrap-datepicker.min.js"></script>
+<script src="/assets/js/jquery.maskedinput.min.js"></script>
+<script src="/assets/js/jquery.ui.touch-punch.min.js"></script>
+<script src="/assets/js/ace-elements.min.js"></script>
+<script src="/assets/js/ace.min.js"></script>
+<script type="text/javascript">
+    function excluirUsuario(codigo) {
+        confirmDeleteModal(codigo);
+    }
+
+    function excluirContato(codigo) {
+        confirmDeleteModalContato(codigo);
+    }
+
+    function confirmDeleteModalContato(codigo) {
+        $('#confirmContato').modal({
+            backdrop: 'static',
+            keyboard: false
+        })
+            .one('click', '#deleteContato', function () {
+                deletarContato(codigo);
+            });
+    }
+
+    function detalhamentoDoContato(codigo) {
+        $('#detalhamentoContato').modal({
+            backdrop: 'static',
+            keyboard: false
+        })
+            .one('click', '#salvarContato', function () {
+                salvarContato(codigo);
+            });
+    }
+
+    function salvarContato(codigo){
+        //AJAX de salvamento
+    }
+
+    function deletarContato(codigo) {
+        $.ajax({
+            url: '/Contato/DeletarContato?codigoDoContato=' + codigo,
+            type: "post",
+            cache: false,
+            success: function (savingStatus) {
+                var tipoAlert;
+                if (savingStatus.acaoBemSucedida) {
+                    tipoAlert = 'alert-success';
+                    $("#" + codigo).remove();
+                }
+                else
+                    tipoAlert = 'alert-danger';
+                $('#usuarioAlerts').html('<div class="alert ' + tipoAlert + '"><a class="close" data-dismiss="alert">×</a><span>' + savingStatus.mensagem + '</span></div>');
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                $('#usuarioAlerts').html('<div class="alert alert-danger"><a class="close" data-dismiss="alert">×</a><span>Ops! Não foi possível deletar este registro no servidor. Contate-nos para que possamos te ajudar melhor.</span></div>')
+            }
+        });
+    }
+
+
+    function confirmDeleteModal(codigo) {
+        $('#confirm').modal({
+            backdrop: 'static',
+            keyboard: false
+        })
+            .one('click', '#delete', function () {
+                window.location = "/Cliente/ExcluirCliente?codigoCliente=" + codigo;
+            });
+    }
+
+    $("#Contador").autocomplete({
+        source: function (request, response) {
+            $.ajax({
+                url: "/Contador/BuscaContadorAJAX",
+                type: "POST",
+                dataType: "json",
+                data: { Prefix: request.term },
+                success: function (data) {
+                    response($.map(data, function (item) {
+                        $('#idContador').attr('value', item.Id);
+                        return { label: item.Name, value: item.Name };
+                    }))
+
+                }
+            })
+        },
+        messages: {
+            noResults: "Sem resultados", results: ""
+        }
+    });
+    $('#Contador').on('blur', function () {
+        if ($(this).val().length === 0) {  //check for no. of characters entered
+            $('#idContador').attr('value', 0);  // clear the textbox
+        }
+    });
+
+    $("#elaboradorPCMSO").autocomplete({
+        source: function (request, response) {
+            $.ajax({
+                url: "/ElaboradorPCMSO/BuscaElaboradorAJAX",
+                type: "POST",
+                dataType: "json",
+                data: { Prefix: request.term },
+                success: function (data) {
+                    response($.map(data, function (item) {
+                        $('#idElaboradorPCMSO').attr('value', item.Id);
+                        return { label: item.Name, value: item.Name };
+                    }))
+
+                }
+            })
+        },
+        messages: {
+            noResults: "Sem resultados", results: ""
+        }
+    });
+    $('#elaboradorPCMSO').on('blur', function () {
+        if ($(this).val().length === 0) {  //check for no. of characters entered
+            $('#idElaboradorPCMSO').attr('value', 0);  // clear the textbox
+        }
+    });
+
+
+    $("#elaboradorPPRA").autocomplete({
+        source: function (request, response) {
+            $.ajax({
+                url: "/ElaboradorPPRA/BuscaElaboradorAJAX",
+                type: "POST",
+                dataType: "json",
+                data: { Prefix: request.term },
+                success: function (data) {
+                    response($.map(data, function (item) {
+                        $('#idElaboradorPPRA').attr('value', item.Id);
+                        return { label: item.Name, value: item.Name };
+                    }))
+
+                }
+            })
+        },
+        messages: {
+            noResults: "Sem resultados", results: ""
+        }
+    });
+    $('#elaboradorPPRA').on('blur', function () {
+        if ($(this).val().length === 0) {  //check for no. of characters entered
+            $('#idElaboradorPPRA').attr('value', 0);  // clear the textbox
+        }
+    });
+
+
+    $("#segmento").autocomplete({
+        source: function (request, response) {
+            $.ajax({
+                url: "/Segmento/BuscaSegmentoAJAX",
+                type: "POST",
+                dataType: "json",
+                data: { Prefix: request.term },
+                success: function (data) {
+                    response($.map(data, function (item) {
+                        $('#idSegmento ').attr('value', item.Id);
+                        return { label: item.Name, value: item.Name };
+                    }))
+
+                }
+            })
+        },
+        messages: {
+            noResults: "Sem resultados", results: ""
+        }
+    });
+    $('#segmento').on('blur', function () {
+        if ($(this).val().length === 0) {  //check for no. of characters entered
+            $('#idSegmento').attr('value', 0);  // clear the textbox
+        }
+    });
+
+    $("#limparForm").click(function () {
+        var cntreq3 = 0;
+        var cntvals3 = 0;
+        $(".componenteFormulario").each(atualizarProgressBar());
+    });
+
+    $('#CEP').mask('99999-999');
+
+    $(document).ready(function () {
+        $('input').on('change', function () {
+            var cntreq = 0;
+            var cntvals = 0;
+            $(".componenteFormulario").each(atualizarProgressBar());
+        });
+
+        var cntreq3 = 0;
+        var cntvals3 = 0;
+        $(".componenteFormulario").each(atualizarProgressBar());
+
+    });
+
+    function atualizarProgressBar() {
+        var cntreq = 0;
+        var cntvals = 0;
+        $(".componenteFormulario").each(function (val) {
+            cntreq++;
+            if ($(this).val() != '') {
+                cntvals++;
+            }
+        });
+        var count = (cntvals / cntreq) * 100;
+        count = parseInt(count);
+        $('.formPercent').empty();
+        $('.progress-striped').attr("data-percent", count + '%');
+        $('div.progress-bar-success').attr("style", "width: " + count + '%');
+        $('.formPercent').append(count + '% ');
+    }
+</script>

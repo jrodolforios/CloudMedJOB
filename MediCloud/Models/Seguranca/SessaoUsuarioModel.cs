@@ -5,7 +5,7 @@ using System.Web;
 
 namespace MediCloud.Models.Seguranca
 {
-    public class SessaoUsuarioModel
+    public class SessaoUsuarioModel : IModel
     {
         public int codigoDoUsuario { get; set; }
         public string NomeDoUsuario { get; set; }
@@ -15,5 +15,15 @@ namespace MediCloud.Models.Seguranca
         public DateTime? dataUltimaAteracaoSenha { get; set; }
         public bool bloqueado { get; set; }
         public bool trocaSenhaNoProximoLogon { get; set; }
+
+        public string toString()
+        {
+            return $"{NomeDoUsuario} | {login}";
+        }
+
+        public void validar()
+        {
+            //void
+        }
     }
 }

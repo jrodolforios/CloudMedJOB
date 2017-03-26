@@ -1,4 +1,5 @@
-﻿using MediCloud.Models.Seguranca;
+﻿using MediCloud.Code;
+using MediCloud.Models.Seguranca;
 using System;
 using System.Collections.Generic;
 using System.Linq;
