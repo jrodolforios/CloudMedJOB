@@ -238,7 +238,7 @@
                         <div id="edit-settings" class="tab-pane fade">
                             <div class="space-10"></div>
                             <a href="javascript:detalhamentoDoContato(0)" class="btn btn-xs">+ Novo contato</a>
-                            @if (Model.Contatos != null && Model.Contatos.Any())
+                            @if (Model != null && Model.Contatos != null && Model.Contatos.Any())
                             {
                                 foreach (MediCloud.Models.Fornecedor.ContatoModel item in Model.Contatos)
                                 {
