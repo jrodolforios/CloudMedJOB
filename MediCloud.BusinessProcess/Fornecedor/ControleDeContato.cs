@@ -43,7 +43,7 @@ namespace MediCloud.BusinessProcess.Fornecedor
 
                 if (contatoDAO.IDCON > 0)
                 {
-                    usuarioSalvo = contexto.CLIENTE_CONTATO.First(x => x.IDCLI == contatoDAO.IDCLI);
+                    usuarioSalvo = contexto.CLIENTE_CONTATO.First(x => x.IDCON == contatoDAO.IDCON);
 
                     usuarioSalvo.DEPARTAMENTO = contatoDAO.DEPARTAMENTO;
                     usuarioSalvo.EMAIL = contatoDAO.EMAIL;
