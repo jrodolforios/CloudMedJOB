@@ -49,7 +49,7 @@ namespace MediCloud.Code.Fornecedor
             return new ContatoModel()
             {
                 DataNascimento = string.IsNullOrEmpty(form["dataNascimento"]) ? null : (DateTime?)Convert.ToDateTime(form["dataNascimento"]),
-                Departamento = string.IsNullOrEmpty(form["dataNascimento"]) ? EnumContato.tipoDepartamento.Vazio : GetDepartamento(form["departamento"]),
+                Departamento = string.IsNullOrEmpty(form["departamento"]) ? EnumContato.tipoDepartamento.Vazio : GetDepartamento(form["departamento"]),
                 Email = string.IsNullOrEmpty(form["email"]) ? string.Empty : form["email"],
                 Funcao = string.IsNullOrEmpty(form["funcao"]) ? string.Empty : form["funcao"],
                 IdContato = Convert.ToInt32(form["codigoContato"]),

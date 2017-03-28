@@ -63,6 +63,7 @@ namespace MediCloud.Controllers
 
                 ContatoModel model = CadastroDeContato.salvarContato(form);
 
+                base.FlashMessage("Contato cadastrado.", MessageType.Success);
                 Response.Redirect($"/Cliente/DetalhamentoCliente?codigoCliente={codigoCliente}");
             }
             catch (InvalidOperationException ex)
@@ -89,7 +90,7 @@ namespace MediCloud.Controllers
 
                 CadastroDeClientes.DeletarCliente(this, codigoDoCliente);
 
-                resultado.mensagem = "Usuário excluído.";
+                resultado.mensagem = "Cliente excluído.";
                 resultado.acaoBemSucedida = true;
 
                 return Json(resultado, JsonRequestBehavior.AllowGet);
