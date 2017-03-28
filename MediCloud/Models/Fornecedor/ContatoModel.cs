@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MediCloud.Code.Fornecedor;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,6 +20,13 @@ namespace MediCloud.Models.Fornecedor
         public string Email { get; set; }
         public string Observacao { get; set; }
         public tipoDepartamento Departamento { get; set; }
+        public string siglaDepartamento
+        {
+            get
+            {
+                return CadastroDeContato.GetDepartamento(Departamento);
+            }
+        }
 
 
         public string toString()

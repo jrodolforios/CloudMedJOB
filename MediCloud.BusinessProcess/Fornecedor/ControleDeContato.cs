@@ -75,5 +75,23 @@ namespace MediCloud.BusinessProcess.Fornecedor
                 throw ex;
             }
         }
+
+        public static CLIENTE_CONTATO recuperarContatoPorID(int codigoDoContato)
+        {
+            CloudMedContext contexto = new CloudMedContext();
+            try
+            {
+                return contexto.CLIENTE_CONTATO.Where(x => x.IDCON == codigoDoContato).First();
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+                return null;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

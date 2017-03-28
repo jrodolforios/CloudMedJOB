@@ -361,17 +361,17 @@
                         <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Departamento &nbsp;<span class="badge badge-important mail-tag"></span></label>
 
                         <div class="col-sm-8">
-                                <select class="form-control" id="departamento" name="departamento">
-                                    <option value="">..:Selecione:..</option>
-                                    <option value="ADM">Administrativo</option>
-                                    <option value="COB">Cobrança</option>
-                                    <option value="COM">Comercial</option>
-                                    <option value="CON">Contratos</option>
-                                    <option value="FIN">Financeiro</option>
-                                    <option value="JUR">Jurídico</option>
-                                    <option value="DIR">Diretoria</option>
-                                    <option value="OUT">Outros</option>
-                                </select>
+                            <select class="form-control" id="departamento" name="departamento">
+                                <option value="">..:Selecione:..</option>
+                                <option value="ADM">Administrativo</option>
+                                <option value="COB">Cobrança</option>
+                                <option value="COM">Comercial</option>
+                                <option value="CON">Contratos</option>
+                                <option value="FIN">Financeiro</option>
+                                <option value="JUR">Jurídico</option>
+                                <option value="DIR">Diretoria</option>
+                                <option value="OUT">Outros</option>
+                            </select>
                         </div>
                     </div>
 
@@ -480,13 +480,61 @@
         })
 
         limparComponentesContato();
-        if (codigo > 0){
-            //preencherFormulário (AJAX)
+        if (codigo > 0) {
+            $.ajax({
+                url: '/Contato/DetalharContato?codigoDoContato=' + codigo,
+                type: "post",
+                cache: false,
+                success: function (data) {
+                    $("#nomeContato").attr('value', data.NomeContato);
+                    $("#codigoContato").attr('value', data.IdContato);
+                    $("#departamento").val(data.siglaDepartamento);
+                    $("#funcao").attr('value', data.Funcao);
+                    $("#telFixo").attr('value', data.TelefoneFixo);
+                    $("#telMovel").attr('value', data.TelfoneMovel);
+                    $("#email").attr('value', data.Email);
+                    $("#dataNascimento").attr('value', toDateFromJson(data.DataNascimento));
+                    $("#observacoesContato").val(data.Observacao);
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    $('#usuarioAlerts').html('<div class="alert alert-danger"><a class="close" data-dismiss="alert">×</a><span>Ops! Não foi possível detalhar este registro no servidor. Contate-nos para que possamos te ajudar melhor.</span></div>')
+                }
+            });
         }
     }
 
+    function toDateFromJson(src) {
+        if (src != null)
+            return formatDate(new Date(parseInt(src.substr(6))));
+        else
+            return '';
+    }
+
+    function formatDate(date) {
+        var monthNames = [
+            "January", "February", "March",
+            "April", "May", "June", "July",
+            "August", "September", "October",
+            "November", "December"
+        ];
+
+        var day = date.getDate();
+        var monthIndex = date.getMonth();
+        var year = date.getFullYear();
+
+        return day + '/' + ("0" + (monthIndex + 1)).slice(-2) + '/' + year;
+    }
+
     function limparComponentesContato() {
-        $('#formContatoCliente')[0].reset();
+        $("#nomeContato").attr('value', '');
+        $("#codigoContato").attr('value', '0');
+        $("#departamento").val('');
+        $("#funcao").attr('value', '');
+        $("#telFixo").attr('value', '');
+        $("#telMovel").attr('value', '');
+        $("#email").attr('value','');
+        $("#dataNascimento").attr('value', '');
+        $("#observacoesContato").val('');
     }
 
     function deletarContato(codigo) {

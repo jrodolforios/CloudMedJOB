@@ -37,11 +37,24 @@ namespace MediCloud.Code.Fornecedor
                     Email = usuarioDoBanco.EMAIL,
                     Funcao = usuarioDoBanco.FUNCAO,
                     IdContato = (int)usuarioDoBanco.IDCON,
+                    IdCliente = (int)usuarioDoBanco.IDCLI,
                     NomeContato = usuarioDoBanco.NOME,
                     Observacao = usuarioDoBanco.OBS,
                     TelefoneFixo = usuarioDoBanco.FONEFIXO,
-                    TelfoneMovel = usuarioDoBanco.FONEMOVEL
+                    TelfoneMovel = usuarioDoBanco.FONEMOVEL,
+                    Departamento = GetDepartamento(usuarioDoBanco.DEPARTAMENTO)
                 };
+        }
+
+        internal static ContatoModel RecuperarContatoPorID(int codigoDoContato)
+        {
+            if (codigoDoContato != 0)
+            {
+                CLIENTE_CONTATO usuarioencontrado = ControleDeContato.recuperarContatoPorID(codigoDoContato);
+                return injetarEmUsuarioModel(usuarioencontrado);
+            }
+            else
+                return null;
         }
 
         private static ContatoModel injetarEmUsuarioModel(FormCollection form)
@@ -99,7 +112,7 @@ namespace MediCloud.Code.Fornecedor
             return tipoDepartamento;
         }
 
-        private static string GetDepartamento(EnumContato.tipoDepartamento v)
+        internal static string GetDepartamento(EnumContato.tipoDepartamento v)
         {
             string tipoDepartamento =null;
 
