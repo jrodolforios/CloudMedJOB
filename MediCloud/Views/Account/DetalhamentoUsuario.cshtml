@@ -288,6 +288,7 @@
         format: 'dd/mm/yyyy',
         language: 'pt-BR',
     });
+    $('.input-mask-date').mask('99/99/9999');
 
     $("#limparForm").click(function () {
         var cntreq3 = 0;
@@ -295,7 +296,7 @@
         $(".componenteFormulario").each(atualizarProgressBar());
     });
 
-    $('.input-mask-date').mask('99/99/9999');
+
 
     $(document).ready(function () {
         $('input').on('change', function () {

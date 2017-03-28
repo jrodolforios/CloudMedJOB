@@ -1,7 +1,9 @@
 ﻿using MediCloud.App_Code;
 using MediCloud.Code;
 using MediCloud.Code.Clientes;
+using MediCloud.Code.Fornecedor;
 using MediCloud.Models.Cliente;
+using MediCloud.Models.Fornecedor;
 using MediCloud.Models.Seguranca;
 using System;
 using System.Collections.Generic;
@@ -47,6 +49,34 @@ namespace MediCloud.Controllers
                 base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
                 return View();
             }
+        }
+
+        [HttpPost]
+        public ActionResult SalvarContato(FormCollection form)
+        {
+            int codigoCliente = Convert.ToInt32(form["codigoClienteContato"]);
+
+            try
+            {
+                base.EstahLogado();
+                ViewBag.Title = "Clientes";
+
+                ContatoModel model = CadastroDeContato.salvarContato(form);
+
+                Response.Redirect($"/Cliente/DetalhamentoCliente?codigoCliente={codigoCliente}");
+            }
+            catch (InvalidOperationException ex)
+            {
+                base.FlashMessage(ex.Message, MessageType.Error);
+                Response.Redirect($"/Cliente/DetalhamentoCliente?codigoCliente={codigoCliente}");
+            }
+            catch (Exception ex)
+            {
+                base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
+                Response.Redirect($"/Cliente/DetalhamentoCliente?codigoCliente={codigoCliente}");
+            }
+
+            return null;
         }
 
         [HttpPost]

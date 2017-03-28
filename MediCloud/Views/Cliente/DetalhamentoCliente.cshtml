@@ -344,19 +344,102 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h3 class="smaller lighter blue no-margin">Contato de cliente</h3>
             </div>
-            <div class="modal-body">
-                Aqui vai ficar o formulário do contato
-            </div>
-            <div class="modal-footer">
-                <button type="button" data-dismiss="modal" class="btn btn-primary" id="salvarContato">
-                    <i class="ace-icon fa fa-check"></i>
-                    Salvar
-                </button>
-                <button type="button" data-dismiss="modal" class="btn">
-                    <i class="ace-icon fa fa-times"></i>
-                    Cancelar
-                </button>
-            </div>
+            <form method="post" id="formContatoCliente" class="form-horizontal" action="@Url.Content("~/Cliente/SalvarContato")">
+                <div class="modal-body">
+                    <input type="hidden" id="codigoContato" name="codigoContato" value="0" />
+                    <input type="hidden" id="codigoClienteContato" name="codigoClienteContato" value="@Html.ValueFor(x => x.IdCliente)" />
+
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Nome &nbsp;<span class="badge badge-important mail-tag"></span></label>
+
+                        <div class="col-sm-8">
+                            <input class="col-xs-12 col-sm-6 " type="text" id="nomeContato" name="nomeContato" placeholder="nome do contato" value="" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Departamento &nbsp;<span class="badge badge-important mail-tag"></span></label>
+
+                        <div class="col-sm-8">
+                                <select class="form-control" id="departamento" name="departamento">
+                                    <option value="">..:Selecione:..</option>
+                                    <option value="ADM">Administrativo</option>
+                                    <option value="COB">Cobrança</option>
+                                    <option value="COM">Comercial</option>
+                                    <option value="CON">Contratos</option>
+                                    <option value="FIN">Financeiro</option>
+                                    <option value="JUR">Jurídico</option>
+                                    <option value="DIR">Diretoria</option>
+                                    <option value="OUT">Outros</option>
+                                </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Função &nbsp;<span class="badge badge-important mail-tag"></span></label>
+
+                        <div class="col-sm-8">
+                            <input class="col-xs-12 col-sm-6 " type="text" id="funcao" name="funcao" placeholder="Função do contato" value="" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Tel. Fixo </label>
+
+                        <div class="col-sm-8">
+                            <input class="col-xs-12 col-sm-6 " type="text" id="telFixo" name="telFixo" placeholder="número do telefone" value="" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Tel. Móvel </label>
+
+                        <div class="col-sm-8">
+                            <input class="col-xs-12 col-sm-6 " type="text" id="telMovel" name="telMovel" placeholder="número do celular" value="" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label no-padding-right" for="form-field-first">E-mail </label>
+
+                        <div class="col-sm-8">
+                            <input class="col-xs-12 col-sm-6 " type="text" id="email" name="email" placeholder="Endereço de email" value="" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label no-padding-right" for="form-field-date">Data de nascimento</label>
+
+                        <div class="col-sm-8">
+                            <div class="input-medium">
+                                <div class="input-group">
+                                    <input class="input-medium date-picker input-mask-date" id="dataNascimento" name="dataNascimento" type="text" data-date-format="dd/mm/yyyy" placeholder="dd/mm/yyyy" value="" />
+                                    <span class="input-group-addon">
+                                        <i class="ace-icon fa fa-calendar"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label no-padding-right" for="form-field-date">Observações</label>
+                        <div class="col-sm-12">
+                            <textarea class="col-sm-12" id="observacoesContato" name="observacoesContato" placeholder="observações adicionais"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary" id="salvarContato">
+                        <i class="ace-icon fa fa-check"></i>
+                        Salvar
+                    </button>
+                    <button type="button" data-dismiss="modal" class="btn">
+                        <i class="ace-icon fa fa-times"></i>
+                        Cancelar
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -398,10 +481,15 @@
             .one('click', '#salvarContato', function () {
                 salvarContato(codigo);
             });
+
+        limparComponentesContato();
+        if (codigo > 0){
+            //preencherFormulário (AJAX)
+        }
     }
 
-    function salvarContato(codigo){
-        //AJAX de salvamento
+    function limparComponentesContato() {
+        $('#formContatoCliente')[0].reset();
     }
 
     function deletarContato(codigo) {
@@ -549,6 +637,14 @@
     });
 
     $('#CEP').mask('99999-999');
+    $('#telFixo').mask('(99) 9999-9999');
+    $('#telMovel').mask('(99) 99999-9999');
+
+    $('.date-picker').datepicker({
+        format: 'dd/mm/yyyy',
+        language: 'pt-BR',
+    });
+    $('.input-mask-date').mask('99/99/9999');
 
     $(document).ready(function () {
         $('input').on('change', function () {
