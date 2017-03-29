@@ -173,6 +173,7 @@
   <ItemGroup>
     <Compile Include="App_Code\BaseController.cs" />
     <Compile Include="Code\CadastroDeUsuarios.cs" />
+    <Compile Include="Code\Clientes\CadastroDeCargo.cs" />
     <Compile Include="Code\Clientes\CadastroDeClientes.cs" />
     <Compile Include="Code\Constantes.cs" />
     <Compile Include="Code\ControleDeSessao.cs" />
@@ -217,6 +218,7 @@
     <Compile Include="Code\Parametro\CadastroDeSegmento.cs" />
     <Compile Include="Code\Financeiro\CadastroDeContador.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\CargoController.cs" />
     <Compile Include="Controllers\ClienteController.cs" />
     <Compile Include="Controllers\ContadorController.cs" />
     <Compile Include="Controllers\ContatoController.cs" />
@@ -229,6 +231,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Cliente\CargoModel.cs" />
     <Compile Include="Models\Cliente\ClienteModel.cs" />
     <Compile Include="Models\Financeiro\ContadorModel.cs" />
     <Compile Include="Models\Fornecedor\ContatoModel.cs" />
@@ -447,6 +450,8 @@
     <Content Include="Views\Cliente\DetalhamentoCliente.cshtml" />
     <Content Include="Views\Funcionario\index.cshtml" />
     <Content Include="Views\Funcionario\DetalhamentoFuncionario.cshtml" />
+    <Content Include="Views\Cargo\index.cshtml" />
+    <Content Include="Views\Cargo\DetalhamentoCargo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

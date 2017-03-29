@@ -578,12 +578,16 @@
                 data: { Prefix: request.term },
                 success: function (data) {
                     response($.map(data, function (item) {
-                        $('#idContador').attr('value', item.Id);
-                        return { label: item.Name, value: item.Name };
+                        return { label: item.Name, value: item.Name, Id: item.Id };
                     }))
 
                 }
             })
+        },
+        select: function (event, ui) {
+            $('#idContador').attr('value', ui.item.Id);
+            $('#Contador').val(ui.item.label);
+            return false;
         },
         messages: {
             noResults: "Sem resultados", results: ""
@@ -604,12 +608,16 @@
                 data: { Prefix: request.term },
                 success: function (data) {
                     response($.map(data, function (item) {
-                        $('#idElaboradorPCMSO').attr('value', item.Id);
-                        return { label: item.Name, value: item.Name };
+                        return { label: item.Name, value: item.Name, Id: item.Id };
                     }))
 
                 }
             })
+        },
+        select: function (event, ui) {
+            $('#idElaboradorPCMSO').attr('value', ui.item.Id);
+            $('#elaboradorPCMSO').val(ui.item.label);
+            return false;
         },
         messages: {
             noResults: "Sem resultados", results: ""
@@ -631,12 +639,16 @@
                 data: { Prefix: request.term },
                 success: function (data) {
                     response($.map(data, function (item) {
-                        $('#idElaboradorPPRA').attr('value', item.Id);
-                        return { label: item.Name, value: item.Name };
+                        return { label: item.Name, value: item.Name, Id: item.Id  };
                     }))
 
                 }
             })
+        },
+        select: function (event, ui) {
+            $('#idElaboradorPPRA').attr('value', ui.item.Id);
+            $('#elaboradorPPRA').val(ui.item.label);
+            return false;
         },
         messages: {
             noResults: "Sem resultados", results: ""
@@ -658,12 +670,16 @@
                 data: { Prefix: request.term },
                 success: function (data) {
                     response($.map(data, function (item) {
-                        $('#idSegmento ').attr('value', item.Id);
-                        return { label: item.Name, value: item.Name };
+                        return { label: item.Name, value: item.Name, Id: item.Id };
                     }))
 
                 }
             })
+        },
+        select: function (event, ui) {
+            $('#idSegmento').attr('value', ui.item.Id);
+            $('#segmento').val(ui.item.label);
+            return false;
         },
         messages: {
             noResults: "Sem resultados", results: ""

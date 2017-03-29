@@ -1,0 +1,129 @@
+﻿@using System.Linq
+
+@model List<MediCloud.Models.Cliente.CargoModel>
+@{
+    ViewBag.Title = "Cargo";
+}
+<div class="page-header">
+    <h1>
+        Cargos
+        <small>
+            <i class="ace-icon fa fa-angle-double-right"></i>
+            Busca de cargos cadastrados
+        </small>
+    </h1>
+</div>
+<div id="cargoAlerts"></div>
+<form method="post" action="@Url.Content("~/Cargo")">
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12">
+            <div class="input-group">
+                <input type="text" class="form-control" name="keywords" placeholder="Digite aqui para buscar">
+                <div class="input-group-btn">
+                    <button type="submit" class="btn btn-default no-border btn-sm">
+                        <i class="ace-icon fa fa-search icon-on-right bigger-110"></i>
+                    </button>
+                </div>
+            </div>
+            <a href="/Cargo/DetalhamentoCargo" class="btn btn-xs">+ Novo cargo</a>
+        </div>
+    </div>
+</form>
+<div class="hr"></div>
+@if (Model != null && Model.Any())
+{
+    foreach (MediCloud.Models.Cliente.CargoModel item in Model)
+    {
+        <div class="col-xs-12" id="@item.IdCargo">
+            <div class="media search-media">
+                <div class="media-body">
+                    <div class="container">
+                        <h4 class="media-heading">
+                            <span class="blue">@item.NomeCargo </span>
+                        </h4>
+                    </div>
+                    <p><b>Abreviatura:</b> @item.Abreviatura <br /> <b>Códgio:</b> @item.IdCargo</p>
+
+                    <div class="search-actions text-center">
+                        <span class="blue bolder bigger-110">Ações</span>
+
+                        <div class="action-buttons bigger-150">
+                            <a href="javascript:excluirCargo(@item.IdCargo);">
+                                <i class="ace-icon fa fa-trash"></i>
+                            </a>
+                        </div>
+                        <a href="/Cargo/DetalhamentoCargo?codigoCargo=@item.IdCargo" class="search-btn-action btn btn-sm btn-block btn-info">Editar</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
+else
+{
+    <div class="alert alert-block alert-info">
+        Nenhum resultado para ser exibido.
+    </div>
+}
+
+<div id="confirm" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="smaller lighter blue no-margin">Excluir cargo</h3>
+            </div>
+            <div class="modal-body">
+                Tem certeza que deseja excluir este cargo?
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-primary" id="delete">
+                    <i class="ace-icon fa fa-check"></i>
+                    Sim
+                </button>
+                <button type="button" data-dismiss="modal" class="btn">
+                    <i class="ace-icon fa fa-times"></i>
+                    Não
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    function excluirCargo(codigo) {
+        confirmDeleteModal(codigo);
+    }
+
+    function confirmDeleteModal(codigo) {
+        $('#confirm').modal({
+            backdrop: 'static',
+            keyboard: false
+        })
+            .one('click', '#delete', function () {
+                deletarCargo(codigo);
+            });
+    }
+
+    function deletarCargo(codigo) {
+        $.ajax({
+            url: '/Cargo/DeletarCargo?codigoDoCargo=' + codigo,
+            type: "post",
+            cache: false,
+            success: function (savingStatus) {
+                var tipoAlert;
+                if (savingStatus.acaoBemSucedida) {
+                    tipoAlert = 'alert-success';
+                    $("#" + codigo).remove();
+                }
+                else
+                    tipoAlert = 'alert-danger';
+
+                $('#cargoAlerts').html('<div class="alert ' + tipoAlert + '"><a class="close" data-dismiss="alert">×</a><span>' + savingStatus.mensagem + '</span></div>');
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                $('#cargoAlerts').html('<div class="alert alert-danger"><a class="close" data-dismiss="alert">×</a><span>Ops! Não foi possível deletar este registro no servidor. Contate-nos para que possamos te ajudar melhor.</span></div>')
+            }
+        });
+    }
+</script>
