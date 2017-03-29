@@ -74,7 +74,7 @@ namespace MediCloud.Code.Clientes
             }
         }
 
-        private static ClienteModel injetarEmUsuarioModel(CLIENTE x)
+        internal static ClienteModel injetarEmUsuarioModel(CLIENTE x)
         {
             return new ClienteModel()
             {
@@ -98,7 +98,7 @@ namespace MediCloud.Code.Clientes
             };
         }
 
-        private static CLIENTE injetarEmUsuarioDAO(ClienteModel x)
+        public static CLIENTE injetarEmUsuarioDAO(ClienteModel x)
         {
             return new CLIENTE()
             {
@@ -119,6 +119,19 @@ namespace MediCloud.Code.Clientes
                 UF = x.UF,
                 NFUN = x.NumeroDeFuncionarios
             };
+        }
+
+        internal static List<ClienteModel> RecuperarContadorPorTermo(string prefix)
+        {
+            List<CLIENTE> contadoresEncontrados = ControleDeClientes.buscarCliente(prefix);
+            List<ClienteModel> resultados = new List<ClienteModel>();
+
+            contadoresEncontrados.ForEach(x =>
+            {
+                resultados.Add(injetarEmUsuarioModel(x));
+            });
+
+            return resultados;
         }
 
         private static string getTipoClienteBanco(EnumCliente.tipoEmpresa tipoEmpresa)

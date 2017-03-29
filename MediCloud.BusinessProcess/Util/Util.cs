@@ -8,9 +8,12 @@ namespace MediCloud.BusinessProcess.Util
 {
     public class Util
     {
-        public static string ApenasNumeros (string valor)
+        public static string ApenasNumeros(string valor)
         {
-            return new string(valor.Where(c => char.IsDigit(c)).ToArray()); ;
+            if (!string.IsNullOrEmpty(valor))
+                return new string(valor.Where(c => char.IsDigit(c)).ToArray());
+            else
+                return null;
         }
     }
 }

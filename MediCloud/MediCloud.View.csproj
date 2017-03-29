@@ -211,6 +211,7 @@
     <Compile Include="Code\Enum\EnumCliente.cs" />
     <Compile Include="Code\Enum\EnumContato.cs" />
     <Compile Include="Code\Fornecedor\CadastroDeContato.cs" />
+    <Compile Include="Code\Funcionario\CadastroDeFuncionarios.cs" />
     <Compile Include="Code\Parametro\CadastroDeElaboradorPCMSO.cs" />
     <Compile Include="Code\Parametro\CadastroDeElaboradorPPRA.cs" />
     <Compile Include="Code\Parametro\CadastroDeSegmento.cs" />
@@ -221,6 +222,7 @@
     <Compile Include="Controllers\ContatoController.cs" />
     <Compile Include="Controllers\ElaboradorPCMSOController.cs" />
     <Compile Include="Controllers\ElaboradorPPRAController.cs" />
+    <Compile Include="Controllers\FuncionarioController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\SegmentoController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
@@ -230,6 +232,7 @@
     <Compile Include="Models\Cliente\ClienteModel.cs" />
     <Compile Include="Models\Financeiro\ContadorModel.cs" />
     <Compile Include="Models\Fornecedor\ContatoModel.cs" />
+    <Compile Include="Models\Funcionario\FuncionarioModel.cs" />
     <Compile Include="Models\Parametro\ElaboradorPCMSOModel.cs" />
     <Compile Include="Models\IModel.cs" />
     <Compile Include="Models\Parametro\ElaboradorPPRAModel.cs" />
@@ -283,6 +286,7 @@
     <Content Include="assets\images\avatars\contact.png" />
     <Content Include="assets\images\avatars\profile-pic.jpg" />
     <Content Include="assets\images\avatars\user.jpg" />
+    <Content Include="assets\images\avatars\worker.png" />
     <Content Include="assets\images\bootstrap-colorpicker\alpha-horizontal.png" />
     <Content Include="assets\images\bootstrap-colorpicker\alpha.png" />
     <Content Include="assets\images\bootstrap-colorpicker\hue-horizontal.png" />
@@ -441,6 +445,8 @@
     <Content Include="Views\Account\DetalhamentoUsuario.cshtml" />
     <Content Include="Views\Cliente\index.cshtml" />
     <Content Include="Views\Cliente\DetalhamentoCliente.cshtml" />
+    <Content Include="Views\Funcionario\index.cshtml" />
+    <Content Include="Views\Funcionario\DetalhamentoFuncionario.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

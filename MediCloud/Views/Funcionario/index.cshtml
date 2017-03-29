@@ -1,0 +1,177 @@
+﻿@using System.Linq
+
+@model List<MediCloud.Models.Funcionario.FuncionarioModel>
+@{
+    ViewBag.Title = "Funcionário";
+}
+<div class="page-header">
+    <h1>
+        Funcionários
+        <small>
+            <i class="ace-icon fa fa-angle-double-right"></i>
+            Busca de funcionários cadastrados
+        </small>
+    </h1>
+</div>
+<div id="usuarioAlerts"></div>
+<form method="post" action="@Url.Content("~/Funcionario")">
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12">
+            <div class="input-group">
+                <input type="text" class="form-control" name="keywords" placeholder="Digite aqui para buscar">
+                <div class="input-group-btn">
+                    <button type="submit" class="btn btn-default no-border btn-sm">
+                        <i class="ace-icon fa fa-search icon-on-right bigger-110"></i>
+                    </button>
+                </div>
+            </div>
+            <a href="/Funcionario/DetalhamentoFuncionario" class="btn btn-xs">+ Novo funcionario</a>
+        </div>
+    </div>
+</form>
+<div class="hr"></div>
+@if (Model != null && Model.Any())
+{
+    foreach (MediCloud.Models.Funcionario.FuncionarioModel item in Model)
+    {
+        <div class="col-xs-12" id="@item.IdFuncionario">
+            <div class="media search-media">
+                <div class="media-left">
+                    <a href="#">
+                        <img class="media-object" data-src="holder.js/72x72" alt="72x72" src="/assets/images/avatars/worker.png" data-holder-rendered="true" style="width: 72px; height: 72px;">
+                    </a>
+                </div>
+                <div class="media-body">
+                    <div class="container">
+                        <h4 class="media-heading">
+                            <span class="blue">@item.NomeCompleto </span>
+                            <span id="bloqueado">
+                                @if (item.Inativo.HasValue ? item.Inativo.Value : false)
+                                {
+                                    <span class="label label-danger" id="spanBloqueado">Inativo</span>
+                                }
+                            </span>
+                        </h4>
+                    </div>
+                    <p><b>Empresa:</b> @item.Empresa.NomeFantasia <br /> <b>Celular:</b> @item.TelMovel</p>
+
+                    <div class="search-actions text-center">
+                        <span class="blue bolder bigger-110">Ações</span>
+
+                        <div class="action-buttons bigger-150">
+                            <a href="javascript:excluirFuncionario(@item.IdFuncionario);">
+                                <i class="ace-icon fa fa-trash"></i>
+                            </a>
+                            &nbsp;&nbsp;&nbsp;
+                            <a href="javascript:inativarFuncionario(@item.IdFuncionario);">
+                                <i class="ace-icon fa fa-ban red"></i>
+                            </a>
+                        </div>
+
+                        <a href="/Funcionario/DetalhamentoFuncionario?codigoFuncionario=@item.IdFuncionario" class="search-btn-action btn btn-sm btn-block btn-info">Editar</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
+else
+{
+    <div class="alert alert-block alert-info">
+        Nenhum resultado para ser exibido.
+    </div>
+}
+
+<div id="confirm" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="smaller lighter blue no-margin">Excluir funcionário</h3>
+            </div>
+            <div class="modal-body">
+                Tem certeza que deseja excluir este funcionário?
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-primary" id="delete">
+                    <i class="ace-icon fa fa-check"></i>
+                    Sim
+                </button>
+                <button type="button" data-dismiss="modal" class="btn">
+                    <i class="ace-icon fa fa-times"></i>
+                    Não
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    function excluirFuncionario(codigo) {
+        confirmDeleteModal(codigo);
+    }
+
+    function confirmDeleteModal(codigo) {
+        $('#confirm').modal({
+            backdrop: 'static',
+            keyboard: false
+        })
+            .one('click', '#delete', function () {
+                deletarFuncionario(codigo);
+            });
+    }
+
+    function inativarFuncionario(codigo) {
+        var bloquear = false;
+        if ($("#" + codigo).find("#bloqueado").children().length > 0) {
+            $("#" + codigo).find("#bloqueado").find("#spanBloqueado").remove();
+            bloquear = false;
+        } else {
+            $("#" + codigo).find("#bloqueado").html("<span class=\"label label-danger\" id=\"spanBloqueado\">Inativo</span>");
+            bloquear = true;
+        }
+
+        inativarFuncionarioAjax(bloquear, codigo);
+    }
+
+    function inativarFuncionarioAjax(bloquear, codigo) {
+        $.ajax({
+            url: '/Funcionario/InativarFuncionario?codigoDoFuncionario=' + codigo + "&Inativar=" + bloquear,
+            type: "post",
+            cache: false,
+            success: function (savingStatus) {
+                var tipoAlert;
+                if (savingStatus.acaoBemSucedida)
+                    tipoAlert = 'alert-success';
+                else
+                    tipoAlert = 'alert-danger';
+                $('#usuarioAlerts').html('<div class="alert ' + tipoAlert + '"><a class="close" data-dismiss="alert">×</a><span>' + savingStatus.mensagem + '</span></div>');
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                $('#usuarioAlerts').html('<div class="alert alert-danger"><a class="close" data-dismiss="alert">×</a><span>Ops! Não foi possível inativar este funcionario no servidor. Contate-nos para que possamos te ajudar melhor.</span></div>')
+            }
+        });
+    }
+
+    function deletarFuncionario(codigo) {
+        $.ajax({
+            url: '/Funcionario/DeletarFuncionario?codigoDoFuncionario=' + codigo,
+            type: "post",
+            cache: false,
+            success: function (savingStatus) {
+                var tipoAlert;
+                if (savingStatus.acaoBemSucedida) {
+                    tipoAlert = 'alert-success';
+                    $("#" + codigo).remove();
+                }
+                else
+                    tipoAlert = 'alert-danger';
+
+                $('#usuarioAlerts').html('<div class="alert ' + tipoAlert + '"><a class="close" data-dismiss="alert">×</a><span>' + savingStatus.mensagem + '</span></div>');
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                $('#usuarioAlerts').html('<div class="alert alert-danger"><a class="close" data-dismiss="alert">×</a><span>Ops! Não foi possível deletar este registro no servidor. Contate-nos para que possamos te ajudar melhor.</span></div>')
+            }
+        });
+    }
+</script>
