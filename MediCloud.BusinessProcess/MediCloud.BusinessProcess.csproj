@@ -33,7 +33,7 @@
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
     <Reference Include="Phidelis.Criptografia, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>DependenciasExternas\Phidelis.Criptografia.dll</HintPath>
+      <HintPath>..\ExternalDependecies\Phidelis.Criptografia.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -68,9 +68,6 @@
       <Project>{2f62e684-ee30-4dc5-bba5-5608d59a5874}</Project>
       <Name>MediCloud.Persistence</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="DependenciasExternas\Phidelis.Criptografia.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
