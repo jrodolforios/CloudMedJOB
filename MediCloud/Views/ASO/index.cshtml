@@ -1,0 +1,181 @@
+﻿@using System.Linq
+
+@model List<MediCloud.Models.Cliente.ASOModel>
+@{
+    ViewBag.Title = "ASO";
+}
+<div class="page-header">
+    <h1>
+        ASO
+        <small>
+            <i class="ace-icon fa fa-angle-double-right"></i>
+            Busca de ASO's Criados
+        </small>
+    </h1>
+</div>
+<div id="ASOAlerts"></div>
+<form method="post" action="@Url.Content("~/ASO")">
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12">
+            <div class="input-group">
+                <input type="text" class="form-control" name="keywords" placeholder="Digite aqui para buscar">
+                <div class="input-group-btn">
+                    <button type="submit" class="btn btn-default no-border btn-sm">
+                        <i class="ace-icon fa fa-search icon-on-right bigger-110"></i>
+                    </button>
+                </div>
+            </div>
+            <a href="/ASO/DetalhamentoASO" class="btn btn-xs">+ Novo ASO</a>
+        </div>
+    </div>
+</form>
+<div class="hr"></div>
+@if (Model != null && Model.Any())
+{
+    foreach (MediCloud.Models.Cliente.ASOModel item in Model)
+    {
+        <div class="col-xs-12" id="@item.IdASO">
+            <div class="media search-media">
+                <div class="media-body">
+                    <div class="container">
+                        <h4 class="media-heading">
+                            <span class="blue">@item.Funcionario.NomeCompleto - @item.Cliente.NomeFantasia </span>
+                            <span id="entregue">
+                                @if (item.Status == "ENTREGUE")
+                                {
+                                    <span class="label label-success" id="spanEntregue">Entregue</span>
+                                }
+                            </span>
+                        </h4>
+                    </div>
+                    <p><b>Referente a:</b> @item.Referente.NomeReferencia <br /> <b>Cargo:</b> @item.Cargo.NomeCargo</p>
+
+                    <div class="search-actions text-center">
+                        <span class="blue bolder bigger-110">Ações</span>
+
+                        <div class="action-buttons bigger-150">
+                            <a href="javascript:marcarAsoComoEntregue(@item.IdASO);" class="tooltipASO" title="Marcar ASO como entregue">
+                                <i class="ace-icon green fa fa-check"></i>
+                            </a>
+                            &nbsp;&nbsp;
+                            <a href="javascript:imprimirASO(@item.IdASO);" class="tooltipASO" title="Imprimir (C/ Médico Coord)">
+                                <i class="ace-icon purple fa fa-file-text-o"></i>
+                            </a>
+                            &nbsp;&nbsp;
+                            <a href="javascript:GerarRecibo(@item.IdASO);" class="tooltipASO" title="Gerar recibo">
+                                <i class="ace-icon orange fa fa-file-excel-o"></i>
+                            </a>
+                        </div>
+                        <a href="/ASO/DetalhamentoASO?codigoASO=@item.IdASO" class="search-btn-action btn btn-sm btn-block btn-info">Editar</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
+else
+{
+    <div class="alert alert-block alert-info">
+        Nenhum resultado para ser exibido.
+    </div>
+}
+
+<script src="assets/js/jquery-2.1.4.min.js"></script>
+<script src="assets/js/jquery-ui.min.js"></script>
+<script src="assets/js/jquery.ui.touch-punch.min.js"></script>
+<script type="text/javascript">
+
+    $(".tooltipASO").tooltip({
+        show: null,
+        position: {
+            my: "left top",
+            at: "left bottom"
+        },
+        open: function (event, ui) {
+            ui.tooltip.animate({ top: ui.tooltip.position().top + 10 }, "fast");
+        }
+    });
+
+
+
+
+
+    function marcarEntregue(entregue, codigo) {
+        $.ajax({
+            url: '/ASO/MarcarComoEntregue?codigoDoASO=' + codigo + "&Entregue=" + entregue,
+            type: "post",
+            cache: false,
+            success: function (savingStatus) {
+                var tipoAlert;
+                if (savingStatus.acaoBemSucedida) {
+                    tipoAlert = 'alert-success';
+                    $("#" + codigo).remove();
+                }
+                else
+                    tipoAlert = 'alert-danger';
+
+                $('#ASOAlerts').html('<div class="alert ' + tipoAlert + '"><a class="close" data-dismiss="alert">×</a><span>' + savingStatus.mensagem + '</span></div>');
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                $('#ASOAlerts').html('<div class="alert alert-danger"><a class="close" data-dismiss="alert">×</a><span>Ops! Não foi possível alterar este registro no servidor. Contate-nos para que possamos te ajudar melhor.</span></div>')
+            }
+        });
+    }
+
+    function marcarAsoComoEntregue(codigo) {
+        var entregue = false;
+        if ($("#" + codigo).find("#entregue").children().length > 0) {
+            $("#" + codigo).find("#entregue").find("#spanEntregue").remove();
+            entregue = false;
+        } else {
+            $("#" + codigo).find("#entregue").html("<span class=\"label label-success\" id=\"spanEntregue\">Entregue</span>");
+            entregue = true;
+        }
+
+        marcarEntregue(entregue, codigo);
+    }
+
+    function imprimirASO(codigo) {
+        $.ajax({
+            url: '/ASO/ImprimirComMedicoCoordenador?codigoDoASO=' + codigo,
+            type: "post",
+            cache: false,
+            success: function (savingStatus) {
+                var tipoAlert;
+                if (savingStatus.acaoBemSucedida) {
+                    tipoAlert = 'alert-success';
+                    $("#" + codigo).remove();
+                }
+                else
+                    tipoAlert = 'alert-danger';
+
+                $('#ASOAlerts').html('<div class="alert ' + tipoAlert + '"><a class="close" data-dismiss="alert">×</a><span>' + savingStatus.mensagem + '</span></div>');
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                $('#ASOAlerts').html('<div class="alert alert-danger"><a class="close" data-dismiss="alert">×</a><span>Ops! Não foi possível alterar este registro no servidor. Contate-nos para que possamos te ajudar melhor.</span></div>')
+            }
+        });
+    }
+
+    function GerarRecibo(codigo) {
+        $.ajax({
+            url: '/ASO/GerarRecibo?codigoDoASO=' + codigo,
+            type: "post",
+            cache: false,
+            success: function (savingStatus) {
+                var tipoAlert;
+                if (savingStatus.acaoBemSucedida) {
+                    tipoAlert = 'alert-success';
+                    $("#" + codigo).remove();
+                }
+                else
+                    tipoAlert = 'alert-danger';
+
+                $('#ASOAlerts').html('<div class="alert ' + tipoAlert + '"><a class="close" data-dismiss="alert">×</a><span>' + savingStatus.mensagem + '</span></div>');
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                $('#ASOAlerts').html('<div class="alert alert-danger"><a class="close" data-dismiss="alert">×</a><span>Ops! Não foi possível alterar este registro no servidor. Contate-nos para que possamos te ajudar melhor.</span></div>')
+            }
+        });
+    }
+</script>

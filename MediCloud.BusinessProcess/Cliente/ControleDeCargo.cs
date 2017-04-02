@@ -116,5 +116,25 @@ namespace MediCloud.BusinessProcess.Cliente
                 throw ex;
             }
         }
+
+        public static List<CARGO> buscarCargosPorTermo(string prefix)
+        {
+            CloudMedContext contexto = new CloudMedContext();
+            try
+            {
+                List<CARGO> cargo = contexto.CARGO.Where(x => x.CARGO1.Contains(prefix)).ToList();
+
+                return cargo;
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return null;
+        }
     }
 }

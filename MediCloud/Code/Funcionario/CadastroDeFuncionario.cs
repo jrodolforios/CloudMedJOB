@@ -13,7 +13,7 @@ using MediCloud.BusinessProcess.Util;
 
 namespace MediCloud.Code.Funcionario
 {
-    public class CadastroDeFuncionarios
+    public class CadastroDeFuncionario
     {
         internal static List<FuncionarioModel> buscarUsuarios(FormCollection form)
         {
@@ -127,6 +127,19 @@ namespace MediCloud.Code.Funcionario
                 TelFixo = Util.ApenasNumeros(string.IsNullOrEmpty(form["telFixo"]) ? string.Empty : form["telFixo"]),
                 TelMovel = Util.ApenasNumeros(string.IsNullOrEmpty(form["telMovel"]) ? string.Empty : form["telMovel"])
             };
+        }
+
+        internal static List<FuncionarioModel> RecuperarContadorPorTermoECliente(string prefix, int idCliente)
+        {
+            List<FUNCIONARIO> contadoresEncontrados = ControleDeFuncionario.buscarFuncionariosDeClientePorTermo(prefix, idCliente);
+            List<FuncionarioModel> resultados = new List<FuncionarioModel>();
+
+            contadoresEncontrados.ForEach(x =>
+            {
+                resultados.Add(injetarEmUsuarioModel(x));
+            });
+
+            return resultados;
         }
     }
 }

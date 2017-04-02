@@ -52,13 +52,15 @@
                                     Cadastro
                                 </a>
                             </li>
-
-                            <li>
-                                <a data-toggle="tab" href="#edit-settings">
-                                    <i class="purple ace-icon fa fa-user bigger-125"></i>
-                                    Contatos
-                                </a>
-                            </li>
+                            @if (Model != null && Model.IdCliente > 0)
+                            {
+                                <li>
+                                    <a data-toggle="tab" href="#edit-settings">
+                                        <i class="purple ace-icon fa fa-user bigger-125"></i>
+                                        Contatos
+                                    </a>
+                                </li>
+                            }
                         </ul>
                     </div>
                     <div class="tab-content profile-edit-tab-content">
@@ -532,7 +534,7 @@
         $("#funcao").attr('value', '');
         $("#telFixo").attr('value', '');
         $("#telMovel").attr('value', '');
-        $("#email").attr('value','');
+        $("#email").attr('value', '');
         $("#dataNascimento").attr('value', '');
         $("#observacoesContato").val('');
     }
@@ -639,7 +641,7 @@
                 data: { Prefix: request.term },
                 success: function (data) {
                     response($.map(data, function (item) {
-                        return { label: item.Name, value: item.Name, Id: item.Id  };
+                        return { label: item.Name, value: item.Name, Id: item.Id };
                     }))
 
                 }

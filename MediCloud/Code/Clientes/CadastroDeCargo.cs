@@ -97,5 +97,18 @@ namespace MediCloud.Code.Clientes
                 NomeCargo = string.IsNullOrEmpty(form["nomeCargo"]) ? string.Empty : form["nomeCargo"]
             };
         }
+
+        internal static List<CargoModel> RecuperarCargoPorTermo(string prefix)
+        {
+            List<CARGO> contadoresEncontrados = ControleDeCargo.buscarCargosPorTermo(prefix);
+            List<CargoModel> resultados = new List<CargoModel>();
+
+            contadoresEncontrados.ForEach(x =>
+            {
+                resultados.Add(injetarEmUsuarioModel(x));
+            });
+
+            return resultados;
+        }
     }
 }

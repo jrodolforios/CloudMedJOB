@@ -27,7 +27,7 @@ namespace MediCloud.Controllers
                 base.EstahLogado();
                 ViewBag.Title = "Usuários";
 
-                List<FuncionarioModel> model = CadastroDeFuncionarios.buscarUsuarios(form);
+                List<FuncionarioModel> model = CadastroDeFuncionario.buscarUsuarios(form);
 
                 return View(model);
             }
@@ -46,7 +46,7 @@ namespace MediCloud.Controllers
             {
                 base.EstahLogado();
 
-                CadastroDeFuncionarios.InativarFuncionario(this, codigoDoFuncionario, Inativar);
+                CadastroDeFuncionario.InativarFuncionario(this, codigoDoFuncionario, Inativar);
 
                 resultado.mensagem = Inativar ? "Funcionário inativo." : "Funcionário ativo.";
                 resultado.acaoBemSucedida = true;
@@ -70,7 +70,7 @@ namespace MediCloud.Controllers
             {
                 base.EstahLogado();
 
-                CadastroDeFuncionarios.DeletarFuncionario(this, codigoDoFuncionario);
+                CadastroDeFuncionario.DeletarFuncionario(this, codigoDoFuncionario);
 
                 resultado.mensagem = "Usuário excluído.";
                 resultado.acaoBemSucedida = true;
@@ -95,7 +95,7 @@ namespace MediCloud.Controllers
                 base.EstahLogado();
                 ViewBag.Title = "Funcionário";
 
-                CadastroDeFuncionarios.DeletarFuncionario(this, codigoFuncionario);
+                CadastroDeFuncionario.DeletarFuncionario(this, codigoFuncionario);
 
                 base.FlashMessage("Funcionário excluído.", MessageType.Success);
 
@@ -103,7 +103,7 @@ namespace MediCloud.Controllers
             }
             catch (Exception ex)
             {
-                modelFuncionario = CadastroDeFuncionarios.RecuperarFuncionarioPorID(Convert.ToInt32(codigoFuncionario));
+                modelFuncionario = CadastroDeFuncionario.RecuperarFuncionarioPorID(Convert.ToInt32(codigoFuncionario));
 
                 base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
                 return View(modelFuncionario);
@@ -117,7 +117,7 @@ namespace MediCloud.Controllers
                 base.EstahLogado();
                 ViewBag.Title = "Funcionário";
 
-                FuncionarioModel model = CadastroDeFuncionarios.RecuperarFuncionarioPorID(codigoFuncionario.HasValue ? codigoFuncionario.Value : 0);
+                FuncionarioModel model = CadastroDeFuncionario.RecuperarFuncionarioPorID(codigoFuncionario.HasValue ? codigoFuncionario.Value : 0);
 
                 return View(model);
             }
@@ -137,7 +137,7 @@ namespace MediCloud.Controllers
                 base.EstahLogado();
                 ViewBag.Title = "Funcionário";
 
-                modelFuncionario = CadastroDeFuncionarios.SalvarFuncionario(form);
+                modelFuncionario = CadastroDeFuncionario.SalvarFuncionario(form);
 
                 base.FlashMessage("Funcionário cadastrado.", MessageType.Success);
                 return View(modelFuncionario);
@@ -145,7 +145,7 @@ namespace MediCloud.Controllers
             catch (InvalidOperationException ex)
             {
                 if (!string.IsNullOrEmpty(form["codigoFuncionario"]))
-                    modelFuncionario = CadastroDeFuncionarios.RecuperarFuncionarioPorID(Convert.ToInt32(form["codigoFuncionario"]));
+                    modelFuncionario = CadastroDeFuncionario.RecuperarFuncionarioPorID(Convert.ToInt32(form["codigoFuncionario"]));
 
                 base.FlashMessage(ex.Message, MessageType.Error);
                 return View(modelFuncionario);
@@ -157,6 +157,33 @@ namespace MediCloud.Controllers
             }
         }
 
+        [HttpPost]
+        public JsonResult BuscaFuncionarioDeClienteAJAX(int IdCliente, string Prefix)
+        {
+            List<FuncionarioModel> contadoresEncontrados = CadastroDeFuncionario.RecuperarContadorPorTermoECliente(Prefix, IdCliente);
+            List<AutoCompleteDefaultModel> ObjList = new List<AutoCompleteDefaultModel>();
+
+            try
+            {
+                contadoresEncontrados.ForEach(x =>
+                {
+                    ObjList.Add(new AutoCompleteDefaultModel() { Id = x.IdFuncionario, Name = x.NomeCompleto });
+                });
+
+                //Searching records from list using LINQ query  
+                var results = (from N in ObjList
+                               select new { N.Id, N.Name }).ToArray();
+                return Json(results, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                ObjList = new List<AutoCompleteDefaultModel>()
+                {
+                new AutoCompleteDefaultModel {Id=-1,Name=Constantes.MENSAGEM_GENERICA_DE_ERRO },
+                };
+                return Json(ObjList.ToArray(), JsonRequestBehavior.AllowGet);
+            }
+        }
 
     }
 }

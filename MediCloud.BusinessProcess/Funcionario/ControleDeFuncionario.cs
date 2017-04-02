@@ -147,5 +147,26 @@ namespace MediCloud.BusinessProcess.Funcionario
                 throw ex;
             }
         }
+
+        public static List<FUNCIONARIO> buscarFuncionariosDeClientePorTermo(string prefix, int idCliente)
+        {
+            CloudMedContext contexto = new CloudMedContext();
+            try
+            {
+                List<FUNCIONARIO> funcionario = contexto.FUNCIONARIO.Where(x => x.FUNCIONARIO1.Contains(prefix) && (int)x.IDCLI == idCliente).ToList();
+
+                return funcionario;
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            return null;
+        }
     }
 }
