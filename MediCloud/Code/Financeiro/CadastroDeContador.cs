@@ -10,8 +10,6 @@ namespace MediCloud.Code.Financeiro
 {
     public class CadastroDeContador
     {
-
-
         public static ContadorModel injetarEmUsuarioModel(CONTADOR usuarioDoBanco)
         {
             if (usuarioDoBanco == null)

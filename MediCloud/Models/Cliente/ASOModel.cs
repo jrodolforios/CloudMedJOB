@@ -23,10 +23,15 @@ namespace MediCloud.Models.Cliente
         public CargoModel Cargo { get; set; }
         public SetorModel Setor { get; set; }
         public FormaPagamentoModel FormaPagamento { get; set; }
+        public int? IdFechamentoCaixa { get; set; }
+        public bool CaixaPendente { get; set; }
         public string Observacao { get; set; }
         public string Status { get; set; }
+        public string Usuario { get; set; }
+        public FaturamentoModel Faturamento {get;set;}
         
         public List<object> ProcedimentosMovimento { get; set; } //TODO: Implementar Procedimentos do Movimento ASO
+        public List<object> AnexosMovimento { get; set; } //TODO: Implementar anexos do Movimento ASO
 
         public string toString()
         {

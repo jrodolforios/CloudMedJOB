@@ -46,5 +46,17 @@ namespace MediCloud.Code.Clientes
 
             return encontrados;
         }
+
+        internal static MOVIMENTO_REFERENTE injetarEmUsuarioDAO(ReferenteModel x)
+        {
+            if (x == null)
+                return null;
+            else
+                return new MOVIMENTO_REFERENTE()
+                {
+                    IDREF = x.IdReferencia,
+                    NOMEREFERENCIA = x.NomeReferencia
+                };
+        }
     }
 }

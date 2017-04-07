@@ -214,6 +214,7 @@
     <Compile Include="Code\Enum\EnumCliente.cs" />
     <Compile Include="Code\Enum\EnumContato.cs" />
     <Compile Include="Code\Enum\EnumFinanceiro.cs" />
+    <Compile Include="Code\Financeiro\CadastroDeFaturamento.cs" />
     <Compile Include="Code\Financeiro\CadastroFormaPagamento.cs" />
     <Compile Include="Code\Fornecedor\CadastroDeContato.cs" />
     <Compile Include="Code\Funcionario\CadastroDeFuncionario.cs" />
@@ -244,6 +245,7 @@
     <Compile Include="Models\Cliente\CargoModel.cs" />
     <Compile Include="Models\Cliente\ClienteModel.cs" />
     <Compile Include="Models\Cliente\ReferenteModel.cs" />
+    <Compile Include="Models\Financeiro\FaturamentoModel.cs" />
     <Compile Include="Models\Financeiro\FormaPagamentoModel.cs" />
     <Compile Include="Models\Recomendacao\SetorModel.cs" />
     <Compile Include="Models\Parametro\TabelaPrecoModel.cs" />

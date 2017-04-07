@@ -49,6 +49,7 @@
     <Compile Include="Cliente\ControleDeCargo.cs" />
     <Compile Include="Cliente\ControleDeClientes.cs" />
     <Compile Include="Cliente\ControleDeReferente.cs" />
+    <Compile Include="Financeiro\ControleDeFaturamento.cs" />
     <Compile Include="Financeiro\ControleDeFormaDePagamento.cs" />
     <Compile Include="Fornecedor\ControleDeContato.cs" />
     <Compile Include="Funcionario\ControleDeFuncionario.cs" />

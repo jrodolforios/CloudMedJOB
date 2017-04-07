@@ -71,7 +71,7 @@ namespace MediCloud.Code.Clientes
             return usuarioModel;
         }
 
-        private static CARGO injetarEmCargoModelDAO(CargoModel usuarioModel)
+        public static CARGO injetarEmCargoModelDAO(CargoModel usuarioModel)
         {
             if (usuarioModel == null)
                 return null;

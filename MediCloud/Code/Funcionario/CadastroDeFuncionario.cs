@@ -53,7 +53,7 @@ namespace MediCloud.Code.Funcionario
                 };
         }
 
-        private static FUNCIONARIO injetarEmUsuarioModelDAO(FuncionarioModel x)
+        public static FUNCIONARIO injetarEmUsuarioModelDAO(FuncionarioModel x)
         {
             if (x == null)
                 return null;

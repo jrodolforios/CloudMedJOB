@@ -64,5 +64,43 @@ namespace MediCloud.Controllers
             }
         }
 
+        [HttpPost]
+        public ActionResult DetalhamentoASO(FormCollection form)
+        {
+            ASOModel modelASO = null;
+            try
+            {
+                base.EstahLogado();
+                ViewBag.Title = "ASO";
+                int codigoASO = 0;
+
+                ViewData["Referentes"] = CadastroDeReferente.RecuperarTodos() as List<ReferenteModel>;
+                ViewData["FormaPagamento"] = CadastroFormaPagamento.RecuperarTodos() as List<FormaPagamentoModel>;
+                ViewData["TabelaPrecos"] = CadastroDeTabelaDePreco.RecuperarTodos() as List<TabelaPrecoModel>;
+
+                if (!Int32.TryParse(form["codigoASO"], out codigoASO) || codigoASO <= 0)
+                    form["usuario"] = base.CurrentUser.login;
+
+                modelASO = CadastroDeASO.SalvarASO(form);
+
+                base.FlashMessage("Cargo cadastrado.", MessageType.Success);
+                return View(modelASO);
+            }
+            catch (InvalidOperationException ex)
+            {
+                if (!string.IsNullOrEmpty(form["codigoCargo"]))
+                    modelASO = CadastroDeASO.RecuperarASOPorID(Convert.ToInt32(form["codigoASO"]));
+
+                base.FlashMessage(ex.Message, MessageType.Error);
+                return View(modelASO);
+            }
+            catch (Exception ex)
+            {
+                base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
+                return View();
+            }
+        }
+
+
     }
 }

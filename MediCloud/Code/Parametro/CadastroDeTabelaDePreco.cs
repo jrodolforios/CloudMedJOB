@@ -51,6 +51,19 @@ namespace MediCloud.Code.Parametro
             }
         }
 
+        private static string getStringPorEnum(EnumFinanceiro.TipoPagamento TIpoPagamento)
+        {
+            switch (TIpoPagamento)
+            {
+                case EnumFinanceiro.TipoPagamento.AVista:
+                    return "V";
+                case EnumFinanceiro.TipoPagamento.APrazo:
+                    return "P";
+                default:
+                    return null;
+            }
+        }
+
         internal static List<TabelaPrecoModel> RecuperarTodos()
         {
             List<TABELA> referenteEncontrado = ControleDeTabelaPreco.RecuperarTodos();
@@ -63,6 +76,21 @@ namespace MediCloud.Code.Parametro
             });
 
             return encontrados;
+        }
+
+        internal static TABELA injetarEmUsuarioDAO(TabelaPrecoModel x)
+        {
+            if (x == null)
+                return null;
+            else
+                return new TABELA()
+                {
+                    IDTAB = x.IdTabela,
+                    TABELA1 = x.NomeTabela,
+                    STATUS = x.Status ? "A" : "I",
+                    TIPOPAGTO = getStringPorEnum(x.TipoPagamento)
+                    
+                };
         }
     }
 }

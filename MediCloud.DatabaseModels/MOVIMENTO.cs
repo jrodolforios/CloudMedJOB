@@ -43,7 +43,7 @@ namespace MediCloud.DatabaseModels
         [Column(TypeName = "numeric")]
         public decimal IDCGO { get; set; }
 
-        [StringLength(9)]
+        [StringLength(20)]
         public string USUARIO { get; set; }
 
         public int? IDFCX { get; set; }

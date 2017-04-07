@@ -48,6 +48,19 @@ namespace MediCloud.Code.Financeiro
             }
         }
 
+        private static string getStringPorEnum(EnumFinanceiro.TipoPagamento TIpoPagamento)
+        {
+            switch (TIpoPagamento)
+            {
+                case EnumFinanceiro.TipoPagamento.AVista:
+                    return "V";
+                case EnumFinanceiro.TipoPagamento.APrazo:
+                    return "P";
+                default:
+                    return null;
+            }
+        }
+
         internal static List<FormaPagamentoModel> RecuperarTodos()
         {
             List<FORMADEPAGAMENTO> referenteEncontrado = ControleDeFormaDePagamento.RecuperarTodos();
@@ -60,6 +73,19 @@ namespace MediCloud.Code.Financeiro
             });
 
             return encontrados;
+        }
+
+        internal static FORMADEPAGAMENTO injetarEmUsuarioDAO(FormaPagamentoModel x)
+        {
+            if (x == null)
+                return null;
+            else
+                return new FORMADEPAGAMENTO()
+                {
+                    FORMADEPAGAMENTO1 = x.NomeFormaPagamento,
+                    IDFORPAG = x.IdFormaPagamento,
+                    TIPOPAGTO = getStringPorEnum(x.TipoPagamento)
+                };
         }
     }
 }

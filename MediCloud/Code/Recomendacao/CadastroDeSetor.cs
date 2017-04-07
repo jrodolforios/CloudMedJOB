@@ -45,5 +45,17 @@ namespace MediCloud.Code.Recomendacao
 
             return resultados;
         }
+
+        internal static SETOR injetarEmUsuarioDAO(SetorModel x)
+        {
+            if (x == null)
+                return null;
+            else
+                return new SETOR()
+                {
+                    IDSETOR = x.IdSetor,
+                    SETOR1 = x.NomeSetor
+                };
+        }
     }
 }
