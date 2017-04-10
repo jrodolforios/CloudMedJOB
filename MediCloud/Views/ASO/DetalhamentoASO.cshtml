@@ -309,6 +309,7 @@
                             @if (Model != null && Model.ProcedimentosMovimento != null && Model.ProcedimentosMovimento.Any())
                             {
                                 string nomeProfissional = string.Empty;
+                                string nomeProcedimento = string.Empty;
                                 foreach (MediCloud.Models.Cliente.ProcedimentoMovimentoModel item in Model.ProcedimentosMovimento)
                                 {
                                     if (item.Profissional != null)
@@ -319,13 +320,22 @@
                                     {
                                         nomeProfissional = string.Empty;
                                     }
+
+                                    if (item.Procedimento != null)
+                                    {
+                                        nomeProcedimento = item.Procedimento.Nome;
+                                    }
+                                    else
+                                    {
+                                        nomeProcedimento = string.Empty;
+                                    }
                                     <div class="row">
                                         <div class="col-xs-12" id="@item.IdMovimentoProcedimento">
                                             <div class="media search-media">
                                                 <div class="media-body">
                                                     <div class="container">
                                                         <h4 class="media-heading">
-                                                            <span class="blue">@item.Procedimento.Nome </span>
+                                                            <span class="blue">@nomeProcedimento </span>
                                                         </h4>
                                                     </div>
                                                     <p><b>Profissional:</b> @nomeProfissional <br /> <b>Valor:</b> @item.Total</p>
@@ -413,6 +423,10 @@
                 <div class="modal-body">
                     <input type="hidden" id="codigoProcedimento" name="codigoProcedimento" value="0" />
                     <input type="hidden" id="codigoASOProcedimento" name="codigoASOProcedimento" value="@Html.ValueFor(x => x.IdASO)" />
+                    <input type="hidden" id="codigoFaturamento" name="codigoFaturamento" value="" />
+                    <input type="hidden" id="codigoFechamentoCaixa" name="codigoFechamentoCaixa" value="" />
+                    <input type="hidden" id="usuarioProcedimentoRealizado" name="usuarioProcedimentoRealizado" value="" />
+                    <input type="hidden" id="dataRealizado" name="dataRealizado" value="" />
 
                     <div class="form-group">
                         <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Fornecedor </label>
@@ -475,7 +489,7 @@
                         <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Usuario </label>
 
                         <div class="col-sm-8">
-                            <input class="col-xs-12 col-sm-8" readonly type="text" id="usuario" name="usuario" placeholder="Usuário" value="" />
+                            <input class="col-xs-12 col-sm-8" readonly type="text" id="usuarioProcedimento" name="usuarioProcedimento" placeholder="Usuário" value="" />
                         </div>
                     </div>
 

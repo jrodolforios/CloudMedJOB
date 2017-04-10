@@ -49,5 +49,71 @@ namespace MediCloud.BusinessProcess.Cliente
                 throw ex;
             }
         }
+
+        public static MOVIMENTO_PROCEDIMENTO SalvarProcedimentoMovimento(MOVIMENTO_PROCEDIMENTO procedimentoMovimentoDAO)
+        {
+            CloudMedContext contexto = new CloudMedContext();
+            MOVIMENTO_PROCEDIMENTO usuarioSalvo = new MOVIMENTO_PROCEDIMENTO();
+
+            procedimentoMovimentoDAO = CacularValorTotal(procedimentoMovimentoDAO);
+
+            try
+            {
+
+                if (procedimentoMovimentoDAO.IDMOVPRO > 0)
+                {
+                    usuarioSalvo = contexto.MOVIMENTO_PROCEDIMENTO.First(x => x.IDMOVPRO == procedimentoMovimentoDAO.IDMOVPRO);
+
+                    usuarioSalvo.DATAEXAME = procedimentoMovimentoDAO.DATAEXAME;
+                    usuarioSalvo.DATAREALIZADO = procedimentoMovimentoDAO.DATAREALIZADO;
+                    usuarioSalvo.DESCONTO = procedimentoMovimentoDAO.DESCONTO;
+                    usuarioSalvo.IDFAT = procedimentoMovimentoDAO.IDFAT;
+                    usuarioSalvo.IDFCX = procedimentoMovimentoDAO.IDFCX;
+                    usuarioSalvo.IDFOR = procedimentoMovimentoDAO.IDFOR;
+                    usuarioSalvo.IDMOV = procedimentoMovimentoDAO.IDMOV;
+                    usuarioSalvo.IDPRF = procedimentoMovimentoDAO.IDPRF;
+                    usuarioSalvo.IDPRO = procedimentoMovimentoDAO.IDPRO;
+                    usuarioSalvo.OBSMOVTO = procedimentoMovimentoDAO.OBSMOVTO;
+                    usuarioSalvo.OBSREALIZADO = procedimentoMovimentoDAO.OBSREALIZADO;
+                    usuarioSalvo.PROXEXAME = procedimentoMovimentoDAO.PROXEXAME;
+                    usuarioSalvo.TOTAL = procedimentoMovimentoDAO.TOTAL;
+                    usuarioSalvo.USUARIO = procedimentoMovimentoDAO.USUARIO;
+                    usuarioSalvo.USUARIOREALIZADO = procedimentoMovimentoDAO.USUARIOREALIZADO;
+                    usuarioSalvo.VALOR = procedimentoMovimentoDAO.VALOR;
+
+                }
+                else
+                {
+
+                    usuarioSalvo = contexto.MOVIMENTO_PROCEDIMENTO.Add(procedimentoMovimentoDAO);
+                }
+
+                contexto.SaveChanges();
+                return usuarioSalvo;
+
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+                return null;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        private static MOVIMENTO_PROCEDIMENTO CacularValorTotal(MOVIMENTO_PROCEDIMENTO procedimentoMovimentoDAO)
+        {
+            if (procedimentoMovimentoDAO == null)
+                return null;
+            else
+            {
+                if (procedimentoMovimentoDAO.VALOR.HasValue && procedimentoMovimentoDAO.DESCONTO.HasValue)
+                    procedimentoMovimentoDAO.TOTAL = (procedimentoMovimentoDAO.VALOR - procedimentoMovimentoDAO.DESCONTO);
+
+                return procedimentoMovimentoDAO;
+            }
+        }
     }
 }

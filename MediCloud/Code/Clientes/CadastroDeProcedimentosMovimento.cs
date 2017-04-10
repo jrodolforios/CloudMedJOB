@@ -10,6 +10,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using MediCloud.Controllers;
+using System.Web.Mvc;
+using System.Globalization;
 
 namespace MediCloud.Code.Clientes
 {
@@ -59,6 +61,71 @@ namespace MediCloud.Code.Clientes
         internal static void DeletarProcedimentoMovimento(ASOController aSOController, int codigoProcedimento)
         {
             ControleDeProcedimentosMovimento.DeletarProcedimento(codigoProcedimento);
+        }
+
+        private static ProcedimentoMovimentoModel injetarEmUsuarioModel(FormCollection form)
+        {
+            if (form == null)
+                return null;
+            else
+                return new ProcedimentoMovimentoModel()
+                {
+                    DataExame = string.IsNullOrEmpty(form["dataExame"]) ? null : (DateTime?)Convert.ToDateTime(form["dataExame"]),
+                    DataRealizado = string.IsNullOrEmpty(form["dataRealizado"]) ? null : (DateTime?)Convert.ToDateTime(form["dataRealizado"]),
+                    Desconto = string.IsNullOrEmpty(form["desconto"]) ? 0 : Convert.ToDecimal(form["desconto"], new CultureInfo("en-US")),
+                    Valor = string.IsNullOrEmpty(form["valor"]) ? 0 : Convert.ToDecimal(form["valor"], new CultureInfo("en-US")),
+                    Faturamento = CadastroDeFaturamento.RecuperarFaturamentoPorID(string.IsNullOrEmpty(form["codigoFaturamento"]) ? 0 : Convert.ToInt32(form["codigoFaturamento"])),
+                    Fornecedor = CadastroDeFornecedor.RecuperarFornecedorPorID(string.IsNullOrEmpty(form["idFornecedor"]) ? 0 : Convert.ToInt32(form["idFornecedor"])),
+                    IdFechamentoCaixa = string.IsNullOrEmpty(form["codigoFechamentoCaixa"]) ? 0 : Convert.ToInt32(form["codigoFechamentoCaixa"]),
+                    IdMovimentoProcedimento = string.IsNullOrEmpty(form["codigoProcedimento"]) ? 0 : Convert.ToInt32(form["codigoProcedimento"]),
+                    Movimento = new ASOModel() { IdASO = string.IsNullOrEmpty(form["codigoASOProcedimento"]) ? 0 : Convert.ToInt32(form["codigoASOProcedimento"]) },
+                    observacao = string.IsNullOrEmpty(form["observacoesProcedimento"]) ? null : form["observacoesProcedimento"],
+                    Procedimento = CadastroDeProcedimentos.RecuperarProcedimentoPorID(string.IsNullOrEmpty(form["idProcedimento"]) ? 0 : Convert.ToInt32(form["idProcedimento"])),
+                    Profissional = CadastroDeProfissional.GetProfissionalPorID(string.IsNullOrEmpty(form["idProfissional"]) ? null : form["idProfissional"]),
+                    Total = string.IsNullOrEmpty(form["total"]) ? 0 : Convert.ToDecimal(form["total"], new CultureInfo("en-US")),
+                    Usuario = string.IsNullOrEmpty(form["usuarioProcedimento"]) ? null : form["usuarioProcedimento"],
+                    UsuarioRealizado = string.IsNullOrEmpty(form["usuarioProcedimentoRealizado"]) ? null : form["usuarioProcedimentoRealizado"]
+                };
+        }
+
+        internal static ProcedimentoMovimentoModel SalvarProcedimentoMovimento(FormCollection form)
+        {
+            ProcedimentoMovimentoModel usuarioModel = injetarEmUsuarioModel(form);
+            usuarioModel.validar();
+
+            MOVIMENTO_PROCEDIMENTO ProcedimentoMovimentoDAO = injetarEmUsuarioDAO(usuarioModel);
+            ProcedimentoMovimentoDAO = ControleDeProcedimentosMovimento.SalvarProcedimentoMovimento(ProcedimentoMovimentoDAO);
+
+            usuarioModel = injetarEmUsuarioModel(ProcedimentoMovimentoDAO);
+
+            return usuarioModel;
+        }
+
+        private static MOVIMENTO_PROCEDIMENTO injetarEmUsuarioDAO(ProcedimentoMovimentoModel x)
+        {
+            if (x == null)
+                return null;
+            else
+                return new MOVIMENTO_PROCEDIMENTO()
+                {
+                    DATAEXAME = x.DataExame,
+                    DATAREALIZADO = x.DataRealizado,
+                    DESCONTO = x.Desconto,
+                    IDFAT = x.Faturamento?.IdFaturamento,
+                    IDFCX = x.IdFechamentoCaixa,
+                    IDFOR = x.Fornecedor?.IdFornecedor,
+                    IDMOV = x.Movimento?.IdASO,
+                    IDMOVPRO = x.IdMovimentoProcedimento,
+                    IDPRF = x.Profissional?.IdProfissional,
+                    IDPRO = x.Procedimento?.IdProcedimento,
+                    OBSMOVTO = x.observacao,
+                    OBSREALIZADO = x.observacao,
+                    PROXEXAME = null,
+                    TOTAL = x.Total,
+                    USUARIO = x.Usuario,
+                    USUARIOREALIZADO = x.UsuarioRealizado,
+                    VALOR = x.Valor                   
+                };
         }
     }
 }

@@ -108,12 +108,12 @@ namespace MediCloud.Controllers
 
                 modelASO = CadastroDeASO.SalvarASO(form);
 
-                base.FlashMessage("Cargo cadastrado.", MessageType.Success);
+                base.FlashMessage("ASO cadastrado.", MessageType.Success);
                 return View(modelASO);
             }
             catch (InvalidOperationException ex)
             {
-                if (!string.IsNullOrEmpty(form["codigoCargo"]))
+                if (!string.IsNullOrEmpty(form["codigoASO"]))
                     modelASO = CadastroDeASO.RecuperarASOPorID(Convert.ToInt32(form["codigoASO"]));
 
                 base.FlashMessage(ex.Message, MessageType.Error);
@@ -126,6 +126,41 @@ namespace MediCloud.Controllers
             }
         }
 
+        [HttpPost]
+        public ActionResult SalvarProcedimentoMovimento(FormCollection form)
+        {
+            ProcedimentoMovimentoModel modelProcedimentoMovimento = null;
+            int codigoASO = Convert.ToInt32(form["codigoASOProcedimento"]);
+            try
+            {
+                base.EstahLogado();
+                ViewBag.Title = "ASO";
+                int codigoProcedimento = 0;
 
+                ViewData["Referentes"] = CadastroDeReferente.RecuperarTodos() as List<ReferenteModel>;
+                ViewData["FormaPagamento"] = CadastroFormaPagamento.RecuperarTodos() as List<FormaPagamentoModel>;
+                ViewData["TabelaPrecos"] = CadastroDeTabelaDePreco.RecuperarTodos() as List<TabelaPrecoModel>;
+
+                if (!Int32.TryParse(form["codigoProcedimento"], out codigoProcedimento) || codigoProcedimento <= 0)
+                    form["usuarioProcedimento"] = base.CurrentUser.login;
+
+                modelProcedimentoMovimento = CadastroDeProcedimentosMovimento.SalvarProcedimentoMovimento(form);
+
+                base.FlashMessage("Procedimento cadastrado.", MessageType.Success);
+                Response.Redirect($"/ASO/DetalhamentoASO?codigoASO={codigoASO}");
+            }
+            catch (InvalidOperationException ex)
+            {
+                base.FlashMessage(ex.Message, MessageType.Error);
+                Response.Redirect($"/ASO/DetalhamentoASO?codigoASO={codigoASO}");
+            }
+            catch (Exception ex)
+            {
+                base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
+                Response.Redirect($"/ASO/DetalhamentoASO?codigoASO={codigoASO}");
+            }
+
+            return null;
+        }
     }
 }

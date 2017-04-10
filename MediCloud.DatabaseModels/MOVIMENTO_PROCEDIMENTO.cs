@@ -18,7 +18,7 @@ namespace MediCloud.DatabaseModels
 
         public decimal? DESCONTO { get; set; }
 
-        [StringLength(10)]
+        [StringLength(20)]
         public string USUARIO { get; set; }
 
         [StringLength(4)]
@@ -45,7 +45,7 @@ namespace MediCloud.DatabaseModels
 
         public DateTime? DATAREALIZADO { get; set; }
 
-        [StringLength(10)]
+        [StringLength(20)]
         public string USUARIOREALIZADO { get; set; }
 
         [Column(TypeName = "numeric")]
