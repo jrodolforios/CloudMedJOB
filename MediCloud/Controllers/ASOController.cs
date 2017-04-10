@@ -6,6 +6,7 @@ using MediCloud.Code.Parametro;
 using MediCloud.Models.Cliente;
 using MediCloud.Models.Financeiro;
 using MediCloud.Models.Parametro;
+using MediCloud.Models.Seguranca;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -61,6 +62,30 @@ namespace MediCloud.Controllers
             {
                 base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
                 return View();
+            }
+        }
+
+        [HttpPost]
+        public JsonResult ExcluirProcedimento(int codigoProcedimento)
+        {
+            ResultadoAjaxGenericoModel resultado = new ResultadoAjaxGenericoModel();
+            try
+            {
+                base.EstahLogado();
+
+                CadastroDeProcedimentosMovimento.DeletarProcedimentoMovimento(this, codigoProcedimento);
+
+                resultado.mensagem = "Procedimento excluído.";
+                resultado.acaoBemSucedida = true;
+
+                return Json(resultado, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                resultado.mensagem = Constantes.MENSAGEM_GENERICA_DE_ERRO;
+                resultado.acaoBemSucedida = false;
+
+                return Json(resultado, JsonRequestBehavior.AllowGet);
             }
         }
 

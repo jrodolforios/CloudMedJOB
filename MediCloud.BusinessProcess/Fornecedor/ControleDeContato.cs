@@ -93,5 +93,23 @@ namespace MediCloud.BusinessProcess.Fornecedor
                 throw ex;
             }
         }
+
+        public static List<FORNECEDOR_CONTATO> recuperarContatosDeFornecedorPorIdFornecedor(int idFor)
+        {
+            CloudMedContext contexto = new CloudMedContext();
+            try
+            {
+                return contexto.FORNECEDOR_CONTATO.Where(x => x.IDCON == idFor).ToList();
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+                return null;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

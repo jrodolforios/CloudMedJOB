@@ -1,7 +1,8 @@
 ﻿using MediCloud.App_Code;
 using MediCloud.Code;
-using MediCloud.Code.Financeiro;
+using MediCloud.Code.Fornecedor;
 using MediCloud.Models.Financeiro;
+using MediCloud.Models.Fornecedor;
 using MediCloud.Models.Seguranca;
 using System;
 using System.Collections.Generic;
@@ -11,9 +12,9 @@ using System.Web.Mvc;
 
 namespace MediCloud.Controllers
 {
-    public class ContadorController : BaseController
+    public class FornecedorController : BaseController
     {
-        // GET: Contador
+        // GET: Fornecedor
         public ActionResult Index()
         {
             this.EstahLogado();
@@ -21,21 +22,21 @@ namespace MediCloud.Controllers
         }
 
         [HttpPost]
-        public JsonResult BuscaContadorAJAX(string Prefix)
+        public JsonResult BuscaFornecedorAJAX(string Prefix)
         {
-            List<ContadorModel> contadoresEncontrados = CadastroDeContador.RecuperarContadorPorTermo(Prefix);
+            List<FornecedorModel> contadoresEncontrados = CadastroDeFornecedor.RecuperarContadorPorTermo(Prefix);
             List<AutoCompleteDefaultModel> ObjList = new List<AutoCompleteDefaultModel>();
 
             try
             {
                 contadoresEncontrados.ForEach(x =>
                 {
-                    ObjList.Add(new AutoCompleteDefaultModel() {Id = x.IdContador, Name = x.NomeContador });
+                    ObjList.Add(new AutoCompleteDefaultModel() { Id = x.IdFornecedor, Name = x.NomeFantasia });
                 });
 
                 //Searching records from list using LINQ query  
                 var results = (from N in ObjList
-                                select new { N.Id, N.Name }).ToArray();
+                               select new { N.Id, N.Name }).ToArray();
                 return Json(results, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
@@ -47,5 +48,6 @@ namespace MediCloud.Controllers
                 return Json(ObjList.ToArray(), JsonRequestBehavior.AllowGet);
             }
         }
+
     }
 }

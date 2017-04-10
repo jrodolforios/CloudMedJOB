@@ -9,6 +9,7 @@
 
     string checkedAtivo = string.Empty;
     bool ASONovo = true;
+    decimal valorTotalDaASO = 0;
 
     List<ReferenteModel> todosReferentes = new List<ReferenteModel>();
     if (ViewData["Referentes"] != null)
@@ -31,6 +32,14 @@
     if (Model != null)
     {
         checkedAtivo = (Model.Status == "ENTREGUE") ? "checked" : string.Empty;
+
+        if (Model.ProcedimentosMovimento.Any())
+        {
+            Model.ProcedimentosMovimento.ForEach(x =>
+            {
+                valorTotalDaASO += (x.Total.HasValue ? x.Total.Value : 0);
+            });
+        }
         ASONovo = false;
     }
 }
@@ -79,6 +88,15 @@
                                     Cadastro
                                 </a>
                             </li>
+                            @if (Model != null && Model.IdASO > 0)
+                            {
+                                <li>
+                                    <a data-toggle="tab" href="#edit-settings">
+                                        <i class="purple ace-icon fa fa-navicon bigger-125"></i>
+                                        Procedimentos
+                                    </a>
+                                </li>
+                            }
                         </ul>
                     </div>
                     <div class="tab-content profile-edit-tab-content">
@@ -243,7 +261,7 @@
                                                 <ul class="list-unstyled spaced2">
                                                     <li>
                                                         <i class="ace-icon fa fa-check green"></i>
-                                                        Total desta ASO: <b></b>
+                                                        Total desta ASO: <b>R$ @valorTotalDaASO</b>
                                                     </li>
 
                                                     <li>
@@ -265,18 +283,18 @@
                                                 <hr />
                                                 <div class="price">
                                                     <small>Situação do caixa:</small>
-                                                        @if (Model != null && Model.CaixaPendente)
-                                                        {
-                                                            <span class="label label-danger">Pendente</span>
-                                                        }
-                                                        else if (Model != null && !Model.CaixaPendente)
-                                                        {
-                                                            <span class="label label-success">Fechado</span>
-                                                        }
-                                                        else
-                                                        {
-                                                            <span class="label label-primary">Indefinido</span>
-                                                        }
+                                                    @if (Model != null && Model.CaixaPendente)
+                                                    {
+                                                        <span class="label label-danger">Pendente</span>
+                                                    }
+                                                    else if (Model != null && !Model.CaixaPendente)
+                                                    {
+                                                        <span class="label label-success">Fechado</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="label label-primary">Indefinido</span>
+                                                    }
                                                 </div>
                                             </div>
                                         </div>
@@ -285,6 +303,58 @@
 
                             </div>
                         </div>
+                        <div id="edit-settings" class="tab-pane fade">
+                            <div class="space-10"></div>
+                            <a href="javascript:detalhamentoDoProcedimento(0)" class="btn btn-xs">+ Novo procedimento</a>
+                            @if (Model != null && Model.ProcedimentosMovimento != null && Model.ProcedimentosMovimento.Any())
+                            {
+                                string nomeProfissional = string.Empty;
+                                foreach (MediCloud.Models.Cliente.ProcedimentoMovimentoModel item in Model.ProcedimentosMovimento)
+                                {
+                                    if (item.Profissional != null)
+                                    {
+                                        nomeProfissional = item.Profissional.NomeProfissional;
+                                    }
+                                    else
+                                    {
+                                        nomeProfissional = string.Empty;
+                                    }
+                                    <div class="row">
+                                        <div class="col-xs-12" id="@item.IdMovimentoProcedimento">
+                                            <div class="media search-media">
+                                                <div class="media-body">
+                                                    <div class="container">
+                                                        <h4 class="media-heading">
+                                                            <span class="blue">@item.Procedimento.Nome </span>
+                                                        </h4>
+                                                    </div>
+                                                    <p><b>Profissional:</b> @nomeProfissional <br /> <b>Valor:</b> @item.Total</p>
+
+                                                    <div class="search-actions text-center">
+                                                        <span class="blue bolder bigger-110">Ações</span>
+
+                                                        <div class="action-buttons bigger-150">
+                                                            <a href="javascript:excluirProcedimento(@item.IdMovimentoProcedimento);">
+                                                                <i class="ace-icon fa fa-trash"></i>
+                                                            </a>
+                                                        </div>
+                                                        <a href="javascript:detalhamentoDoProcedimento(@item.IdMovimentoProcedimento)" class="search-btn-action btn btn-sm btn-block btn-info">Editar</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <div class="alert alert-block alert-info">
+                                    Nenhum procedimento para ser exibido.
+                                </div>
+                            }
+
+                        </div>
+
                     </div>
                     <div class="clearfix form-actions">
                         <div class="col-md-offset-3 col-md-9">
@@ -313,10 +383,10 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h3 class="smaller lighter blue no-margin">Excluir usuário</h3>
+                <h3 class="smaller lighter blue no-margin">Excluir procedimento</h3>
             </div>
             <div class="modal-body">
-                Tem certeza que deseja excluir este usuário?
+                Tem certeza que deseja excluir este procedimento?
             </div>
             <div class="modal-footer">
                 <button type="button" data-dismiss="modal" class="btn btn-primary" id="delete">
@@ -332,6 +402,150 @@
     </div>
 </div>
 
+<div id="detalhamentoProcedimento" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="smaller lighter blue no-margin">Procedimento</h3>
+            </div>
+            <form method="post" id="formProcedimentoASO" class="form-horizontal" action="@Url.Content("~/ASO/SalvarProcedimentoMovimento")">
+                <div class="modal-body">
+                    <input type="hidden" id="codigoProcedimento" name="codigoProcedimento" value="0" />
+                    <input type="hidden" id="codigoASOProcedimento" name="codigoASOProcedimento" value="@Html.ValueFor(x => x.IdASO)" />
+
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Fornecedor </label>
+
+                        <div class="col-sm-8">
+                            <input type="hidden" name="idFornecedor" id="idFornecedor" value="" />
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <i class="ace-icon fa fa-search"></i>
+                                </span>
+                                <input class="col-xs-12 col-sm-6" type="text" id="fonecedor" name="fornecedor" placeholder="Digite o nome do fornecedor" value="" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Procedimento </label>
+
+                        <div class="col-sm-8">
+                            <input type="hidden" name="idProcedimento" id="idProcedimento" value="" />
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <i class="ace-icon fa fa-search"></i>
+                                </span>
+                                <input class="col-xs-12 col-sm-6" type="text" id="procedimento" name="procedimento" placeholder="Digite o procedimento" value="" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Profissional </label>
+
+                        <div class="col-sm-8">
+                            <input type="hidden" name="idProfissional" id="idProfissional" value="" />
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <i class="ace-icon fa fa-search"></i>
+                                </span>
+                                <input class="col-xs-12 col-sm-6" type="text" id="profissional" name="profissional" placeholder="Digite o nome do profissional" value="" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label no-padding-right" for="form-field-date">Data do exame</label>
+
+                        <div class="col-sm-8">
+                            <div class="input-medium">
+                                <div class="input-group">
+                                    <input class="input-medium date-picker input-mask-date" id="dataExame" name="dataExame" type="text" data-date-format="dd/mm/yyyy" placeholder="dd/mm/aaaa" value="" />
+                                    <span class="input-group-addon">
+                                        <i class="ace-icon fa fa-calendar"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Usuario </label>
+
+                        <div class="col-sm-8">
+                            <input class="col-xs-12 col-sm-8" readonly type="text" id="usuario" name="usuario" placeholder="Usuário" value="" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-1 control-label no-padding-right" for="form-field-first">Observação</label>
+
+                        <div class="col-sm-12">
+                            <textarea class="col-sm-7" id="observacoesProcedimento" name="observacoesProcedimento" placeholder="observações adicionais"></textarea>
+                        </div>
+                    </div>
+
+                    <h4 class="header blue bolder smaller">Valor</h4>
+                    <div class="vspace-12-sm"></div>
+
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Valor </label>
+
+                        <div class="col-sm-8">
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    R$
+                                </span>
+                                <input class="col-xs-12 col-sm-5" readonly type="text" id="valor" name="valor" placeholder="Valor" value="" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Desconto </label>
+
+                        <div class="col-sm-8">
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    R$
+                                </span>
+                                <input class="col-xs-12 col-sm-5" type="text" id="desconto" name="desconto" placeholder="Desconto" value="" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Total </label>
+
+                        <div class="col-sm-8">
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    R$
+                                </span>
+                                <input class="col-xs-12 col-sm-5" readonly type="text" id="total" name="total" placeholder="Total" value="" />
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary" id="salvarContato">
+                        <i class="ace-icon fa fa-check"></i>
+                        Salvar
+                    </button>
+                    <button type="button" data-dismiss="modal" class="btn">
+                        <i class="ace-icon fa fa-times"></i>
+                        Cancelar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
 
 <script src="/assets/js/jquery-ui.min.js"></script>
 <script src="/assets/js/bootstrap-datepicker.min.js"></script>
@@ -343,6 +557,41 @@
 
 
 <script type="text/javascript">
+                                                    function excluirProcedimento(codigo) {
+                                                        confirmDeleteModal(codigo);
+                                                    }
+
+                                                    function confirmDeleteModal(codigo) {
+                                                        $('#confirm').modal({
+                                                            backdrop: 'static',
+                                                            keyboard: false
+                                                        })
+                                                            .one('click', '#delete', function () {
+                                                                deletarContato(codigo);
+                                                            });
+                                                    }
+
+                                                    function deletarContato(codigo) {
+                                                        $.ajax({
+                                                            url: '/ASO/ExcluirProcedimento?codigoProcedimento=' + codigo,
+                                                            type: "post",
+                                                            cache: false,
+                                                            success: function (savingStatus) {
+                                                                var tipoAlert;
+                                                                if (savingStatus.acaoBemSucedida) {
+                                                                    tipoAlert = 'alert-success';
+                                                                    $("#" + codigo).remove();
+                                                                }
+                                                                else
+                                                                    tipoAlert = 'alert-danger';
+                                                                $('#usuarioAlerts').html('<div class="alert ' + tipoAlert + '"><a class="close" data-dismiss="alert">×</a><span>' + savingStatus.mensagem + '</span></div>');
+                                                            },
+                                                            error: function (xhr, ajaxOptions, thrownError) {
+                                                                $('#usuarioAlerts').html('<div class="alert alert-danger"><a class="close" data-dismiss="alert">×</a><span>Ops! Não foi possível deletar este registro no servidor. Contate-nos para que possamos te ajudar melhor.</span></div>')
+                                                            }
+                                                        });
+                                                    }
+
 
                                                     $('.date-picker').datepicker({
                                                         format: 'dd/mm/yyyy',
@@ -448,6 +697,98 @@
                                                         }
                                                     });
 
+                                                    $("#fonecedor").autocomplete({
+                                                        source: function (request, response) {
+                                                            $.ajax({
+                                                                url: "/Fornecedor/BuscaFornecedorAJAX",
+                                                                type: "POST",
+                                                                dataType: "json",
+                                                                data: { Prefix: request.term },
+                                                                success: function (data) {
+                                                                    response($.map(data, function (item) {
+                                                                        return { label: item.Name, value: item.Name, Id: item.Id };
+                                                                    }))
+
+                                                                }
+                                                            })
+                                                        },
+                                                        select: function (event, ui) {
+                                                            $('#idFornecedor').attr('value', ui.item.Id);
+                                                            $('#fonecedor').val(ui.item.label);
+                                                            return false;
+                                                        }
+                                                    });
+                                                    $('#fonecedor').on('blur', function () {
+                                                        if ($(this).val().length === 0) {  //check for no. of characters entered
+                                                            $('#idFornecedor').attr('value', 0);  // clear the textbox
+                                                        }
+                                                    });
+
+
+                                                    $("#procedimento").autocomplete({
+                                                        source: function (request, response) {
+                                                            $.ajax({
+                                                                url: "/Procedimento/BuscarProcedimentoByFornecedorAJAX",
+                                                                type: "POST",
+                                                                dataType: "json",
+                                                                data: { Prefix: request.term, Fornecedor: $('#idFornecedor').attr('value') },
+                                                                success: function (data) {
+                                                                    response($.map(data, function (item) {
+                                                                        return { label: item.Name, value: item.Name, Id: item.Id, Value: item.Value };
+                                                                    }))
+                                                                }
+                                                            })
+                                                        },
+                                                        select: function (event, ui) {
+                                                            $('#idProcedimento').attr('value', ui.item.Id);
+                                                            $('#procedimento').val(ui.item.label);
+                                                            $('#valor').val(ui.item.Value);
+                                                            recalcularTotal();
+                                                            return false;
+                                                        },
+                                                        messages: {
+                                                            noResults: "Sem resultados", results: ""
+                                                        }
+                                                    });
+                                                    $('#procedimento').on('blur', function () {
+                                                        if ($(this).val().length === 0) {  //check for no. of characters entered
+                                                            $('#idProcedimento').attr('value', 0);  // clear the textbox
+                                                            $('#valor').val('');
+                                                            $('#desconto').val('');
+                                                            recalcularTotal();
+                                                        }
+                                                    });
+
+                                                    $("#profissional").autocomplete({
+                                                        source: function (request, response) {
+                                                            $.ajax({
+                                                                url: "/Profissional/BuscarProfissionalAJAX",
+                                                                type: "POST",
+                                                                dataType: "json",
+                                                                data: { Prefix: request.term },
+                                                                success: function (data) {
+                                                                    response($.map(data, function (item) {
+                                                                        return { label: item.Name, value: item.Name, Id: item.Id };
+                                                                    }))
+
+                                                                }
+                                                            })
+                                                        },
+                                                        select: function (event, ui) {
+                                                            $('#idProfissional').attr('value', ui.item.Id);
+                                                            $('#profissional').val(ui.item.label);
+                                                            return false;
+                                                        },
+                                                        messages: {
+                                                            noResults: "Sem resultados", results: ""
+                                                        }
+                                                    });
+                                                    $('#profissional').on('blur', function () {
+                                                        if ($(this).val().length === 0) {  //check for no. of characters entered
+                                                            $('#idProfissional').attr('value', 0);  // clear the textbox
+                                                        }
+                                                    });
+
                                                     $("#setor").autocomplete({
                                                         source: function (request, response) {
                                                             $.ajax({
@@ -538,4 +879,49 @@
                                                             else $('#form-field-select-4').removeClass('tag-input-style');
                                                         });
                                                     }
+
+
+                                                    function detalhamentoDoProcedimento(codigo) {
+                                                        $('#detalhamentoProcedimento').modal({
+                                                            backdrop: 'static',
+                                                            keyboard: false
+                                                        })
+
+                                                        limparComponentesContato();
+                                                        //if (codigo > 0) {
+                                                        //    $.ajax({
+                                                        //        url: '/Contato/DetalharContato?codigoDoContato=' + codigo,
+                                                        //        type: "post",
+                                                        //        cache: false,
+                                                        //        success: function (data) {
+                                                        //            $("#nomeContato").attr('value', data.NomeContato);
+                                                        //            $("#codigoContato").attr('value', data.IdContato);
+                                                        //            $("#departamento").val(data.siglaDepartamento);
+                                                        //            $("#funcao").attr('value', data.Funcao);
+                                                        //            $("#telFixo").attr('value', data.TelefoneFixo);
+                                                        //            $("#telMovel").attr('value', data.TelfoneMovel);
+                                                        //            $("#email").attr('value', data.Email);
+                                                        //            $("#dataNascimento").attr('value', toDateFromJson(data.DataNascimento));
+                                                        //            $("#observacoesContato").val(data.Observacao);
+                                                        //        },
+                                                        //        error: function (xhr, ajaxOptions, thrownError) {
+                                                        //            $('#usuarioAlerts').html('<div class="alert alert-danger"><a class="close" data-dismiss="alert">×</a><span>Ops! Não foi possível detalhar este registro no servidor. Contate-nos para que possamos te ajudar melhor.</span></div>')
+                                                        //        }
+                                                        //    });
+                                                    }
+
+                                                    function recalcularTotal() {
+                                                        var valorProcedimento = parseFloat($('#valor').val());
+                                                        var valorDesconto = parseFloat($('#desconto').val());
+
+                                                        $('#total').attr('value', parseFloat(Math.round(((valorProcedimento ? valorProcedimento : 0) - (valorDesconto ? valorDesconto : 0)) * 100) / 100).toFixed(2));
+
+                                                        //Garantir 2 casas decimais sempre
+                                                        $('#valor').val(parseFloat(Math.round((valorProcedimento ? valorProcedimento : 0) * 100) / 100).toFixed(2));
+                                                        $('#desconto').val(parseFloat(Math.round((valorDesconto ? valorDesconto : 0) * 100) / 100).toFixed(2));
+                                                    }
+
+                                                    $('#desconto').on('blur', function () {
+                                                        recalcularTotal();
+                                                    });
 </script>

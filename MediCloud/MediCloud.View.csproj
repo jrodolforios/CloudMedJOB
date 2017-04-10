@@ -176,6 +176,7 @@
     <Compile Include="Code\Clientes\CadastroDeASO.cs" />
     <Compile Include="Code\Clientes\CadastroDeCargo.cs" />
     <Compile Include="Code\Clientes\CadastroDeClientes.cs" />
+    <Compile Include="Code\Clientes\CadastroDeProcedimentosMovimento.cs" />
     <Compile Include="Code\Clientes\CadastroDeReferente.cs" />
     <Compile Include="Code\Constantes.cs" />
     <Compile Include="Code\ControleDeSessao.cs" />
@@ -214,15 +215,21 @@
     <Compile Include="Code\Enum\EnumCliente.cs" />
     <Compile Include="Code\Enum\EnumContato.cs" />
     <Compile Include="Code\Enum\EnumFinanceiro.cs" />
+    <Compile Include="Code\Enum\EnumFornecedor.cs" />
     <Compile Include="Code\Financeiro\CadastroDeFaturamento.cs" />
     <Compile Include="Code\Financeiro\CadastroFormaPagamento.cs" />
     <Compile Include="Code\Fornecedor\CadastroDeContato.cs" />
+    <Compile Include="Code\Fornecedor\CadastroDeFornecedor.cs" />
     <Compile Include="Code\Funcionario\CadastroDeFuncionario.cs" />
     <Compile Include="Code\Parametro\CadastroDeElaboradorPCMSO.cs" />
     <Compile Include="Code\Parametro\CadastroDeElaboradorPPRA.cs" />
+    <Compile Include="Code\Parametro\CadastroDeProfissional.cs" />
     <Compile Include="Code\Parametro\CadastroDeSegmento.cs" />
     <Compile Include="Code\Financeiro\CadastroDeContador.cs" />
     <Compile Include="Code\Parametro\CadastroDeTabelaDePreco.cs" />
+    <Compile Include="Code\Parametro\GrupoProcedimento\CadastroDeGrupo.cs" />
+    <Compile Include="Code\Parametro\GrupoProcedimento\CadastroDeProcedimentos.cs" />
+    <Compile Include="Code\Parametro\GrupoProcedimento\CadastroDeSubGrupo.cs" />
     <Compile Include="Code\Recomendacao\CadastroDeSetor.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ASOController.cs" />
@@ -232,8 +239,11 @@
     <Compile Include="Controllers\ContatoController.cs" />
     <Compile Include="Controllers\ElaboradorPCMSOController.cs" />
     <Compile Include="Controllers\ElaboradorPPRAController.cs" />
+    <Compile Include="Controllers\FornecedorController.cs" />
     <Compile Include="Controllers\FuncionarioController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ProcedimentoController.cs" />
+    <Compile Include="Controllers\ProfissionalController.cs" />
     <Compile Include="Controllers\SegmentoController.cs" />
     <Compile Include="Controllers\SetorController.cs" />
     <Compile Include="Controllers\TabelaDePrecoController.cs" />
@@ -242,11 +252,19 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Cliente\ASOModel.cs" />
+    <Compile Include="Models\Cliente\AutoCompleteProcendimentoMovimentoModel.cs" />
     <Compile Include="Models\Cliente\CargoModel.cs" />
     <Compile Include="Models\Cliente\ClienteModel.cs" />
+    <Compile Include="Models\Cliente\ProcedimentoMovimentoModel.cs" />
     <Compile Include="Models\Cliente\ReferenteModel.cs" />
     <Compile Include="Models\Financeiro\FaturamentoModel.cs" />
     <Compile Include="Models\Financeiro\FormaPagamentoModel.cs" />
+    <Compile Include="Models\Fornecedor\ContatoFornecedorModel.cs" />
+    <Compile Include="Models\Fornecedor\FornecedorModel.cs" />
+    <Compile Include="Models\Parametro\GrupoProcedimento\GrupoModel.cs" />
+    <Compile Include="Models\Parametro\GrupoProcedimento\ProcedimentoModel.cs" />
+    <Compile Include="Models\Parametro\GrupoProcedimento\SubGrupoModel.cs" />
+    <Compile Include="Models\Parametro\ProfissionalModel.cs" />
     <Compile Include="Models\Recomendacao\SetorModel.cs" />
     <Compile Include="Models\Parametro\TabelaPrecoModel.cs" />
     <Compile Include="Models\Financeiro\ContadorModel.cs" />
@@ -255,6 +273,7 @@
     <Compile Include="Models\Parametro\ElaboradorPCMSOModel.cs" />
     <Compile Include="Models\IModel.cs" />
     <Compile Include="Models\Parametro\ElaboradorPPRAModel.cs" />
+    <Compile Include="Models\Seguranca\AutoCompleteStringIDModel.cs" />
     <Compile Include="Models\Seguranca\AutoCompleteDefaultModel.cs" />
     <Compile Include="Models\Seguranca\ResultadoAjaxGenericoModel.cs" />
     <Compile Include="Models\Parametro\SegmentoModel.cs" />
@@ -478,6 +497,9 @@
     <Folder Include="Views\Contato\" />
     <Folder Include="Views\ElaboradorPCMSO\" />
     <Folder Include="Views\ElaboradorPPRA\" />
+    <Folder Include="Views\Fornecedor\" />
+    <Folder Include="Views\Procedimento\" />
+    <Folder Include="Views\Profissional\" />
     <Folder Include="Views\Segmento\" />
     <Folder Include="Views\Setor\" />
     <Folder Include="Views\TabelaDePreco\" />

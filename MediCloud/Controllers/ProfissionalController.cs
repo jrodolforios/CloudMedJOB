@@ -1,7 +1,7 @@
 ﻿using MediCloud.App_Code;
 using MediCloud.Code;
-using MediCloud.Code.Financeiro;
-using MediCloud.Models.Financeiro;
+using MediCloud.Code.Parametro;
+using MediCloud.Models.Parametro;
 using MediCloud.Models.Seguranca;
 using System;
 using System.Collections.Generic;
@@ -11,9 +11,9 @@ using System.Web.Mvc;
 
 namespace MediCloud.Controllers
 {
-    public class ContadorController : BaseController
+    public class ProfissionalController : BaseController
     {
-        // GET: Contador
+        // GET: Profissional
         public ActionResult Index()
         {
             this.EstahLogado();
@@ -21,28 +21,28 @@ namespace MediCloud.Controllers
         }
 
         [HttpPost]
-        public JsonResult BuscaContadorAJAX(string Prefix)
+        public JsonResult BuscarProfissionalAJAX(string Prefix)
         {
-            List<ContadorModel> contadoresEncontrados = CadastroDeContador.RecuperarContadorPorTermo(Prefix);
-            List<AutoCompleteDefaultModel> ObjList = new List<AutoCompleteDefaultModel>();
+            List<ProfissionalModel> contadoresEncontrados = CadastroDeProfissional.RecuperarContadorPorTermo(Prefix);
+            List<AutoCompleteStringIDModel> ObjList = new List<AutoCompleteStringIDModel>();
 
             try
             {
                 contadoresEncontrados.ForEach(x =>
                 {
-                    ObjList.Add(new AutoCompleteDefaultModel() {Id = x.IdContador, Name = x.NomeContador });
+                    ObjList.Add(new AutoCompleteStringIDModel() { Id = x.IdProfissional, Name = x.NomeProfissional });
                 });
 
                 //Searching records from list using LINQ query  
                 var results = (from N in ObjList
-                                select new { N.Id, N.Name }).ToArray();
+                               select new { N.Id, N.Name }).ToArray();
                 return Json(results, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
-                ObjList = new List<AutoCompleteDefaultModel>()
+                ObjList = new List<AutoCompleteStringIDModel>()
                 {
-                new AutoCompleteDefaultModel {Id=-1,Name=Constantes.MENSAGEM_GENERICA_DE_ERRO },
+                new AutoCompleteStringIDModel {Id="-1",Name=Constantes.MENSAGEM_GENERICA_DE_ERRO },
                 };
                 return Json(ObjList.ToArray(), JsonRequestBehavior.AllowGet);
             }

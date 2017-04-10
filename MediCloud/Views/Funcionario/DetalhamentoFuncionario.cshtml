@@ -120,13 +120,18 @@
 
                             <div class="space"></div>
                             <h4 class="header blue bolder smaller">Identificação</h4>
-                            
+
                             <div class="form-group">
                                 <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Empresa &nbsp;<span class="badge badge-important mail-tag"></span></label>
 
                                 <div class="col-sm-8">
                                     <input type="hidden" name="idEmpresa" id="idEmpresa" value="@Html.ValueFor(x => x.Empresa.IdCliente)" />
-                                    <input class="col-xs-12 col-sm-6 componenteFormulario" type="text" id="empresa" name="empresa" placeholder="Digite o nome da empresa do funcionário" value="@Html.ValueFor(x => x.Empresa.NomeFantasia)" />
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <i class="ace-icon fa fa-search"></i>
+                                        </span>
+                                        <input class="col-xs-12 col-sm-6 componenteFormulario" type="text" id="empresa" name="empresa" placeholder="Digite o nome da empresa do funcionário" value="@Html.ValueFor(x => x.Empresa.NomeFantasia)" />
+                                    </div>
                                 </div>
                             </div>
 

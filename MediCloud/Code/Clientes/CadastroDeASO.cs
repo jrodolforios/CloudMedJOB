@@ -30,7 +30,7 @@ namespace MediCloud.Code.Clientes
             return listaDeModels;
         }
 
-        private static ASOModel injetarEmUsuarioModel(MOVIMENTO x)
+        public static ASOModel injetarEmUsuarioModel(MOVIMENTO x)
         {
             if (x == null)
                 return null;
@@ -53,8 +53,9 @@ namespace MediCloud.Code.Clientes
                     IdFechamentoCaixa = x.IDFCX,
                     Faturamento = CadastroDeFaturamento.RecuperarFaturamentoPorID(x.IDFAT),
 
-                    AnexosMovimento = new List<object>(),
-                    ProcedimentosMovimento = new List<object>()
+                    ProcedimentosMovimento = CadastroDeProcedimentosMovimento.BuscarProcedimentosDeMovimentoPorIDMovimento(x.IDMOV),
+
+                    AnexosMovimento = new List<object>()
 
                 };
         }
@@ -132,7 +133,7 @@ namespace MediCloud.Code.Clientes
                 Faturamento = CadastroDeFaturamento.RecuperarFaturamentoPorID(string.IsNullOrEmpty(form["faturamento"]) ? 0 : Convert.ToInt32(form["faturamento"])),
 
                 AnexosMovimento = new List<object>(),
-                ProcedimentosMovimento = new List<object>()
+                ProcedimentosMovimento = new List<ProcedimentoMovimentoModel>()
             };
         }
     }

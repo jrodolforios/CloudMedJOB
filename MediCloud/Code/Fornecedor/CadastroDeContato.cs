@@ -26,6 +26,18 @@ namespace MediCloud.Code.Fornecedor
             return listaInjetada;
         }
 
+        public static List<ContatoFornecedorModel> injetarEmUsuarioModel(List<FORNECEDOR_CONTATO> usuarioDoBanco)
+        {
+            List<ContatoFornecedorModel> listaInjetada = new List<ContatoFornecedorModel>();
+
+            usuarioDoBanco.ForEach(x =>
+            {
+                listaInjetada.Add(CadastroDeContato.injetarEmUsuarioModel(x));
+            });
+
+            return listaInjetada;
+        }
+
         public static ContatoModel injetarEmUsuarioModel(CLIENTE_CONTATO usuarioDoBanco)
         {
             if (usuarioDoBanco == null)
@@ -44,6 +56,37 @@ namespace MediCloud.Code.Fornecedor
                     TelfoneMovel = usuarioDoBanco.FONEMOVEL,
                     Departamento = GetDepartamento(usuarioDoBanco.DEPARTAMENTO)
                 };
+        }
+
+        public static ContatoFornecedorModel injetarEmUsuarioModel(FORNECEDOR_CONTATO usuarioDoBanco)
+        {
+            if (usuarioDoBanco == null)
+                return null;
+            else
+                return new ContatoFornecedorModel()
+                {
+                    DataNascimento = usuarioDoBanco.NASCIMENTO,
+                    Email = usuarioDoBanco.EMAIL,
+                    Funcao = usuarioDoBanco.FUNCAO,
+                    IdContatoFornecedor = (int)usuarioDoBanco.IDCON,
+                    Fornecedor = CadastroDeFornecedor.injetarEmUsuarioModel(usuarioDoBanco.FORNECEDOR),
+                    Nome = usuarioDoBanco.NOME,
+                    Observacao = usuarioDoBanco.OBS,
+                    TelFixo = usuarioDoBanco.FONEFIXO,
+                    TelMovel = usuarioDoBanco.FONEMOVEL,
+                    Departamento = GetDepartamento(usuarioDoBanco.DEPARTAMENTO)
+                };
+        }
+
+        internal static List<ContatoFornecedorModel> RecuperarListaDeContatoFornecedorPorIdFornecedor(int IdFor)
+        {
+            if (IdFor != 0)
+            {
+                List<FORNECEDOR_CONTATO> usuarioencontrado = ControleDeContato.recuperarContatosDeFornecedorPorIdFornecedor(IdFor);
+                return injetarEmUsuarioModel(usuarioencontrado);
+            }
+            else
+                return null;
         }
 
         internal static ContatoModel RecuperarContatoPorID(int codigoDoContato)
