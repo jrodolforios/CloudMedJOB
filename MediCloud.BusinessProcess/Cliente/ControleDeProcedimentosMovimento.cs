@@ -115,5 +115,24 @@ namespace MediCloud.BusinessProcess.Cliente
                 return procedimentoMovimentoDAO;
             }
         }
+
+        public static MOVIMENTO_PROCEDIMENTO buscarProcedimentoMovimentoPorId(int codigoDoProcedimentoMovimento)
+        {
+            CloudMedContext contexto = new CloudMedContext();
+
+            try
+            {
+                return contexto.MOVIMENTO_PROCEDIMENTO.First(x => x.IDMOVPRO == codigoDoProcedimentoMovimento);
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+                return null;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

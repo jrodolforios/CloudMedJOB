@@ -96,11 +96,18 @@
                                         Procedimentos
                                     </a>
                                 </li>
+
+                                <li>
+                                    <a data-toggle="tab" href="#edit-files">
+                                        <i class="orange ace-icon fa fa-file-text-o bigger-125"></i>
+                                        Arquivos
+                                    </a>
+                                </li>
                             }
                         </ul>
                     </div>
                     <div class="tab-content profile-edit-tab-content">
-                        <div id="edit-basic" class="tab-pane in active">
+                        <div id="edit-basic" class="tab-pane in active fade">
                             <h4 class="header blue bolder smaller">Dados do ASO</h4>
 
                             <div class="vspace-12-sm"></div>
@@ -338,7 +345,7 @@
                                                             <span class="blue">@nomeProcedimento </span>
                                                         </h4>
                                                     </div>
-                                                    <p><b>Profissional:</b> @nomeProfissional <br /> <b>Valor:</b> @item.Total</p>
+                                                    <p><b>Profissional:</b> @nomeProfissional <br /> <b>Valor:</b>R$ @item.Total</p>
 
                                                     <div class="search-actions text-center">
                                                         <span class="blue bolder bigger-110">Ações</span>
@@ -362,6 +369,11 @@
                                     Nenhum procedimento para ser exibido.
                                 </div>
                             }
+
+                        </div>
+                        <div id="edit-files" class="tab-pane fade">
+                            <div class="space-10"></div>
+                           <h1>ARQUIVOS</h1>
 
                         </div>
 
@@ -497,7 +509,7 @@
                         <label class="col-sm-1 control-label no-padding-right" for="form-field-first">Observação</label>
 
                         <div class="col-sm-12">
-                            <textarea class="col-sm-7" id="observacoesProcedimento" name="observacoesProcedimento" placeholder="observações adicionais"></textarea>
+                            <textarea class="col-sm-12" id="observacoesProcedimento" name="observacoesProcedimento" placeholder="observações adicionais"></textarea>
                         </div>
                     </div>
 
@@ -901,34 +913,85 @@
                                                             keyboard: false
                                                         })
 
-                                                        limparComponentesContato();
-                                                        //if (codigo > 0) {
-                                                        //    $.ajax({
-                                                        //        url: '/Contato/DetalharContato?codigoDoContato=' + codigo,
-                                                        //        type: "post",
-                                                        //        cache: false,
-                                                        //        success: function (data) {
-                                                        //            $("#nomeContato").attr('value', data.NomeContato);
-                                                        //            $("#codigoContato").attr('value', data.IdContato);
-                                                        //            $("#departamento").val(data.siglaDepartamento);
-                                                        //            $("#funcao").attr('value', data.Funcao);
-                                                        //            $("#telFixo").attr('value', data.TelefoneFixo);
-                                                        //            $("#telMovel").attr('value', data.TelfoneMovel);
-                                                        //            $("#email").attr('value', data.Email);
-                                                        //            $("#dataNascimento").attr('value', toDateFromJson(data.DataNascimento));
-                                                        //            $("#observacoesContato").val(data.Observacao);
-                                                        //        },
-                                                        //        error: function (xhr, ajaxOptions, thrownError) {
-                                                        //            $('#usuarioAlerts').html('<div class="alert alert-danger"><a class="close" data-dismiss="alert">×</a><span>Ops! Não foi possível detalhar este registro no servidor. Contate-nos para que possamos te ajudar melhor.</span></div>')
-                                                        //        }
-                                                        //    });
+                                                        limparComponentesProcedimentoMovimento();
+                                                        if (codigo > 0) {
+                                                            $.ajax({
+                                                                url: '/ASO/DetalharProcedimentoMovimento?codigoDoProcedimentoMovimento=' + codigo,
+                                                                type: "post",
+                                                                cache: false,
+                                                                success: function (data) {
+                                                                    $("#codigoProcedimento").attr('value', data.IdMovimentoProcedimento);
+                                                                    $("#valor").val(data.Valor);
+                                                                    $("#desconto").val(data.Desconto);
+                                                                    $("#total").val(data.Total);
+                                                                    $("#usuarioProcedimento").attr('value', data.Usuario);
+                                                                    $("#usuarioProcedimentoRealizado").attr('value', data.UsuarioRealizado);
+                                                                    $("#observacoesProcedimento").val(data.observacao);
+                                                                    $("#dataRealizado").attr('value', toDateFromJson(data.DataRealizado));
+                                                                    $("#codigoFechamentoCaixa").attr('value', data.IdFechamentoCaixa);
+                                                                    $("#codigoFaturamento").val(data.Faturamento != null ? data.Faturamento.IdFaturamento : '');
+                                                                    $("#dataExame").attr('value', toDateFromJson(data.DataExame));
+                                                                    $("#idFornecedor").attr('value', data.Fornecedor != null ? data.Fornecedor.IdFornecedor : '');
+                                                                    $("#fonecedor").attr('value', data.Fornecedor != null ? data.Fornecedor.NomeFantasia : '');
+                                                                    $("#idProfissional").attr('value', data.Profissional != null ? data.Profissional.IdProfissional : '');
+                                                                    $("#profissional").attr('value', data.Profissional != null ? data.Profissional.NomeProfissional : '');
+                                                                    $("#idProcedimento").attr('value', data.Procedimento != null ? data.Procedimento.IdProcedimento : '');
+                                                                    $("#procedimento").attr('value', data.Procedimento != null ? data.Procedimento.Nome : '');
+                                                                },
+                                                                error: function (xhr, ajaxOptions, thrownError) {
+                                                                    $('#usuarioAlerts').html('<div class="alert alert-danger"><a class="close" data-dismiss="alert">×</a><span>Ops! Não foi possível detalhar este registro no servidor. Contate-nos para que possamos te ajudar melhor.</span></div>')
+                                                                }
+                                                            });
+                                                        }
+                                                    }
+
+                                                    function toDateFromJson(src) {
+                                                        if (src != null)
+                                                            return formatDate(new Date(parseInt(src.substr(6))));
+                                                        else
+                                                            return '';
+                                                    }
+
+                                                    function formatDate(date) {
+                                                        var monthNames = [
+                                                            "January", "February", "March",
+                                                            "April", "May", "June", "July",
+                                                            "August", "September", "October",
+                                                            "November", "December"
+                                                        ];
+
+                                                        var day = date.getDate();
+                                                        var monthIndex = date.getMonth();
+                                                        var year = date.getFullYear();
+
+                                                        return day + '/' + ("0" + (monthIndex + 1)).slice(-2) + '/' + year;
+                                                    }
+
+                                                    function limparComponentesProcedimentoMovimento() {
+                                                        $("#codigoProcedimento").attr('value', '');
+                                                        $("#codigoFaturamento").attr('value', '');
+                                                        $("#codigoFechamentoCaixa").attr('value', '');
+                                                        $("#usuarioProcedimentoRealizado").attr('value', '');
+                                                        $("#dataRealizado").attr('value', '');
+                                                        $("#fonecedor").attr('value', '');
+                                                        $("#idFornecedor").attr('value', '');
+                                                        $("#idProcedimento").attr('value', '');
+                                                        $("#procedimento").attr('value', '');
+                                                        $("#idProfissional").attr('value', '');
+                                                        $("#profissional").attr('value', '');
+                                                        $("#dataExame").attr('value', '');
+                                                        $("#usuarioProcedimento").attr('value', '');
+                                                        $("#observacoesProcedimento").val('');
+                                                        $("#valor").val('');
+                                                        $("#desconto").val('');
+                                                        $("#total").val('');
                                                     }
 
                                                     function recalcularTotal() {
                                                         var valorProcedimento = parseFloat($('#valor').val());
                                                         var valorDesconto = parseFloat($('#desconto').val());
 
-                                                        $('#total').attr('value', parseFloat(Math.round(((valorProcedimento ? valorProcedimento : 0) - (valorDesconto ? valorDesconto : 0)) * 100) / 100).toFixed(2));
+                                                        $('#total').val(parseFloat(Math.round(((valorProcedimento ? valorProcedimento : 0) - (valorDesconto ? valorDesconto : 0)) * 100) / 100).toFixed(2));
 
                                                         //Garantir 2 casas decimais sempre
                                                         $('#valor').val(parseFloat(Math.round((valorProcedimento ? valorProcedimento : 0) * 100) / 100).toFixed(2));

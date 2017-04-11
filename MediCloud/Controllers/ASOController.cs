@@ -162,5 +162,27 @@ namespace MediCloud.Controllers
 
             return null;
         }
+
+        [HttpPost]
+        public JsonResult DetalharProcedimentoMovimento(int codigoDoProcedimentoMovimento)
+        {
+            try
+            {
+                ProcedimentoMovimentoModel contadoresEncontrados = CadastroDeProcedimentosMovimento.BuscarProcedimentoDeMovimentoPorID(codigoDoProcedimentoMovimento);
+
+
+                return Json(contadoresEncontrados, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                ResultadoAjaxGenericoModel resultado = new ResultadoAjaxGenericoModel();
+
+                resultado.mensagem = Constantes.MENSAGEM_GENERICA_DE_ERRO;
+                resultado.acaoBemSucedida = false;
+
+                return Json(resultado, JsonRequestBehavior.AllowGet);
+            }
+        }
+
     }
 }

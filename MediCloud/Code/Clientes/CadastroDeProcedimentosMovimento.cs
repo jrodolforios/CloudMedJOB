@@ -43,7 +43,7 @@ namespace MediCloud.Code.Clientes
                     Desconto = x.DESCONTO,
                     IdFechamentoCaixa = (int?)x.IDFCX,
                     IdMovimentoProcedimento = (int)x.IDMOVPRO,
-                    Movimento = new ASOModel() { IdASO = (int)x.IDMOV},
+                    Movimento = new ASOModel() { IdASO = (int)x.IDMOV },
                     Total = x.TOTAL,
                     Usuario = x.USUARIO,
                     UsuarioRealizado = x.USUARIOREALIZADO,
@@ -124,8 +124,13 @@ namespace MediCloud.Code.Clientes
                     TOTAL = x.Total,
                     USUARIO = x.Usuario,
                     USUARIOREALIZADO = x.UsuarioRealizado,
-                    VALOR = x.Valor                   
+                    VALOR = x.Valor
                 };
+        }
+
+        internal static ProcedimentoMovimentoModel BuscarProcedimentoDeMovimentoPorID(int codigoDoProcedimentoMovimento)
+        {
+            return injetarEmUsuarioModel(ControleDeProcedimentosMovimento.buscarProcedimentoMovimentoPorId(codigoDoProcedimentoMovimento));
         }
     }
 }
