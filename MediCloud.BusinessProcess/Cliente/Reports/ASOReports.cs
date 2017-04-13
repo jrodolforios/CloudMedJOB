@@ -36,8 +36,6 @@ namespace MediCloud.BusinessProcess.Cliente.Reports
                     break;
             }
 
-            retorno = Encoding.ASCII.GetBytes(template);
-
             return retorno;
         }
     }

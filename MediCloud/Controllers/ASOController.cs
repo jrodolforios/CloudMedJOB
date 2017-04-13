@@ -281,7 +281,7 @@ namespace MediCloud.Controllers
                 arquivo = CadastroDeASO.ImprimirASOComMedCoord(codigoASO);
 
                 byte[] fileBytes = arquivo;
-                string fileName = aso.toString() + ".html";
+                string fileName = aso.toString() + ".pdf";
                 return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, fileName);
             }
             catch (Exception ex)
