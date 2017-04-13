@@ -7,6 +7,7 @@ using MediCloud.DatabaseModels;
 using MediCloud.Persistence;
 using System.Data.Entity.Validation;
 using MediCloud.BusinessProcess.Util;
+using MediCloud.BusinessProcess.Cliente.Reports;
 
 namespace MediCloud.BusinessProcess.Cliente
 {
@@ -118,6 +119,148 @@ namespace MediCloud.BusinessProcess.Cliente
             {
                 throw ex;
             }
+        }
+
+        public static void MarcarASOComoEntregue(int codigoASO)
+        {
+            CloudMedContext contexto = new CloudMedContext();
+            MOVIMENTO ASOASerEntregue = null;
+            try
+            {
+                if(contexto.MOVIMENTO.Any(x => x.IDMOV == codigoASO))
+                {
+                    ASOASerEntregue = contexto.MOVIMENTO.First(x => x.IDMOV == codigoASO);
+
+                    ASOASerEntregue.CAIXAPENDENTE = ASOASerEntregue.CAIXAPENDENTE.HasValue ? !ASOASerEntregue.CAIXAPENDENTE : false;
+                }
+
+                contexto.SaveChanges();
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static List<MOVIMENTO_ARQUIVOS> CarregarArquivosSemBinarios(decimal iDMOV)
+        {
+            CloudMedContext contexto = new CloudMedContext();
+            List<MOVIMENTO_ARQUIVOS> listaBancoSemBinarios = new List<MOVIMENTO_ARQUIVOS>();
+
+            try
+            {
+                var lista = contexto.MOVIMENTO_ARQUIVOS.Where(x => x.IDMOV == iDMOV);
+
+                foreach(var item in lista)
+                {
+                    listaBancoSemBinarios.Add(new MOVIMENTO_ARQUIVOS()
+                    {
+                        DATAENVIO = item.DATAENVIO,
+                        IDARQUIVO = item.IDARQUIVO,
+                        IDMOV = item.IDMOV,
+                        MOVIMENTO = item.MOVIMENTO,
+                        NOMEARQUIVO = item.NOMEARQUIVO,
+                        ARQUIVO = null
+                    });
+                }
+
+                return listaBancoSemBinarios;
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+                return new List<MOVIMENTO_ARQUIVOS>();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static void SalvarArquivo(byte[] fileData, string fileName, int codigoASO)
+        {
+            CloudMedContext contexto = new CloudMedContext();
+
+            try
+            {
+                MOVIMENTO_ARQUIVOS arquivo = new MOVIMENTO_ARQUIVOS()
+                {
+                    ARQUIVO = fileData,
+                    DATAENVIO = DateTime.Now,
+                    IDARQUIVO = 0,
+                    IDMOV = codigoASO,
+                    NOMEARQUIVO = fileName
+                };
+
+                contexto.MOVIMENTO_ARQUIVOS.Add(arquivo);
+
+                contexto.SaveChanges();
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static MOVIMENTO_ARQUIVOS recuperarBinarioDeArquivo(int codigoArquivo)
+        {
+            CloudMedContext contexto = new CloudMedContext();
+
+            try
+            {
+                if (contexto.MOVIMENTO_ARQUIVOS.Any(x => x.IDARQUIVO == codigoArquivo))
+                    return contexto.MOVIMENTO_ARQUIVOS.First(x => x.IDARQUIVO == codigoArquivo);
+                else
+                    return null;
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+                return null;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static void DeletarArquivo(int codigoArquivo)
+        {
+            CloudMedContext contexto = new CloudMedContext();
+
+            try
+            {
+                if (contexto.MOVIMENTO_ARQUIVOS.Any(x => x.IDARQUIVO == codigoArquivo))
+                    contexto.MOVIMENTO_ARQUIVOS.Remove(contexto.MOVIMENTO_ARQUIVOS.First(x => x.IDARQUIVO == codigoArquivo));
+
+                contexto.SaveChanges();
+                
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static byte[] ImprimirASOComMedCoord(int codigoASO)
+        {
+            MOVIMENTO aso = ControleDeASO.buscarASOPorId(codigoASO);
+
+            ASOReports Report = new ASOReports(aso, Util.Enum.Cliente.ASOReportEnum.imprimirComMedCoord);
+
+            return Report.generate();
         }
     }
 }

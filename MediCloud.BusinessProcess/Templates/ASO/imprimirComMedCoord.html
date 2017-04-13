@@ -1,0 +1,371 @@
+﻿<html>
+<head>
+    <title>Boleto</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <style>
+        .TextoCampo {
+            font-weight: bold;
+            font-size: 6px;
+            font-family: Verdana;
+        }
+
+        .ValorCampo {
+            font-weight: normal;
+            font-size: 8px;
+            font-family: Verdana;
+        }
+
+        .ReciboSacado {
+            font-weight: bold;
+            font-size: 8px;
+            font-family: Verdana;
+        }
+
+        .LinhaDigitavel {
+            font-weight: normal;
+            font-size: 9px;
+            font-family: Verdana;
+        }
+
+        .NumeroBanco {
+            font-weight: bold;
+            font-size: 9px;
+            font-family: Verdana;
+        }
+    </style>
+</head>
+<body>
+    <div style="width: 640px;">
+        <table cellspacing="0" cellpadding="2" width="640" border="1" bordercolor="#000000" id="Table1">
+            <tbody>
+                <tr valign="middle">
+                    <td align="center"><img src="[%LogoBanco%]"></td>
+                    <td align="center"><div class="NumeroBanco">[%NumeroBanco%]</div></td>
+                    <td align="right" colspan="6"><div class="ReciboSacado">Recibo do Sacado</div></td>
+                </tr>
+                <tr valign="top">
+                    <td colspan="7">
+                        <div class="TextoCampo">Local de Pagamento</div>
+                        <div class="ValorCampo">[%LocalPagamento%]</div>
+                    </td>
+                    <td valign="middle" align="center" rowspan="4" width="180"><img src="[%LogoBanco%]"></td>
+                </tr>
+                <tr valign="top">
+                    <td colspan="7">
+                        <div class="TextoCampo">Cedente</div>
+                        <div class="ValorCampo">[%NomeCedente%]</div>
+                    </td>
+                    <!---<TD></TD>--->
+                </tr>
+                <tr valign="top">
+                    <td colspan="2">
+                        <div class="TextoCampo">Data do Documento</div>
+                        <div class="ValorCampo" align="center">[%DataDocumento%]</div>
+                    </td>
+                    <td colspan="2">
+                        <div class="TextoCampo">N&uacute;mero&nbsp;do&nbsp;Documento</div>
+                        <div class="ValorCampo" align="center">[%NumeroDocumento%]</div>
+                    </td>
+                    <td>
+                        <div class="TextoCampo">Esp&eacute;cie&nbsp;Doc.</div>
+                        <div class="ValorCampo" align="center">RC</div>
+                    </td>
+
+                    <td>
+                        <div class="TextoCampo">
+                            Acente<div>
+                                <div class="ValorCampo" align="center">N</div>
+                            </div>
+                        </div>
+                    </td>
+
+                    <td>
+                        <div class="TextoCampo">Data&nbsp;do&nbsp;Processo</div>
+                        <div class="ValorCampo" align="center">[%DataProcesso%]</div>
+                    </td>
+                    <!---<TD></TD>--->
+                </tr>
+
+                <tr valign="top">
+                    <td><div class="TextoCampo">Uso do Banco</div></td>
+                    <td><div class="TextoCampo">Cip</div></td>
+                    <td>
+                        <div class="TextoCampo">Carteira</div>
+                        <div class="ValorCampo" align="center">[%NumeroCarteira%]</div>
+                    </td>
+                    <td>
+                        <div class="TextoCampo">Esp&eacute;cie</div>
+                        <div class="ValorCampo" align="center">R$</div>
+                    </td>
+                    <td colspan="2"><div class="TextoCampo">Quantidade</div></td>
+                    <td><div class="TextoCampo">Valor</div></td>
+                    <!---<TD></TD>--->
+                </tr>
+
+                <tr valign="top">
+                    <td colspan="7" rowspan="9">
+                        <div class="TextoCampo">Instru&ccedil;&otilde;es de responsabilidade do cedente</div>
+                        <div class="ValorCampo">[%Area1%]</div>
+                        <br>
+                        <div class="ValorCampo">&nbsp;</div>
+                    </td>
+                    <td bgcolor="#dcdcdc">
+                        <div class="TextoCampo">Vencimento</div>
+                        <div class="ValorCampo" align="center">[%DataVencimento%]</div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <div class="TextoCampo">Ag&ecirc;ncia/C&oacute;digo Cedente</div>
+                        <div class="ValorCampo" align="center">[%NumeroAgencia%] / [%NumeroConta%]</div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <div class="TextoCampo">Nosso N&uacute;mero</div>
+                        <div class="ValorCampo" align="center">[%NossoNumero%]</div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td bgcolor="#dcdcdc">
+                        <div class="TextoCampo">1 (=) Valor do Documento</div>
+                        <div class="ValorCampo" align="right">[%ValorDocumento%]</div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <div class="TextoCampo">2 (-) Desconto/Abatimento<br><br></div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <div class="TextoCampo">3 (-) Outras Dedu&ccedil;&otilde;es<br><br></div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <div class="TextoCampo">4 () Mora/Multa<br><br></div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <div class="TextoCampo">5 () Outros Acr&eacute;scimos<br><br></div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <div class="TextoCampo">6 (=) Valor Cobrado<br><br></div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td colspan="8">
+
+                        <table width="100%" border="0" cellpadding="0" cellspacing="0" id="Table2">
+                            <tbody>
+                                <tr valign="top">
+                                    <td width="6%"><div class="TextoCampo">Sacado:</div></td>
+                                    <td>
+                                        <div class="ValorCampo">
+
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        <div class="TextoCampo">
+                                            Respons&aacute;vel
+                                            Financeiro:
+                                            [%NomeAvalista%]
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table cellspacing="0" cellpadding="0" width="640" border="0" bordercolor="#ffffff" id="Table3">
+            <tbody>
+                <tr>
+                    <td width="*">&nbsp;</td>
+                    <td width="300">
+                        <div class="ValorCampo" align="center">Autentica&ccedil;&atilde;o Mec&acirc;nica</div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <br>
+        <hr width="640" align="left">
+        <table cellspacing="0" cellpadding="3" width="640" border="1" bordercolor="#000000" id="Table4">
+            <tbody>
+                <tr valign="middle">
+                    <td align="center"><img src="[%LogoBanco%]"></td>
+                    <td align="center"><div class="NumeroBanco">[%NumeroBanco%]</div></td>
+                    <td align="left" colspan="6"><div class="LinhaDigitavel"></div></td>
+                </tr>
+
+                <tr valign="top">
+                    <td colspan="7">
+                        <div class="TextoCampo">Local de Pagamento</div>
+                        <div class="ValorCampo">[%LocalPagamento%]</div>
+                    </td>
+                    <td bgcolor="#dcdcdc" width="180">
+                        <div class="TextoCampo">Vencimento</div>
+                        <div class="ValorCampo" align="center">[%DataVencimento%]</div>
+                    </td>
+                </tr>
+
+                <tr valign="top">
+                    <td colspan="7">
+                        <div class="TextoCampo">Cedente</div>
+                        <div class="ValorCampo">[%NomeCedente%]</div>
+                    </td>
+                    <td>
+                        <div class="TextoCampo">Ag&ecirc;ncia/C&oacute;digo Cedente</div>
+                        <div class="ValorCampo" align="center">[%NumeroAgencia%] / [%NumeroConta%]</div>
+                    </td>
+                </tr>
+
+                <tr valign="top">
+                    <td colspan="2">
+                        <div class="TextoCampo">Data&nbsp;do&nbsp;Documento</div>
+                        <div class="ValorCampo" align="center">[%DataDocumento%]</div>
+                    </td>
+                    <td colspan="2">
+                        <div class="TextoCampo">N&uacute;mero&nbsp;do&nbsp;Documento</div>
+                        <div class="ValorCampo" align="center">[%NumeroDocumento%]</div>
+                    </td>
+
+                    <td>
+                        <div class="TextoCampo">Esp&eacute;cie&nbsp;Doc.</div>
+                        <div class="ValorCampo" align="center">RC</div>
+                    </td>
+
+                    <td>
+                        <div class="TextoCampo">
+                            Acente<div>
+                                <div class="ValorCampo" align="center">N</div>
+                            </div>
+                        </div>
+                    </td>
+
+                    <td>
+                        <div class="TextoCampo">Data&nbsp;do&nbsp;Processo</div>
+                        <div class="ValorCampo" align="center">[%DataProcesso%]</div>
+                    </td>
+                    <td>
+                        <div class="TextoCampo">Nosso N&uacute;mero</div>
+                        <div class="ValorCampo" align="center">[%NossoNumero%]</div>
+                    </td>
+                </tr>
+
+                <tr valign="top">
+                    <td><div class="TextoCampo">Uso do Banco</div></td>
+                    <td><div class="TextoCampo">Cip</div></td>
+                    <td>
+                        <div class="TextoCampo">Carteira</div>
+                        <div class="ValorCampo" align="center">[%NumeroCarteira%]</div>
+                    </td>
+                    <td>
+                        <div class="TextoCampo">Esp&eacute;cie</div>
+                        <div class="ValorCampo" align="center">R$</div>
+                    </td>
+                    <td colspan="2"><div class="TextoCampo">Quantidade</div></td>
+                    <td><div class="TextoCampo">Valor</div></td>
+                    <td bgcolor="#dcdcdc">
+                        <div class="TextoCampo">1 (=) Valor do Documento</div>
+                        <div class="ValorCampo" align="right">[%ValorDocumento%]</div>
+                    </td>
+                </tr>
+
+                <tr valign="top">
+                    <td colspan="7" rowspan="5">
+                        <div class="TextoCampo">Instru&ccedil;&otilde;es de responsabilidade do cedente</div>
+                        <div class="ValorCampo"></div>
+                        <br>
+                        <div class="ValorCampo">[%Area2%]</div>
+                    </td>
+                    <td>
+                        <div class="TextoCampo">2 (-) Desconto/Abatimento<br><br></div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <div class="TextoCampo">3 (-) Outras Dedu&ccedil;&otilde;es<br><br></div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <div class="TextoCampo">4 () Mora/Multa<br><br></div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <div class="TextoCampo">5 () Outros Acr&eacute;scimos<br><br></div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <div class="TextoCampo">6 (=) Valor Cobrado<br><br></div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td colspan="8">
+
+                        <table width="100%" border="0" cellpadding="0" cellspacing="0" id="Table5">
+                            <tbody>
+                                <tr valign="top">
+                                    <td width="6%"><div class="TextoCampo">Sacado:</div></td>
+                                    <td>
+                                        <div class="ValorCampo">
+                                            [%Area3%]
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        <div class="TextoCampo">
+                                            Respons&aacute;vel
+                                            Financeiro:
+                                            [%NomeAvalista%]
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table cellspacing="0" cellpadding="3" width="640" border="0" bordercolor="#ffffff" id="Table6">
+            <tbody>
+                <tr>
+                    <td rowspan="2">[%ImagemCodigoBarra%]</td>
+                    <td width="300" valign="top">
+                        <div class="ValorCampo" align="center">Autentica&ccedil;&atilde;o Mec&acirc;nica</div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

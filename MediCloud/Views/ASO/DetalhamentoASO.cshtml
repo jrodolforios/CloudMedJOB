@@ -53,6 +53,7 @@
         </small>
     </h1>
 </div><!-- /.page-header -->
+<div id="usuarioAlerts"></div>
 <div class="row">
     <div class="col-xs-12">
         <div id="user-profile-3" class="user-profile row">
@@ -74,7 +75,7 @@
                 </div>
 
                 <div class="space"></div>
-                <form method="post" class="form-horizontal" action="@Url.Content("~/ASO/DetalhamentoASO")">
+                <form method="post" id="formPrincipalASO" class="form-horizontal" action="@Url.Content("~/ASO/DetalhamentoASO")" enctype="multipart/form-data">
                     <input type="hidden" id="codigoASO" name="codigoASO" value="@Html.ValueFor(x => x.IdASO)" />
                     <input type="hidden" id="usuario" name="usuario" value="@Html.ValueFor(x => x.Usuario)" />
                     <input type="hidden" id="caixaPendente" name="caixaPendente" value="@Html.ValueFor(x => x.CaixaPendente)" />
@@ -373,7 +374,66 @@
                         </div>
                         <div id="edit-files" class="tab-pane fade">
                             <div class="space-10"></div>
-                           <h1>ARQUIVOS</h1>
+                            <div class="form-group">
+                                <div class="col-xs-12">
+                                    <input multiple="" name="arquivo" type="file" id="arquivo" />
+                                </div>
+                            </div>
+
+                            <div class="progress pos-rel hide" id="progressBarFile" data-percent="0%">
+                                <div class="progress-bar" id="InnerProgressBarFile" style="width:0%;"></div>
+                            </div>
+                            <a class="btn btn-info" href="javascript:enviarArquivo()">
+                                <i class="ace-icon fa fa-cloud-upload bigger-110"></i>
+                                Enviar arquivo
+                            </a>
+
+                            <h4 class="header blue bolder smaller">Arquivos</h4>
+
+                            <div class="vspace-12-sm"></div>
+
+                            @if (Model != null && Model.AnexosMovimento != null && Model.AnexosMovimento.Any())
+                            {
+                                foreach (MediCloud.Models.Cliente.ArquivoMovimentoModel item in Model.AnexosMovimento)
+                                {
+                                    <div class="row">
+                                        <div class="col-xs-12" id="@item.IdArquivo">
+                                            <div class="media search-media">
+                                                <div class="media-left">
+                                                    <a href="#">
+                                                        <img class="media-object" data-src="holder.js/72x72" alt="72x72" src="/assets/images/avatars/document-download-flat.png" data-holder-rendered="true" style="width: 72px; height: 72px;">
+                                                    </a>
+                                                </div>
+                                                <div class="media-body">
+                                                    <div class="container">
+                                                        <h4 class="media-heading">
+                                                            <span class="blue">@item.NomeArquivo </span>
+                                                        </h4>
+                                                    </div>
+                                                    <p><b>Data de envio:</b><br /> @item.DataEnvio.ToShortDateString()</p>
+
+                                                    <div class="search-actions text-center">
+                                                        <span class="blue bolder bigger-110">Ações</span>
+
+                                                        <div class="action-buttons bigger-150">
+                                                            <a href="javascript:excluirArquivoMovimento(@item.IdArquivo);">
+                                                                <i class="ace-icon fa fa-trash"></i>
+                                                            </a>
+                                                        </div>
+                                                        <a href="javascript:baixarArquivoMovimento(@item.IdArquivo)" class="search-btn-action btn btn-sm btn-block btn-info"><i class="ace-icon fa fa-arrow-down"></i>Baixar</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <div class="alert alert-block alert-info">
+                                    Nenhum procedimento para ser exibido.
+                                </div>
+                            }
 
                         </div>
 
@@ -412,6 +472,30 @@
             </div>
             <div class="modal-footer">
                 <button type="button" data-dismiss="modal" class="btn btn-primary" id="delete">
+                    <i class="ace-icon fa fa-check"></i>
+                    Sim
+                </button>
+                <button type="button" data-dismiss="modal" class="btn">
+                    <i class="ace-icon fa fa-times"></i>
+                    Não
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="confirmArquivo" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="smaller lighter blue no-margin">Excluir Arquivo</h3>
+            </div>
+            <div class="modal-body">
+                Tem certeza que deseja excluir este arquivo?
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-primary" id="deleteArquivo">
                     <i class="ace-icon fa fa-check"></i>
                     Sim
                 </button>
@@ -1001,4 +1085,121 @@
                                                     $('#desconto').on('blur', function () {
                                                         recalcularTotal();
                                                     });
+
+                                                    $('#arquivo').ace_file_input({
+                                                        style: 'well',
+                                                        btn_choose: 'clique para selecionar os  arquivos.',
+                                                        btn_change: null,
+                                                        no_icon: 'ace-icon fa fa-cloud-upload',
+                                                        droppable: false,
+                                                        thumbnail: 'small'//large | fit
+                                                        //,icon_remove:null//set null, to hide remove/reset button
+                                                        /**,before_change:function(files, dropped) {
+                                                            //Check an example below
+                                                            //or examples/file-upload.html
+                                                            return true;
+                                                        }*/
+                                                        /**,before_remove : function() {
+                                                            return true;
+                                                        }*/
+                                                        ,
+                                                        preview_error: function (filename, error_code) {
+                                                            //name of the file that failed
+                                                            //error_code values
+                                                            //1 = 'FILE_LOAD_FAILED',
+                                                            //2 = 'IMAGE_LOAD_FAILED',
+                                                            //3 = 'THUMBNAIL_FAILED'
+                                                            //alert(error_code);
+                                                        }
+
+                                                    }).on('change', function () {
+                                                    });
+
+                                                    function enviarArquivo() {
+                                                        var formData = new FormData();
+                                                        var totalFiles = document.getElementById("arquivo").files.length;
+                                                        for (var i = 0; i < totalFiles; i++) {
+                                                            var file = document.getElementById("arquivo").files[i];
+
+                                                            formData.append("arquivo", file);
+                                                        }
+
+                                                        if (data) {
+                                                            $.ajax({
+                                                                url: "/ASO/UploadArquivo?CodigoASO=" + $("#codigoASO").val(),
+                                                                type: 'POST',
+                                                                data: formData,
+                                                                success: function (data) {
+                                                                    location.reload();
+                                                                },
+                                                                cache: false,
+                                                                contentType: false,
+                                                                processData: false,
+                                                                xhr: function () {  // Custom XMLHttpRequest
+                                                                    var myXhr = $.ajaxSettings.xhr();
+                                                                    if (myXhr.upload) { // Avalia se tem suporte a propriedade upload
+                                                                        myXhr.upload.addEventListener('progress', function (e) {
+                                                                            if (e.lengthComputable) {
+                                                                                var max = e.total;
+                                                                                var current = e.loaded;
+
+                                                                                var Percentage = (current * 100) / max;
+                                                                                atualizarProgressBarArquivo(Percentage);
+                                                                            }
+                                                                        }, false);
+                                                                    }
+                                                                    return myXhr;
+                                                                }
+                                                            });
+                                                        }
+                                                    }
+
+                                                    function atualizarProgressBarArquivo(count) {
+                                                        var cntreq = 0;
+                                                        var cntvals = 0;
+                                                        $("#progressBarFile").removeClass("hide");
+                                                        count = parseInt(count);
+                                                        $('#progressBarFile').attr("data-percent", count + '%');
+                                                        $('#InnerProgressBarFile').attr("style", "width: " + count + '%');
+
+                                                        if (count == 100) {
+                                                            $("#progressBarFile").addClass("hide");
+                                                        }
+                                                    }
+
+                                                    function baixarArquivoMovimento(codigo) {
+                                                        window.location.replace("/ASO/BaixarArquivoASO?codigoArquivo=" + codigo);
+                                                    }
+
+                                                    function excluirArquivoMovimento(codigo) {
+
+                                                        $('#confirmArquivo').modal({
+                                                            backdrop: 'static',
+                                                            keyboard: false
+                                                        })
+                                                            .one('click', '#deleteArquivo', function () {
+                                                                deletarArquivoMovimento(codigo);
+                                                            });
+                                                    }
+
+                                                    function deletarArquivoMovimento(codigo) {
+                                                        $.ajax({
+                                                            url: '/ASO/ExcluirArquivoMovimento?codigoArquivo=' + codigo,
+                                                            type: "post",
+                                                            cache: false,
+                                                            success: function (savingStatus) {
+                                                                var tipoAlert;
+                                                                if (savingStatus.acaoBemSucedida) {
+                                                                    tipoAlert = 'alert-success';
+                                                                    $("#" + codigo).remove();
+                                                                }
+                                                                else
+                                                                    tipoAlert = 'alert-danger';
+                                                                $('#usuarioAlerts').html('<div class="alert ' + tipoAlert + '"><a class="close" data-dismiss="alert">×</a><span>' + savingStatus.mensagem + '</span></div>');
+                                                            },
+                                                            error: function (xhr, ajaxOptions, thrownError) {
+                                                                $('#usuarioAlerts').html('<div class="alert alert-danger"><a class="close" data-dismiss="alert">×</a><span>Ops! Não foi possível deletar este registro no servidor. Contate-nos para que possamos te ajudar melhor.</span></div>')
+                                                            }
+                                                        });
+                                                    }
 </script>

@@ -13,7 +13,7 @@ namespace MediCloud.DatabaseModels
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public decimal IDARQUIVO { get; set; }
 
-        [Column(TypeName = "image")]
+        [Column(TypeName = "varbinary")]
         [Required]
         public byte[] ARQUIVO { get; set; }
 
@@ -21,5 +21,10 @@ namespace MediCloud.DatabaseModels
         public decimal IDMOV { get; set; }
 
         public virtual MOVIMENTO MOVIMENTO { get; set; }
+
+        public DateTime DATAENVIO { get; set; }
+
+        [StringLength(100)]
+        public string NOMEARQUIVO { get; set; }
     }
 }

@@ -102,14 +102,13 @@ else
 
     function marcarEntregue(entregue, codigo) {
         $.ajax({
-            url: '/ASO/MarcarComoEntregue?codigoDoASO=' + codigo + "&Entregue=" + entregue,
+            url: '/ASO/MarcarASOEntregue?codigoASO=' + codigo,
             type: "post",
             cache: false,
             success: function (savingStatus) {
                 var tipoAlert;
                 if (savingStatus.acaoBemSucedida) {
                     tipoAlert = 'alert-success';
-                    $("#" + codigo).remove();
                 }
                 else
                     tipoAlert = 'alert-danger';
@@ -136,25 +135,7 @@ else
     }
 
     function imprimirASO(codigo) {
-        $.ajax({
-            url: '/ASO/ImprimirComMedicoCoordenador?codigoDoASO=' + codigo,
-            type: "post",
-            cache: false,
-            success: function (savingStatus) {
-                var tipoAlert;
-                if (savingStatus.acaoBemSucedida) {
-                    tipoAlert = 'alert-success';
-                    $("#" + codigo).remove();
-                }
-                else
-                    tipoAlert = 'alert-danger';
-
-                $('#ASOAlerts').html('<div class="alert ' + tipoAlert + '"><a class="close" data-dismiss="alert">×</a><span>' + savingStatus.mensagem + '</span></div>');
-            },
-            error: function (xhr, ajaxOptions, thrownError) {
-                $('#ASOAlerts').html('<div class="alert alert-danger"><a class="close" data-dismiss="alert">×</a><span>Ops! Não foi possível alterar este registro no servidor. Contate-nos para que possamos te ajudar melhor.</span></div>')
-            }
-        });
+        window.location.replace("/ASO/ImprimirASOComMedCoord?codigoASO=" + codigo);
     }
 
     function GerarRecibo(codigo) {

@@ -251,6 +251,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Cliente\ArquivoMovimentoModel.cs" />
     <Compile Include="Models\Cliente\ASOModel.cs" />
     <Compile Include="Models\Cliente\AutoCompleteProcendimentoMovimentoModel.cs" />
     <Compile Include="Models\Cliente\CargoModel.cs" />
@@ -322,6 +323,7 @@
     <Content Include="assets\images\avatars\avatar5.png" />
     <Content Include="assets\images\avatars\client.png" />
     <Content Include="assets\images\avatars\contact.png" />
+    <Content Include="assets\images\avatars\document-download-flat.png" />
     <Content Include="assets\images\avatars\profile-pic.jpg" />
     <Content Include="assets\images\avatars\user.jpg" />
     <Content Include="assets\images\avatars\worker.png" />

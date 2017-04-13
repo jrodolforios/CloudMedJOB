@@ -10,6 +10,7 @@ using MediCloud.Code.Financeiro;
 using MediCloud.Code.Funcionario;
 using MediCloud.Code.Recomendacao;
 using MediCloud.Code.Parametro;
+using MediCloud.Controllers;
 
 namespace MediCloud.Code.Clientes
 {
@@ -55,8 +56,57 @@ namespace MediCloud.Code.Clientes
 
                     ProcedimentosMovimento = CadastroDeProcedimentosMovimento.BuscarProcedimentosDeMovimentoPorIDMovimento(x.IDMOV),
 
-                    AnexosMovimento = new List<object>()
+                    AnexosMovimento = CarregarArquivosDeASOSemBinarios(x.IDMOV)
 
+                };
+        }
+
+        private static List<ArquivoMovimentoModel> CarregarArquivosDeASOSemBinarios(decimal iDMOV)
+        {
+            List<ArquivoMovimentoModel> listaDeModels = new List<ArquivoMovimentoModel>();
+
+            List<MOVIMENTO_ARQUIVOS> usuarioDoBanco = ControleDeASO.CarregarArquivosSemBinarios(iDMOV);
+
+            usuarioDoBanco.ForEach(x =>
+            {
+                listaDeModels.Add(injetarEmUsuarioModelArquivoComBinarios(x));
+            });
+
+            return listaDeModels;
+        }
+
+        private static ArquivoMovimentoModel injetarEmUsuarioModelArquivoComBinarios(MOVIMENTO_ARQUIVOS x)
+        {
+            if (x == null)
+                return null;
+            else
+                return new ArquivoMovimentoModel()
+                {
+                    Arquivo = x.ARQUIVO,
+                    DataEnvio = x.DATAENVIO,
+                    IdArquivo = (int)x.IDARQUIVO,
+                    Movimento = new ASOModel() { IdASO = (int)x.IDMOV},
+                    NomeArquivo = x.NOMEARQUIVO
+                };
+        }
+
+        internal static void MarcarComoEntregue(ASOController aSOController, int codigoASO)
+        {
+            ControleDeASO.MarcarASOComoEntregue(codigoASO);
+        }
+
+        private static ArquivoMovimentoModel injetarEmUsuarioModelArquivo(MOVIMENTO_ARQUIVOS x)
+        {
+            if (x == null)
+                return null;
+            else
+                return new ArquivoMovimentoModel()
+                {
+                    Arquivo = null,
+                    DataEnvio = x.DATAENVIO,
+                    IdArquivo = (int)x.IDARQUIVO,
+                    Movimento = new ASOModel() { IdASO = (int)x.IDMOV },
+                    NomeArquivo = x.NOMEARQUIVO
                 };
         }
 
@@ -103,7 +153,7 @@ namespace MediCloud.Code.Clientes
                     CAIXAPENDENTE = x.CaixaPendente,
                     IDFCX = x.IdFechamentoCaixa,
                     IDFAT = x.Faturamento?.IdFaturamento,
-                    
+
 
                     TIPO = "ASO",
                     FATURA = (decimal?)0.00, //No banco está sempre guardando este valor.
@@ -132,9 +182,29 @@ namespace MediCloud.Code.Clientes
                 IdFechamentoCaixa = string.IsNullOrEmpty(form["fechamentoCaixa"]) ? null : (int?)Convert.ToInt32(form["fechamentoCaixa"]),
                 Faturamento = CadastroDeFaturamento.RecuperarFaturamentoPorID(string.IsNullOrEmpty(form["faturamento"]) ? 0 : Convert.ToInt32(form["faturamento"])),
 
-                AnexosMovimento = new List<object>(),
+                AnexosMovimento = new List<ArquivoMovimentoModel>(),
                 ProcedimentosMovimento = new List<ProcedimentoMovimentoModel>()
             };
+        }
+
+        internal static void uploadDeArquivo(byte[] fileData, string fileName, int codigoASO)
+        {
+            ControleDeASO.SalvarArquivo(fileData, fileName, codigoASO);
+        }
+
+        internal static ArquivoMovimentoModel downloadDeArquivo(int codigoArquivo)
+        {
+            return injetarEmUsuarioModelArquivoComBinarios(ControleDeASO.recuperarBinarioDeArquivo(codigoArquivo));
+        }
+
+        internal static void DeletarArquivoMovimento(ASOController aSOController, int codigoArquivo)
+        {
+            ControleDeASO.DeletarArquivo(codigoArquivo);
+        }
+
+        internal static byte[] ImprimirASOComMedCoord(int codigoASO)
+        {
+            return ControleDeASO.ImprimirASOComMedCoord(codigoASO);
         }
     }
 }

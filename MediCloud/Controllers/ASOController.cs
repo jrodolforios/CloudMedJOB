@@ -9,6 +9,7 @@ using MediCloud.Models.Parametro;
 using MediCloud.Models.Seguranca;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -76,6 +77,30 @@ namespace MediCloud.Controllers
                 CadastroDeProcedimentosMovimento.DeletarProcedimentoMovimento(this, codigoProcedimento);
 
                 resultado.mensagem = "Procedimento excluído.";
+                resultado.acaoBemSucedida = true;
+
+                return Json(resultado, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                resultado.mensagem = Constantes.MENSAGEM_GENERICA_DE_ERRO;
+                resultado.acaoBemSucedida = false;
+
+                return Json(resultado, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpPost]
+        public JsonResult MarcarASOEntregue(int codigoASO)
+        {
+            ResultadoAjaxGenericoModel resultado = new ResultadoAjaxGenericoModel();
+            try
+            {
+                base.EstahLogado();
+
+                CadastroDeASO.MarcarComoEntregue(this, codigoASO);
+
+                resultado.mensagem = "Marcação alterada.";
                 resultado.acaoBemSucedida = true;
 
                 return Json(resultado, JsonRequestBehavior.AllowGet);
@@ -184,5 +209,111 @@ namespace MediCloud.Controllers
             }
         }
 
+        [HttpPost]
+        public JsonResult UploadArquivo(int CodigoASO)
+        {
+            ResultadoAjaxGenericoModel resultado = new ResultadoAjaxGenericoModel();
+            try
+            {
+                base.EstahLogado();
+                byte[] fileData = null;
+
+                for (int i = 0; i < Request.Files.Count; i++)
+                {
+                    var file = Request.Files[i];
+
+                    var fileName = Path.GetFileName(file.FileName);
+
+
+                    using (var binaryReader = new BinaryReader(file.InputStream))
+                    {
+                        fileData = binaryReader.ReadBytes(file.ContentLength);
+                    }
+
+                    CadastroDeASO.uploadDeArquivo(fileData, fileName, CodigoASO);
+                }
+
+                resultado.mensagem = "Upload de arquivo bem-sucedido.";
+                resultado.acaoBemSucedida = true;
+
+                return Json(resultado, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                resultado.mensagem = Constantes.MENSAGEM_GENERICA_DE_ERRO;
+                resultado.acaoBemSucedida = false;
+
+                return Json(resultado, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        public FileResult BaixarArquivoASO(int codigoArquivo)
+        {
+            ArquivoMovimentoModel arquivo = null;
+            try
+            {
+                base.EstahLogado();
+
+                arquivo = CadastroDeASO.downloadDeArquivo(codigoArquivo);
+
+                byte[] fileBytes = arquivo.Arquivo;
+                string fileName = arquivo.NomeArquivo;
+                return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, fileName);
+            }
+            catch (Exception ex)
+            {
+                base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
+                Response.Redirect("/ASO");
+                return null;
+            }
+        }
+
+        public FileResult ImprimirASOComMedCoord(int codigoASO)
+        {
+            ASOModel aso = null;
+            byte[] arquivo = null;
+            try
+            {
+                base.EstahLogado();
+
+                aso = CadastroDeASO.RecuperarASOPorID(codigoASO);
+
+                arquivo = CadastroDeASO.ImprimirASOComMedCoord(codigoASO);
+
+                byte[] fileBytes = arquivo;
+                string fileName = aso.toString() + ".html";
+                return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, fileName);
+            }
+            catch (Exception ex)
+            {
+                base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
+                Response.Redirect("/ASO");
+                return null;
+            }
+        }
+
+        [HttpPost]
+        public JsonResult ExcluirArquivoMovimento(int codigoArquivo)
+        {
+            ResultadoAjaxGenericoModel resultado = new ResultadoAjaxGenericoModel();
+            try
+            {
+                base.EstahLogado();
+
+                CadastroDeASO.DeletarArquivoMovimento(this, codigoArquivo);
+
+                resultado.mensagem = "Arquivo excluído.";
+                resultado.acaoBemSucedida = true;
+
+                return Json(resultado, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                resultado.mensagem = Constantes.MENSAGEM_GENERICA_DE_ERRO;
+                resultado.acaoBemSucedida = false;
+
+                return Json(resultado, JsonRequestBehavior.AllowGet);
+            }
+        }
     }
 }

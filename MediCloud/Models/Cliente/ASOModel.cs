@@ -30,8 +30,8 @@ namespace MediCloud.Models.Cliente
         public string Usuario { get; set; }
         public FaturamentoModel Faturamento {get;set;}
         
-        public List<ProcedimentoMovimentoModel> ProcedimentosMovimento { get; set; } //TODO: Implementar Procedimentos do Movimento ASO
-        public List<object> AnexosMovimento { get; set; } //TODO: Implementar anexos do Movimento ASO
+        public List<ProcedimentoMovimentoModel> ProcedimentosMovimento { get; set; }
+        public List<ArquivoMovimentoModel> AnexosMovimento { get; set; }
 
         public string toString()
         {
