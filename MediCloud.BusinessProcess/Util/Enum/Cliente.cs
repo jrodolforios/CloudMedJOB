@@ -11,7 +11,9 @@ namespace MediCloud.BusinessProcess.Util.Enum
         public enum ASOReportEnum
         {
             indefinido = 0,
-            imprimirComMedCoord
+            imprimirComMedCoord = 1,
+            imprimirReciboASO = 2,
+            imprimirSemMedCoord = 3
         }
     }
 }

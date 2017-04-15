@@ -257,8 +257,9 @@ namespace MediCloud.BusinessProcess.Cliente
         public static byte[] ImprimirASOComMedCoord(int codigoASO)
         {
             MOVIMENTO aso = ControleDeASO.buscarASOPorId(codigoASO);
+            INFORMACOES_CLINICA infoClinica = Util.Util.RecuperarInformacoesDaClinica();
 
-            ASOReports Report = new ASOReports(aso,recuperarNaturezaERiscosDeASO(aso), Util.Enum.Cliente.ASOReportEnum.imprimirComMedCoord);
+            ASOReports Report = new ASOReports(infoClinica, aso, recuperarNaturezaERiscosDeASO(aso), Util.Enum.Cliente.ASOReportEnum.imprimirComMedCoord);
 
             return Report.generate();
         }
@@ -305,6 +306,26 @@ namespace MediCloud.BusinessProcess.Cliente
             }
 
             return naturezasERiscos;
+        }
+
+        public static byte[] ImprimirASOSemMedCoord(int codigoASO)
+        {
+            MOVIMENTO aso = ControleDeASO.buscarASOPorId(codigoASO);
+            INFORMACOES_CLINICA infoClinica = Util.Util.RecuperarInformacoesDaClinica();
+
+            ASOReports Report = new ASOReports(infoClinica, aso, recuperarNaturezaERiscosDeASO(aso), Util.Enum.Cliente.ASOReportEnum.imprimirSemMedCoord);
+
+            return Report.generate();
+        }
+
+        public static byte[] ImprimirReciboASO(int codigoASO)
+        {
+            MOVIMENTO aso = ControleDeASO.buscarASOPorId(codigoASO);
+            INFORMACOES_CLINICA infoClinica = Util.Util.RecuperarInformacoesDaClinica();
+
+            ASOReports Report = new ASOReports(infoClinica, aso, recuperarNaturezaERiscosDeASO(aso), Util.Enum.Cliente.ASOReportEnum.imprimirReciboASO);
+
+            return Report.generate();
         }
     }
 }

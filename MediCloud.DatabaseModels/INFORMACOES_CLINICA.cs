@@ -34,5 +34,11 @@ namespace MediCloud.DatabaseModels
 
         [StringLength(20)]
         public string TELEFONECLINICA { get; set; }
+
+        [StringLength(200)]
+        public string RAZAOSOCIAL { get; set; }
+
+        [StringLength(20)]
+        public string CNPJ { get; set; }
     }
 }

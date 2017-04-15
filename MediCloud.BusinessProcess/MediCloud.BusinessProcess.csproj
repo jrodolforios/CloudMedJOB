@@ -91,6 +91,12 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Content Include="Templates\ASO\imprimirSemMedCoord.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\ASO\imprimirReciboASO.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Templates\ASO\imprimirComMedCoord.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

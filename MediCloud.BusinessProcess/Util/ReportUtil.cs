@@ -20,6 +20,10 @@ namespace MediCloud.BusinessProcess.Util
             {
                 case ASOReportEnum.imprimirComMedCoord:
                     return recoverTemplateByFileName(path + tipoASOReport.ToString() + ".html");
+                case ASOReportEnum.imprimirSemMedCoord:
+                    return recoverTemplateByFileName(path + tipoASOReport.ToString() + ".html");
+                case ASOReportEnum.imprimirReciboASO:
+                    return recoverTemplateByFileName(path + tipoASOReport.ToString() + ".html");
                 default:
                     return string.Empty;
             }

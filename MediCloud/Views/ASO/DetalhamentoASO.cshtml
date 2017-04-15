@@ -109,6 +109,19 @@
                     </div>
                     <div class="tab-content profile-edit-tab-content">
                         <div id="edit-basic" class="tab-pane in active fade">
+                            <div class="action-buttons bigger-150">
+                                <a href="javascript:imprimirASO(@Model.IdASO);" class="tooltipASO" title="Imprimir (C/ Médico Coord)">
+                                    <i class="ace-icon purple fa fa-file-text-o"></i>
+                                </a>
+                                &nbsp;&nbsp;
+                                <a href="javascript:imprimirASOSemMedCoord(@Model.IdASO);" class="tooltipASO" title="Imprimir (S/ Médico Coord)">
+                                    <i class="ace-icon purple fa fa-file-o"></i>
+                                </a>
+                                &nbsp;&nbsp;
+                                <a href="javascript:GerarRecibo(@Model.IdASO);" class="tooltipASO" title="Gerar recibo">
+                                    <i class="ace-icon orange fa fa-file-excel-o"></i>
+                                </a>
+                            </div>
                             <h4 class="header blue bolder smaller">Dados do ASO</h4>
 
                             <div class="vspace-12-sm"></div>
@@ -667,6 +680,17 @@
 
 
 <script type="text/javascript">
+                                                    $(".tooltipASO").tooltip({
+                                                        show: null,
+                                                        position: {
+                                                            my: "left top",
+                                                            at: "left bottom"
+                                                        },
+                                                        open: function (event, ui) {
+                                                            ui.tooltip.animate({ top: ui.tooltip.position().top + 10 }, "fast");
+                                                        }
+                                                    });
+
                                                     function excluirProcedimento(codigo) {
                                                         confirmDeleteModal(codigo);
                                                     }
@@ -1201,5 +1225,17 @@
                                                                 $('#usuarioAlerts').html('<div class="alert alert-danger"><a class="close" data-dismiss="alert">×</a><span>Ops! Não foi possível deletar este registro no servidor. Contate-nos para que possamos te ajudar melhor.</span></div>')
                                                             }
                                                         });
+                                                    }
+
+                                                    function imprimirASO(codigo) {
+                                                        window.location.replace("/ASO/ImprimirASOComMedCoord?codigoASO=" + codigo);
+                                                    }
+
+                                                    function imprimirASOSemMedCoord(codigo) {
+                                                        window.location.replace("/ASO/ImprimirASOSemMedCoord?codigoASO=" + codigo);
+                                                    }
+                                                    
+                                                    function GerarRecibo(codigo) {
+                                                        window.location.replace("/ASO/ImprimirReciboASO?codigoASO=" + codigo);
                                                     }
 </script>
