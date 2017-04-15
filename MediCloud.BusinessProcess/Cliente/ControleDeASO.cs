@@ -131,7 +131,7 @@ namespace MediCloud.BusinessProcess.Cliente
                 {
                     ASOASerEntregue = contexto.MOVIMENTO.First(x => x.IDMOV == codigoASO);
 
-                    ASOASerEntregue.CAIXAPENDENTE = ASOASerEntregue.CAIXAPENDENTE.HasValue ? !ASOASerEntregue.CAIXAPENDENTE : false;
+                    ASOASerEntregue.STATUS = !string.IsNullOrEmpty(ASOASerEntregue.STATUS) ? (ASOASerEntregue.STATUS == "ENTREGUE" ? "PENDENTE" : "ENTREGUE") : "ENTREGUE";
                 }
 
                 contexto.SaveChanges();
@@ -258,9 +258,53 @@ namespace MediCloud.BusinessProcess.Cliente
         {
             MOVIMENTO aso = ControleDeASO.buscarASOPorId(codigoASO);
 
-            ASOReports Report = new ASOReports(aso, Util.Enum.Cliente.ASOReportEnum.imprimirComMedCoord);
+            ASOReports Report = new ASOReports(aso,recuperarNaturezaERiscosDeASO(aso), Util.Enum.Cliente.ASOReportEnum.imprimirComMedCoord);
 
             return Report.generate();
+        }
+
+        public static Dictionary<NATUREZA, List<RISCO>> recuperarNaturezaERiscosDeASO(MOVIMENTO mov)
+        {
+            Dictionary<NATUREZA, List<RISCO>> naturezasERiscos = new Dictionary<NATUREZA, List<RISCO>>();
+            CloudMedContext contexto = new CloudMedContext();
+
+            try
+            {
+                List<RECOMENDACAO> recomendacao = contexto.RECOMENDACAO.Where(x => x.IDCLI == mov.IDCLI && x.IDCGO == mov.IDCGO && x.IDSETOR == mov.IDSETOR).ToList();
+
+                List<RECOMENDACAOXRISCO> recomendacaoRisco = new List<RECOMENDACAOXRISCO>();
+                recomendacao.ForEach(x => 
+                {
+                    recomendacaoRisco.AddRange(contexto.RECOMENDACAOXRISCO.Where(y => y.IDREC == x.IDREC));
+                });
+
+                List<RISCO> riscos = new List<RISCO>();
+                recomendacaoRisco.ForEach(x => 
+                {
+                    riscos.AddRange(contexto.RISCO.Where(y => y.IDRISCO == x.IDRISCO));
+                });
+
+                List<NATUREZA> naturezas = new List<NATUREZA>();
+                riscos.ForEach(x => 
+                {
+                    naturezas.AddRange(contexto.NATUREZA.Where(y => y.IDNAT == x.IDNAT));
+                });
+
+                naturezas.ForEach(x => 
+                {
+                    naturezasERiscos.Add(x, riscos.Where(y => y.IDNAT == x.IDNAT).ToList());
+                });
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            return naturezasERiscos;
         }
     }
 }

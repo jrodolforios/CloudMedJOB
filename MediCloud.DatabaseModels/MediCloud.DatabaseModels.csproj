@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="AUDIOMETRIA.cs" />
     <Compile Include="BANCOS.cs" />
+    <Compile Include="INFORMACOES_CLINICA.cs" />
     <Compile Include="CARGO.cs" />
     <Compile Include="CENTROCUSTO.cs" />
     <Compile Include="CIDADE.cs" />

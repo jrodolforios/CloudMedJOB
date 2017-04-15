@@ -10,6 +10,7 @@
         }
 
         public virtual DbSet<CARGO> CARGO { get; set; }
+        public virtual DbSet<INFORMACOES_CLINICA> INFORMACOES_CLINICA { get; set; }
         public virtual DbSet<CENTROCUSTO> CENTROCUSTO { get; set; }
         public virtual DbSet<CIDADE> CIDADE { get; set; }
         public virtual DbSet<CLIENTE> CLIENTE { get; set; }
