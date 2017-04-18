@@ -1,0 +1,178 @@
+﻿<html>
+<head>
+    <title>Atestado de Saúde Ocupacional</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <style type="text/css">
+        body {
+            font-family: Arial;
+            font-size: 9pt;
+        }
+
+        .line {
+            display: block;
+            height: 1px;
+            border: 0;
+            border-top: 1px solid black;
+            margin: 1em 0;
+            padding: 0;
+        }
+
+        .lineWrite {
+            display: block;
+            height: 1px;
+            border: 0;
+            border-top: 1px solid black;
+            margin: 1.5em 0;
+            padding: 0;
+        }
+
+        .dotted {
+            display: block;
+            height: 1px;
+            border: 0;
+            border-top: 1px dashed black;
+            margin: 1em 0;
+            padding: 0;
+        }
+
+        .corpo {
+            border: 1px solid black;
+            height:100%;
+        }
+
+        .dadosEmpresa {
+            width: 70%;
+            float: left;
+            text-align: left;
+        }
+
+        .logoEmpresa {
+            width: 30%;
+            float: left;
+            text-align: center;
+            vertical-align:central;
+        }
+
+            .logoEmpresa img {
+                width: 200px;
+                height: 80px;
+            }
+
+        .tituloRelatorio {
+            border: 1px solid black;
+            text-align: center;
+            margin: 3px 3px 3px 3px;
+        }
+
+        .conteudoRelatorio {
+            padding-top: 5px;
+            margin: 3px 3px 3px 3px;
+        }
+
+        .campo {
+            font-weight: bold;
+        }
+
+        .opcoes {
+            word-wrap: normal;
+            display: block;
+        }
+
+        .Assinatura {
+            display: table;
+            width:100%;
+        }
+
+        .AssinaturaDireita {
+            float: left;
+            width: 50%;
+            border-right: solid 1px black;
+        }
+
+        .AssinaturaEsquerda {
+            margin-left: 50%;
+            border-left: solid 1px black;
+        }
+
+        .Centralizado {
+            text-align: center;
+        }
+
+        .alignLeft {
+            text-align: left;
+        }
+
+        .alignRight {
+            float: right;
+            margin: 3px 3px 3px 3px;
+        }
+    </style>
+</head>
+<body>
+    <div class="corpo">
+        <div class="cabecalho">
+            <div class="cabecalhoSuperior">
+                <div class="logoEmpresa"><img src="[%LogoEmpresa%]" alt="Logo da empresa" /></div>
+                <div class="dadosEmpresa">
+                    <h3>REQUISIÇÃO DE EXAMES <small class="alignRight">(Emitido em: [%DataHoraEmissao%])</small></h3>
+                    <div class="grupoDeCampo">
+                        <span class="campo">IDMOV:</span>
+                        <span class="textoCampo">[%IdMovimento%]</span>
+                    </div>
+                    <div class="grupoDeCampo">
+                        <span class="campo">EMPRESA:</span>
+                        <span class="textoCampo">[%Cliente%]</span>
+                    </div>
+                    <div class="grupoDeCampo">
+                        <span class="campo">NOME FUNCIONÁRIO:</span>
+                        <span class="textoCampo">[%Funcionario%]</span>
+                    </div>
+                    <div class="grupoDeCampo">
+                        <span class="campo">RG:</span>
+                        <span class="textoCampo">[%RGFuncionario%]</span>
+                    </div>
+                    <div class="grupoDeCampo">
+                        <span class="campo">SETOR/FUNÇÃO:</span>
+                        <span class="textoCampo">[%Setor%]/[%Cargo%]</span>
+                    </div>
+                    <div class="grupoDeCampo">
+                        <span class="campo">DATA DE NASCIMENTO:</span>
+                        <span class="textoCampo">[%DataNacimentoFuncionario%]</span>
+                    </div>
+                    <div class="grupoDeCampo">
+                        <span class="campo">ENDEREÇO:</span>
+                        <span class="textoCampo">[%EnderecoEmpresa%]</span>
+                    </div>
+                    <div class="grupoDeCampo">
+                        <span class="campo">OBSERVAÇÕES:</span>
+                        <span class="textoCampo">[%Observacoes%]</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="conteudoRelatorio">
+                <p>&nbsp;</p>
+                <hr class="line" />
+                <div class="Assinatura">
+                    <div class="AssinaturaDireita">
+                        <h2 class="tituloRelatorio">PROCEDIMENTOS:</h2>
+                        <p class="conteudoRelatorio">[%Procedimentos%]</p>
+                    </div>
+                    <div class="AssinaturaEsquerda">
+                        <h2 class="tituloRelatorio">PREPARAÇÃO: </h2>
+                        <p class="conteudoRelatorio">
+                            <b>- RX COLUNA LOMBAR</b><br />
+                            Na véspera do exame:<br />&nbsp;&nbsp;&nbsp;
+                            - Comer até às 16:00h;<br />&nbsp;&nbsp;&nbsp;
+                            - Tomar 02 comprimidos de lacto purga às 18:00h;<br />&nbsp;&nbsp;&nbsp;
+                            - Tomar 02 comprimidos de lacto purga às 23:00h;<br />&nbsp;&nbsp;&nbsp;
+                            - Após o uso do medicamento tomar somente água, suco ou comer mamão;<br />&nbsp;&nbsp;&nbsp;
+                            Comparecer no dia seguinte às 7:00h em jejum absoluto.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+</body>
+</html>

@@ -317,6 +317,30 @@ namespace MediCloud.Controllers
         }
 
 
+        public FileResult ImprimirListaDeProcedimentos(int codigoASO)
+        {
+            ASOModel aso = null;
+            byte[] arquivo = null;
+            try
+            {
+                base.EstahLogado();
+
+                aso = CadastroDeASO.RecuperarASOPorID(codigoASO);
+
+                arquivo = CadastroDeASO.ImprimirListaDeProcedimentos(codigoASO);
+
+                byte[] fileBytes = arquivo;
+                string fileName = aso.toString() + ".pdf";
+                return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, fileName);
+            }
+            catch (Exception ex)
+            {
+                base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
+                Response.Redirect("/ASO");
+                return null;
+            }
+        }
+
         public FileResult ImprimirReciboASO(int codigoASO)
         {
             ASOModel aso = null;

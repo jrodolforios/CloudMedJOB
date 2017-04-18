@@ -48,6 +48,9 @@ namespace MediCloud.BusinessProcess.Cliente.Reports
                 case ASOReportEnum.imprimirReciboASO:
                     retorno = PdfFactory.create(EnumPdfType.TuesPechkin).Parse(substituirParametrosReciboASO(template));
                     break;
+                case ASOReportEnum.imprimirListaDeProcedimentos:
+                    retorno = PdfFactory.create(EnumPdfType.TuesPechkin).Parse(substituirParametrosListaDeProcedimentos(template));
+                    break;
                 default:
                     retorno = null;
                     break;
@@ -78,6 +81,7 @@ namespace MediCloud.BusinessProcess.Cliente.Reports
             return template;
         }
         #endregion
+
         #region imprimirReciboASO
         private string substituirParametrosReciboASO(string template)
         {
@@ -168,6 +172,40 @@ namespace MediCloud.BusinessProcess.Cliente.Reports
 
             return strRetorno.ToString();
         }
+        #endregion
+
+        #region imprimirListaDeProcedimentos
+        private string substituirParametrosListaDeProcedimentos(string template)
+        {
+            template = template.Replace("[%LogoEmpresa%]", _infoClinica.URLLOGO);
+            template = template.Replace("[%DataHoraEmissao%]", DateTime.Now.ToShortDateString());
+            template = template.Replace("[%IdMovimento%]", ((int)_movimento.IDMOV).ToString());
+            template = template.Replace("[%Cliente%]", _movimento.CLIENTE.RAZAOSOCIAL);
+            template = template.Replace("[%Funcionario%]", _movimento.FUNCIONARIO.FUNCIONARIO1);
+            template = template.Replace("[%RGFuncionario%]", _movimento.FUNCIONARIO.RG);
+            template = template.Replace("[%Setor%]", _movimento.SETOR.SETOR1);
+            template = template.Replace("[%Cargo%]", _movimento.CARGO.CARGO1);
+            template = template.Replace("[%DataNacimentoFuncionario%]", _movimento.FUNCIONARIO.NASCIMENTO.HasValue ? _movimento.FUNCIONARIO.NASCIMENTO.Value.ToShortDateString() : string.Empty);
+            template = template.Replace("[%EnderecoEmpresa%]", _movimento.FUNCIONARIO.ENDERECO);
+            template = template.Replace("[%Observacoes%]", _movimento.OBSERVACAO);
+            template = template.Replace("[%Procedimentos%]", PreencherProcedimentosComCaixaDeSelecao(_movimento.MOVIMENTO_PROCEDIMENTO.ToList()));
+
+            return template;
+        }
+
+        private string PreencherProcedimentosComCaixaDeSelecao(List<MOVIMENTO_PROCEDIMENTO> movimentoProcedimento)
+        {
+            StringBuilder strRetorno = new StringBuilder();
+
+            movimentoProcedimento.ForEach(x =>
+            {
+                strRetorno.AppendLine("<br/>");
+                strRetorno.AppendLine($"(&nbsp;&nbsp;) [{x.IDMOVPRO}] {x.PROCEDIMENTO.PROCEDIMENTO1}");
+            });
+
+            return strRetorno.ToString();
+        }
+
         #endregion
     }
 }

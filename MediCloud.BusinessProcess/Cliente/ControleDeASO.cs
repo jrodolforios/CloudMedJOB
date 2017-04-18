@@ -308,6 +308,16 @@ namespace MediCloud.BusinessProcess.Cliente
             return naturezasERiscos;
         }
 
+        public static byte[] ImprimirListaDeProcedimentos(int codigoASO)
+        {
+            MOVIMENTO aso = ControleDeASO.buscarASOPorId(codigoASO);
+            INFORMACOES_CLINICA infoClinica = Util.Util.RecuperarInformacoesDaClinica();
+
+            ASOReports Report = new ASOReports(aso, Util.Enum.Cliente.ASOReportEnum.imprimirListaDeProcedimentos, infoClinica);
+
+            return Report.generate();
+        }
+
         public static byte[] ImprimirASOSemMedCoord(int codigoASO)
         {
             MOVIMENTO aso = ControleDeASO.buscarASOPorId(codigoASO);

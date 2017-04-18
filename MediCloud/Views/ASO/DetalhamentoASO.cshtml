@@ -121,6 +121,10 @@
                                 <a href="javascript:GerarRecibo(@Model.IdASO);" class="tooltipASO" title="Gerar recibo">
                                     <i class="ace-icon orange fa fa-file-excel-o"></i>
                                 </a>
+                                &nbsp;&nbsp;
+                                <a href="javascript:GerarListaDeProcedimentos(@Model.IdASO);" class="tooltipASO" title="Lista de procedimentos">
+                                    <i class="ace-icon blue fa fa-list"></i>
+                                </a>
                             </div>
                             <h4 class="header blue bolder smaller">Dados do ASO</h4>
 
@@ -271,7 +275,7 @@
                             </div>
 
                             <div class="row">
-                                <div class="col-xs-6 col-sm-12 pricing-box">
+                                <div class="col-xs-12 col-sm-12 pricing-box">
                                     <div class="widget-box widget-color-dark">
                                         <div class="widget-header">
                                             <h5 class="widget-title bigger lighter">Mais informações deste ASO</h5>
@@ -1237,5 +1241,9 @@
                                                     
                                                     function GerarRecibo(codigo) {
                                                         window.location.replace("/ASO/ImprimirReciboASO?codigoASO=" + codigo);
-                                                    }
+                                                    } 
+
+                                                    function GerarListaDeProcedimentos(codigo) {
+                                                        window.location.replace("/ASO/ImprimirListaDeProcedimentos?codigoASO=" + codigo);
+                                                    } 
 </script>

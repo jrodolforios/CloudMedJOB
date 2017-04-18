@@ -13,7 +13,8 @@ namespace MediCloud.BusinessProcess.Util.Enum
             indefinido = 0,
             imprimirComMedCoord = 1,
             imprimirReciboASO = 2,
-            imprimirSemMedCoord = 3
+            imprimirSemMedCoord = 3,
+            imprimirListaDeProcedimentos = 4
         }
     }
 }
