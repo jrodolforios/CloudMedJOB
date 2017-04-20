@@ -51,6 +51,9 @@ namespace MediCloud.BusinessProcess.Cliente.Reports
                 case ASOReportEnum.imprimirListaDeProcedimentos:
                     retorno = PdfFactory.create(EnumPdfType.TuesPechkin).Parse(substituirParametrosListaDeProcedimentos(template));
                     break;
+                case ASOReportEnum.imprimirFichaClinica:
+                    retorno = PdfFactory.create(EnumPdfType.TuesPechkin).Parse(substituirParametrosFichaClinica(template));
+                    break;
                 default:
                     retorno = null;
                     break;
@@ -58,6 +61,7 @@ namespace MediCloud.BusinessProcess.Cliente.Reports
 
             return retorno;
         }
+
         #region imprimirSemMedCoord
         private string substituirParametrosSemMedCoord(string template)
         {
@@ -206,6 +210,30 @@ namespace MediCloud.BusinessProcess.Cliente.Reports
             return strRetorno.ToString();
         }
 
+        #endregion
+
+        #region imprimirFichaClinica
+        private string substituirParametrosFichaClinica(string template)
+        {
+            template = template.Replace("[%Referente%]", _movimento.MOVIMENTO_REFERENTE.NOMEREFERENCIA);
+            template = template.Replace("[%LogoEmpresa%]", _infoClinica.URLLOGO);
+            template = template.Replace("[%NomeFuncionario%]", _movimento.FUNCIONARIO.FUNCIONARIO1);
+            template = template.Replace("[%Cargo%]", _movimento.CARGO.CARGO1);
+            template = template.Replace("[%Cliente%]", _movimento.CLIENTE.NOMEFANTASIA);
+            template = template.Replace("[%Nascimento%]", _movimento.FUNCIONARIO.NASCIMENTO.HasValue ? _movimento.FUNCIONARIO.NASCIMENTO.Value.ToShortDateString() : string.Empty);
+            template = template.Replace("[%RazaoSocialCliente%]", _movimento.CLIENTE.RAZAOSOCIAL);
+            template = template.Replace("[%RG%]", _movimento.FUNCIONARIO.RG);
+            template = template.Replace("[%NomeClinica%]", _infoClinica.NOMECLINICA);
+            template = template.Replace("[%DataHora%]", DateTime.Now.ToShortDateString());
+            template = template.Replace("[%IdMov%]", ((int)_movimento.IDMOV).ToString());
+            template = template.Replace("[%PCMSO%]", _movimento.CLIENTE.EPCMSO.ELABORADORPCMSO);
+            template = template.Replace("[%FormaPag%]", _movimento.FORMADEPAGAMENTO.FORMADEPAGAMENTO1);
+            template = template.Replace("[%ValorTotalASO%]", ControleDeASO.CalcularValorTotalDeASO(_movimento).ToString("0.00"));
+            template = template.Replace("[%Observacoes%]", _movimento.OBSERVACAO);
+            template = template.Replace("[%NomeUsuario%]", _movimento.USUARIO);
+
+            return template;
+        }
         #endregion
     }
 }

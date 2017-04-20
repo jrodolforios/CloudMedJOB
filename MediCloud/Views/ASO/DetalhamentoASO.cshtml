@@ -125,6 +125,10 @@
                                 <a href="javascript:GerarListaDeProcedimentos(@Model.IdASO);" class="tooltipASO" title="Lista de procedimentos">
                                     <i class="ace-icon blue fa fa-list"></i>
                                 </a>
+                                &nbsp;&nbsp;
+                                <a href="javascript:GerarFichaClinica(@Model.IdASO);" class="tooltipASO" title="Ficha Clínica">
+                                    <i class="ace-icon green fa fa-clipboard"></i>
+                                </a>
                             </div>
                             <h4 class="header blue bolder smaller">Dados do ASO</h4>
 
@@ -1245,5 +1249,9 @@
 
                                                     function GerarListaDeProcedimentos(codigo) {
                                                         window.location.replace("/ASO/ImprimirListaDeProcedimentos?codigoASO=" + codigo);
+                                                    } 
+
+                                                    function GerarFichaClinica(codigo) {
+                                                        window.location.replace("/ASO/ImprimirFichaClinica?codigoASO=" + codigo);
                                                     } 
 </script>

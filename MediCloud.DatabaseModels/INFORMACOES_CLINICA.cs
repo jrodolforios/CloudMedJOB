@@ -23,6 +23,10 @@ namespace MediCloud.DatabaseModels
         [StringLength(500)]
         public string URLLOGO { get; set; }
 
+        [Required]
+        [StringLength(500)]
+        public string NOMECLINICA { get; set; }
+
         [StringLength(1000)]
         public string DADOSCABECALHOREL { get; set; }
 

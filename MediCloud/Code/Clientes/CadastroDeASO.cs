@@ -221,5 +221,10 @@ namespace MediCloud.Code.Clientes
         {
             return ControleDeASO.ImprimirListaDeProcedimentos(codigoASO);
         }
+
+        internal static byte[] ImprimirFichaClinica(int codigoASO)
+        {
+            return ControleDeASO.ImprimirFichaClinica(codigoASO);
+        }
     }
 }

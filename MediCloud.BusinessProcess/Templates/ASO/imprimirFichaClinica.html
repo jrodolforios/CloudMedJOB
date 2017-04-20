@@ -1,0 +1,259 @@
+﻿<html>
+<head>
+    <title>Atestado de Saúde Ocupacional</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <style type="text/css">
+        body {
+            font-family: Arial;
+            font-size: 7pt;
+        }
+
+        .line {
+            display: block;
+            height: 1px;
+            border: 0;
+            border-top: 1px solid black;
+            margin: 1em 0;
+            padding: 0;
+        }
+
+        .lineWrite {
+            display: block;
+            height: 1px;
+            border: 0;
+            border-top: 1px solid black;
+            margin: 1.5em 0;
+            padding: 0;
+        }
+
+        .dotted {
+            display: block;
+            height: 1px;
+            border: 0;
+            border-top: 1px dashed black;
+            margin: 1em 0;
+            padding: 0;
+        }
+
+        .corpo {
+            border: 1px solid black;
+            height: 100%;
+        }
+
+        .dadosEmpresa {
+            width: 70%;
+            float: left;
+            text-align: center;
+        }
+
+        .logoEmpresa {
+            width: 30%;
+            float: left;
+            text-align: center;
+        }
+
+            .logoEmpresa img {
+                width: 100%;
+            }
+
+        .tituloRelatorio {
+            border: 1px solid black;
+            text-align: center;
+            margin: 3px 3px 3px 3px;
+        }
+
+        .conteudoRelatorio {
+            padding-top: 5px;
+            margin: 3px 3px 3px 3px;
+        }
+
+        .campo {
+            font-weight: bold;
+        }
+
+        .opcoes {
+            word-wrap: normal;
+            display: block;
+        }
+
+        .Assinatura {
+            display: table;
+            width: 100%
+        }
+
+        .AssinaturaDireita {
+            float: left;
+            width: 25%;
+        }
+
+        .AssinaturaEsquerda {
+            margin-left: 50%;
+        }
+
+        .Centralizado {
+            text-align: center;
+        }
+
+        .alignLeft {
+            text-align: left;
+        }
+
+        .alignRight {
+            float: right;
+        }
+        .margemInferior{
+            border-bottom: solid 1px black;
+        }
+    </style>
+</head>
+<body>
+    <div class="corpo">
+        <div class="cabecalho">
+            <div class="cabecalhoSuperior">
+                <div class="logoEmpresa"><img src="[%LogoEmpresa%]" alt="Logo da empresa" /></div>
+                <div class="dadosEmpresa"><h1>EXAME MÉDICO: [%Referente%]</h1></div>
+            </div>
+        </div>
+        <div class="conteudoRelatorio">
+            <hr class="line" />
+            <div class="grupoDeCampo">
+                <div class="Assinatura">
+                    <div class="AssinaturaDireita">
+                        <span class="campo">NOME:</span>
+                        <span class="textoCampo">[%NomeFuncionario%]</span>
+                    </div>
+                    <div class="AssinaturaEsquerda">
+                        <span class="campo">CARGO:</span>
+                        <span class="textoCampo">[%Cargo%]</span>
+                    </div>
+                </div>
+            </div>
+            <div class="grupoDeCampo">
+                <div class="Assinatura">
+                    <div class="AssinaturaDireita">
+                        <span class="campo">EMPRESA:</span>
+                        <span class="textoCampo">[%Cliente%]</span>
+                    </div>
+                    <div class="AssinaturaEsquerda">
+                        <span class="campo">DATA DE NASCIMENTO:</span>
+                        <span class="textoCampo">[%Nascimento%]</span>
+                    </div>
+                </div>
+            </div>
+            <div class="grupoDeCampo">
+                <span class="campo">RAZÃO SOCIAL:</span>
+                <span class="textoCampo">[%RazaoSocialCliente%]</span>
+            </div>
+            <div class="grupoDeCampo">
+                <span class="campo">RG:</span>
+                <span class="textoCampo">[%RG%]</span>
+                &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;
+                <span class="campo">Obs.:</span>
+                <span class="textoCampo">[%Observacoes%]</span>
+            </div>
+            
+            <hr class="line" />
+            <h3 class="Centralizado">EXAME FÍSICO</h3>
+
+            <p>ASPECTO GERAL E DESENVOLVIMENTO:__________________________________________________________________________________________</p>
+            <p>AUDIÇÃO:____________________________________________________________________________________________________________________</p>
+            <p>VISÃO:______________________________________________________________________________________________________________________</p>
+            <p>PELE E MUCOSAS:_____________________________________________________________________________________________________________</p>
+            <p>ACV:__________________________________________________________________ PA:__________________________ FC:______________________</p>
+            <p>AR:_______________________________________________________________________ AGI:_______________________________________________</p>
+            <p>AGU:________________________________________________________________________ COLUNA:________________________________________</p>
+            <p>MEMBROS:___________________________________________________________________________________________________________________</p>
+            
+            <hr class="dotted" />
+            
+            <hr class="line" />
+            <br/>
+            <hr class="line" />
+            <br />
+            <hr class="line" />
+            <br />
+            <hr class="line" />
+
+            <hr class="dotted" />
+
+            <h3 class="Centralizado">SOLICITAÇÃO DE EXAMES COMPLEMENTARES</h3>
+
+            <div class="Assinatura">
+                <div class="AssinaturaDireita">
+                    <h4 class="Centralizado margemInferior">[%NomeClinica%]</h4>
+                    <p>(&nbsp;&nbsp;&nbsp;) ACUIDADE VISUAL</p>
+                    <p>(&nbsp;&nbsp;&nbsp;) AUDIOMETRIA</p>
+                    <p>(&nbsp;&nbsp;&nbsp;) ESPIROMETRIA</p>
+                    <p>(&nbsp;&nbsp;&nbsp;) ECG</p>
+                    <p>(&nbsp;&nbsp;&nbsp;) EEG</p>
+                </div>
+                <div class="AssinaturaDireita">
+                    <h4 class="Centralizado margemInferior">Radiológico</h4>
+                    <p>(&nbsp;&nbsp;&nbsp;) RAIO-X TÓRAX AP</p>
+                    <p>(&nbsp;&nbsp;&nbsp;) RAIO-X TÓRAX AP(OIT)</p>
+                    <p>(&nbsp;&nbsp;&nbsp;) RAIO-X COLUNA LOMBAR AP/PERFIL</p>
+                </div>
+                <div class="AssinaturaDireita">
+                    <h4 class="Centralizado margemInferior">Laboratoriais</h4>
+                    <p>(&nbsp;&nbsp;&nbsp;) HEMOGRAMA</p>
+                    <p>(&nbsp;&nbsp;&nbsp;) PLAQUETAS</p>
+                    <p>(&nbsp;&nbsp;&nbsp;) TIP. SANGUÍNEA + FATOR RH</p>
+                    <p>(&nbsp;&nbsp;&nbsp;) GLICOSE</p>
+                    <p>(&nbsp;&nbsp;&nbsp;) AC.METILHIPÚRICO/ HIPURICO</p>
+                </div>
+                <div class="AssinaturaDireita">
+                    <p>(&nbsp;&nbsp;&nbsp;) COLESTEROL TOTAL</p>
+                    <p>(&nbsp;&nbsp;&nbsp;) PARASITOLÓGICO(EPF)</p>
+                    <p>(&nbsp;&nbsp;&nbsp;) URINÁLISE(EAS)</p>
+                    <h4 class="Centralizado margemInferior">Outros</h4>
+                    <p>(&nbsp;&nbsp;&nbsp;) ___________________________</p>
+                    <p>(&nbsp;&nbsp;&nbsp;) ___________________________</p>
+                    <p>(&nbsp;&nbsp;&nbsp;) ___________________________</p>
+
+                </div>
+                <hr class="dotted" />
+                <h3 class="Centralizado">RESULTADOS DE EXAMES COMPLEMENTARES E CONDUTAS</h3>
+                <br/>
+                <hr class="line" />
+                <br />
+                <hr class="line" />
+                <br />
+                <hr class="line" />
+
+                <hr class="dotted" />
+
+                <div class="Assinatura">
+                    <div class="AssinaturaDireita">
+                        <h4>CONCLUSÃO</h4>
+                        <p>(&nbsp;&nbsp;&nbsp;) APTO &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (&nbsp;&nbsp;&nbsp;) INAPTO</p>
+                    </div>
+                    <div class="AssinaturaDireita" style="width:49%">
+                        <h4>CARIMBO/ASS. MÉDICO:</h4>
+                    </div>
+                    <div class="AssinaturaDireita">
+                        <p>DATA: [%DataHora%]</p>
+                        <p>IDMOV: [%IdMov%]</p>
+                    </div>
+                </div>
+                <div class="Assinatura">
+                    <div class="AssinaturaDireita">
+                        <h4>PCMSO</h4>
+                        <p>[%PCMSO%]</p>
+                    </div>
+                    <div class="AssinaturaDireita" style="width:49%">
+                        <h4>ATENDENTE</h4>
+                        <p class="Centralizado">_____________________________________________</p>
+                        <p class="Centralizado">[%NomeUsuario%]</p>
+                    </div>
+                    <div class="AssinaturaDireita">
+                        <P>FORMA PAG: [%FormaPag%]<br/>
+                            Valor: [%ValorTotalASO%]</P>
+                        <p class="Centralizado">___________________________</p>
+                        <p class="Centralizado">ASS. DO CAIXA RESP.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

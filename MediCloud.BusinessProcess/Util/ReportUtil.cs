@@ -26,12 +26,14 @@ namespace MediCloud.BusinessProcess.Util
                     return recoverTemplateByFileName(path + tipoASOReport.ToString() + ".html");
                 case ASOReportEnum.imprimirListaDeProcedimentos:
                     return recoverTemplateByFileName(path + tipoASOReport.ToString() + ".html");
+                case ASOReportEnum.imprimirFichaClinica:
+                    return recoverTemplateByFileName(path + tipoASOReport.ToString() + ".html");
                 default:
                     return string.Empty;
             }
         }
 
-        private static string recoverTemplateByFileName (string fileName)
+        private static string recoverTemplateByFileName(string fileName)
         {
             string template = null;
 

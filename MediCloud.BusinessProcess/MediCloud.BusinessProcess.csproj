@@ -57,6 +57,7 @@
     <Compile Include="Fornecedor\ControleDeContato.cs" />
     <Compile Include="Fornecedor\ControleDeFornecedor.cs" />
     <Compile Include="Funcionario\ControleDeFuncionario.cs" />
+    <Compile Include="Laudo\ControleDeLaudoRX.cs" />
     <Compile Include="Parametro\ControleDeElaboradorPCMSO.cs" />
     <Compile Include="Financeiro\ControleDeContador.cs" />
     <Compile Include="Parametro\ControleDeElaboradorPPRA.cs" />
@@ -91,6 +92,9 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Content Include="Templates\ASO\imprimirFichaClinica.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Templates\ASO\imprimirListaDeProcedimentos.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

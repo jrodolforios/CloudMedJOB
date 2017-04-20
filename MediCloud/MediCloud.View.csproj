@@ -216,11 +216,14 @@
     <Compile Include="Code\Enum\EnumContato.cs" />
     <Compile Include="Code\Enum\EnumFinanceiro.cs" />
     <Compile Include="Code\Enum\EnumFornecedor.cs" />
+    <Compile Include="Code\Enum\EnumLaudo.cs" />
     <Compile Include="Code\Financeiro\CadastroDeFaturamento.cs" />
     <Compile Include="Code\Financeiro\CadastroFormaPagamento.cs" />
     <Compile Include="Code\Fornecedor\CadastroDeContato.cs" />
     <Compile Include="Code\Fornecedor\CadastroDeFornecedor.cs" />
     <Compile Include="Code\Funcionario\CadastroDeFuncionario.cs" />
+    <Compile Include="Code\Laudo\CadastroDeLaudoRX.cs" />
+    <Compile Include="Code\Laudo\CadastroDeModeloLaudo.cs" />
     <Compile Include="Code\Parametro\CadastroDeElaboradorPCMSO.cs" />
     <Compile Include="Code\Parametro\CadastroDeElaboradorPPRA.cs" />
     <Compile Include="Code\Parametro\CadastroDeProfissional.cs" />
@@ -244,6 +247,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ProcedimentoController.cs" />
     <Compile Include="Controllers\ProfissionalController.cs" />
+    <Compile Include="Controllers\RaioXController.cs" />
     <Compile Include="Controllers\SegmentoController.cs" />
     <Compile Include="Controllers\SetorController.cs" />
     <Compile Include="Controllers\TabelaDePrecoController.cs" />
@@ -262,6 +266,8 @@
     <Compile Include="Models\Financeiro\FormaPagamentoModel.cs" />
     <Compile Include="Models\Fornecedor\ContatoFornecedorModel.cs" />
     <Compile Include="Models\Fornecedor\FornecedorModel.cs" />
+    <Compile Include="Models\Laudo\LaudoRXModel.cs" />
+    <Compile Include="Models\Laudo\ModeloLaudoModel.cs" />
     <Compile Include="Models\Parametro\GrupoProcedimento\GrupoModel.cs" />
     <Compile Include="Models\Parametro\GrupoProcedimento\ProcedimentoModel.cs" />
     <Compile Include="Models\Parametro\GrupoProcedimento\SubGrupoModel.cs" />
@@ -491,6 +497,7 @@
     <Content Include="Views\Cargo\DetalhamentoCargo.cshtml" />
     <Content Include="Views\ASO\index.cshtml" />
     <Content Include="Views\ASO\DetalhamentoASO.cshtml" />
+    <Content Include="Views\RaioX\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

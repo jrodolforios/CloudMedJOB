@@ -14,7 +14,8 @@ namespace MediCloud.BusinessProcess.Util.Enum
             imprimirComMedCoord = 1,
             imprimirReciboASO = 2,
             imprimirSemMedCoord = 3,
-            imprimirListaDeProcedimentos = 4
+            imprimirListaDeProcedimentos = 4,
+            imprimirFichaClinica = 5
         }
     }
 }

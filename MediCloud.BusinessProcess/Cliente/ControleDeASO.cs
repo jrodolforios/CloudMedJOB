@@ -308,6 +308,16 @@ namespace MediCloud.BusinessProcess.Cliente
             return naturezasERiscos;
         }
 
+        public static byte[] ImprimirFichaClinica(int codigoASO)
+        {
+            MOVIMENTO aso = ControleDeASO.buscarASOPorId(codigoASO);
+            INFORMACOES_CLINICA infoClinica = Util.Util.RecuperarInformacoesDaClinica();
+
+            ASOReports Report = new ASOReports(aso, Util.Enum.Cliente.ASOReportEnum.imprimirFichaClinica, infoClinica);
+
+            return Report.generate();
+        }
+
         public static byte[] ImprimirListaDeProcedimentos(int codigoASO)
         {
             MOVIMENTO aso = ControleDeASO.buscarASOPorId(codigoASO);
@@ -336,6 +346,18 @@ namespace MediCloud.BusinessProcess.Cliente
             ASOReports Report = new ASOReports(infoClinica, aso, recuperarNaturezaERiscosDeASO(aso), Util.Enum.Cliente.ASOReportEnum.imprimirReciboASO);
 
             return Report.generate();
+        }
+
+        public static decimal CalcularValorTotalDeASO(MOVIMENTO MOV)
+        {
+            decimal soma = 0;
+
+            MOV.MOVIMENTO_PROCEDIMENTO.ToList().ForEach(x => 
+            {
+                soma += x.TOTAL.HasValue ? x.TOTAL.Value : 0;
+            });
+
+            return soma;
         }
     }
 }
