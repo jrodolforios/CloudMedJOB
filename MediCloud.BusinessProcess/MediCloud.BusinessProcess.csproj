@@ -59,6 +59,7 @@
     <Compile Include="Funcionario\ControleDeFuncionario.cs" />
     <Compile Include="Laudo\ControleDeLaudoRX.cs" />
     <Compile Include="Laudo\ControleDeModeloLaudo.cs" />
+    <Compile Include="Laudo\Reports\LaudoReports.cs" />
     <Compile Include="Parametro\ControleDeElaboradorPCMSO.cs" />
     <Compile Include="Financeiro\ControleDeContador.cs" />
     <Compile Include="Parametro\ControleDeElaboradorPPRA.cs" />
@@ -71,6 +72,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Recomendacao\ControleDeSetor.cs" />
     <Compile Include="Segurança\ControleDeAcesso.cs" />
+    <Compile Include="Util\Enum\Laudo.cs" />
     <Compile Include="Util\Enum\Cliente.cs" />
     <Compile Include="Util\ExceptionUtil.cs" />
     <Compile Include="Util\ReportUtil.cs" />
@@ -106,6 +108,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Templates\ASO\imprimirComMedCoord.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Laudo\imprimirLaudo.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

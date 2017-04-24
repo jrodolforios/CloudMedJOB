@@ -7,6 +7,7 @@ using MediCloud.DatabaseModels;
 using System.Data.Entity.Validation;
 using MediCloud.BusinessProcess.Util;
 using MediCloud.Persistence;
+using MediCloud.BusinessProcess.Laudo.Reports;
 
 namespace MediCloud.BusinessProcess.Laudo
 {
@@ -152,6 +153,16 @@ namespace MediCloud.BusinessProcess.Laudo
             {
                 throw ex;
             }
+        }
+
+        public static byte[] ImprimirLaudo(int codigoLaudo)
+        {
+            LAUDORX laudoRX = ControleDeLaudoRX.buscarLaudoRXPorId(codigoLaudo);
+            INFORMACOES_CLINICA infoClinica = Util.Util.RecuperarInformacoesDaClinica();
+
+            LaudoReports Report = new LaudoReports(laudoRX, Util.Enum.Laudo.LaudoReportEnum.imprimirLaudo, infoClinica);
+
+            return Report.generate();
         }
     }
 }

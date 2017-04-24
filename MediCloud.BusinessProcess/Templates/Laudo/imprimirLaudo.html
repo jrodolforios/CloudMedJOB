@@ -1,0 +1,199 @@
+﻿<html>
+<head>
+    <title>Atestado de Saúde Ocupacional</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <style type="text/css">
+        body {
+            font-family: Arial;
+            font-size: 8pt;
+        }
+
+        .line {
+            display: block;
+            height: 1px;
+            border: 0;
+            border-top: 1px solid black;
+            margin: 1em 0;
+            padding: 0;
+        }
+
+        .lineWrite {
+            display: block;
+            height: 1px;
+            border: 0;
+            border-top: 1px solid black;
+            margin: 1.5em 0;
+            padding: 0;
+        }
+
+        .dotted {
+            display: block;
+            height: 1px;
+            border: 0;
+            border-top: 1px dashed black;
+            margin: 1em 0;
+            padding: 0;
+        }
+
+        .corpo {
+            border: 1px solid black;
+        }
+
+        .dadosEmpresa {
+            width: 70%;
+            float: left;
+            text-align: center;
+        }
+
+        .logoEmpresa {
+            width: 30%;
+            float: left;
+            text-align: center;
+        }
+
+            .logoEmpresa img {
+                width: 120pt;
+            }
+
+        .tituloRelatorio {
+            border: 1px solid black;
+            text-align: center;
+            margin: 3px 3px 3px 3px;
+        }
+
+        .conteudoRelatorio {
+            padding-top: 5px;
+            margin: 3px 3px 3px 3px;
+        }
+
+        .campo {
+            font-weight: bold;
+        }
+
+        .opcoes {
+            word-wrap: normal;
+            display: block;
+        }
+
+        .Assinatura {
+            display: table;
+        }
+
+        .AssinaturaDireita {
+            float: left;
+            width: 50%;
+            border-right: solid 1px black;
+        }
+
+        .AssinaturaEsquerda {
+            margin-left: 50%;
+        }
+
+        .Centralizado {
+            text-align: center;
+        }
+
+        .alignLeft {
+            text-align: left;
+        }
+
+        .alignRight {
+            float: right;
+        }
+    </style>
+</head>
+<body>
+    <div class="corpo">
+        <div class="cabecalho">
+            <div class="cabecalhoSuperior">
+                <div class="logoEmpresa"><img src="[%LogoEmpresa%]" alt="Logo da empresa" /></div>
+                <div class="dadosEmpresa">[%DadosEmpresaCabecalho%]</div>
+            </div>
+            &nbsp;
+            <div class="tituloRelatorio">ATESTADO DE SAÚDE OCUPACIONAL - ASO</div>
+        </div>
+        <div class="conteudoRelatorio">
+            <div class="grupoDeCampo">
+                <span class="campo">EMPRESA:</span>
+                <span class="textoCampo">[%Cliente%]</span>
+            </div>
+            <div class="grupoDeCampo">
+                <span class="campo">NOME FUNCIONÁRIO:</span>
+                <span class="textoCampo">[%Funcionario%]</span>
+            </div>
+            <div class="grupoDeCampo">
+                <span class="campo">SETOR/FUNÇÃO:</span>
+                <span class="textoCampo">[%Setor%]/[%Cargo%]</span>
+            </div>
+            <div class="grupoDeCampo">
+                <span class="campo">DATA DE NASCIMENTO:</span>
+                <span class="textoCampo">[%DataNacimentoFuncionario%]</span>
+            </div>
+            <div class="grupoDeCampo">
+                <span class="campo">IDADE:</span>
+                <span class="textoCampo">[%CalculoIdade%]</span>
+            </div>
+
+            <hr class="line" />
+
+            <span class="campo">- ATESTADO ADMISSIONAL</span>
+
+            <hr class="dotted" />
+
+            <p>
+                ATESTO, PARA FINS DE CUMPRIMENTO DA NR-7 (PORTARIA 3214/78 DO MTE) EXAMINEI O TRABALHADOR ACIMA IDENTIFICA QUE ENCONTRA-SE, NO MOMENTO:
+            </p>
+
+            <span class="opcoes">(&nbsp;&nbsp;) APTO</span>
+            <span class="opcoes">(&nbsp;&nbsp;) INAPTO</span>
+            <span class="opcoes">(&nbsp;&nbsp;) APTO COM RESTRIÇÕES</span>
+            <p><b>EXAME CLÍNICO REALIZADO EM: [%DataExame%]</b> </p>
+            <hr class="line" />
+
+            <p><b>ESTARÁ EXPOSTO(A) AOS SEGUINTES RISCOS OCUPACIONAIS ESPECÍFICOS (ACIMA DOS NÍVEIS DE AÇÃO FIXADOS PELO MTE).</b></p>
+
+            <p>
+                [%exposicao%]
+            </p>
+
+            <hr class="line" />
+
+            <p><b>SENDO SUBMETIDO AOS SEGUINTES EXAMES COMPLEMENTARES:</b></p>
+            <p>
+                [%procedimentos%]
+            </p>
+
+            <hr class="dotted" />
+
+            <p>OBSERVAÇÕES:</p>
+            <hr class="lineWrite" />
+            <hr class="lineWrite" />
+            <hr class="lineWrite" />
+
+            <hr class="dotted" />
+
+            <div class="Assinatura">
+                <div class="AssinaturaDireita">
+                    <p>Declaro que estou ciente dos resultados dos exames acima, e que recebi uma cópia deste atestado de saúde ocupacional</p>
+                    <p>&nbsp;</p>
+                    <hr class="line" />
+                    <p class="Centralizado">[%Funcionario%]</p>
+                </div>
+                <div class="AssinaturaEsquerda">
+                    <p><br /><br /></p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <hr class="line" />
+                    <p class="Centralizado">MÉDICO EXAMINADOR</p>
+                </div>
+            </div>
+
+            <hr class="dotted" />
+            <hr class="dotted" />
+
+            <p><span class="alignLeft">MÉDICO COORDENADOR: [%nomeMedicoCoord%]</span><span class="alignRight">[%CidadeEstadoClinica%], ___/___/______</span></p>
+            <p>[%EnderecoClinica%]&nbsp;&nbsp;[%TelefoneClinica%]</p>
+        </div>
+    </div>
+</body>
+</html>

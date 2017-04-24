@@ -157,5 +157,30 @@ namespace MediCloud.Controllers
                 return Json(resultado, JsonRequestBehavior.AllowGet);
             }
         }
+
+        public FileResult ImprimirLaudo(int codigoLaudo)
+        {
+            LaudoRXModel laudoRX = null;
+            byte[] arquivo = null;
+            try
+            {
+                base.EstahLogado();
+
+                laudoRX = CadastroDeLaudoRX.buscarLaudoRXPorID(codigoLaudo);
+
+                arquivo = CadastroDeLaudoRX.ImprimirLaudo(codigoLaudo);
+
+                byte[] fileBytes = arquivo;
+                string fileName = laudoRX.toString() + ".pdf";
+                return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, fileName);
+            }
+            catch (Exception ex)
+            {
+                base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
+                Response.Redirect("/RaioX/DetalhamentoRaioX?codigoRaioX=" + codigoLaudo.ToString());
+                return null;
+            }
+        }
+
     }
 }

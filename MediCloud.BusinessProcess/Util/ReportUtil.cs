@@ -7,6 +7,7 @@ using MediCloud.BusinessProcess.Util.Enum;
 using static MediCloud.BusinessProcess.Util.Enum.Cliente;
 using System.IO;
 using System.Configuration;
+using static MediCloud.BusinessProcess.Util.Enum.Laudo;
 
 namespace MediCloud.BusinessProcess.Util
 {
@@ -28,6 +29,19 @@ namespace MediCloud.BusinessProcess.Util
                     return recoverTemplateByFileName(path + tipoASOReport.ToString() + ".html");
                 case ASOReportEnum.imprimirFichaClinica:
                     return recoverTemplateByFileName(path + tipoASOReport.ToString() + ".html");
+                default:
+                    return string.Empty;
+            }
+        }
+
+        internal static string GetLaudoTemplate(Enum.Laudo.LaudoReportEnum tipoLaudoReport)
+        {
+            string path = ConfigurationManager.AppSettings["TemplatesPath"] + "\\Laudo\\";
+
+            switch (tipoLaudoReport)
+            {
+                case LaudoReportEnum.imprimirLaudo:
+                    return recoverTemplateByFileName(path + tipoLaudoReport.ToString() + ".html");
                 default:
                     return string.Empty;
             }

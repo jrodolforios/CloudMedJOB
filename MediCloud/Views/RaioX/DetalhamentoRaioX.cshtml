@@ -258,6 +258,10 @@
         confirmDeleteModal(codigo);
     }
 
+    function imprimirLaudo(codigo) {
+        window.location.replace("/RaioX/ImprimirLaudo?codigoLaudo=" + codigo);
+    }
+
     function confirmDeleteModal(codigo) {
         $('#confirm').modal({
             backdrop: 'static',

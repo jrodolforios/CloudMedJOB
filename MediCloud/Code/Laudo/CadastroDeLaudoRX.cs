@@ -127,6 +127,11 @@ namespace MediCloud.Code.Laudo
             }
         }
 
+        internal static byte[] ImprimirLaudo(int codigoLaudo)
+        {
+            return ControleDeLaudoRX.ImprimirLaudo(codigoLaudo);
+        }
+
         internal static string ConverteStatusLaudoParaString(StatusLiberadoLaudo status)
         {
             switch (status)
