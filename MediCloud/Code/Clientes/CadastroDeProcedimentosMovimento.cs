@@ -132,5 +132,18 @@ namespace MediCloud.Code.Clientes
         {
             return injetarEmUsuarioModel(ControleDeProcedimentosMovimento.buscarProcedimentoMovimentoPorId(codigoDoProcedimentoMovimento));
         }
+
+        internal static List<ProcedimentoMovimentoModel> RecuperarProcedimentoMovimentoPorTermo(string prefix)
+        {
+            List<MOVIMENTO_PROCEDIMENTO> contadoresEncontrados = ControleDeProcedimentosMovimento.buscarProcedimentoMovimento(prefix);
+            List<ProcedimentoMovimentoModel> resultados = new List<ProcedimentoMovimentoModel>();
+
+            contadoresEncontrados.ForEach(x =>
+            {
+                resultados.Add(injetarEmUsuarioModel(x));
+            });
+
+            return resultados;
+        }
     }
 }

@@ -245,6 +245,7 @@
     <Compile Include="Controllers\FornecedorController.cs" />
     <Compile Include="Controllers\FuncionarioController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ModeloLaudoController.cs" />
     <Compile Include="Controllers\ProcedimentoController.cs" />
     <Compile Include="Controllers\ProfissionalController.cs" />
     <Compile Include="Controllers\RaioXController.cs" />
@@ -266,6 +267,7 @@
     <Compile Include="Models\Financeiro\FormaPagamentoModel.cs" />
     <Compile Include="Models\Fornecedor\ContatoFornecedorModel.cs" />
     <Compile Include="Models\Fornecedor\FornecedorModel.cs" />
+    <Compile Include="Models\Laudo\AutoCompleteDefaultModeloLaudoModel.cs" />
     <Compile Include="Models\Laudo\LaudoRXModel.cs" />
     <Compile Include="Models\Laudo\ModeloLaudoModel.cs" />
     <Compile Include="Models\Parametro\GrupoProcedimento\GrupoModel.cs" />
@@ -498,6 +500,7 @@
     <Content Include="Views\ASO\index.cshtml" />
     <Content Include="Views\ASO\DetalhamentoASO.cshtml" />
     <Content Include="Views\RaioX\Index.cshtml" />
+    <Content Include="Views\RaioX\DetalhamentoRaioX.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -507,6 +510,7 @@
     <Folder Include="Views\ElaboradorPCMSO\" />
     <Folder Include="Views\ElaboradorPPRA\" />
     <Folder Include="Views\Fornecedor\" />
+    <Folder Include="Views\ModeloLaudo\" />
     <Folder Include="Views\Procedimento\" />
     <Folder Include="Views\Profissional\" />
     <Folder Include="Views\Segmento\" />

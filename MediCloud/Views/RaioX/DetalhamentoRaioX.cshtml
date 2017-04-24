@@ -1,0 +1,383 @@
+﻿@model MediCloud.Models.Laudo.LaudoRXModel
+@{
+    string checkedInativo = string.Empty;
+    bool cargoNovo = true;
+
+    ViewBag.Title = "Raio-X";
+
+    if (Model != null)
+    {
+        checkedInativo = (Model.Status == MediCloud.Code.Enum.EnumLaudo.StatusLiberadoLaudo.liberado) ? "checked" : string.Empty;
+        cargoNovo = false;
+    }
+}
+<script src="/assets/js/jquery-2.1.4.min.js"></script>
+
+<style type="text/css">
+    textarea {
+        height: 200px;
+    }
+</style>
+
+<div class="page-header">
+    <h1>
+        Detalhamento de Raio-X
+        <small>
+            <i class="ace-icon fa fa-angle-double-right"></i>
+            Detalhamento de Raio-X
+        </small>
+    </h1>
+</div><!-- /.page-header -->
+<div class="row">
+    <div class="col-xs-12">
+        <div id="user-profile-3" class="user-profile row">
+            <div class="col-sm-offset-1 col-sm-10">
+                <div class="well well-sm">
+                    <!-- -
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    &nbsp; -->
+                    <div class="inline middle blue bigger-110"> <span class="formPercent">0%</span> do cadastro concluído </div>
+
+                    &nbsp; &nbsp; &nbsp;
+                    <div style="width:200px;" data-percent="70%" class="inline middle no-margin progress progress-striped active pos-rel">
+                        <div class="progress-bar progress-bar-success" style="width:70%"></div>
+                    </div>
+
+                </div><!-- /.well -->
+                <div class="row">
+                    <label class="col-sm-4 control-label no-padding-right" for="form-field-username"><span class="badge badge-important mail-tag"></span>Obrigatório</label>
+                </div>
+
+                <div class="space"></div>
+                <form method="post" class="form-horizontal" action="@Url.Content("~/RaioX/DetalhamentoRaioX")">
+                    <input type="hidden" id="codigoLaudoRX" name="codigoLaudoRX" value="@Html.ValueFor(x => x.ProcedimentoMovimento.IdMovimentoProcedimento)" />
+                    <div class="tabbable">
+                        <ul class="nav nav-tabs padding-16">
+                            <li class="active">
+                                <a data-toggle="tab" href="#edit-basic">
+                                    <i class="green ace-icon fa fa-pencil-square-o bigger-125"></i>
+                                    Cadastro
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="tab-content profile-edit-tab-content">
+                        <div id="edit-basic" class="tab-pane in active">
+                            <div class="action-buttons bigger-150">
+                                <a href="javascript:imprimirLaudo(@(Model?.ProcedimentoMovimento?.IdMovimentoProcedimento));" class="tooltipASO" title="Imprimir laudo">
+                                    <i class="ace-icon purple fa fa-print"></i>
+                                </a>
+                            </div>
+                            <h4 class="header blue bolder smaller">Configurações</h4>
+
+                            <div class="row">
+                                <div class="vspace-12-sm"></div>
+
+                                <div class="col-xs-12 col-sm-8">
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Procedimento de movimento &nbsp;<span class="badge badge-important mail-tag"></span></label>
+
+                                        <div class="col-sm-8">
+                                            <input type="hidden" name="idProcedimentoMovimento" id="idProcedimentoMovimento" value="@Html.ValueFor(x => x.ProcedimentoMovimento.IdMovimentoProcedimento)" />
+                                            <div class="input-group">
+                                                <span class="input-group-addon">
+                                                    <i class="ace-icon fa fa-search"></i>
+                                                </span>
+                                                <input class="col-xs-12 col-sm-6 componenteFormulario" type="text" id="ProcedimentoMovimento" name="ProcedimentoMovimento" placeholder="Procedimento" value="@Html.ValueFor(x => x.ProcedimentoMovimento.Procedimento.Nome)" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label no-padding-right" for="form-field-username">Médico &nbsp;<span class="badge badge-important mail-tag"></span></label>
+
+                                        <div class="col-sm-8">
+                                            <input class="col-xs-12 col-sm-8 componenteFormulario" type="text" id="abreviatura" name="Medico" placeholder="Medico" value="@Html.ValueFor(x => x.Medico)" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label no-padding-right" for="form-field-username">Paciente &nbsp;<span class="badge badge-important mail-tag"></span></label>
+
+                                        <div class="col-sm-8">
+                                            <input class="col-xs-12 col-sm-8 componenteFormulario" type="text" id="Paciente" name="Paciente" placeholder="Paciente" value="@Html.ValueFor(x => x.Paciente)" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label no-padding-right" for="form-field-date">Data &nbsp;<span class="badge badge-important mail-tag"></span></label>
+
+                                        <div class="col-sm-8">
+                                            <div class="input-medium">
+                                                <div class="input-group">
+                                                    <input class="input-medium date-picker input-mask-date" id="data" name="data" type="text" data-date-format="dd/mm/yyyy" placeholder="dd/mm/aaaa" value="@Html.ValueFor(x => x.Data)" />
+                                                    <span class="input-group-addon">
+                                                        <i class="ace-icon fa fa-calendar"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label no-padding-right" for="form-field-username">Idade &nbsp;<span class="badge badge-important mail-tag"></span></label>
+
+                                        <div class="col-sm-8">
+                                            <input class="col-xs-12 col-sm-4 componenteFormulario" type="number" id="Idade" name="Idade" placeholder="Idade" value="@Html.ValueFor(x => x.Idade)" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Modelo de laudo</label>
+
+                                        <div class="col-sm-8">
+                                            <input type="hidden" name="idModeloLaudo" id="idModeloLaudo" value="@Html.ValueFor(x => x.ModeloLaudo.IdModeloLaudo)" />
+                                            <div class="input-group">
+                                                <span class="input-group-addon">
+                                                    <i class="ace-icon fa fa-search"></i>
+                                                </span>
+                                                <input class="col-xs-12 col-sm-6 componenteFormulario" type="text" id="ModeloLaudo" name="ModeloLaudo" placeholder="Modelo pré-definido" value="@Html.ValueFor(x => x.ModeloLaudo.NomeModelo)" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Liberado</label>
+
+                                        <div class="col-sm-8 ">
+                                            <div class="checkbox">
+                                                <label>
+                                                    <input name="Status" type="checkbox" class="ace" @checkedInativo />
+                                                    <span class="lbl"> &nbsp;</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <h4 class="header blue bolder smaller">Laudo</h4>
+
+                                    <div class="form-group">
+                                        <label class="col-sm-1 control-label no-padding-right" for="form-field-first">Negrito</label>
+
+                                        <div class="col-sm-12">
+                                            <textarea class="col-sm-12" id="laudoNegrito" name="laudoNegrito" placeholder="">@Html.ValueFor(x => x.LaudoNegrito)</textarea>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-sm-1 control-label no-padding-right" for="form-field-first">Laudo &nbsp;<span class="badge badge-important mail-tag"></span></label>
+
+                                        <div class="col-sm-12">
+                                            <textarea class="col-sm-12" id="corpoLaudo" name="corpoLaudo" placeholder="">@Html.ValueFor(x => x.CorpoLaudo)</textarea>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-sm-1 control-label no-padding-right" for="form-field-first">Conclusão &nbsp;<span class="badge badge-important mail-tag"></span></label>
+
+                                        <div class="col-sm-12">
+                                            <textarea class="col-sm-12" id="conclusao" name="conclusao" placeholder="">@Html.ValueFor(x => x.Conclusao)</textarea>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-sm-1 control-label no-padding-right" for="form-field-first">Rodapé &nbsp;<span class="badge badge-important mail-tag"></span></label>
+
+                                        <div class="col-sm-12">
+                                            <textarea class="col-sm-12" id="rodape" name="rodape" placeholder="">@Html.ValueFor(x => x.Rodape)</textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="clearfix form-actions">
+                        <div class="col-md-offset-3 col-md-9">
+                            <button class="btn btn-info" type="submit">
+                                <i class="ace-icon fa fa-check bigger-110"></i>
+                                Salvar
+                            </button>
+                            @if (cargoNovo)
+                            {
+                                <span>&nbsp; &nbsp;</span>
+                                <button class="btn" type="reset" id="limparForm">
+                                    <i class="ace-icon fa fa-undo bigger-110"></i>
+                                    Limpar
+                                </button>
+                            }
+                            else
+                            {
+                                <span>&nbsp; &nbsp;</span>
+                                <a href="javascript:excluirRaioX(@Model.ProcedimentoMovimento.IdMovimentoProcedimento)" class="btn btn-danger" type="reset">
+                                    <i class="ace-icon fa fa-times bigger-110"></i>
+                                    Excluir
+                                </a>
+                            }
+                        </div>
+                    </div>
+                </form>
+            </div><!-- /.span -->
+        </div>
+    </div>
+</div>
+
+<div id="confirm" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="smaller lighter blue no-margin">Excluir laudo</h3>
+            </div>
+            <div class="modal-body">
+                Tem certeza que deseja excluir este laudo?
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-primary" id="delete">
+                    <i class="ace-icon fa fa-check"></i>
+                    Sim
+                </button>
+                <button type="button" data-dismiss="modal" class="btn">
+                    <i class="ace-icon fa fa-times"></i>
+                    Não
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/assets/js/jquery-ui.min.js"></script>
+<script src="/assets/js/bootstrap-datepicker.min.js"></script>
+<script src="/assets/js/jquery.maskedinput.min.js"></script>
+<script src="/assets/js/jquery.ui.touch-punch.min.js"></script>
+<script src="/assets/js/ace-elements.min.js"></script>
+<script src="/assets/js/ace.min.js"></script>
+<script type="text/javascript">
+    function excluirRaioX(codigo) {
+        confirmDeleteModal(codigo);
+    }
+
+    function confirmDeleteModal(codigo) {
+        $('#confirm').modal({
+            backdrop: 'static',
+            keyboard: false
+        })
+            .one('click', '#delete', function () {
+                window.location = "/RaioX/ExcluirRaioX?codigoLaudo=" + codigo;
+            });
+    }
+
+    $("#limparForm").click(function () {
+        var cntreq3 = 0;
+        var cntvals3 = 0;
+        $(".componenteFormulario").each(atualizarProgressBar());
+    });
+
+    $(document).ready(function () {
+        $('input').on('change', function () {
+            var cntreq = 0;
+            var cntvals = 0;
+            $(".componenteFormulario").each(atualizarProgressBar());
+        });
+
+        var cntreq3 = 0;
+        var cntvals3 = 0;
+        $(".componenteFormulario").each(atualizarProgressBar());
+
+    });
+
+    function atualizarProgressBar() {
+        var cntreq = 0;
+        var cntvals = 0;
+        $(".componenteFormulario").each(function (val) {
+            cntreq++;
+            if ($(this).val() != '') {
+                cntvals++;
+            }
+        });
+        var count = (cntvals / cntreq) * 100;
+        count = parseInt(count);
+        $('.formPercent').empty();
+        $('.progress-striped').attr("data-percent", count + '%');
+        $('div.progress-bar-success').attr("style", "width: " + count + '%');
+        $('.formPercent').append(count + '% ');
+    }
+
+    $('.date-picker').datepicker({
+        format: 'dd/mm/yyyy',
+        language: 'pt-BR',
+    });
+    $('.input-mask-date').mask('99/99/9999');
+
+    $(".tooltipASO").tooltip({
+        show: null,
+        position: {
+            my: "left top",
+            at: "left bottom"
+        },
+        open: function (event, ui) {
+            ui.tooltip.animate({ top: ui.tooltip.position().top + 10 }, "fast");
+        }
+    });
+
+    $("#ModeloLaudo").autocomplete({
+        source: function (request, response) {
+            $.ajax({
+                url: "/ModeloLaudo/BuscaModeloAJAX",
+                type: "POST",
+                dataType: "json",
+                data: { Prefix: request.term },
+                success: function (data) {
+                    response($.map(data, function (item) {
+                        return { label: item.Name, value: item.Name, Id: item.Id, Laudo: item.Laudo, Conclusao: item.Conclusao, Rodape: item.Rodape };
+                    }))
+
+                }
+            })
+        },
+        select: function (event, ui) {
+            $('#idModeloLaudo').attr('value', ui.item.Id);
+            $('#ModeloLaudo').val(ui.item.label);
+
+            $("#corpoLaudo").val(ui.item.Laudo);
+            $("#conclusao").val(ui.item.Conclusao);
+            $("#rodape").val(ui.item.Rodape);
+
+            return false;
+        }
+    });
+    $('#ModeloLaudo').on('blur', function () {
+        if ($(this).val().length === 0) {  //check for no. of characters entered
+            $('#idModeloLaudo').attr('value', 0);  // clear the textbox
+        }
+    });
+
+    $("#ProcedimentoMovimento").autocomplete({
+        source: function (request, response) {
+            $.ajax({
+                url: "/ASO/BuscaProcedimentosParaLaudoAJAX",
+                type: "POST",
+                dataType: "json",
+                data: { Prefix: request.term },
+                success: function (data) {
+                    response($.map(data, function (item) {
+                        return { label: item.Name, value: item.Name, Id: item.Id };
+                    }))
+
+                }
+            })
+        },
+        select: function (event, ui) {
+            $('#idProcedimentoMovimento').attr('value', ui.item.Id);
+            $('#ProcedimentoMovimento').val(ui.item.label);
+            return false;
+        }
+    });
+    $('#ProcedimentoMovimento').on('blur', function () {
+        if ($(this).val().length === 0) {  //check for no. of characters entered
+            $('#idProcedimentoMovimento').attr('value', 0);  // clear the textbox
+        }
+    });
+
+</script>

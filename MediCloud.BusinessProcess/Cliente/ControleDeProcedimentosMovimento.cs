@@ -134,5 +134,26 @@ namespace MediCloud.BusinessProcess.Cliente
                 throw ex;
             }
         }
+
+        public static List<MOVIMENTO_PROCEDIMENTO> buscarProcedimentoMovimento(string prefix)
+        {
+            CloudMedContext contexto = new CloudMedContext();
+            try
+            {
+                List<MOVIMENTO_PROCEDIMENTO> funcionario = contexto.MOVIMENTO_PROCEDIMENTO.Where(x => x.MOVIMENTO.CLIENTE.NOMEFANTASIA.Contains(prefix) || x.MOVIMENTO.FUNCIONARIO.FUNCIONARIO1.Contains(prefix) ).ToList();
+
+                return funcionario;
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            return null;
+        }
     }
 }

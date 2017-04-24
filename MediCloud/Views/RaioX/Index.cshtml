@@ -136,4 +136,25 @@ else
             }
         });
     }
+
+    function liberarLaudo(codigo) {
+        $.ajax({
+            url: '/RaioX/LiberarRaioX?codigoRaioX=' + codigo,
+            type: "post",
+            cache: false,
+            success: function (savingStatus) {
+                var tipoAlert;
+                if (savingStatus.acaoBemSucedida) {
+                    tipoAlert = 'alert-success'; 
+                }
+                else
+                    tipoAlert = 'alert-danger';
+
+                $('#RaioXAlerts').html('<div class="alert ' + tipoAlert + '"><a class="close" data-dismiss="alert">×</a><span>' + savingStatus.mensagem + '</span></div>');
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                $('#RaioXAlerts').html('<div class="alert alert-danger"><a class="close" data-dismiss="alert">×</a><span>Ops! Não foi possível deletar este registro no servidor. Contate-nos para que possamos te ajudar melhor.</span></div>')
+            }
+        });
+    }
 </script>

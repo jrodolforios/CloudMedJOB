@@ -58,6 +58,7 @@
     <Compile Include="Fornecedor\ControleDeFornecedor.cs" />
     <Compile Include="Funcionario\ControleDeFuncionario.cs" />
     <Compile Include="Laudo\ControleDeLaudoRX.cs" />
+    <Compile Include="Laudo\ControleDeModeloLaudo.cs" />
     <Compile Include="Parametro\ControleDeElaboradorPCMSO.cs" />
     <Compile Include="Financeiro\ControleDeContador.cs" />
     <Compile Include="Parametro\ControleDeElaboradorPPRA.cs" />

@@ -8,6 +8,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using static MediCloud.Code.Enum.EnumLaudo;
+using MediCloud.Controllers;
 
 namespace MediCloud.Code.Laudo
 {
@@ -49,6 +50,70 @@ namespace MediCloud.Code.Laudo
                 };
         }
 
+        internal static LaudoRXModel buscarLaudoRXPorID(int v)
+        {
+            LAUDORX LaudoRXEncontrado = ControleDeLaudoRX.buscarLaudoRXPorId(v);
+
+            return injetarEmUsuarioModel(LaudoRXEncontrado);
+        }
+
+        internal static LaudoRXModel SalvarLaudoRX(FormCollection form)
+        {
+            LaudoRXModel usuarioModel = injetarEmUsuarioModel(form);
+            usuarioModel.validar();
+
+            LAUDORX laudoDAO = injetarEmCargoModelDAO(usuarioModel);
+            laudoDAO = ControleDeLaudoRX.SalvarLaudo(laudoDAO);
+
+            usuarioModel = injetarEmUsuarioModel(laudoDAO);
+
+            return usuarioModel;
+        }
+
+        private static LAUDORX injetarEmCargoModelDAO(LaudoRXModel x)
+        {
+            if (x == null)
+                return null;
+            else
+                return new LAUDORX()
+                {
+                    CONCLUSAO = x.Conclusao,
+                    DATA = x.Data,
+                    IDADE = x.Idade.ToString(),
+                    IDMODELO = x.ModeloLaudo?.IdModeloLaudo,
+                    IDMOVPRO = x.ProcedimentoMovimento.IdMovimentoProcedimento,
+                    LAUDO = x.CorpoLaudo,
+                    LAUDONEGRITO = x.LaudoNegrito,
+                    MEDICO = x.Medico,
+                    PACIENTE = x.Paciente,
+                    RODAPE = x.Rodape,
+                    STATUS = ConverteStatusLaudoParaString(x.Status)
+                };
+        }
+
+        private static LaudoRXModel injetarEmUsuarioModel(FormCollection form)
+        {
+            return new LaudoRXModel()
+            {
+                Conclusao = string.IsNullOrEmpty(form["conclusao"]) ? string.Empty : form["conclusao"],
+                CorpoLaudo = string.IsNullOrEmpty(form["corpoLaudo"]) ? string.Empty : form["corpoLaudo"],
+                Data = DateTime.Parse(form["data"]),
+                Idade = Int32.Parse(form["Idade"]),
+                LaudoNegrito = string.IsNullOrEmpty(form["laudoNegrito"]) ? string.Empty : form["laudoNegrito"],
+                Medico = string.IsNullOrEmpty(form["Medico"]) ? string.Empty : form["Medico"],
+                ModeloLaudo = CadastroDeModeloLaudo.RecuperarModeloPorID(string.IsNullOrEmpty(form["idModeloLaudo"]) ? 0 : Int32.Parse(form["idModeloLaudo"])),
+                Paciente = string.IsNullOrEmpty(form["Paciente"]) ? string.Empty : form["Paciente"],
+                ProcedimentoMovimento = CadastroDeProcedimentosMovimento.BuscarProcedimentoDeMovimentoPorID(int.Parse(form["idProcedimentoMovimento"])),
+                Rodape = string.IsNullOrEmpty(form["rodape"]) ? string.Empty : form["rodape"],
+                Status = string.IsNullOrEmpty(form["Status"]) ? StatusLiberadoLaudo.vazio : (Convert.ToBoolean((form["Status"].ToLower() == "on")) ? StatusLiberadoLaudo.liberado : StatusLiberadoLaudo.pendente)
+            };
+        }
+
+        internal static void DeletarLaudoRX(RaioXController raioXController, int codigoRaioX)
+        {
+            ControleDeLaudoRX.DeletarLaudoRX(codigoRaioX);
+        }
+
         internal static StatusLiberadoLaudo ConverteStatusLaudoParaEnum (string status)
         {
             switch (status.ToUpper())
@@ -60,6 +125,24 @@ namespace MediCloud.Code.Laudo
                 default:
                     return StatusLiberadoLaudo.vazio;
             }
+        }
+
+        internal static string ConverteStatusLaudoParaString(StatusLiberadoLaudo status)
+        {
+            switch (status)
+            {
+                case StatusLiberadoLaudo.liberado:
+                    return "LIBERADO";
+                case StatusLiberadoLaudo.pendente:
+                    return "PENDENTE";
+                default:
+                    return null;
+            }
+        }
+
+        internal static void LiberarLaudoRX(RaioXController raioXController, int codigoRaioX)
+        {
+            ControleDeLaudoRX.LiberarLaudoRX(codigoRaioX);
         }
     }
 }
