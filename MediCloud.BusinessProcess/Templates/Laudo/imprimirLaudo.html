@@ -52,7 +52,7 @@
         }
 
             .logoEmpresa img {
-                width: 120pt;
+                width: 120px;
             }
 
         .tituloRelatorio {
@@ -100,6 +100,9 @@
         .alignRight {
             float: right;
         }
+        .cabecalhoSuperior{
+            display:table;
+        }
     </style>
 </head>
 <body>
@@ -107,92 +110,58 @@
         <div class="cabecalho">
             <div class="cabecalhoSuperior">
                 <div class="logoEmpresa"><img src="[%LogoEmpresa%]" alt="Logo da empresa" /></div>
-                <div class="dadosEmpresa">[%DadosEmpresaCabecalho%]</div>
+                <div class="dadosEmpresa">&nbsp;</div>
             </div>
             &nbsp;
-            <div class="tituloRelatorio">ATESTADO DE SAÚDE OCUPACIONAL - ASO</div>
+            <div class="tituloRelatorio"><h3>Laudo [%NomeProcedimento%]</h3></div>
         </div>
         <div class="conteudoRelatorio">
             <div class="grupoDeCampo">
-                <span class="campo">EMPRESA:</span>
-                <span class="textoCampo">[%Cliente%]</span>
+                <span class="campo">PACIENTE:</span>
+                <span class="textoCampo">[%Paciente%]</span>
+                &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+                <span class="campo">RG:</span>
+                <span class="textoCampo">[%RGPaciente%]</span>
             </div>
             <div class="grupoDeCampo">
-                <span class="campo">NOME FUNCIONÁRIO:</span>
-                <span class="textoCampo">[%Funcionario%]</span>
-            </div>
-            <div class="grupoDeCampo">
-                <span class="campo">SETOR/FUNÇÃO:</span>
-                <span class="textoCampo">[%Setor%]/[%Cargo%]</span>
-            </div>
-            <div class="grupoDeCampo">
-                <span class="campo">DATA DE NASCIMENTO:</span>
-                <span class="textoCampo">[%DataNacimentoFuncionario%]</span>
-            </div>
-            <div class="grupoDeCampo">
+                <span class="campo">DATA:</span>
+                <span class="textoCampo">[%DataLaudo%]</span>
+                &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
                 <span class="campo">IDADE:</span>
-                <span class="textoCampo">[%CalculoIdade%]</span>
+                <span class="textoCampo">[%Idade%]</span>
+                &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+                <span class="campo">IDMOVPRO:</span>
+                <span class="textoCampo">[%IdMovPRO%]</span>
             </div>
 
             <hr class="line" />
 
-            <span class="campo">- ATESTADO ADMISSIONAL</span>
-
-            <hr class="dotted" />
-
             <p>
-                ATESTO, PARA FINS DE CUMPRIMENTO DA NR-7 (PORTARIA 3214/78 DO MTE) EXAMINEI O TRABALHADOR ACIMA IDENTIFICA QUE ENCONTRA-SE, NO MOMENTO:
-            </p>
-
-            <span class="opcoes">(&nbsp;&nbsp;) APTO</span>
-            <span class="opcoes">(&nbsp;&nbsp;) INAPTO</span>
-            <span class="opcoes">(&nbsp;&nbsp;) APTO COM RESTRIÇÕES</span>
-            <p><b>EXAME CLÍNICO REALIZADO EM: [%DataExame%]</b> </p>
-            <hr class="line" />
-
-            <p><b>ESTARÁ EXPOSTO(A) AOS SEGUINTES RISCOS OCUPACIONAIS ESPECÍFICOS (ACIMA DOS NÍVEIS DE AÇÃO FIXADOS PELO MTE).</b></p>
-
-            <p>
-                [%exposicao%]
+                [%CorpoLaudo%]
             </p>
 
             <hr class="line" />
 
-            <p><b>SENDO SUBMETIDO AOS SEGUINTES EXAMES COMPLEMENTARES:</b></p>
-            <p>
-                [%procedimentos%]
-            </p>
+            <p><b>CONCLUSÃO: [%Conclusao%]</b></p>
 
-            <hr class="dotted" />
 
-            <p>OBSERVAÇÕES:</p>
-            <hr class="lineWrite" />
-            <hr class="lineWrite" />
-            <hr class="lineWrite" />
-
-            <hr class="dotted" />
+            <hr class="line" />
 
             <div class="Assinatura">
-                <div class="AssinaturaDireita">
-                    <p>Declaro que estou ciente dos resultados dos exames acima, e que recebi uma cópia deste atestado de saúde ocupacional</p>
-                    <p>&nbsp;</p>
-                    <hr class="line" />
-                    <p class="Centralizado">[%Funcionario%]</p>
+                <div class="AssinaturaDireita Centralizado">
+                    <h4 class="Centralizado"><b>[%Rodape%]</b></h4>
                 </div>
                 <div class="AssinaturaEsquerda">
-                    <p><br /><br /></p>
                     <p>&nbsp;</p>
                     <p>&nbsp;</p>
-                    <hr class="line" />
-                    <p class="Centralizado">MÉDICO EXAMINADOR</p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
                 </div>
             </div>
 
             <hr class="dotted" />
-            <hr class="dotted" />
 
-            <p><span class="alignLeft">MÉDICO COORDENADOR: [%nomeMedicoCoord%]</span><span class="alignRight">[%CidadeEstadoClinica%], ___/___/______</span></p>
-            <p>[%EnderecoClinica%]&nbsp;&nbsp;[%TelefoneClinica%]</p>
+            <p class="Centralizado">[%InformacoesClinica%]</p>
         </div>
     </div>
 </body>

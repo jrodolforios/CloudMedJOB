@@ -47,12 +47,19 @@ namespace MediCloud.BusinessProcess.Laudo.Reports
         #region imprimirLaudo
         private string substituirParametrosLaudo(string template)
         {
-            template = template.Replace("[%DadosEmpresaCabecalho%]", _infoClinica.DADOSCABECALHOREL);
-            template = template.Replace("[%CidadeEstadoClinica%]", _infoClinica.CIDADEESTADOCLINICA);
-            template = template.Replace("[%EnderecoClinica%]", _infoClinica.ENDERECOCLINICA);
-            template = template.Replace("[%TelefoneClinica%]", _infoClinica.TELEFONECLINICA);
+            template = template.Replace("[%InformacoesClinica%]", _infoClinica.DADOSCABECALHOREL);
             template = template.Replace("[%LogoEmpresa%]", _infoClinica.URLLOGO);
 
+            template = template.Replace("[%Rodape%]", _laudoRX.RODAPE);
+            template = template.Replace("[%Conclusao%]", _laudoRX.CONCLUSAO);
+            template = template.Replace("[%CorpoLaudo%]", _laudoRX.LAUDO);
+
+            template = template.Replace("[%IdMovPRO%]", ((int)_laudoRX.IDMOVPRO).ToString());
+            template = template.Replace("[%Idade%]", _laudoRX.IDADE);
+            template = template.Replace("[%DataLaudo%]", _laudoRX.DATA.ToShortDateString());
+            template = template.Replace("[%RGPaciente%]", _laudoRX.MOVIMENTO_PROCEDIMENTO.MOVIMENTO.FUNCIONARIO.RG);
+            template = template.Replace("[%Paciente%]", _laudoRX.PACIENTE);
+            template = template.Replace("[%NomeProcedimento%]", _laudoRX.MOVIMENTO_PROCEDIMENTO.PROCEDIMENTO?.PROCEDIMENTO1);
 
             return template;
         }
