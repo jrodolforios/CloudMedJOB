@@ -1,0 +1,127 @@
+﻿@using System.Linq
+
+@model List<MediCloud.Models.Laudo.ModeloLaudoModel>
+@{
+    ViewBag.Title = "Modelos de laudo";
+}
+<div class="page-header">
+    <h1>
+        Modelos
+        <small>
+            <i class="ace-icon fa fa-angle-double-right"></i>
+            Busca de modelos para laudos
+        </small>
+    </h1>
+</div>
+<div id="ModeloLaudoAlerts"></div>
+<form method="post" action="@Url.Content("~/ModeloLaudo")">
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12">
+            <div class="input-group">
+                <input type="text" class="form-control" name="keywords" placeholder="Digite aqui para buscar">
+                <div class="input-group-btn">
+                    <button type="submit" class="btn btn-default no-border btn-sm">
+                        <i class="ace-icon fa fa-search icon-on-right bigger-110"></i>
+                    </button>
+                </div>
+            </div>
+            <a href="/ModeloLaudo/DetalhamentoModeloLaudo" class="btn btn-xs">+ Novo Modelo</a>
+        </div>
+    </div>
+</form>
+<div class="hr"></div>
+@if (Model != null && Model.Any())
+{
+    foreach (MediCloud.Models.Laudo.ModeloLaudoModel item in Model)
+    {
+        <div class="col-xs-12" id="@item.IdModeloLaudo">
+            <div class="media search-media">
+                <div class="media-body">
+                        <h4 class="media-heading">
+                            <span class="blue">@item.NomeModelo </span>
+                        </h4>
+                    <p><b>ID:</b> @item.IdModeloLaudo <br /> <b>Laudo:</b> @(item.CorpoModelo.Length > 45 ? item.CorpoModelo.Substring(0,45) + "..." : item.CorpoModelo) </p>
+
+                    <div class="search-actions text-center">
+                        <span class="blue bolder bigger-110">Ações</span>
+
+                        <div class="action-buttons bigger-150">
+                            <a href="javascript:excluirModeloLaudo(@item.IdModeloLaudo);">
+                                <i class="ace-icon fa fa-trash"></i>
+                            </a>
+                        </div>
+                        <a href="/ModeloLaudo/DetalhamentoModeloLaudo?codigoModeloLaudo=@item.IdModeloLaudo" class="search-btn-action btn btn-sm btn-block btn-info">Editar</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
+else
+{
+    <div class="alert alert-block alert-info">
+        Nenhum resultado para ser exibido.
+    </div>
+}
+
+<div id="confirm" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="smaller lighter blue no-margin">Excluir modelo de laudo</h3>
+            </div>
+            <div class="modal-body">
+                Tem certeza que deseja excluir este modelo de laudo?
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-primary" id="delete">
+                    <i class="ace-icon fa fa-check"></i>
+                    Sim
+                </button>
+                <button type="button" data-dismiss="modal" class="btn">
+                    <i class="ace-icon fa fa-times"></i>
+                    Não
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    function excluirModeloLaudo(codigo) {
+        confirmDeleteModal(codigo);
+    }
+
+    function confirmDeleteModal(codigo) {
+        $('#confirm').modal({
+            backdrop: 'static',
+            keyboard: false
+        })
+            .one('click', '#delete', function () {
+                deletarModeloDeLaudo(codigo);
+            });
+    }
+
+    function deletarModeloDeLaudo(codigo) {
+        $.ajax({
+            url: '/ModeloLaudo/DeletarModeloLaudo?codigoModeloLaudo=' + codigo,
+            type: "post",
+            cache: false,
+            success: function (savingStatus) {
+                var tipoAlert;
+                if (savingStatus.acaoBemSucedida) {
+                    tipoAlert = 'alert-success';
+                    $("#" + codigo).remove();
+                }
+                else
+                    tipoAlert = 'alert-danger';
+
+                $('#ModeloLaudoAlerts').html('<div class="alert ' + tipoAlert + '"><a class="close" data-dismiss="alert">×</a><span>' + savingStatus.mensagem + '</span></div>');
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                $('#ModeloLaudoAlerts').html('<div class="alert alert-danger"><a class="close" data-dismiss="alert">×</a><span>Ops! Não foi possível deletar este registro no servidor. Contate-nos para que possamos te ajudar melhor.</span></div>')
+            }
+        });
+    }
+</script>

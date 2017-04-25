@@ -21,6 +21,49 @@ namespace MediCloud.Controllers
         }
 
         [HttpPost]
+        public ActionResult Index(FormCollection form)
+        {
+            try
+            {
+                base.EstahLogado();
+                ViewBag.Title = "Usuários";
+
+                List<ModeloLaudoModel> model = CadastroDeModeloLaudo.buscarModeloLaudo(form);
+
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
+                return View();
+            }
+        }
+
+
+        [HttpPost]
+        public JsonResult DeletarModeloLaudo(int codigoModeloLaudo)
+        {
+            ResultadoAjaxGenericoModel resultado = new ResultadoAjaxGenericoModel();
+            try
+            {
+                base.EstahLogado();
+
+                CadastroDeModeloLaudo.DeletarModeloLaudo(this, codigoModeloLaudo);
+
+                resultado.mensagem = "Modelo de laudo excluído.";
+                resultado.acaoBemSucedida = true;
+
+                return Json(resultado, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                resultado.mensagem = Constantes.MENSAGEM_GENERICA_DE_ERRO;
+                resultado.acaoBemSucedida = false;
+
+                return Json(resultado, JsonRequestBehavior.AllowGet);
+            }
+        }
+        [HttpPost]
         public JsonResult BuscaModeloAJAX(string Prefix)
         {
             EstahLogado();

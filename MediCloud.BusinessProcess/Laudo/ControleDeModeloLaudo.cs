@@ -63,5 +63,24 @@ namespace MediCloud.BusinessProcess.Laudo
                 throw ex;
             }
         }
+
+        public static void ExcluirModeloLaudo(int codigoModeloLaudo)
+        {
+            CloudMedContext contexto = new CloudMedContext();
+            try
+            {
+                contexto.MODELOLAUDO.Remove(contexto.MODELOLAUDO.First(x => x.IDMODELO == codigoModeloLaudo));
+
+                contexto.SaveChanges();
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }
