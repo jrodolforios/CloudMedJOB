@@ -222,6 +222,7 @@
     <Compile Include="Code\Fornecedor\CadastroDeContato.cs" />
     <Compile Include="Code\Fornecedor\CadastroDeFornecedor.cs" />
     <Compile Include="Code\Funcionario\CadastroDeFuncionario.cs" />
+    <Compile Include="Code\Laudo\CadastroDeLaudoAudio.cs" />
     <Compile Include="Code\Laudo\CadastroDeLaudoRX.cs" />
     <Compile Include="Code\Laudo\CadastroDeModeloLaudo.cs" />
     <Compile Include="Code\Parametro\CadastroDeElaboradorPCMSO.cs" />
@@ -245,6 +246,7 @@
     <Compile Include="Controllers\FornecedorController.cs" />
     <Compile Include="Controllers\FuncionarioController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LaudoAudioController.cs" />
     <Compile Include="Controllers\ModeloLaudoController.cs" />
     <Compile Include="Controllers\ProcedimentoController.cs" />
     <Compile Include="Controllers\ProfissionalController.cs" />
@@ -268,6 +270,7 @@
     <Compile Include="Models\Fornecedor\ContatoFornecedorModel.cs" />
     <Compile Include="Models\Fornecedor\FornecedorModel.cs" />
     <Compile Include="Models\Laudo\AutoCompleteDefaultModeloLaudoModel.cs" />
+    <Compile Include="Models\Laudo\LaudoAudioModel.cs" />
     <Compile Include="Models\Laudo\LaudoRXModel.cs" />
     <Compile Include="Models\Laudo\ModeloLaudoModel.cs" />
     <Compile Include="Models\Parametro\GrupoProcedimento\GrupoModel.cs" />
@@ -513,6 +516,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\ModeloLaudo\index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\ModeloLaudo\DetalhamentoModeloLaudo.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\LaudoAudio\index.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -62,6 +62,46 @@ namespace MediCloud.Code.Laudo
             ControleDeModeloLaudo.ExcluirModeloLaudo(codigoModeloLaudo);
         }
 
+        internal static ModeloLaudoModel SalvarModeloLaudo(FormCollection form)
+        {
+            ModeloLaudoModel usuarioModel = injetarEmUsuarioModel(form);
+            usuarioModel.validar();
+
+            MODELOLAUDO modeloLaudoDAO = injetarEmCargoModelDAO(usuarioModel);
+            modeloLaudoDAO = ControleDeModeloLaudo.SalvarModeloLaudo(modeloLaudoDAO);
+
+            usuarioModel = injetarEmUsuarioModel(modeloLaudoDAO);
+
+            return usuarioModel;
+        }
+
+        private static MODELOLAUDO injetarEmCargoModelDAO(ModeloLaudoModel x)
+        {
+            if (x == null)
+                return null;
+            else
+                return new MODELOLAUDO()
+                {
+                    CONCLUSAO = x.Conclusao,
+                    IDMODELO = x.IdModeloLaudo,
+                    LAUDO = x.CorpoModelo,
+                    MODELO = x.NomeModelo,
+                    RODAPE = x.Rodape
+                };
+        }
+
+        private static ModeloLaudoModel injetarEmUsuarioModel(FormCollection form)
+        {
+            return new ModeloLaudoModel()
+            {
+                Conclusao = string.IsNullOrEmpty(form["conclusao"]) ? string.Empty : form["conclusao"],
+                CorpoModelo = string.IsNullOrEmpty(form["corpoModelo"]) ? string.Empty : form["corpoModelo"],
+                IdModeloLaudo = string.IsNullOrEmpty(form["codigoModeloLaudo"]) ? 0 : Convert.ToInt32(form["codigoModeloLaudo"]),
+                NomeModelo = string.IsNullOrEmpty(form["nomeModelo"]) ? string.Empty : form["nomeModelo"],
+                Rodape = string.IsNullOrEmpty(form["rodape"]) ? string.Empty : form["rodape"]
+            };
+        }
+
         internal static List<ModeloLaudoModel> buscarModeloLaudo(FormCollection form)
         {
             string termo = form["keywords"];

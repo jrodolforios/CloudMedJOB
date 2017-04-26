@@ -57,6 +57,7 @@
     <Compile Include="Fornecedor\ControleDeContato.cs" />
     <Compile Include="Fornecedor\ControleDeFornecedor.cs" />
     <Compile Include="Funcionario\ControleDeFuncionario.cs" />
+    <Compile Include="Laudo\ControleDeLaudoAudio.cs" />
     <Compile Include="Laudo\ControleDeLaudoRX.cs" />
     <Compile Include="Laudo\ControleDeModeloLaudo.cs" />
     <Compile Include="Laudo\Reports\LaudoReports.cs" />

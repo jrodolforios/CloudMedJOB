@@ -31,7 +31,7 @@ namespace MediCloud.Code.Clientes
             return listaDeModels;
         }
 
-        private static ProcedimentoMovimentoModel injetarEmUsuarioModel(MOVIMENTO_PROCEDIMENTO x)
+        private static ProcedimentoMovimentoModel injetarEmUsuarioModel(MOVIMENTO_PROCEDIMENTO x, bool materializarMovimento = false)
         {
             if (x == null)
                 return null;
@@ -43,7 +43,7 @@ namespace MediCloud.Code.Clientes
                     Desconto = x.DESCONTO,
                     IdFechamentoCaixa = (int?)x.IDFCX,
                     IdMovimentoProcedimento = (int)x.IDMOVPRO,
-                    Movimento = new ASOModel() { IdASO = (int)x.IDMOV },
+                    Movimento = materializarMovimento ? CadastroDeASO.RecuperarASOPorID((int)x.IDMOV) : new ASOModel() { IdASO = (int)x.IDMOV },
                     Total = x.TOTAL,
                     Usuario = x.USUARIO,
                     UsuarioRealizado = x.USUARIOREALIZADO,
@@ -128,9 +128,9 @@ namespace MediCloud.Code.Clientes
                 };
         }
 
-        internal static ProcedimentoMovimentoModel BuscarProcedimentoDeMovimentoPorID(int codigoDoProcedimentoMovimento)
+        internal static ProcedimentoMovimentoModel BuscarProcedimentoDeMovimentoPorID(int codigoDoProcedimentoMovimento, bool materializarMovimento = false)
         {
-            return injetarEmUsuarioModel(ControleDeProcedimentosMovimento.buscarProcedimentoMovimentoPorId(codigoDoProcedimentoMovimento));
+            return injetarEmUsuarioModel(ControleDeProcedimentosMovimento.buscarProcedimentoMovimentoPorId(codigoDoProcedimentoMovimento), true);
         }
 
         internal static List<ProcedimentoMovimentoModel> RecuperarProcedimentoMovimentoPorTermo(string prefix)
