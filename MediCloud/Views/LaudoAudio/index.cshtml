@@ -37,11 +37,9 @@
         <div class="col-xs-12" id="@item.IdLaudoAudio">
             <div class="media search-media">
                 <div class="media-body">
-                    <div class="container">
-                        <h4 class="media-heading">
-                            <span class="blue">@(item.ProcedimentoMovimento.Movimento.Funcionario.NomeCompleto)  </span>
-                        </h4>
-                    </div>
+                    <h4 class="media-heading">
+                        <span class="blue">@(item.ProcedimentoMovimento.Movimento.Funcionario.NomeCompleto)  </span>
+                    </h4>
                     <p><b>Procedimento:</b> @item.ProcedimentoMovimento.Procedimento.Nome <br /> <b>Data:</b> @(item.ProcedimentoMovimento.DataExame.HasValue ? item.ProcedimentoMovimento.DataExame.Value.ToShortDateString() : string.Empty)</p>
 
                     <div class="search-actions text-center">

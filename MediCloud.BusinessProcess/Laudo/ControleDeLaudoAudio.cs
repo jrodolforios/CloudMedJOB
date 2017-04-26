@@ -39,5 +39,46 @@ namespace MediCloud.BusinessProcess.Laudo
                 throw ex;
             }
         }
+
+        public static LAUDOAUD BuscarLaudoAudioPorId(int v)
+        {
+            CloudMedContext contexto = new CloudMedContext();
+
+            try
+            {
+                if (contexto.LAUDOAUD.Any(x => (int)x.IDLAUDO == v))
+                    return contexto.LAUDOAUD.First(x => (int)x.IDLAUDO == v);
+                else
+                    return null;
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+                return new LAUDOAUD();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static void ExcluirLaudoAudio(int codigoLaudoAudio)
+        {
+            CloudMedContext contexto = new CloudMedContext();
+            try
+            {
+                contexto.LAUDOAUD.Remove(contexto.LAUDOAUD.First(x => x.IDLAUDO == codigoLaudoAudio));
+
+                contexto.SaveChanges();
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

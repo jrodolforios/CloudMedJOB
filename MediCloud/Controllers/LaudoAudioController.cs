@@ -2,6 +2,7 @@
 using MediCloud.Code;
 using MediCloud.Code.Laudo;
 using MediCloud.Models.Laudo;
+using MediCloud.Models.Seguranca;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +18,24 @@ namespace MediCloud.Controllers
         {
             EstahLogado();
             return View();
+        }
+
+        public ActionResult DetalhamentoLaudoAudio(int? codigoLaudoAudio)
+        {
+            try
+            {
+                base.EstahLogado();
+                ViewBag.Title = "Audiometria";
+
+                LaudoAudioModel model = CadastroDeLaudoAudio.RecuperarLaudoAudioPorID(codigoLaudoAudio.HasValue ? codigoLaudoAudio.Value : 0);
+
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
+                return View();
+            }
         }
 
         [HttpPost]
@@ -35,6 +54,30 @@ namespace MediCloud.Controllers
             {
                 base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
                 return View();
+            }
+        }
+
+        [HttpPost]
+        public JsonResult DeletarLaudoAudio(int codigoLaudoAudio)
+        {
+            ResultadoAjaxGenericoModel resultado = new ResultadoAjaxGenericoModel();
+            try
+            {
+                base.EstahLogado();
+
+                CadastroDeLaudoAudio.DeletarLaudoAudio(this, codigoLaudoAudio);
+
+                resultado.mensagem = "Audiometria excluída.";
+                resultado.acaoBemSucedida = true;
+
+                return Json(resultado, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                resultado.mensagem = Constantes.MENSAGEM_GENERICA_DE_ERRO;
+                resultado.acaoBemSucedida = false;
+
+                return Json(resultado, JsonRequestBehavior.AllowGet);
             }
         }
     }

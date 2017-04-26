@@ -7,6 +7,7 @@ using MediCloud.Models.Laudo;
 using MediCloud.DatabaseModels;
 using MediCloud.BusinessProcess.Laudo;
 using MediCloud.Code.Clientes;
+using MediCloud.Controllers;
 
 namespace MediCloud.Code.Laudo
 {
@@ -25,6 +26,13 @@ namespace MediCloud.Code.Laudo
             });
 
             return listaDeModels;
+        }
+
+        internal static LaudoAudioModel RecuperarLaudoAudioPorID(int v)
+        {
+            LAUDOAUD LaudoRXEncontrado = ControleDeLaudoAudio.BuscarLaudoAudioPorId(v);
+
+            return InjetarEmUsuarioModel(LaudoRXEncontrado);
         }
 
         private static LaudoAudioModel InjetarEmUsuarioModel(LAUDOAUD x)
@@ -75,6 +83,11 @@ namespace MediCloud.Code.Laudo
                     
                     ProcedimentoMovimento = CadastroDeProcedimentosMovimento.BuscarProcedimentoDeMovimentoPorID((int)x.IDMOVPRO, true)
                 };
+        }
+
+        internal static void DeletarLaudoAudio(LaudoAudioController laudoAudioController, int codigoLaudoAudio)
+        {
+            ControleDeLaudoAudio.ExcluirLaudoAudio(codigoLaudoAudio);
         }
     }
 }
