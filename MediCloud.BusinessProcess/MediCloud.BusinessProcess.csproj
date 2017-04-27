@@ -59,6 +59,7 @@
     <Compile Include="Funcionario\ControleDeFuncionario.cs" />
     <Compile Include="Laudo\ControleDeLaudoAudio.cs" />
     <Compile Include="Laudo\ControleDeLaudoRX.cs" />
+    <Compile Include="Laudo\ControleDeLaudoVisao.cs" />
     <Compile Include="Laudo\ControleDeModeloLaudo.cs" />
     <Compile Include="Laudo\Reports\LaudoReports.cs" />
     <Compile Include="Parametro\ControleDeElaboradorPCMSO.cs" />

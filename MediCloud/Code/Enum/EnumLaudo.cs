@@ -13,5 +13,19 @@ namespace MediCloud.Code.Enum
             pendente = 1,
             liberado = 2
         }
+
+        public enum CorrecaoAcuidadeVisual
+        {
+            vazio = 0,
+            SemCorrecao = 1,
+            ComCorrecao = 2
+        }
+
+        public enum EnumVisaoCromatica
+        {
+            vazio = 0,
+            Normal = 1,
+            Discromatopsia = 2
+        }
     }
 }

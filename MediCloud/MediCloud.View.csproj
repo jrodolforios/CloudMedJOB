@@ -212,6 +212,7 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
+    <Compile Include="Code\Enum\DefaultEnum.cs" />
     <Compile Include="Code\Enum\EnumCliente.cs" />
     <Compile Include="Code\Enum\EnumContato.cs" />
     <Compile Include="Code\Enum\EnumFinanceiro.cs" />
@@ -224,6 +225,7 @@
     <Compile Include="Code\Funcionario\CadastroDeFuncionario.cs" />
     <Compile Include="Code\Laudo\CadastroDeLaudoAudio.cs" />
     <Compile Include="Code\Laudo\CadastroDeLaudoRX.cs" />
+    <Compile Include="Code\Laudo\CadastroDeLaudoVisao.cs" />
     <Compile Include="Code\Laudo\CadastroDeModeloLaudo.cs" />
     <Compile Include="Code\Parametro\CadastroDeElaboradorPCMSO.cs" />
     <Compile Include="Code\Parametro\CadastroDeElaboradorPPRA.cs" />
@@ -247,6 +249,7 @@
     <Compile Include="Controllers\FuncionarioController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LaudoAudioController.cs" />
+    <Compile Include="Controllers\LaudoVisaoController.cs" />
     <Compile Include="Controllers\ModeloLaudoController.cs" />
     <Compile Include="Controllers\ProcedimentoController.cs" />
     <Compile Include="Controllers\ProfissionalController.cs" />
@@ -272,6 +275,7 @@
     <Compile Include="Models\Laudo\AutoCompleteDefaultModeloLaudoModel.cs" />
     <Compile Include="Models\Laudo\LaudoAudioModel.cs" />
     <Compile Include="Models\Laudo\LaudoRXModel.cs" />
+    <Compile Include="Models\Laudo\LaudoVisaoModel.cs" />
     <Compile Include="Models\Laudo\ModeloLaudoModel.cs" />
     <Compile Include="Models\Parametro\GrupoProcedimento\GrupoModel.cs" />
     <Compile Include="Models\Parametro\GrupoProcedimento\ProcedimentoModel.cs" />
@@ -525,6 +529,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\LaudoAudio\DetalhamentoLaudoAudio.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\LaudoVisao\index.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

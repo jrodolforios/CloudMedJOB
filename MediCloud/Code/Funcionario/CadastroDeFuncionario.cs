@@ -30,7 +30,7 @@ namespace MediCloud.Code.Funcionario
             return listaDeModels;
         }
 
-        private static FuncionarioModel injetarEmUsuarioModel(FUNCIONARIO x)
+        public static FuncionarioModel injetarEmUsuarioModel(FUNCIONARIO x)
         {
             if (x == null)
                 return null;
