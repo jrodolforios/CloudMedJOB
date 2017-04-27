@@ -20,6 +20,48 @@ namespace MediCloud.Controllers
             return View();
         }
 
+        public ActionResult DetalhamentoLaudoVisao(int? codigoLaudoVisao)
+        {
+            try
+            {
+                base.EstahLogado();
+                ViewBag.Title = "Cargo";
+
+                LaudoVisaoModel model = CadastroDeLaudoVisao.recuperarLaudoVisaoPorID(codigoLaudoVisao.HasValue ? codigoLaudoVisao.Value : 0);
+
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
+                return View();
+            }
+        }
+
+        public ActionResult ExcluirLaudoVisao(int codigoLaudoVisao)
+        {
+            LaudoVisaoModel modelCargo = null;
+
+            try
+            {
+                base.EstahLogado();
+                ViewBag.Title = "Funcionário";
+
+                CadastroDeLaudoVisao.DeletarLaudoVisao(this, codigoLaudoVisao);
+
+                base.FlashMessage("Laudo excluído.", MessageType.Success);
+
+                return View("Index");
+            }
+            catch (Exception ex)
+            {
+                modelCargo = CadastroDeLaudoVisao.recuperarLaudoVisaoPorID(Convert.ToInt32(codigoLaudoVisao));
+
+                base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
+                return View(modelCargo);
+            }
+        }
+
         [HttpPost]
         public ActionResult Index(FormCollection form)
         {
@@ -60,6 +102,35 @@ namespace MediCloud.Controllers
                 resultado.acaoBemSucedida = false;
 
                 return Json(resultado, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpPost]
+        public ActionResult DetalhamentoLaudoVisao(FormCollection form)
+        {
+            LaudoVisaoModel modelFuncionario = null;
+            try
+            {
+                base.EstahLogado();
+                ViewBag.Title = "Acuidade visual";
+
+                modelFuncionario = CadastroDeLaudoVisao.SalvarLaudoVisao(form);
+
+                base.FlashMessage("Laudo cadastrado.", MessageType.Success);
+                return View(modelFuncionario);
+            }
+            catch (InvalidOperationException ex)
+            {
+                if (!string.IsNullOrEmpty(form["codigoLaudoVisao"]))
+                    modelFuncionario = CadastroDeLaudoVisao.recuperarLaudoVisaoPorID(Convert.ToInt32(form["codigoLaudoVisao"]));
+
+                base.FlashMessage(ex.Message, MessageType.Error);
+                return View(modelFuncionario);
+            }
+            catch (Exception ex)
+            {
+                base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
+                return View();
             }
         }
     }

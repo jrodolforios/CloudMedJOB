@@ -40,6 +40,28 @@ namespace MediCloud.BusinessProcess.Laudo
             }
         }
 
+        public static LAUDOAV buscarLaudoVisaoPorId(int v)
+        {
+            CloudMedContext contexto = new CloudMedContext();
+
+            try
+            {
+                if (contexto.LAUDOAV.Any(x => x.IDLAUDO == v))
+                    return contexto.LAUDOAV.First(x => x.IDLAUDO == v);
+                else
+                    return null;
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+                return new LAUDOAV();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public static void ExcluirLaudoVisao(int codigoLaudoVisao)
         {
             CloudMedContext contexto = new CloudMedContext();
@@ -52,6 +74,51 @@ namespace MediCloud.BusinessProcess.Laudo
             catch (DbEntityValidationException ex)
             {
                 ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static LAUDOAV SalvarLaudoVisao(LAUDOAV s)
+        {
+            CloudMedContext contexto = new CloudMedContext();
+            LAUDOAV a = new LAUDOAV();
+
+            try
+            {
+
+                if (s.IDLAUDO > 0)
+                {
+                    a = contexto.LAUDOAV.First(x => x.IDLAUDO == s.IDLAUDO);
+
+                    a.COD = s.COD;
+                    a.COE = s.COE;
+                    a.CONCLUSAO = s.CONCLUSAO;
+                    a.CORRECAO = s.CORRECAO;
+                    a.DATALAUDO = s.DATALAUDO;
+                    a.ESTRABISMO = s.ESTRABISMO;
+                    a.IDCGO = s.IDCGO;
+                    a.IDCLI = s.IDCLI;
+                    a.IDFUN = s.IDFUN;
+                    a.OD = s.OD;
+                    a.OE = s.OE;
+                    a.VISAOCROMATICA = s.VISAOCROMATICA;
+                }
+                else
+                {
+                    a = contexto.LAUDOAV.Add(s);
+                }
+
+                contexto.SaveChanges();
+                return a;
+
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+                return null;
             }
             catch (Exception ex)
             {

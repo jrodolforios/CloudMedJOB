@@ -30,6 +30,13 @@ namespace MediCloud.Code.Laudo
             return listaDeModels;
         }
 
+        internal static LaudoVisaoModel recuperarLaudoVisaoPorID(int v)
+        {
+            LAUDOAV laudoVisaoEncontrado = ControleDeLaudoVisao.buscarLaudoVisaoPorId(v);
+
+            return InjetarEmUsuarioModel(laudoVisaoEncontrado);
+        }
+
         private static LaudoVisaoModel InjetarEmUsuarioModel(LAUDOAV x)
         {
             if (x == null)
@@ -37,15 +44,15 @@ namespace MediCloud.Code.Laudo
             else
                 return new LaudoVisaoModel()
                 {
-                    Cargo = CadastroDeCargo.injetarEmUsuarioModel(x.CARGO),
-                    Cliente = CadastroDeClientes.injetarEmUsuarioModel(x.CLIENTE),
+                    Cargo = CadastroDeCargo.RecuperarCargoPorID((int)x.IDCGO),
+                    Cliente = CadastroDeClientes.RecuperarClientePorID((int)x.IDCLI),
                     COD = x.COD,
                     COE = x.COE,
                     Conclusao = x.CONCLUSAO,
                     Correcao = ConverterCorrecaoParaEnum(x.CORRECAO),
                     DataLaudo = x.DATALAUDO,
                     Estrabismo = ConverterEstrabismoParaEnum(x.ESTRABISMO),
-                    Funcionario = CadastroDeFuncionario.injetarEmUsuarioModel(x.FUNCIONARIO),
+                    Funcionario = CadastroDeFuncionario.RecuperarFuncionarioPorID((int)x.IDFUN),
                     IdLaudo = (int)x.IDLAUDO,
                     OD = x.OD,
                     OE = x.OE,
@@ -64,7 +71,7 @@ namespace MediCloud.Code.Laudo
             {
                 case "SIM":
                     return DefaultEnum.EnumSimNao.Sim;
-                case "NAO":
+                case "NÃO":
                     return DefaultEnum.EnumSimNao.Nao;
                 default:
                     return DefaultEnum.EnumSimNao.vazio;
@@ -84,6 +91,45 @@ namespace MediCloud.Code.Laudo
             }
         }
 
+        private static string ConverterCorrecaoParaString(EnumLaudo.CorrecaoAcuidadeVisual x)
+        {
+            switch (x)
+            {
+                case EnumLaudo.CorrecaoAcuidadeVisual.SemCorrecao:
+                    return "SEM CORREÇÃO";
+                case EnumLaudo.CorrecaoAcuidadeVisual.ComCorrecao:
+                    return "COM CORREÇÃO";
+                default:
+                    return null;
+            }
+        }
+
+        private static string ConverterEstrabismoParaString(DefaultEnum.EnumSimNao x)
+        {
+            switch (x)
+            {
+                case DefaultEnum.EnumSimNao.Sim:
+                    return "SIM";
+                case DefaultEnum.EnumSimNao.Nao:
+                    return "NÃO";
+                default:
+                    return null;
+            }
+        }
+
+        private static string ConverterVisaoCromaticaParaString(EnumLaudo.EnumVisaoCromatica x)
+        {
+            switch (x)
+            {
+                case EnumLaudo.EnumVisaoCromatica.Normal:
+                    return "NORMAL";
+                case EnumLaudo.EnumVisaoCromatica.Discromatopsia:
+                    return "DISCROMATOPSIA";
+                default:
+                    return null;
+            }
+        }
+
         private static EnumLaudo.CorrecaoAcuidadeVisual ConverterCorrecaoParaEnum(string x)
         {
             switch (x)
@@ -95,6 +141,63 @@ namespace MediCloud.Code.Laudo
                 default:
                     return EnumLaudo.CorrecaoAcuidadeVisual.vazio;
             }
+        }
+
+        internal static LaudoVisaoModel SalvarLaudoVisao(FormCollection form)
+        {
+            LaudoVisaoModel usuarioModel = InjetarEmUsuarioModel(form);
+            usuarioModel.validar();
+
+            LAUDOAV laudoVisaoDAO = InjetarEmUsuarioModelDAO(usuarioModel);
+            laudoVisaoDAO = ControleDeLaudoVisao.SalvarLaudoVisao(laudoVisaoDAO);
+
+            usuarioModel = InjetarEmUsuarioModel(laudoVisaoDAO);
+
+            return usuarioModel;
+        }
+
+        private static LAUDOAV InjetarEmUsuarioModelDAO(LaudoVisaoModel x)
+        {
+            if (x == null)
+                return null;
+            else
+                return new LAUDOAV()
+                {
+                    COD = x.COD,
+                    COE = x.COE,
+                    CONCLUSAO = x.Conclusao,
+                    CORRECAO = ConverterCorrecaoParaString(x.Correcao),
+                    DATALAUDO = x.DataLaudo.Value,
+                    ESTRABISMO = ConverterEstrabismoParaString(x.Estrabismo),
+                    IDCGO = x.Cargo.IdCargo,
+                    IDCLI = x.Cliente.IdCliente,
+                    IDFUN = x.Funcionario.IdFuncionario,
+                    IDLAUDO = x.IdLaudo,
+                    OD = x.OD,
+                    OE = x.OE,
+                    VISAOCROMATICA = ConverterVisaoCromaticaParaString (x.VisaoCromatica),
+                };
+        }
+
+        private static LaudoVisaoModel InjetarEmUsuarioModel(FormCollection form)
+        {
+            return new LaudoVisaoModel()
+            {
+                Cargo = CadastroDeCargo.RecuperarCargoPorID(string.IsNullOrEmpty(form["idCargo"]) ? 0: Convert.ToInt32(form["idCargo"])),
+                Cliente = CadastroDeClientes.RecuperarClientePorID(string.IsNullOrEmpty(form["idCliente"]) ? 0 : Convert.ToInt32(form["idCliente"])),
+                Funcionario = CadastroDeFuncionario.RecuperarFuncionarioPorID(string.IsNullOrEmpty(form["idFuncionario"]) ? 0 : Convert.ToInt32(form["idFuncionario"])),
+
+                COD = string.IsNullOrEmpty(form["COD"]) ? null: form["COD"],
+                COE = string.IsNullOrEmpty(form["COE"]) ? null : form["COE"],
+                Conclusao = string.IsNullOrEmpty(form["Conclusao"]) ? null : form["Conclusao"],
+                Correcao = string.IsNullOrEmpty(form["correcao"]) ? EnumLaudo.CorrecaoAcuidadeVisual.vazio : (EnumLaudo.CorrecaoAcuidadeVisual)Convert.ToInt32(form["correcao"]),
+                DataLaudo = string.IsNullOrEmpty(form["DataLaudo"]) ? null : (DateTime?)Convert.ToDateTime(form["DataLaudo"]),
+                Estrabismo = string.IsNullOrEmpty(form["estrabismo"]) ? DefaultEnum.EnumSimNao.vazio : (DefaultEnum.EnumSimNao)Convert.ToInt32(form["estrabismo"]),
+                IdLaudo = string.IsNullOrEmpty(form["codigoLaudoVisao"]) ? 0 : Convert.ToInt32(form["codigoLaudoVisao"]),
+                OD = string.IsNullOrEmpty(form["OD"]) ? null : form["OD"],
+                OE = string.IsNullOrEmpty(form["OE"]) ? null : form["OE"],
+                VisaoCromatica = string.IsNullOrEmpty(form["visaoCromatica"]) ? EnumLaudo.EnumVisaoCromatica.vazio: (EnumLaudo.EnumVisaoCromatica)Convert.ToInt32(form["visaoCromatica"])
+            };
         }
     }
 }
