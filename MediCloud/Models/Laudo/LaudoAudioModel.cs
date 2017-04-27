@@ -64,7 +64,7 @@ namespace MediCloud.Models.Laudo
             string errosTratados = string.Empty;
 
             if (ProcedimentoMovimento == null || ProcedimentoMovimento.IdMovimentoProcedimento <= 0)
-                erros.Add("O campo \"Nome\" é de preenchimento obrigratório");
+                erros.Add("O campo \"Procedimento de movimento\" é de preenchimento obrigratório");
 
             if (erros.Any())
             {

@@ -11,6 +11,13 @@
     }
 }
 <script src="/assets/js/jquery-2.1.4.min.js"></script>
+
+<style type="text/css">
+    textarea {
+        height: 200px;
+    }
+</style>
+
 <div class="page-header">
     <h1>
         Detalhamento de audiometria
@@ -58,6 +65,190 @@
                             <h4 class="header blue bolder smaller">Dados da audiometria</h4>
                             <div class="vspace-12-sm"></div>
 
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Procedimento de movimento &nbsp;<span class="badge badge-important mail-tag"></span></label>
+
+                                <div class="col-sm-8">
+                                    <input type="hidden" name="idProcedimentoMovimento" id="idProcedimentoMovimento" value="@Html.ValueFor(x => x.ProcedimentoMovimento.IdMovimentoProcedimento)" />
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <i class="ace-icon fa fa-search"></i>
+                                        </span>
+                                        <input class="col-xs-12 col-sm-6 componenteFormulario" type="text" id="ProcedimentoMovimento" name="ProcedimentoMovimento" placeholder="Procedimento" value="@Html.ValueFor(x => x.ProcedimentoMovimento.Procedimento.Nome)" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label no-padding-right" for="form-field-date">Data para a próxima avaliação</label>
+
+                                <div class="col-sm-8">
+                                    <div class="input-medium">
+                                        <div class="input-group">
+                                            <input class="input-medium date-picker input-mask-date componenteFormulario" id="data" name="data" type="text" data-date-format="dd/mm/yyyy" placeholder="dd/mm/aaaa" value="@Html.ValueFor(x => x.DataProxAvaliacao)" />
+                                            <span class="input-group-addon">
+                                                <i class="ace-icon fa fa-calendar"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <h4 class="header blue bolder smaller">Exame</h4>
+                            <div class="vspace-12-sm"></div>
+
+                            <div class="form-group">
+                                <label class="col-sm-1 control-label no-padding-right" for="form-field-username">O.D.</label>
+
+                                <div class="col-sm-1">
+                                    <input class="col-xs-12 col-sm-12 componenteFormulario" type="number" id="OD250" name="OD250" placeholder="250" value="@Html.ValueFor(x => x.OD250)" />
+                                </div>
+
+                                <div class="col-sm-1">
+                                    <input class="col-xs-12 col-sm-12 componenteFormulario" type="number" id="OD500" name="OD500" placeholder="500" value="@Html.ValueFor(x => x.OD500)" />
+                                </div>
+
+                                <div class="col-sm-1">
+                                    <input class="col-xs-12 col-sm-12 componenteFormulario" type="number" id="OD1K" name="OD1K" placeholder="1K" value="@Html.ValueFor(x => x.OD1K)" />
+                                </div>
+
+                                <div class="col-sm-1">
+                                    <input class="col-xs-12 col-sm-12 componenteFormulario" type="number" id="OD2K" name="OD2K" placeholder="2K" value="@Html.ValueFor(x => x.OD2K)" />
+                                </div>
+
+                                <div class="col-sm-1">
+                                    <input class="col-xs-12 col-sm-12 componenteFormulario" type="number" id="OD3K" name="OD3K" placeholder="3K" value="@Html.ValueFor(x => x.OD3K)" />
+                                </div>
+
+                                <div class="col-sm-1">
+                                    <input class="col-xs-12 col-sm-12 componenteFormulario" type="number" id="OD4K" name="OD4K" placeholder="4K" value="@Html.ValueFor(x => x.OD4K)" />
+                                </div>
+
+                                <div class="col-sm-1">
+                                    <input class="col-xs-12 col-sm-12 componenteFormulario" type="number" id="OD6K" name="OD6K" placeholder="6K" value="@Html.ValueFor(x => x.OD6K)" />
+                                </div>
+
+                                <div class="col-sm-1">
+                                    <input class="col-xs-12 col-sm-12 componenteFormulario" type="number" id="OD8K" name="OD8K" placeholder="8K" value="@Html.ValueFor(x => x.OD8K)" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-1 control-label no-padding-right" for="form-field-username">O.D.O.</label>
+
+                                <div class="col-sm-1">
+                                    <input class="col-xs-12 col-sm-12 componenteFormulario" type="number" id="ODO250" name="ODO250" placeholder="250" value="@Html.ValueFor(x => x.ODO250)" />
+                                </div>
+
+                                <div class="col-sm-1">
+                                    <input class="col-xs-12 col-sm-12 componenteFormulario" type="number" id="ODO500" name="ODO500" placeholder="500" value="@Html.ValueFor(x => x.ODO500)" />
+                                </div>
+
+                                <div class="col-sm-1">
+                                    <input class="col-xs-12 col-sm-12 componenteFormulario" type="number" id="ODO1K" name="ODO1K" placeholder="1K" value="@Html.ValueFor(x => x.ODO1K)" />
+                                </div>
+
+                                <div class="col-sm-1">
+                                    <input class="col-xs-12 col-sm-12 componenteFormulario" type="number" id="ODO2K" name="ODO2K" placeholder="2K" value="@Html.ValueFor(x => x.ODO2K)" />
+                                </div>
+
+                                <div class="col-sm-1">
+                                    <input class="col-xs-12 col-sm-12 componenteFormulario" type="number" id="ODO3K" name="ODO3K" placeholder="3K" value="@Html.ValueFor(x => x.ODO3K)" />
+                                </div>
+
+                                <div class="col-sm-1">
+                                    <input class="col-xs-12 col-sm-12 componenteFormulario" type="number" id="ODO4K" name="ODO4K" placeholder="4K" value="@Html.ValueFor(x => x.ODO4K)" />
+                                </div>
+
+                                <div class="col-sm-1">
+                                    <input class="col-xs-12 col-sm-12 componenteFormulario" type="number" id="ODO6K" name="ODO6K" placeholder="6K" value="@Html.ValueFor(x => x.ODO6K)" />
+                                </div>
+
+                                <div class="col-sm-1">
+                                    <input class="col-xs-12 col-sm-12 componenteFormulario" type="number" id="ODO8K" name="ODO8K" placeholder="8K" value="@Html.ValueFor(x => x.ODO8K)" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-1 control-label no-padding-right" for="form-field-username">O.E.</label>
+
+                                <div class="col-sm-1">
+                                    <input class="col-xs-12 col-sm-12 componenteFormulario" type="number" id="OE250" name="OE250" placeholder="250" value="@Html.ValueFor(x => x.OE250)" />
+                                </div>
+
+                                <div class="col-sm-1">
+                                    <input class="col-xs-12 col-sm-12 componenteFormulario" type="number" id="OE500" name="OE500" placeholder="500" value="@Html.ValueFor(x => x.OE500)" />
+                                </div>
+
+                                <div class="col-sm-1">
+                                    <input class="col-xs-12 col-sm-12 componenteFormulario" type="number" id="OE1K" name="OE1K" placeholder="1K" value="@Html.ValueFor(x => x.OE1K)" />
+                                </div>
+
+                                <div class="col-sm-1">
+                                    <input class="col-xs-12 col-sm-12 componenteFormulario" type="number" id="OE2K" name="OE2K" placeholder="2K" value="@Html.ValueFor(x => x.OE2K)" />
+                                </div>
+
+                                <div class="col-sm-1">
+                                    <input class="col-xs-12 col-sm-12 componenteFormulario" type="number" id="OE3K" name="OE3K" placeholder="3K" value="@Html.ValueFor(x => x.OE3K)" />
+                                </div>
+
+                                <div class="col-sm-1">
+                                    <input class="col-xs-12 col-sm-12 componenteFormulario" type="number" id="OE4K" name="OE4K" placeholder="4K" value="@Html.ValueFor(x => x.OE4K)" />
+                                </div>
+
+                                <div class="col-sm-1">
+                                    <input class="col-xs-12 col-sm-12 componenteFormulario" type="number" id="OE6K" name="OE6K" placeholder="6K" value="@Html.ValueFor(x => x.OE6K)" />
+                                </div>
+
+                                <div class="col-sm-1">
+                                    <input class="col-xs-12 col-sm-12 componenteFormulario" type="number" id="OE8K" name="OE8K" placeholder="8K" value="@Html.ValueFor(x => x.OE8K)" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-1 control-label no-padding-right" for="form-field-username">O.E.O.</label>
+
+                                <div class="col-sm-1">
+                                    <input class="col-xs-12 col-sm-12 componenteFormulario" type="number" id="OEO250" name="OEO250" placeholder="250" value="@Html.ValueFor(x => x.OEO250)" />
+                                </div>
+
+                                <div class="col-sm-1">
+                                    <input class="col-xs-12 col-sm-12 componenteFormulario" type="number" id="OEO500" name="OEO500" placeholder="500" value="@Html.ValueFor(x => x.OEO500)" />
+                                </div>
+
+                                <div class="col-sm-1">
+                                    <input class="col-xs-12 col-sm-12 componenteFormulario" type="number" id="OEO1K" name="OEO1K" placeholder="1K" value="@Html.ValueFor(x => x.OEO1K)" />
+                                </div>
+
+                                <div class="col-sm-1">
+                                    <input class="col-xs-12 col-sm-12 componenteFormulario" type="number" id="OEO2K" name="OEO2K" placeholder="2K" value="@Html.ValueFor(x => x.OEO2K)" />
+                                </div>
+
+                                <div class="col-sm-1">
+                                    <input class="col-xs-12 col-sm-12 componenteFormulario" type="number" id="OEO3K" name="OEO3K" placeholder="3K" value="@Html.ValueFor(x => x.OEO3K)" />
+                                </div>
+
+                                <div class="col-sm-1">
+                                    <input class="col-xs-12 col-sm-12 componenteFormulario" type="number" id="OEO4K" name="OEO4K" placeholder="4K" value="@Html.ValueFor(x => x.OEO4K)" />
+                                </div>
+
+                                <div class="col-sm-1">
+                                    <input class="col-xs-12 col-sm-12 componenteFormulario" type="number" id="OEO6K" name="OEO6K" placeholder="6K" value="@Html.ValueFor(x => x.OEO6K)" />
+                                </div>
+
+                                <div class="col-sm-1">
+                                    <input class="col-xs-12 col-sm-12 componenteFormulario" type="number" id="OEO8K" name="OEO8K" placeholder="8K" value="@Html.ValueFor(x => x.OEO8K)" />
+                                </div>
+                            </div>
+
+                            <h4 class="header blue bolder smaller">Observações</h4>
+                            <div class="vspace-12-sm"></div>
+
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <textarea class="col-sm-12 componenteFormulario" id="rodape" name="observacao" placeholder="">@Html.ValueFor(x => x.Observavao)</textarea>
+                                </div>
+                            </div>
 
                             <div class="clearfix form-actions">
                                 <div class="col-md-offset-3 col-md-9">
@@ -121,7 +312,7 @@
 <script src="/assets/js/ace-elements.min.js"></script>
 <script src="/assets/js/ace.min.js"></script>
 <script type="text/javascript">
-    function excluirAudiometria(codigo) {
+    function excluirLaudoAudio(codigo) {
         confirmDeleteModal(codigo);
     }
 
@@ -170,4 +361,37 @@
         $('div.progress-bar-success').attr("style", "width: " + count + '%');
         $('.formPercent').append(count + '% ');
     }
+
+    $("#ProcedimentoMovimento").autocomplete({
+        source: function (request, response) {
+            $.ajax({
+                url: "/ASO/BuscaProcedimentosParaLaudoAJAX",
+                type: "POST",
+                dataType: "json",
+                data: { Prefix: request.term },
+                success: function (data) {
+                    response($.map(data, function (item) {
+                        return { label: item.Name, value: item.Name, Id: item.Id };
+                    }))
+
+                }
+            })
+        },
+        select: function (event, ui) {
+            $('#idProcedimentoMovimento').attr('value', ui.item.Id);
+            $('#ProcedimentoMovimento').val(ui.item.label);
+            return false;
+        }
+    });
+    $('#ProcedimentoMovimento').on('blur', function () {
+        if ($(this).val().length === 0) {  //check for no. of characters entered
+            $('#idProcedimentoMovimento').attr('value', 0);  // clear the textbox
+        }
+    });
+
+    $('.date-picker').datepicker({
+        format: 'dd/mm/yyyy',
+        language: 'pt-BR',
+    });
+    $('.input-mask-date').mask('99/99/9999');
 </script>

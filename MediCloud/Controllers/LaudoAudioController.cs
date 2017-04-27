@@ -38,6 +38,30 @@ namespace MediCloud.Controllers
             }
         }
 
+        public ActionResult ExcluirLaudoAudio(int codigoLaudoAudio)
+        {
+            LaudoAudioModel modelCargo = null;
+
+            try
+            {
+                base.EstahLogado();
+                ViewBag.Title = "Funcionário";
+
+                CadastroDeLaudoAudio.DeletarLaudoAudio(this, codigoLaudoAudio);
+
+                base.FlashMessage("Audiometria excluída.", MessageType.Success);
+
+                return View("Index");
+            }
+            catch (Exception ex)
+            {
+                modelCargo = CadastroDeLaudoAudio.RecuperarLaudoAudioPorID(Convert.ToInt32(codigoLaudoAudio));
+
+                base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
+                return View(modelCargo);
+            }
+        }
+
         [HttpPost]
         public ActionResult Index(FormCollection form)
         {
@@ -78,6 +102,35 @@ namespace MediCloud.Controllers
                 resultado.acaoBemSucedida = false;
 
                 return Json(resultado, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpPost]
+        public ActionResult DetalhamentoLaudoAudio(FormCollection form)
+        {
+            LaudoAudioModel modelLaudoAudio = null;
+            try
+            {
+                base.EstahLogado();
+                ViewBag.Title = "Audiometria";
+
+                modelLaudoAudio = CadastroDeLaudoAudio.SalvarAudiometria(form);
+
+                base.FlashMessage("Audiometria cadastrada.", MessageType.Success);
+                return View(modelLaudoAudio);
+            }
+            catch (InvalidOperationException ex)
+            {
+                if (!string.IsNullOrEmpty(form["codigoLaudoAudio"]))
+                    modelLaudoAudio = CadastroDeLaudoAudio.RecuperarLaudoAudioPorID(Convert.ToInt32(form["codigoLaudoAudio"]));
+
+                base.FlashMessage(ex.Message, MessageType.Error);
+                return View(modelLaudoAudio);
+            }
+            catch (Exception ex)
+            {
+                base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
+                return View();
             }
         }
     }

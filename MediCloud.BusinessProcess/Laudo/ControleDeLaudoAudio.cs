@@ -80,5 +80,81 @@ namespace MediCloud.BusinessProcess.Laudo
                 throw ex;
             }
         }
+
+        public static LAUDOAUD SalvarLaudoAudio(LAUDOAUD LaudoAudioDAO)
+        {
+            CloudMedContext contexto = new CloudMedContext();
+            LAUDOAUD laudoAudioSalvo = new LAUDOAUD();
+
+            try
+            {
+
+                if (LaudoAudioDAO.IDMOVPRO > 0)
+                {
+                    laudoAudioSalvo = contexto.LAUDOAUD.First(x => x.IDLAUDO == LaudoAudioDAO.IDLAUDO);
+
+                    laudoAudioSalvo.DATAPROX = LaudoAudioDAO.DATAPROX;
+                    laudoAudioSalvo.IDLAUDO = LaudoAudioDAO.IDLAUDO;
+                    laudoAudioSalvo.IDMOVPRO = LaudoAudioDAO.IDMOVPRO;
+                    laudoAudioSalvo.OBSERVACAO = LaudoAudioDAO.OBSERVACAO;
+
+                    laudoAudioSalvo.OD250 = LaudoAudioDAO.OD250;
+                    laudoAudioSalvo.OD500 = LaudoAudioDAO.OD500;
+                    laudoAudioSalvo.OD1K = LaudoAudioDAO.OD1K;
+                    laudoAudioSalvo.OD2K = LaudoAudioDAO.OD2K;
+                    laudoAudioSalvo.OD3K = LaudoAudioDAO.OD3K;
+                    laudoAudioSalvo.OD4K = LaudoAudioDAO.OD4K;
+                    laudoAudioSalvo.OD6K = LaudoAudioDAO.OD6K;
+                    laudoAudioSalvo.OD8K = LaudoAudioDAO.OD8K;
+
+                    laudoAudioSalvo.ODO250 = LaudoAudioDAO.ODO250;
+                    laudoAudioSalvo.ODO500 = LaudoAudioDAO.ODO500;
+                    laudoAudioSalvo.ODO1K = LaudoAudioDAO.ODO1K;
+                    laudoAudioSalvo.ODO2K = LaudoAudioDAO.ODO2K;
+                    laudoAudioSalvo.ODO3K = LaudoAudioDAO.ODO3K;
+                    laudoAudioSalvo.ODO4K = LaudoAudioDAO.ODO4K;
+                    laudoAudioSalvo.ODO6K = LaudoAudioDAO.ODO6K;
+                    laudoAudioSalvo.ODO8K = LaudoAudioDAO.ODO8K;
+
+                    laudoAudioSalvo.OE250 = LaudoAudioDAO.OE250;
+                    laudoAudioSalvo.OE500 = LaudoAudioDAO.OE500;
+                    laudoAudioSalvo.OE1K = LaudoAudioDAO.OE1K;
+                    laudoAudioSalvo.OE2K = LaudoAudioDAO.OE2K;
+                    laudoAudioSalvo.OE3K = LaudoAudioDAO.OE3K;
+                    laudoAudioSalvo.OE4K = LaudoAudioDAO.OE4K;
+                    laudoAudioSalvo.OE6K = LaudoAudioDAO.OE6K;
+                    laudoAudioSalvo.OE8K = LaudoAudioDAO.OE8K;
+
+                    laudoAudioSalvo.OEO250 = LaudoAudioDAO.OEO250;
+                    laudoAudioSalvo.OEO500 = LaudoAudioDAO.OEO500;
+                    laudoAudioSalvo.OEO1K = LaudoAudioDAO.OEO1K;
+                    laudoAudioSalvo.OEO2K = LaudoAudioDAO.OEO2K;
+                    laudoAudioSalvo.OEO3K = LaudoAudioDAO.OEO3K;
+                    laudoAudioSalvo.OEO4K = LaudoAudioDAO.OEO4K;
+                    laudoAudioSalvo.OEO6K = LaudoAudioDAO.OEO6K;
+                    laudoAudioSalvo.OEO8K = LaudoAudioDAO.OEO8K;
+
+
+                }
+                else
+                {
+
+                    laudoAudioSalvo = contexto.LAUDOAUD.Add(LaudoAudioDAO);
+                }
+
+                contexto.SaveChanges();
+                return laudoAudioSalvo;
+
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+                return null;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }
