@@ -160,7 +160,7 @@ namespace MediCloud.BusinessProcess.Laudo
             LAUDORX laudoRX = ControleDeLaudoRX.buscarLaudoRXPorId(codigoLaudo);
             INFORMACOES_CLINICA infoClinica = Util.Util.RecuperarInformacoesDaClinica();
 
-            LaudoReports Report = new LaudoReports(laudoRX, Util.Enum.Laudo.LaudoReportEnum.imprimirLaudo, infoClinica);
+            LaudoReports Report = new LaudoReports(laudoRX, Util.Enum.Laudo.LaudoReportEnum.imprimirLaudoRaioX, infoClinica);
 
             return Report.generate();
         }

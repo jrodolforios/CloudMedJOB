@@ -1,0 +1,168 @@
+﻿<html>
+<head>
+    <title>Atestado de Saúde Ocupacional</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <style type="text/css">
+        body {
+            font-family: Arial;
+            font-size: 8pt;
+        }
+
+        .line {
+            display: block;
+            height: 1px;
+            border: 0;
+            border-top: 1px solid black;
+            margin: 1em 0;
+            padding: 0;
+        }
+
+        .lineWrite {
+            display: block;
+            height: 1px;
+            border: 0;
+            border-top: 1px solid black;
+            margin: 1.5em 0;
+            padding: 0;
+        }
+
+        .dotted {
+            display: block;
+            height: 1px;
+            border: 0;
+            border-top: 1px dashed black;
+            margin: 1em 0;
+            padding: 0;
+        }
+
+        .corpo {
+            border: 1px solid black;
+        }
+
+        .dadosEmpresa {
+            width: 70%;
+            float: left;
+            text-align: center;
+        }
+
+        .logoEmpresa {
+            width: 30%;
+            float: left;
+            text-align: center;
+        }
+
+            .logoEmpresa img {
+                width: 120px;
+            }
+
+        .tituloRelatorio {
+            border: 1px solid black;
+            text-align: center;
+            margin: 3px 3px 3px 3px;
+        }
+
+        .conteudoRelatorio {
+            padding-top: 5px;
+            margin: 3px 3px 3px 3px;
+        }
+
+        .campo {
+            font-weight: bold;
+        }
+
+        .opcoes {
+            word-wrap: normal;
+            display: block;
+        }
+
+        .Assinatura {
+            display: table;
+        }
+
+        .AssinaturaDireita {
+            float: left;
+            width: 50%;
+            border-right: solid 1px black;
+        }
+
+        .AssinaturaEsquerda {
+            margin-left: 50%;
+        }
+
+        .Centralizado {
+            text-align: center;
+        }
+
+        .alignLeft {
+            text-align: left;
+        }
+
+        .alignRight {
+            float: right;
+        }
+        .cabecalhoSuperior{
+            display:table;
+        }
+    </style>
+</head>
+<body>
+    <div class="corpo">
+        <div class="cabecalho">
+            <div class="cabecalhoSuperior">
+                <div class="logoEmpresa"><img src="[%LogoEmpresa%]" alt="Logo da empresa" /></div>
+                <div class="dadosEmpresa">&nbsp;</div>
+            </div>
+            &nbsp;
+            <div class="tituloRelatorio"><h3>Laudo [%NomeProcedimento%]</h3></div>
+        </div>
+        <div class="conteudoRelatorio">
+            <div class="grupoDeCampo">
+                <span class="campo">PACIENTE:</span>
+                <span class="textoCampo">[%Paciente%]</span>
+                &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+                <span class="campo">RG:</span>
+                <span class="textoCampo">[%RGPaciente%]</span>
+            </div>
+            <div class="grupoDeCampo">
+                <span class="campo">DATA:</span>
+                <span class="textoCampo">[%DataLaudo%]</span>
+                &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+                <span class="campo">IDADE:</span>
+                <span class="textoCampo">[%Idade%]</span>
+                &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+                <span class="campo">IDMOVPRO:</span>
+                <span class="textoCampo">[%IdMovPRO%]</span>
+            </div>
+
+            <hr class="line" />
+
+            <p>
+                [%CorpoLaudo%]
+            </p>
+
+            <hr class="line" />
+
+            <p><b>CONCLUSÃO: [%Conclusao%]</b></p>
+
+
+            <hr class="line" />
+
+            <div class="Assinatura">
+                <div class="AssinaturaDireita Centralizado">
+                    <h4 class="Centralizado"><b>[%Rodape%]</b></h4>
+                </div>
+                <div class="AssinaturaEsquerda">
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                </div>
+            </div>
+
+            <hr class="dotted" />
+
+            <p class="Centralizado">[%InformacoesClinica%]</p>
+        </div>
+    </div>
+</body>
+</html>

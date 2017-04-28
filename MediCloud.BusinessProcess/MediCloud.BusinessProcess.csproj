@@ -112,7 +112,10 @@
     <Content Include="Templates\ASO\imprimirComMedCoord.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Templates\Laudo\imprimirLaudo.html">
+    <Content Include="Templates\Laudo\imprimirLaudoVisao.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Laudo\imprimirLaudoRaioX.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

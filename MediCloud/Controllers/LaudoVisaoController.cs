@@ -133,5 +133,29 @@ namespace MediCloud.Controllers
                 return View();
             }
         }
+
+        public FileResult ImprimirLaudo(int codigoLaudo)
+        {
+            LaudoVisaoModel laudoVisaoModel = null;
+            byte[] arquivo = null;
+            try
+            {
+                base.EstahLogado();
+
+                laudoVisaoModel = CadastroDeLaudoVisao.recuperarLaudoVisaoPorID(codigoLaudo);
+
+                arquivo = CadastroDeLaudoVisao.ImprimirLaudo(codigoLaudo);
+
+                byte[] fileBytes = arquivo;
+                string fileName = laudoVisaoModel.toString() + ".pdf";
+                return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, fileName);
+            }
+            catch (Exception ex)
+            {
+                base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
+                Response.Redirect("/RaioX/DetalhamentoLaudoVisao?codigoLaudoVisao=" + codigoLaudo.ToString());
+                return null;
+            }
+        }
     }
 }

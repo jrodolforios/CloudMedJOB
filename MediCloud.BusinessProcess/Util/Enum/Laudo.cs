@@ -11,7 +11,8 @@ namespace MediCloud.BusinessProcess.Util.Enum
         public enum LaudoReportEnum
         {
             indefinido = 0,
-            imprimirLaudo = 1,
+            imprimirLaudoRaioX = 1,
+            imprimirLaudoVisao = 2
         }
     }
 }

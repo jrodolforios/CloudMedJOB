@@ -143,6 +143,11 @@ namespace MediCloud.Code.Laudo
             }
         }
 
+        internal static byte[] ImprimirLaudo(int codigoLaudo)
+        {
+            return ControleDeLaudoVisao.ImprimirLaudo(codigoLaudo);
+        }
+
         internal static LaudoVisaoModel SalvarLaudoVisao(FormCollection form)
         {
             LaudoVisaoModel usuarioModel = InjetarEmUsuarioModel(form);

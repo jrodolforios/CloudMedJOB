@@ -40,7 +40,9 @@ namespace MediCloud.BusinessProcess.Util
 
             switch (tipoLaudoReport)
             {
-                case LaudoReportEnum.imprimirLaudo:
+                case LaudoReportEnum.imprimirLaudoRaioX:
+                    return recoverTemplateByFileName(path + tipoLaudoReport.ToString() + ".html");
+                case LaudoReportEnum.imprimirLaudoVisao:
                     return recoverTemplateByFileName(path + tipoLaudoReport.ToString() + ".html");
                 default:
                     return string.Empty;

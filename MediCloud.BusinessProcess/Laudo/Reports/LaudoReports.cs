@@ -15,8 +15,16 @@ namespace MediCloud.BusinessProcess.Laudo.Reports
     public class LaudoReports
     {
         LAUDORX _laudoRX = null;
+        LAUDOAV _laudoVisao = null;
         LaudoReportEnum _tipoLaudoReport = LaudoReportEnum.indefinido;
         INFORMACOES_CLINICA _infoClinica = null;
+
+        public LaudoReports(LAUDOAV laudoVisao, LaudoReportEnum tipoLaudoReport, INFORMACOES_CLINICA infoClinica)
+        {
+            _laudoVisao = laudoVisao;
+            _tipoLaudoReport = tipoLaudoReport;
+            _infoClinica = infoClinica;
+        }
 
         public LaudoReports(LAUDORX laudoRX, LaudoReportEnum tipoLaudoReport, INFORMACOES_CLINICA infoClinica)
         {
@@ -33,8 +41,11 @@ namespace MediCloud.BusinessProcess.Laudo.Reports
 
             switch (_tipoLaudoReport)
             {
-                case LaudoReportEnum.imprimirLaudo:
-                    retorno = PdfFactory.create(EnumPdfType.TuesPechkin).Parse(substituirParametrosLaudo(template));
+                case LaudoReportEnum.imprimirLaudoRaioX:
+                    retorno = PdfFactory.create(EnumPdfType.TuesPechkin).Parse(substituirParametrosLaudoRaioX(template));
+                    break;
+                case LaudoReportEnum.imprimirLaudoVisao:
+                    retorno = PdfFactory.create(EnumPdfType.TuesPechkin).Parse(substituirParametrosLaudoVisao(template));
                     break;
                 default:
                     retorno = null;
@@ -44,8 +55,15 @@ namespace MediCloud.BusinessProcess.Laudo.Reports
             return retorno;
         }
 
-        #region imprimirLaudo
-        private string substituirParametrosLaudo(string template)
+        #region imprimirLaudoVisao
+        private string substituirParametrosLaudoVisao(string template)
+        {
+            return template;
+        }
+        #endregion
+
+        #region imprimirLaudoRaioX
+        private string substituirParametrosLaudoRaioX(string template)
         {
             template = template.Replace("[%InformacoesClinica%]", _infoClinica.DADOSCABECALHOREL);
             template = template.Replace("[%LogoEmpresa%]", _infoClinica.URLLOGO);
