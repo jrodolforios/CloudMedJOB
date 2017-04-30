@@ -9,6 +9,7 @@ namespace MediCloud.DatabaseModels
     [Table("RECOMENDACAO")]
     public partial class RECOMENDACAO
     {
+
         [Key]
         [Column(TypeName = "numeric")]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -17,8 +18,12 @@ namespace MediCloud.DatabaseModels
         [Column(TypeName = "numeric")]
         public decimal IDCGO { get; set; }
 
+        public virtual CARGO CARGO { get; set; }
+
         [Column(TypeName = "numeric")]
         public decimal IDCLI { get; set; }
+
+        public virtual CLIENTE CLIENTE { get; set; }
 
         [Column(TypeName = "numeric")]
         public decimal IDSETOR { get; set; }

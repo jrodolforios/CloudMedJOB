@@ -40,13 +40,13 @@
         }
 
         .dadosEmpresa {
-            width: 70%;
+            width: 60%;
             float: left;
             text-align: center;
         }
 
         .logoEmpresa {
-            width: 30%;
+            width: 40%;
             float: left;
             text-align: center;
         }
@@ -58,6 +58,17 @@
         .tituloRelatorio {
             border: 1px solid black;
             text-align: center;
+            margin: 3px 3px 3px 3px;
+        }
+
+        .tituloRelatorioEsquerda {
+            border: 1px solid black;
+            text-align: left;
+            margin: 3px 3px 3px 3px;
+        }
+
+        .tituloRelatorioSemAlinhamento {
+            border: 1px solid black;
             margin: 3px 3px 3px 3px;
         }
 
@@ -100,8 +111,9 @@
         .alignRight {
             float: right;
         }
-        .cabecalhoSuperior{
-            display:table;
+
+        .cabecalhoSuperior {
+            display: table;
         }
     </style>
 </head>
@@ -110,58 +122,58 @@
         <div class="cabecalho">
             <div class="cabecalhoSuperior">
                 <div class="logoEmpresa"><img src="[%LogoEmpresa%]" alt="Logo da empresa" /></div>
-                <div class="dadosEmpresa">&nbsp;</div>
+                <div class="dadosEmpresa">[%InformacoesClinica%]</div>
             </div>
             &nbsp;
-            <div class="tituloRelatorio"><h3>Laudo [%NomeProcedimento%]</h3></div>
+            <div class="tituloRelatorio"><h3>Laudo de Acuidade Visual</h3></div>
         </div>
-        <div class="conteudoRelatorio">
-            <div class="grupoDeCampo">
-                <span class="campo">PACIENTE:</span>
-                <span class="textoCampo">[%Paciente%]</span>
-                &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
-                <span class="campo">RG:</span>
-                <span class="textoCampo">[%RGPaciente%]</span>
-            </div>
-            <div class="grupoDeCampo">
-                <span class="campo">DATA:</span>
-                <span class="textoCampo">[%DataLaudo%]</span>
-                &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
-                <span class="campo">IDADE:</span>
-                <span class="textoCampo">[%Idade%]</span>
-                &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
-                <span class="campo">IDMOVPRO:</span>
-                <span class="textoCampo">[%IdMovPRO%]</span>
-            </div>
+
+        <div class="tituloRelatorioEsquerda"><b>NOME:</b> [%Paciente%]</div>
+        <div class="tituloRelatorioEsquerda"><b>EMPRESA:</b> [%Cliente%]</div>
+        <div class="tituloRelatorioEsquerda"><b>FUNÇÃO:</b> [%Cargo%]</div>
+        <div class="tituloRelatorioEsquerda"><b>DATA DE NASCIMENTO:</b> [%DataNascimento%]</div>
+        <div class="tituloRelatorioEsquerda"><b>RG:</b> [%RG%]</div>
+
+        <div class="tituloRelatorioSemAlinhamento">
+            <h2 class="Centralizado">Avaliação Oftamológica</h2>
 
             <hr class="line" />
 
-            <p>
-                [%CorpoLaudo%]
-            </p>
-
-            <hr class="line" />
-
-            <p><b>CONCLUSÃO: [%Conclusao%]</b></p>
-
-
-            <hr class="line" />
-
-            <div class="Assinatura">
-                <div class="AssinaturaDireita Centralizado">
-                    <h4 class="Centralizado"><b>[%Rodape%]</b></h4>
-                </div>
-                <div class="AssinaturaEsquerda">
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
+            <div class="cabecalhoSuperior">
+                <div class="logoEmpresa" style="width:40%"><b>Aduidade Visual</b></div>
+                <div class="dadosEmpresa" style="width:60%">
+                    <p><b>[%Correcao%]</b></p>
+                    <p><b>O.D.:</b>: [%OD%]</p>
+                    <p><b>O.E.:</b>: [%OE%]</p>
                 </div>
             </div>
+        </div>
 
-            <hr class="dotted" />
+        <div class="tituloRelatorioSemAlinhamento">
 
-            <p class="Centralizado">[%InformacoesClinica%]</p>
+            <div class="cabecalhoSuperior">
+                <div class="logoEmpresa" style="width:40%"><b>Campimetria</b></div>
+                <div class="dadosEmpresa" style="width:60%">
+                    <p><b>O.D.:</b>: [%COD%]</p>
+                    <p><b>O.E.:</b>: [%COE%]</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="tituloRelatorioEsquerda"><b>ESTRABISMO:</b> [%Estrabismo%]</div>
+        <div class="tituloRelatorioEsquerda"><b>VISÃO CROMÁTICA:</b> [%VisaoCromatica%]</div>
+        <div class="tituloRelatorioEsquerda"><b>CONCLUSÃO</b><br /> [%Conclusao%]</div>
+
+        <div class="Assinatura">
+            <div class="AssinaturaDireita Centralizado">
+                <h2><b> CARIMBO/ASS. MÉDICO</b></h2>
+            </div>
+            <div class="AssinaturaEsquerda">
+                <h2><b> DATA</b></h2>
+                <p class="Centralizado">[%Data%]</p>
+                <p>&nbsp;</p>
+                <p>&nbsp;</p>
+            </div>
         </div>
     </div>
 </body>

@@ -72,6 +72,8 @@
     <Compile Include="Parametro\GrupoProcedimento\ControleDeProcedimentos.cs" />
     <Compile Include="Parametro\GrupoProcedimento\ControleDeSubGrupo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Recomendacao\ControleDeRecomendacao.cs" />
+    <Compile Include="Recomendacao\ControleDeRiscos.cs" />
     <Compile Include="Recomendacao\ControleDeSetor.cs" />
     <Compile Include="Segurança\ControleDeAcesso.cs" />
     <Compile Include="Util\Enum\Laudo.cs" />

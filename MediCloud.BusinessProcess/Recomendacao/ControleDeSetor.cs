@@ -49,5 +49,60 @@ namespace MediCloud.BusinessProcess.Recomendacao
             }
             return null;
         }
+
+        public static void ExcluirSetor(int codigoDoSetor)
+        {
+            CloudMedContext contexto = new CloudMedContext();
+            try
+            {
+                contexto.SETOR.Remove(contexto.SETOR.First(x => x.IDSETOR == codigoDoSetor));
+
+                contexto.SaveChanges();
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static SETOR SalvarSetor(SETOR setorDAO)
+        {
+            CloudMedContext contexto = new CloudMedContext();
+            SETOR setorSalvo = new SETOR();
+
+            try
+            {
+
+                if (setorDAO.IDSETOR > 0)
+                {
+                    setorSalvo = contexto.SETOR.First(x => x.IDSETOR == setorDAO.IDSETOR);
+
+                    setorSalvo.IDSETOR = setorDAO.IDSETOR;
+                    setorSalvo.SETOR1 = setorDAO.SETOR1;
+
+                }
+                else
+                {
+                    setorSalvo = contexto.SETOR.Add(setorDAO);
+                }
+
+                contexto.SaveChanges();
+                return setorSalvo;
+
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+                return null;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

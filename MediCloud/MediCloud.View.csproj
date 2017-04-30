@@ -218,6 +218,7 @@
     <Compile Include="Code\Enum\EnumFinanceiro.cs" />
     <Compile Include="Code\Enum\EnumFornecedor.cs" />
     <Compile Include="Code\Enum\EnumLaudo.cs" />
+    <Compile Include="Code\Enum\EnumRecomendacao.cs" />
     <Compile Include="Code\Financeiro\CadastroDeFaturamento.cs" />
     <Compile Include="Code\Financeiro\CadastroFormaPagamento.cs" />
     <Compile Include="Code\Fornecedor\CadastroDeContato.cs" />
@@ -236,6 +237,8 @@
     <Compile Include="Code\Parametro\GrupoProcedimento\CadastroDeGrupo.cs" />
     <Compile Include="Code\Parametro\GrupoProcedimento\CadastroDeProcedimentos.cs" />
     <Compile Include="Code\Parametro\GrupoProcedimento\CadastroDeSubGrupo.cs" />
+    <Compile Include="Code\Recomendacao\CadastroDeRecomendacao.cs" />
+    <Compile Include="Code\Recomendacao\CadastroDeRiscos.cs" />
     <Compile Include="Code\Recomendacao\CadastroDeSetor.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ASOController.cs" />
@@ -254,6 +257,9 @@
     <Compile Include="Controllers\ProcedimentoController.cs" />
     <Compile Include="Controllers\ProfissionalController.cs" />
     <Compile Include="Controllers\RaioXController.cs" />
+    <Compile Include="Controllers\RecomendacaoController.cs" />
+    <Compile Include="Controllers\ReferenciaController.cs" />
+    <Compile Include="Controllers\RiscoNaturezaController.cs" />
     <Compile Include="Controllers\SegmentoController.cs" />
     <Compile Include="Controllers\SetorController.cs" />
     <Compile Include="Controllers\TabelaDePrecoController.cs" />
@@ -281,6 +287,9 @@
     <Compile Include="Models\Parametro\GrupoProcedimento\ProcedimentoModel.cs" />
     <Compile Include="Models\Parametro\GrupoProcedimento\SubGrupoModel.cs" />
     <Compile Include="Models\Parametro\ProfissionalModel.cs" />
+    <Compile Include="Models\Recomendacao\NaturezaModel.cs" />
+    <Compile Include="Models\Recomendacao\RecomendacaoModel.cs" />
+    <Compile Include="Models\Recomendacao\RiscoModel.cs" />
     <Compile Include="Models\Recomendacao\SetorModel.cs" />
     <Compile Include="Models\Parametro\TabelaPrecoModel.cs" />
     <Compile Include="Models\Financeiro\ContadorModel.cs" />
@@ -501,8 +510,8 @@
     <Folder Include="Views\Fornecedor\" />
     <Folder Include="Views\Procedimento\" />
     <Folder Include="Views\Profissional\" />
+    <Folder Include="Views\Referencia\" />
     <Folder Include="Views\Segmento\" />
-    <Folder Include="Views\Setor\" />
     <Folder Include="Views\TabelaDePreco\" />
   </ItemGroup>
   <ItemGroup>
@@ -535,6 +544,24 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\LaudoVisao\DetalhamentoLaudoVisao.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Setor\DetalhamentoSetor.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Setor\index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Recomendacao\index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Recomendacao\DetalhamentoRecomendacao.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\RiscoNatureza\index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\RiscoNatureza\DetalhamentoRiscoNatureza.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

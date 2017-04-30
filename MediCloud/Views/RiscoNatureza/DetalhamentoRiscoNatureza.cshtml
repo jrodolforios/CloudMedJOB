@@ -1,0 +1,367 @@
+﻿@model MediCloud.Models.Recomendacao.NaturezaModel
+@{
+    string checkedInativo = string.Empty;
+    bool NaturezaNovo = true;
+
+    ViewBag.Title = "Natureza";
+
+    if (Model != null)
+    {
+        NaturezaNovo = false;
+    }
+}
+<script src="/assets/js/jquery-2.1.4.min.js"></script>
+<div class="page-header">
+    <h1>
+        Detalhamento de natureza
+        <small>
+            <i class="ace-icon fa fa-angle-double-right"></i>
+            Cadastro de natureza
+        </small>
+    </h1>
+</div><!-- /.page-header -->
+<div class="row">
+    <div class="col-xs-12">
+        <div id="user-profile-3" class="user-profile row">
+            <div class="col-sm-offset-1 col-sm-10">
+                <div class="well well-sm">
+                    <!-- -
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    &nbsp; -->
+                    <div class="inline middle blue bigger-110"> <span class="formPercent">0%</span> do cadastro concluído </div>
+
+                    &nbsp; &nbsp; &nbsp;
+                    <div style="width:200px;" data-percent="70%" class="inline middle no-margin progress progress-striped active pos-rel">
+                        <div class="progress-bar progress-bar-success" style="width:70%"></div>
+                    </div>
+
+                </div><!-- /.well -->
+                <div class="row">
+                    <label class="col-sm-4 control-label no-padding-right" for="form-field-username"><span class="badge badge-important mail-tag"></span>Obrigatório</label>
+                </div>
+
+                <div class="space"></div>
+                <form method="post" class="form-horizontal" action="@Url.Content("~/RiscoNatureza/DetalhamentoRiscoNatureza")">
+                    <input type="hidden" id="codigoNatureza" name="codigoNatureza" value="@Html.ValueFor(x => x.IdNatureza)" />
+                    <div class="tabbable">
+                        <ul class="nav nav-tabs padding-16">
+                            <li class="active">
+                                <a data-toggle="tab" href="#edit-basic">
+                                    <i class="green ace-icon fa fa-pencil-square-o bigger-125"></i>
+                                    Cadastro
+                                </a>
+                            </li>
+
+                            <li>
+                                <a data-toggle="tab" href="#edit-risk">
+                                    <i class="red ace-icon fa fa-exclamation-triangle bigger-125"></i>
+                                    Riscos
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="tab-content profile-edit-tab-content">
+                        <div id="edit-basic" class="tab-pane in fade active">
+                            <h4 class="header blue bolder smaller">Dados do Natureza</h4>
+
+                            <div class="row">
+                                <div class="vspace-12-sm"></div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label no-padding-right" for="form-field-username">Nome da natureza &nbsp;<span class="badge badge-important mail-tag"></span></label>
+
+                                    <div class="col-sm-8">
+                                        <input class="col-xs-12 col-sm-8 componenteFormulario" type="text" id="nomeNatureza" name="nomeNatureza" placeholder="Nome da natureza" value="@Html.ValueFor(x => x.NomeNatureza)" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="clearfix form-actions">
+                                <div class="col-md-offset-3 col-md-9">
+                                    <button class="btn btn-info" type="submit">
+                                        <i class="ace-icon fa fa-check bigger-110"></i>
+                                        Salvar
+                                    </button>
+                                    @if (NaturezaNovo)
+                                    {
+                                        <span>&nbsp; &nbsp;</span>
+                                        <button class="btn" type="reset" id="limparForm">
+                                            <i class="ace-icon fa fa-undo bigger-110"></i>
+                                            Limpar
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <span>&nbsp; &nbsp;</span>
+                                        <a href="javascript:excluirNatureza(@Model.IdNatureza)" class="btn btn-danger" type="reset">
+                                            <i class="ace-icon fa fa-times bigger-110"></i>
+                                            Excluir
+                                        </a>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="edit-risk" class="tab-pane in fade">
+                            <div class="space-10"></div>
+                            <a href="javascript:detalhamentoRisco(0)" class="btn btn-xs">+ Novo risco</a>
+                            @if (Model != null && Model != null && Model.Riscos.Any())
+                            {
+                                foreach (MediCloud.Models.Recomendacao.RiscoModel item in Model.Riscos)
+                                {
+                                    <div class="row">
+                                        <div class="col-xs-12" id="@item.IdRisco">
+                                            <div class="media search-media">
+                                                <div class="media-body">
+                                                    <h4 class="media-heading">
+                                                        <span class="blue">@item.NomeRisco </span>
+                                                    </h4>
+                                                    <p><b>Eventualidade:</b> @item.Eventualidade.ToString() <br /> <br/></p>
+
+                                                    <div class="search-actions text-center">
+                                                        <span class="blue bolder bigger-110">Ações</span>
+
+                                                        <div class="action-buttons bigger-150">
+                                                            <a href="javascript:excluirRisco(@item.IdRisco);">
+                                                                <i class="ace-icon fa fa-trash"></i>
+                                                            </a>
+                                                        </div>
+                                                        <a href="javascript:detalhamentoRisco(@item.IdRisco)" class="search-btn-action btn btn-sm btn-block btn-info">Editar</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <div class="alert alert-block alert-info">
+                                    Nenhum contato para ser exibido.
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </form>
+            </div><!-- /.span -->
+        </div>
+    </div>
+</div>
+
+<div id="confirm" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="smaller lighter blue no-margin">Excluir natureza</h3>
+            </div>
+            <div class="modal-body">
+                Tem certeza que deseja excluir esta natureza?
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-primary" id="delete">
+                    <i class="ace-icon fa fa-check"></i>
+                    Sim
+                </button>
+                <button type="button" data-dismiss="modal" class="btn">
+                    <i class="ace-icon fa fa-times"></i>
+                    Não
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="confirmRisco" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="smaller lighter blue no-margin">Excluir risco</h3>
+            </div>
+            <div class="modal-body">
+                Tem certeza que deseja excluir este risco?
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-primary" id="deleteRisco">
+                    <i class="ace-icon fa fa-check"></i>
+                    Sim
+                </button>
+                <button type="button" data-dismiss="modal" class="btn">
+                    <i class="ace-icon fa fa-times"></i>
+                    Não
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="detalhamentoRisco" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="smaller lighter blue no-margin">Contato de cliente</h3>
+            </div>
+            <form method="post" id="formContatoCliente" class="form-horizontal" action="@Url.Content("~/RiscoNatureza/SalvarRisco")">
+                <div class="modal-body">
+                    <input type="hidden" id="codigoRisco" name="codigoRisco" value="0" />
+                    <input type="hidden" id="codigoNaturezaRisco" name="codigoNaturezaRisco" value="@Html.ValueFor(x => x.IdNatureza)" />
+
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Nome &nbsp;<span class="badge badge-important mail-tag"></span></label>
+
+                        <div class="col-sm-8">
+                            <input class="col-xs-12 col-sm-6 " type="text" id="nomeRisco" name="nomeRisco" placeholder="nome do risco" value="" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Eventualidade &nbsp;<span class="badge badge-important mail-tag"></span></label>
+
+                        <div class="col-sm-8">
+                            <select class="form-control" id="eventualidade" name="eventualidade">
+                                <option value="">..:Selecione:..</option>
+                                <option value="2">Habitual</option>
+                                <option value="1">Eventual</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary" id="salvarContato">
+                        <i class="ace-icon fa fa-check"></i>
+                        Salvar
+                    </button>
+                    <button type="button" data-dismiss="modal" class="btn">
+                        <i class="ace-icon fa fa-times"></i>
+                        Cancelar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="/assets/js/jquery-ui.min.js"></script>
+<script src="/assets/js/bootstrap-datepicker.min.js"></script>
+<script src="/assets/js/jquery.maskedinput.min.js"></script>
+<script src="/assets/js/jquery.ui.touch-punch.min.js"></script>
+<script src="/assets/js/ace-elements.min.js"></script>
+<script src="/assets/js/ace.min.js"></script>
+<script type="text/javascript">
+    function excluirRisco(codigo) {
+        confirmDeleteModalRisco(codigo);
+    }
+
+    function excluirNatureza(codigo) {
+        confirmDeleteModal(codigo);
+    }
+
+    function confirmDeleteModal(codigo) {
+        $('#confirm').modal({
+            backdrop: 'static',
+            keyboard: false
+        })
+            .one('click', '#delete', function () {
+                window.location = "/RiscoNatureza/ExcluirNatureza?codigoNatureza=" + codigo;
+            });
+    }
+
+    function confirmDeleteModalRisco(codigo) {
+        $('#confirmRisco').modal({
+            backdrop: 'static',
+            keyboard: false
+        })
+            .one('click', '#deleteRisco', function () {
+                deletarContato(codigo);
+            });
+    }
+
+    function deletarContato(codigo) {
+        $.ajax({
+            url: "/RiscoNatureza/ExcluirRisco?codigoRisco=" + codigo,
+            type: "post",
+            cache: false,
+            success: function (savingStatus) {
+                var tipoAlert;
+                if (savingStatus.acaoBemSucedida) {
+                    tipoAlert = 'alert-success';
+                    $("#" + codigo).remove();
+                }
+                else
+                    tipoAlert = 'alert-danger';
+                $('#usuarioAlerts').html('<div class="alert ' + tipoAlert + '"><a class="close" data-dismiss="alert">×</a><span>' + savingStatus.mensagem + '</span></div>');
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                $('#usuarioAlerts').html('<div class="alert alert-danger"><a class="close" data-dismiss="alert">×</a><span>Ops! Não foi possível deletar este registro no servidor. Contate-nos para que possamos te ajudar melhor.</span></div>')
+            }
+        });
+    }
+
+    $("#limparForm").click(function () {
+        var cntreq3 = 0;
+        var cntvals3 = 0;
+        $(".componenteFormulario").each(atualizarProgressBar());
+    });
+
+    $(document).ready(function () {
+        $('input').on('change', function () {
+            var cntreq = 0;
+            var cntvals = 0;
+            $(".componenteFormulario").each(atualizarProgressBar());
+        });
+
+        var cntreq3 = 0;
+        var cntvals3 = 0;
+        $(".componenteFormulario").each(atualizarProgressBar());
+
+    });
+
+    function atualizarProgressBar() {
+        var cntreq = 0;
+        var cntvals = 0;
+        $(".componenteFormulario").each(function (val) {
+            cntreq++;
+            if ($(this).val() != '') {
+                cntvals++;
+            }
+        });
+        var count = (cntvals / cntreq) * 100;
+        count = parseInt(count);
+        $('.formPercent').empty();
+        $('.progress-striped').attr("data-percent", count + '%');
+        $('div.progress-bar-success').attr("style", "width: " + count + '%');
+        $('.formPercent').append(count + '% ');
+    }
+
+    function detalhamentoRisco(codigo) {
+        $('#detalhamentoRisco').modal({
+            backdrop: 'static',
+            keyboard: false
+        })
+
+        limparComponentesRisco();
+        if (codigo > 0) {
+            $.ajax({
+                url: '/RiscoNatureza/DetalharRisco?codigoRisco=' + codigo,
+                type: "post",
+                cache: false,
+                success: function (data) {
+                    $("#nomeRisco").attr('value', data.NomeRisco);
+                    $("#eventualidade").val(data.Eventualidade);
+                    $("#codigoRisco").attr('value', data.IdRisco);
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    $('#usuarioAlerts').html('<div class="alert alert-danger"><a class="close" data-dismiss="alert">×</a><span>Ops! Não foi possível detalhar este registro no servidor. Contate-nos para que possamos te ajudar melhor.</span></div>')
+                }
+            });
+        }
+    }
+
+    function limparComponentesRisco() {
+        $("#nomeRisco").attr('value', '');
+        $("#eventualidade").attr('value', '');
+        $("#codigoRisco").attr('value', '');
+    }
+</script>

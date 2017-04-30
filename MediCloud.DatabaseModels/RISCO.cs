@@ -25,5 +25,7 @@ namespace MediCloud.DatabaseModels
 
         [Column(TypeName = "numeric")]
         public decimal IDNAT { get; set; }
+
+        public virtual NATUREZA NATUREZA { get; set; }
     }
 }

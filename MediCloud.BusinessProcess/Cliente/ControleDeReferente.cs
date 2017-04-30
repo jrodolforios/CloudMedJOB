@@ -47,5 +47,25 @@ namespace MediCloud.BusinessProcess.Cliente
                 throw ex;
             }
         }
+
+        public static List<MOVIMENTO_REFERENTE> buscarReferentePorTermo(string prefix)
+        {
+            CloudMedContext contexto = new CloudMedContext();
+            try
+            {
+                List<MOVIMENTO_REFERENTE> referencia = contexto.MOVIMENTO_REFERENTE.Where(x => x.NOMEREFERENCIA.Contains(prefix)).ToList();
+
+                return referencia;
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return null;
+        }
     }
 }

@@ -58,6 +58,24 @@ namespace MediCloud.BusinessProcess.Laudo.Reports
         #region imprimirLaudoVisao
         private string substituirParametrosLaudoVisao(string template)
         {
+            template = template.Replace("[%InformacoesClinica%]", _infoClinica.DADOSCABECALHOREL);
+            template = template.Replace("[%LogoEmpresa%]", _infoClinica.URLLOGO);
+
+            template = template.Replace("[%Paciente%]", _laudoVisao.FUNCIONARIO.FUNCIONARIO1);
+            template = template.Replace("[%Cliente%]", _laudoVisao.CLIENTE.RAZAOSOCIAL);
+            template = template.Replace("[%Cargo%]", _laudoVisao.CARGO.CARGO1);
+            template = template.Replace("[%DataNascimento%]", _laudoVisao.FUNCIONARIO.NASCIMENTO.HasValue ? _laudoVisao.FUNCIONARIO.NASCIMENTO.Value.ToShortDateString() : string.Empty);
+            template = template.Replace("[%RG%]", _laudoVisao.FUNCIONARIO.RG);
+            template = template.Replace("[%Correcao%]", _laudoVisao.CORRECAO);
+            template = template.Replace("[%OD%]", _laudoVisao.OD);
+            template = template.Replace("[%OE%]", _laudoVisao.OE);
+            template = template.Replace("[%COD%]", _laudoVisao.COD);
+            template = template.Replace("[%COE%]", _laudoVisao.COE);
+            template = template.Replace("[%Estrabismo%]", _laudoVisao.ESTRABISMO);
+            template = template.Replace("[%VisaoCromatica%]", _laudoVisao.VISAOCROMATICA);
+            template = template.Replace("[%Conclusao%]", _laudoVisao.CONCLUSAO);
+            template = template.Replace("[%Data%]", _laudoVisao.DATALAUDO.ToShortDateString());
+
             return template;
         }
         #endregion

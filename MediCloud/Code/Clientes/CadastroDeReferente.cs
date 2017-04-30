@@ -21,7 +21,7 @@ namespace MediCloud.Code.Clientes
                 return null;
         }
 
-        private static ReferenteModel injetarEmUsuarioModel(MOVIMENTO_REFERENTE referenteEncontrado)
+        internal static ReferenteModel injetarEmUsuarioModel(MOVIMENTO_REFERENTE referenteEncontrado)
         {
             if (referenteEncontrado == null)
                 return null;
@@ -31,6 +31,20 @@ namespace MediCloud.Code.Clientes
                     IdReferencia = (int)referenteEncontrado.IDREF,
                     NomeReferencia = referenteEncontrado.NOMEREFERENCIA
                 };
+        }
+
+        internal static List<ReferenteModel> BuscarReferentePorTermo(string prefix)
+        {
+            List<ReferenteModel> listaDeModels = new List<ReferenteModel>();
+
+            List<MOVIMENTO_REFERENTE> usuarioDoBanco = ControleDeReferente.buscarReferentePorTermo(prefix);
+
+            usuarioDoBanco.ForEach(x =>
+            {
+                listaDeModels.Add(injetarEmUsuarioModel(x));
+            });
+
+            return listaDeModels;
         }
 
         internal static List<ReferenteModel> RecuperarTodos()
