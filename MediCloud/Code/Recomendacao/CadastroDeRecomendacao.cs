@@ -62,7 +62,7 @@ namespace MediCloud.Code.Recomendacao
                     procedimentos.Add(CadastroDeProcedimentos.injetarEmUsuarioModel(x));
                 });
 
-                ReferenciasProcedimentosTratados.Add(CadastroDeReferente.injetarEmUsuarioModel(item.Key), procedimentos);
+                ReferenciasProcedimentosTratados.Add(CadastroDeReferente.InjetarEmUsuarioModel(item.Key), procedimentos);
             }
 
             return ReferenciasProcedimentosTratados;

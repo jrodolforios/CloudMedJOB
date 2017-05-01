@@ -49,5 +49,147 @@ namespace MediCloud.Controllers
             }
         }
 
+        [HttpPost]
+        public ActionResult Index(FormCollection form)
+        {
+            try
+            {
+                base.EstahLogado();
+                ViewBag.Title = "Setores";
+
+                List<FornecedorModel> model = CadastroDeFornecedor.BuscarFornecedor(form);
+
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
+                return View();
+            }
+        }
+
+        [HttpPost]
+        public JsonResult DeletarFornecedor(int codigoFornecedor)
+        {
+            ResultadoAjaxGenericoModel resultado = new ResultadoAjaxGenericoModel();
+            try
+            {
+                base.EstahLogado();
+
+                CadastroDeFornecedor.DeletarFornecedor(this, codigoFornecedor);
+
+                resultado.mensagem = "Fornecedor excluído.";
+                resultado.acaoBemSucedida = true;
+
+                return Json(resultado, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                resultado.mensagem = Constantes.MENSAGEM_GENERICA_DE_ERRO;
+                resultado.acaoBemSucedida = false;
+
+                return Json(resultado, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        public ActionResult ExcluirFornecedor(int codigoFornecedor)
+        {
+            FornecedorModel modelFornecedor = null;
+
+            try
+            {
+                base.EstahLogado();
+                ViewBag.Title = "Fornecedor";
+
+                CadastroDeFornecedor.DeletarFornecedor(this, codigoFornecedor);
+
+                base.FlashMessage("Fornecedor excluído.", MessageType.Success);
+
+                return View("Index");
+            }
+            catch (Exception ex)
+            {
+                modelFornecedor = CadastroDeFornecedor.RecuperarFornecedorPorID(Convert.ToInt32(codigoFornecedor));
+
+                base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
+                return View(modelFornecedor);
+            }
+        }
+
+        public ActionResult DetalhamentoFornecedor(int? codigoFornecedor)
+        {
+            try
+            {
+                base.EstahLogado();
+                ViewBag.Title = "Setor";
+
+                FornecedorModel model = CadastroDeFornecedor.RecuperarFornecedorPorID(codigoFornecedor.HasValue ? codigoFornecedor.Value : 0);
+
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
+                return View();
+            }
+        }
+
+        [HttpPost]
+        public ActionResult DetalhamentoFornecedor(FormCollection form)
+        {
+            FornecedorModel modelFuncionario = null;
+            try
+            {
+                base.EstahLogado();
+                ViewBag.Title = "Fornecedor";
+
+                modelFuncionario = CadastroDeFornecedor.SalvarFornecedor(form);
+
+                base.FlashMessage("Fornecedor cadastrado.", MessageType.Success);
+                return View(modelFuncionario);
+            }
+            catch (InvalidOperationException ex)
+            {
+                if (!string.IsNullOrEmpty(form["codigoFornecedor"]))
+                    modelFuncionario = CadastroDeFornecedor.RecuperarFornecedorPorID(Convert.ToInt32(form["codigoFornecedor"]));
+
+                base.FlashMessage(ex.Message, MessageType.Error);
+                return View(modelFuncionario);
+            }
+            catch (Exception ex)
+            {
+                base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
+                return View();
+            }
+        }
+
+        [HttpPost]
+        public ActionResult SalvarContato(FormCollection form)
+        {
+            int codigoFornecedor = Convert.ToInt32(form["codigoFornecedorContato"]);
+
+            try
+            {
+                base.EstahLogado();
+                ViewBag.Title = "Fornecedor";
+
+                ContatoFornecedorModel model = CadastroDeContato.salvarContatoFornecedor(form);
+
+                base.FlashMessage("Contato cadastrado.", MessageType.Success);
+                Response.Redirect($"/Fornecedor/DetalhamentoFornecedor?codigoFornecedor={codigoFornecedor}");
+            }
+            catch (InvalidOperationException ex)
+            {
+                base.FlashMessage(ex.Message, MessageType.Error);
+                Response.Redirect($"/Fornecedor/DetalhamentoFornecedor?codigoFornecedor={codigoFornecedor}");
+            }
+            catch (Exception ex)
+            {
+                base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
+                Response.Redirect($"/Fornecedor/DetalhamentoFornecedor?codigoFornecedor={codigoFornecedor}");
+            }
+
+            return null;
+        }
     }
 }

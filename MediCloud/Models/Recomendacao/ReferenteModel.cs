@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Web;
 
-namespace MediCloud.Models.Cliente
+namespace MediCloud.Models.Recomendacao
 {
     public class ReferenteModel : IModel
     {

@@ -177,7 +177,7 @@
     <Compile Include="Code\Clientes\CadastroDeCargo.cs" />
     <Compile Include="Code\Clientes\CadastroDeClientes.cs" />
     <Compile Include="Code\Clientes\CadastroDeProcedimentosMovimento.cs" />
-    <Compile Include="Code\Clientes\CadastroDeReferente.cs" />
+    <Compile Include="Code\Recomendacao\CadastroDeReferente.cs" />
     <Compile Include="Code\Constantes.cs" />
     <Compile Include="Code\ControleDeSessao.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
@@ -273,7 +273,8 @@
     <Compile Include="Models\Cliente\CargoModel.cs" />
     <Compile Include="Models\Cliente\ClienteModel.cs" />
     <Compile Include="Models\Cliente\ProcedimentoMovimentoModel.cs" />
-    <Compile Include="Models\Cliente\ReferenteModel.cs" />
+    <Compile Include="Models\Fornecedor\FornecedorProcedimento.cs" />
+    <Compile Include="Models\Recomendacao\ReferenteModel.cs" />
     <Compile Include="Models\Financeiro\FaturamentoModel.cs" />
     <Compile Include="Models\Financeiro\FormaPagamentoModel.cs" />
     <Compile Include="Models\Fornecedor\ContatoFornecedorModel.cs" />
@@ -507,10 +508,8 @@
     <Folder Include="Views\Contato\" />
     <Folder Include="Views\ElaboradorPCMSO\" />
     <Folder Include="Views\ElaboradorPPRA\" />
-    <Folder Include="Views\Fornecedor\" />
     <Folder Include="Views\Procedimento\" />
     <Folder Include="Views\Profissional\" />
-    <Folder Include="Views\Referencia\" />
     <Folder Include="Views\Segmento\" />
     <Folder Include="Views\TabelaDePreco\" />
   </ItemGroup>
@@ -562,6 +561,18 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\RiscoNatureza\DetalhamentoRiscoNatureza.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Referencia\DetalhamentoReferencia.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Referencia\index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Fornecedor\DetalhamentoFornecedor.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Fornecedor\index.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

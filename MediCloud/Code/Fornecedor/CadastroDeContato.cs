@@ -58,7 +58,12 @@ namespace MediCloud.Code.Fornecedor
                 };
         }
 
-        public static ContatoFornecedorModel injetarEmUsuarioModel(FORNECEDOR_CONTATO usuarioDoBanco)
+        internal static void DeletarContatoFornecedor(ContatoController contatoController, int codigoDoContatoFornecedor)
+        {
+            ControleDeContato.ExcluirContatoFornecedor(codigoDoContatoFornecedor);
+        }
+
+        public static ContatoFornecedorModel injetarEmUsuarioModel(FORNECEDOR_CONTATO usuarioDoBanco, bool materializarClasses = false)
         {
             if (usuarioDoBanco == null)
                 return null;
@@ -69,13 +74,24 @@ namespace MediCloud.Code.Fornecedor
                     Email = usuarioDoBanco.EMAIL,
                     Funcao = usuarioDoBanco.FUNCAO,
                     IdContatoFornecedor = (int)usuarioDoBanco.IDCON,
-                    Fornecedor = CadastroDeFornecedor.injetarEmUsuarioModel(usuarioDoBanco.FORNECEDOR),
+                    Fornecedor = materializarClasses ? CadastroDeFornecedor.InjetarEmUsuarioModel(usuarioDoBanco.FORNECEDOR) : new FornecedorModel() { IdFornecedor = (int)usuarioDoBanco.IDFOR },
                     Nome = usuarioDoBanco.NOME,
                     Observacao = usuarioDoBanco.OBS,
                     TelFixo = usuarioDoBanco.FONEFIXO,
                     TelMovel = usuarioDoBanco.FONEMOVEL,
                     Departamento = GetDepartamento(usuarioDoBanco.DEPARTAMENTO)
                 };
+        }
+
+        internal static ContatoFornecedorModel RecuperarContatoFornecedorPorID(int codigoDoContatoFornecedor)
+        {
+            if (codigoDoContatoFornecedor != 0)
+            {
+                FORNECEDOR_CONTATO usuarioencontrado = ControleDeContato.recuperarContatoFornecedorPorID(codigoDoContatoFornecedor);
+                return injetarEmUsuarioModel(usuarioencontrado);
+            }
+            else
+                return null;
         }
 
         internal static List<ContatoFornecedorModel> RecuperarListaDeContatoFornecedorPorIdFornecedor(int IdFor)
@@ -117,6 +133,23 @@ namespace MediCloud.Code.Fornecedor
             };
         }
 
+        private static ContatoFornecedorModel injetarEmContatoFornecedorModel(FormCollection form)
+        {
+            return new ContatoFornecedorModel()
+            {
+                DataNascimento = string.IsNullOrEmpty(form["dataNascimento"]) ? null : (DateTime?)Convert.ToDateTime(form["dataNascimento"]),
+                Departamento = string.IsNullOrEmpty(form["departamento"]) ? EnumContato.tipoDepartamento.Vazio : (EnumContato.tipoDepartamento)Convert.ToInt32(form["departamento"]),
+                Email = string.IsNullOrEmpty(form["email"]) ? string.Empty : form["email"],
+                Funcao = string.IsNullOrEmpty(form["funcao"]) ? string.Empty : form["funcao"],
+                IdContatoFornecedor = Convert.ToInt32(form["codigoContato"]),
+                Fornecedor = CadastroDeFornecedor.RecuperarFornecedorPorID(Convert.ToInt32(form["codigoFornecedorContato"])),
+                Nome = string.IsNullOrEmpty(form["nomeContato"]) ? string.Empty : form["nomeContato"],
+                Observacao = string.IsNullOrEmpty(form["observacoesContato"]) ? string.Empty : form["observacoesContato"],
+                TelFixo = string.IsNullOrEmpty(form["telFixo"]) ? string.Empty : Util.ApenasNumeros(form["telFixo"]),
+                TelMovel = string.IsNullOrEmpty(form["telMovel"]) ? string.Empty : Util.ApenasNumeros(form["telMovel"])
+            };
+        }
+
         private static EnumContato.tipoDepartamento GetDepartamento(string v)
         {
             EnumContato.tipoDepartamento tipoDepartamento = EnumContato.tipoDepartamento.Vazio;
@@ -153,6 +186,19 @@ namespace MediCloud.Code.Fornecedor
             }
 
             return tipoDepartamento;
+        }
+
+        internal static ContatoFornecedorModel salvarContatoFornecedor(FormCollection form)
+        {
+            ContatoFornecedorModel contatoModel = injetarEmContatoFornecedorModel(form);
+            contatoModel.validar();
+
+            FORNECEDOR_CONTATO contatoDAO = injetarEmContatoFornecedorDAO(contatoModel);
+            contatoDAO = ControleDeContato.SalvarContatoFornecedor(contatoDAO);
+
+            contatoModel = injetarEmUsuarioModel(contatoDAO);
+
+            return contatoModel;
         }
 
         internal static string GetDepartamento(EnumContato.tipoDepartamento v)
@@ -193,6 +239,25 @@ namespace MediCloud.Code.Fornecedor
             return tipoDepartamento;
         }
 
+        private static FORNECEDOR_CONTATO injetarEmContatoFornecedorDAO(ContatoFornecedorModel x)
+        {
+            if (x == null)
+                return null;
+            else
+                return new FORNECEDOR_CONTATO()
+                {
+                    DEPARTAMENTO = GetDepartamento(x.Departamento),
+                    EMAIL = x.Email,
+                    FONEFIXO = x.TelFixo,
+                    FONEMOVEL = x.TelMovel,
+                    FUNCAO = x.Funcao,
+                    IDFOR = x.Fornecedor.IdFornecedor,
+                    IDCON = x.IdContatoFornecedor,
+                    NASCIMENTO = x.DataNascimento,
+                    NOME = x.Nome,
+                    OBS = x.Observacao
+                };
+        }
 
 
         internal static ContatoModel salvarContato(FormCollection form)

@@ -23,6 +23,8 @@ namespace MediCloud.Models.Fornecedor
 
         public List<ContatoFornecedorModel> ContatosFornecedor { get; set; }
 
+        public List<FornecedorProcedimento> ProcedimentosFornecedor { get; set; }
+
         public string toString()
         {
             return $"{NomeFantasia} - {CNPJ}";

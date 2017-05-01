@@ -50,7 +50,7 @@
     <Compile Include="Cliente\ControleDeCargo.cs" />
     <Compile Include="Cliente\ControleDeClientes.cs" />
     <Compile Include="Cliente\ControleDeProcedimentosMovimento.cs" />
-    <Compile Include="Cliente\ControleDeReferente.cs" />
+    <Compile Include="Recomendacao\ControleDeReferente.cs" />
     <Compile Include="Cliente\Reports\ASOReports.cs" />
     <Compile Include="Financeiro\ControleDeFaturamento.cs" />
     <Compile Include="Financeiro\ControleDeFormaDePagamento.cs" />

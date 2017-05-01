@@ -8,18 +8,22 @@ using MediCloud.BusinessProcess.Fornecedor;
 using MediCloud.Code.Enum;
 using MediCloud.Models.Financeiro;
 using MediCloud.BusinessProcess.Funcionario;
+using System.Web.Mvc;
+using MediCloud.Controllers;
+using MediCloud.BusinessProcess.Util;
+using MediCloud.Code.Parametro.GrupoProcedimento;
 
 namespace MediCloud.Code.Fornecedor
 {
     public class CadastroDeFornecedor
     {
-        internal static FornecedorModel RecuperarFornecedorPorID(decimal? IdFor)
+        internal static FornecedorModel RecuperarFornecedorPorID(decimal? IdFor, bool materializarListas = true)
         {
             if (IdFor.HasValue)
             {
                 FORNECEDOR usuarioDoBanco = ControleDeFornecedor.buscarProcedimentosMovimentoPorIdMovimento((int)IdFor);
 
-                return injetarEmUsuarioModel(usuarioDoBanco);
+                return InjetarEmUsuarioModel(usuarioDoBanco, materializarListas);
             }
             else
                 return null;
@@ -27,18 +31,18 @@ namespace MediCloud.Code.Fornecedor
 
         internal static List<FornecedorModel> RecuperarContadorPorTermo(string prefix)
         {
-            List<FORNECEDOR> contadoresEncontrados = ControleDeFornecedor.buscarCargosPorTermo(prefix);
+            List<FORNECEDOR> contadoresEncontrados = ControleDeFornecedor.buscarFornecedorPorTermo(prefix);
             List<FornecedorModel> resultados = new List<FornecedorModel>();
 
             contadoresEncontrados.ForEach(x =>
             {
-                resultados.Add(injetarEmUsuarioModel(x));
+                resultados.Add(InjetarEmUsuarioModel(x));
             });
 
             return resultados;
         }
 
-        public static FornecedorModel injetarEmUsuarioModel(FORNECEDOR x)
+        public static FornecedorModel InjetarEmUsuarioModel(FORNECEDOR x, bool materializarListas = true)
         {
             if (x == null)
                 return null;
@@ -53,21 +57,141 @@ namespace MediCloud.Code.Fornecedor
                     IdFornecedor = (int)x.IDFOR,
                     NomeFantasia = x.NOMEFANTASIA,
                     RazaoSocial = x.RAZAOSOCIAL,
-                    TipoConta = tipoContaEnumParaString(x.TIPOCONTA)
+                    TipoConta = tipoContaStringParaEnum(x.TIPOCONTA),
+
+                    ContatosFornecedor = materializarListas ? CadastroDeContato.RecuperarListaDeContatoFornecedorPorIdFornecedor((int)x.IDFOR) : new List<ContatoFornecedorModel>(),
+                    ProcedimentosFornecedor = materializarListas ? RecuperarProcedimentosDeFornecedor((int)x.IDFOR) : new List<FornecedorProcedimento>()
                 };
         }
 
-        private static EnumFornecedor.TipoContaFornecedor tipoContaEnumParaString(string X)
+        private static List<FornecedorProcedimento> RecuperarProcedimentosDeFornecedor(int IdFor)
+        {
+            if (IdFor != 0)
+            {
+                List<FORNECEDORXPROCEDIMENTO> usuarioencontrado = ControleDeFornecedor.recuperarProcedimentosDeFornecedor(IdFor);
+                return injetarEmFornecedorProcedimentoModel(usuarioencontrado);
+            }
+            else
+                return null;
+        }
+
+        private static List<FornecedorProcedimento> injetarEmFornecedorProcedimentoModel(List<FORNECEDORXPROCEDIMENTO> usuarioencontrado)
+        { 
+            List<FornecedorProcedimento> listaTratada = new List<FornecedorProcedimento>();
+
+            usuarioencontrado.ForEach(x => 
+            {
+                listaTratada.Add(injetarEmFornecedorProcedimento(x));
+            });
+
+            return listaTratada;
+        }
+
+        private static FornecedorProcedimento injetarEmFornecedorProcedimento(FORNECEDORXPROCEDIMENTO x)
+        {
+            if (x == null)
+                return null;
+            else
+                return new FornecedorProcedimento()
+                {
+                    Fornecedor = RecuperarFornecedorPorID(x.FORNECEDOR.IDFOR, false),
+                    Procedimento = CadastroDeProcedimentos.RecuperarProcedimentoPorID((int)x.PROCEDIMENTO.IDPRO),
+                    Valor = x.CUSTO
+                };
+        }
+
+        internal static List<FornecedorModel> BuscarFornecedor(FormCollection form)
+        {
+            string termo = form["keywords"];
+            List<FornecedorModel> listaDeModels = new List<FornecedorModel>();
+
+            List<FORNECEDOR> usuarioDoBanco = ControleDeFornecedor.buscarFornecedorPorTermo(termo);
+
+            usuarioDoBanco.ForEach(x =>
+            {
+                listaDeModels.Add(InjetarEmUsuarioModel(x, false));
+            });
+
+            return listaDeModels;
+        }
+
+        private static string tipoContaEnumParaString(EnumFornecedor.TipoContaFornecedor X)
         {
             switch (X)
             {
-                case "p":
+                case EnumFornecedor.TipoContaFornecedor.Poupanca:
+                    return "P";
+                case EnumFornecedor.TipoContaFornecedor.Corrente:
+                    return "C";
+                default:
+                    return null;
+            }
+        }
+
+        private static EnumFornecedor.TipoContaFornecedor tipoContaStringParaEnum(string X)
+        {
+            switch (X)
+            {
+                case "P":
                     return EnumFornecedor.TipoContaFornecedor.Poupanca;
                 case "C":
                     return EnumFornecedor.TipoContaFornecedor.Corrente;
                 default:
                     return EnumFornecedor.TipoContaFornecedor.vazio;
             }
+        }
+
+        internal static void DeletarFornecedor(FornecedorController fornecedorController, int codigoFornecedor)
+        {
+            ControleDeFornecedor.DeletarFornecedor(codigoFornecedor);
+        }
+
+        internal static FornecedorModel SalvarFornecedor(FormCollection form)
+        {
+            FornecedorModel fornecedorModel = InjetarEmUsuarioModel(form);
+            fornecedorModel.validar();
+
+            FORNECEDOR fornecedorDAO = InjetarEmUsuarioDAO(fornecedorModel);
+            fornecedorDAO = ControleDeFornecedor.SalvarFornecedor(fornecedorDAO);
+
+            fornecedorModel = InjetarEmUsuarioModel(fornecedorDAO);
+
+            return fornecedorModel;
+        }
+
+        private static FORNECEDOR InjetarEmUsuarioDAO(FornecedorModel x)
+        {
+            if (x == null)
+                return null;
+            else
+                return new FORNECEDOR()
+                {
+                    CNPJ = x.CNPJ,
+                    CTAAGENCIA = x.CodigoAgencia,
+                    CTABANCO = x.CodigoBanco,
+                    CTACORRENTE = x.ContaCorrente,
+                    IDFOR = x.IdFornecedor,
+                    NOMEFANTASIA = x.NomeFantasia,
+                    RAZAOSOCIAL = x.RazaoSocial,
+                    TIPOCONTA = tipoContaEnumParaString(x.TipoConta),
+                    TIPOFORNECEDOR = x.FornecedorDeProcedimentos
+                };
+        }
+
+        private static FornecedorModel InjetarEmUsuarioModel(FormCollection form)
+        {
+            return new FornecedorModel()
+            {
+                CNPJ = string.IsNullOrEmpty(form["CNPJ"]) ? null : Util.ApenasNumeros(form["CNPJ"]),
+                CodigoAgencia = string.IsNullOrEmpty(form["codigoAgencia"]) ? null : form["codigoAgencia"],
+                CodigoBanco = string.IsNullOrEmpty(form["codigoBanco"]) ? null : form["codigoBanco"],
+                ContaCorrente = string.IsNullOrEmpty(form["contaCorrente"]) ? null : form["contaCorrente"],
+                FornecedorDeProcedimentos = string.IsNullOrEmpty(form["fornecedorDeProcedimentos"]) ? false : Convert.ToBoolean(form["fornecedorDeProcedimentos"].ToLower() == "on"),
+                IdFornecedor = string.IsNullOrEmpty(form["codigoFornecedor"]) ? 0 : Convert.ToInt32(form["codigoFornecedor"]),
+                NomeFantasia = string.IsNullOrEmpty(form["nomeFantasia"]) ? null : form["nomeFantasia"],
+                RazaoSocial = string.IsNullOrEmpty(form["razaoSocial"]) ? null : form["razaoSocial"],
+                TipoConta = string.IsNullOrEmpty(form["tipoConta"]) ? EnumFornecedor.TipoContaFornecedor.vazio : (EnumFornecedor.TipoContaFornecedor)Convert.ToInt32(form["tipoConta"])
+            };
         }
     }
 }
