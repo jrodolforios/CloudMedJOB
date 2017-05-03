@@ -327,12 +327,36 @@
     </div>
 </div>
 
+<div id="confirmProcedimento" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="smaller lighter blue no-margin">Excluir proceidmento</h3>
+            </div>
+            <div class="modal-body">
+                Tem certeza que deseja excluir este procedimento?
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-primary" id="deleteProcedimento">
+                    <i class="ace-icon fa fa-check"></i>
+                    Sim
+                </button>
+                <button type="button" data-dismiss="modal" class="btn">
+                    <i class="ace-icon fa fa-times"></i>
+                    Não
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div id="detalhamentoContato" class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h3 class="smaller lighter blue no-margin">Contato de cliente</h3>
+                <h3 class="smaller lighter blue no-margin">Contato de fornecedor</h3>
             </div>
             <form method="post" id="formContatoCliente" class="form-horizontal" action="@Url.Content("~/Fornecedor/SalvarContato")">
                 <div class="modal-body">
@@ -434,6 +458,62 @@
     </div>
 </div>
 
+<div id="detalhamentoProcedimento" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="smaller lighter blue no-margin">Procedimento de fornecedor</h3>
+            </div>
+            <form method="post" id="formContatoCliente" class="form-horizontal" action="@Url.Content("~/Fornecedor/SalvarProcedimento")">
+                <div class="modal-body">
+                    <input type="hidden" id="codigoContato" name="codigoProcedimento" value="0" />
+                    <input type="hidden" id="codigoFornecedorContato" name="codigoFornecedorProcedimento" value="@Html.ValueFor(x => x.IdFornecedor)" />
+
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Procedimento  &nbsp;<span class="badge badge-important mail-tag"></span></label>
+
+                        <div class="col-sm-8">
+                            <input type="hidden" name="idProcedimento" id="idProcedimento" value="" />
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <i class="ace-icon fa fa-search"></i>
+                                </span>
+                                <input class="col-xs-12 col-sm-6" type="text" id="procedimento" name="procedimento" placeholder="Digite o procedimento" value="" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Valor </label>
+
+                        <div class="col-sm-8">
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    R$
+                                </span>
+                                <input class="col-xs-12 col-sm-5" type="number" step="0.01" id="valorProcedimento" name="valorProcedimento" placeholder="Valor" value="" />
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary" id="salvarContato">
+                        <i class="ace-icon fa fa-check"></i>
+                        Salvar
+                    </button>
+                    <button type="button" data-dismiss="modal" class="btn">
+                        <i class="ace-icon fa fa-times"></i>
+                        Cancelar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
 
 <script src="/assets/js/jquery-ui.min.js"></script>
 <script src="/assets/js/bootstrap-datepicker.min.js"></script>
@@ -450,6 +530,10 @@
         confirmDeleteModalContato(codigo);
     }
 
+    function excluirProcedimento(codigo) {
+        confirmDeleteModalProcedimento(codigo);
+    }
+
     function confirmDeleteModalContato(codigo) {
         $('#confirmContato').modal({
             backdrop: 'static',
@@ -457,6 +541,16 @@
         })
             .one('click', '#deleteContato', function () {
                 deletarContato(codigo);
+            });
+    }
+
+    function confirmDeleteModalProcedimento(codigo) {
+        $('#confirmContato').modal({
+            backdrop: 'static',
+            keyboard: false
+        })
+            .one('click', '#deleteContato', function () {
+                deletarProcedimento(codigo);
             });
     }
 
@@ -482,6 +576,36 @@
                     $("#email").attr('value', data.Email);
                     $("#dataNascimento").attr('value', toDateFromJson(data.DataNascimento));
                     $("#observacoesContato").val(data.Observacao);
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    $('#usuarioAlerts').html('<div class="alert alert-danger"><a class="close" data-dismiss="alert">×</a><span>Ops! Não foi possível detalhar este registro no servidor. Contate-nos para que possamos te ajudar melhor.</span></div>')
+                }
+            });
+        }
+    }
+
+    function detalhamentoDoProcedimento(codigo) {
+        $('#detalhamentoProcedimento').modal({
+            backdrop: 'static',
+            keyboard: false
+        })
+
+        limparComponentesFornecedor();
+        if (codigo > 0) {
+            $.ajax({
+                url: '/Fornecedor/DetalharProcedimentoFornecedor?codigoDoProcedimentoFornecedor=' + codigo + "&codigoFornecedor=" + @Html.ValueFor(x => x.IdFornecedor),
+                type: "post",
+                cache: false,
+                success: function (data) {
+                    $("#procedimento").attr('value', data.Procedimento.Nome);
+                    $("#idProcedimento").attr('value', data.Procedimento.IdProcedimento);
+                    $("#valorProcedimento").attr('value', data.Valor);
+
+                    $("#codigoProcedimento").attr('value', data.Procedimento.IdProcedimento);
+
+                    $("#procedimento").attr("readonly", true);
+                    $("#idProcedimento").attr("readonly", true);
+                    $("#codigoProcedimento").attr("readonly", true);
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
                     $('#usuarioAlerts').html('<div class="alert alert-danger"><a class="close" data-dismiss="alert">×</a><span>Ops! Não foi possível detalhar este registro no servidor. Contate-nos para que possamos te ajudar melhor.</span></div>')
@@ -524,9 +648,43 @@
         $("#observacoesContato").val('');
     }
 
+    function limparComponentesFornecedor() {
+        $("#procedimento").attr('value', '');
+        $("#procedimento").attr("readonly", false);
+
+        $("#idProcedimento").attr('value', '0');
+        $("#idProcedimento").attr("readonly", false);
+
+        $("#valorProcedimento").attr('value', '0');
+
+        $("#codigoProcedimento").attr('value', '0');
+        $("#codigoProcedimento").attr("readonly", false);
+    }
+
     function deletarContato(codigo) {
         $.ajax({
             url: '/Contato/DeletarContatoFornecedor?codigoDoContatoFornecedor=' + codigo,
+            type: "post",
+            cache: false,
+            success: function (savingStatus) {
+                var tipoAlert;
+                if (savingStatus.acaoBemSucedida) {
+                    tipoAlert = 'alert-success';
+                    $("#" + codigo).remove();
+                }
+                else
+                    tipoAlert = 'alert-danger';
+                $('#usuarioAlerts').html('<div class="alert ' + tipoAlert + '"><a class="close" data-dismiss="alert">×</a><span>' + savingStatus.mensagem + '</span></div>');
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                $('#usuarioAlerts').html('<div class="alert alert-danger"><a class="close" data-dismiss="alert">×</a><span>Ops! Não foi possível deletar este registro no servidor. Contate-nos para que possamos te ajudar melhor.</span></div>')
+            }
+        });
+    }
+
+    function deletarProcedimento(codigo) {
+        $.ajax({
+            url: '/Fornecedor/DeletarProcedimentoFornecedor?codigoDoProcedimentoFornecedor=' + codigo + "&codigoFornecedor=" + @Html.ValueFor(x => x.IdFornecedor),
             type: "post",
             cache: false,
             success: function (savingStatus) {
@@ -600,4 +758,33 @@
     }
 
     $('#CNPJ').mask('99.999.999/9999-99');
+
+    $("#procedimento").autocomplete({
+        source: function (request, response) {
+            $.ajax({
+                url: "/Procedimento/BuscarProcedimentoAJAX",
+                type: "POST",
+                dataType: "json",
+                data: { Prefix: request.term },
+                success: function (data) {
+                    response($.map(data, function (item) {
+                        return { label: item.Name, value: item.Name, Id: item.Id, Value: item.Value };
+                    }))
+                }
+            })
+        },
+        select: function (event, ui) {
+            $('#idProcedimento').attr('value', ui.item.Id);
+            $('#procedimento').val(ui.item.label);
+            return false;
+        },
+        messages: {
+            noResults: "Sem resultados", results: ""
+        }
+    });
+    $('#procedimento').on('blur', function () {
+        if ($(this).val().length === 0) {  //check for no. of characters entered
+            $('#idProcedimento').attr('value', 0);  // clear the textbox
+        }
+    });
 </script>

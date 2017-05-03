@@ -140,7 +140,7 @@ namespace MediCloud.Controllers
             }
         }
 
-        public ActionResult ExcluirCargo(int codigoCargo)
+        public ActionResult ExcluirSetor(int codigoCargo)
         {
             SetorModel modelCargo = null;
 

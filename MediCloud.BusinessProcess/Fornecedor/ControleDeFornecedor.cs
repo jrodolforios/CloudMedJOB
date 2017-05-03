@@ -140,5 +140,82 @@ namespace MediCloud.BusinessProcess.Fornecedor
                 throw ex;
             }
         }
+
+        public static FORNECEDORXPROCEDIMENTO recuperarFornecedorProcedimentoPorID(int codigoDoProcedimentoFornecedor, int codigoFornecedor)
+        {
+            CloudMedContext contexto = new CloudMedContext();
+
+            try
+            {
+                if (contexto.FORNECEDORXPROCEDIMENTO.Any(x => x.PROCEDIMENTO.IDPRO == codigoDoProcedimentoFornecedor && x.FORNECEDOR.IDFOR == codigoFornecedor))
+                    return contexto.FORNECEDORXPROCEDIMENTO.First(x => x.PROCEDIMENTO.IDPRO == codigoDoProcedimentoFornecedor && x.FORNECEDOR.IDFOR == codigoFornecedor);
+                else
+                    return null;
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+                return new FORNECEDORXPROCEDIMENTO();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static void DeletarProcedimentoFornecedor(int codigoDoProcedimentoFornecedor, int codigoFornecedor)
+        {
+            CloudMedContext contexto = new CloudMedContext();
+
+            try
+            {
+                if (contexto.FORNECEDORXPROCEDIMENTO.Any(x => x.IDFOR == codigoFornecedor && x.IDPRO == codigoDoProcedimentoFornecedor))
+                    contexto.FORNECEDORXPROCEDIMENTO.Remove(contexto.FORNECEDORXPROCEDIMENTO.First(x => x.IDFOR == codigoFornecedor && x.IDPRO == codigoDoProcedimentoFornecedor));
+
+                contexto.SaveChanges();
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static FORNECEDORXPROCEDIMENTO SalvarFornecedorProcedimento(FORNECEDORXPROCEDIMENTO fornecedorDAO)
+        {
+            CloudMedContext contexto = new CloudMedContext();
+            FORNECEDORXPROCEDIMENTO fornecedorSalvo = new FORNECEDORXPROCEDIMENTO();
+
+            try
+            {
+
+                if (fornecedorDAO.IDFOR > 0 && fornecedorDAO.IDPRO  > 0 && contexto.FORNECEDORXPROCEDIMENTO.Any(x => x.IDPRO == fornecedorDAO.IDPRO && x.IDFOR == fornecedorDAO.IDFOR))
+                {
+                    fornecedorSalvo = contexto.FORNECEDORXPROCEDIMENTO.First(x => x.IDFOR == fornecedorDAO.IDFOR);
+
+                    fornecedorSalvo.CUSTO = fornecedorDAO.CUSTO;
+                }
+                else
+                {
+                    fornecedorSalvo = contexto.FORNECEDORXPROCEDIMENTO.Add(fornecedorDAO);
+                }
+
+                contexto.SaveChanges();
+                return fornecedorSalvo;
+
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+                return null;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

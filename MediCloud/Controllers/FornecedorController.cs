@@ -191,5 +191,79 @@ namespace MediCloud.Controllers
 
             return null;
         }
+
+        [HttpPost]
+        public ActionResult SalvarProcedimento(FormCollection form)
+        {
+            int codigoFornecedor = Convert.ToInt32(form["codigoFornecedorProcedimento"]);
+
+            try
+            {
+                base.EstahLogado();
+                ViewBag.Title = "Fornecedor";
+
+                FornecedorProcedimento model = CadastroDeFornecedor.salvarProcedimentoFornecedor(form);
+
+                base.FlashMessage("Procedimento cadastrado.", MessageType.Success);
+                Response.Redirect($"/Fornecedor/DetalhamentoFornecedor?codigoFornecedor={codigoFornecedor}");
+            }
+            catch (InvalidOperationException ex)
+            {
+                base.FlashMessage(ex.Message, MessageType.Error);
+                Response.Redirect($"/Fornecedor/DetalhamentoFornecedor?codigoFornecedor={codigoFornecedor}");
+            }
+            catch (Exception ex)
+            {
+                base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
+                Response.Redirect($"/Fornecedor/DetalhamentoFornecedor?codigoFornecedor={codigoFornecedor}");
+            }
+
+            return null;
+        }
+
+        [HttpPost]
+        public JsonResult DetalharProcedimentoFornecedor(int codigoDoProcedimentoFornecedor, int codigoFornecedor)
+        {
+            try
+            {
+                FornecedorProcedimento contadoresEncontrados = CadastroDeFornecedor.recuperarFornecedorProcedimentoPorID(codigoDoProcedimentoFornecedor, codigoFornecedor);
+
+
+                return Json(contadoresEncontrados, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                ResultadoAjaxGenericoModel resultado = new ResultadoAjaxGenericoModel();
+
+                resultado.mensagem = Constantes.MENSAGEM_GENERICA_DE_ERRO;
+                resultado.acaoBemSucedida = false;
+
+                return Json(resultado, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpPost]
+        public JsonResult DeletarProcedimentoFornecedor(int codigoDoProcedimentoFornecedor, int codigoFornecedor)
+        {
+            ResultadoAjaxGenericoModel resultado = new ResultadoAjaxGenericoModel();
+            try
+            {
+                base.EstahLogado();
+
+                CadastroDeFornecedor.DeletarProcedimentoFornecedor(codigoDoProcedimentoFornecedor, codigoFornecedor);
+
+                resultado.mensagem = "Procedimento excluído.";
+                resultado.acaoBemSucedida = true;
+
+                return Json(resultado, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                resultado.mensagem = Constantes.MENSAGEM_GENERICA_DE_ERRO;
+                resultado.acaoBemSucedida = false;
+
+                return Json(resultado, JsonRequestBehavior.AllowGet);
+            }
+        }
     }
 }
