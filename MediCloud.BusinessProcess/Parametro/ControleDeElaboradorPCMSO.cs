@@ -40,7 +40,10 @@ namespace MediCloud.BusinessProcess.Parametro
 
             try
             {
-                return contexto.EPCMSO.First(x => x.IDEPCMSO == v);
+                if (contexto.EPCMSO.Any(x => x.IDEPCMSO == v))
+                    return contexto.EPCMSO.First(x => x.IDEPCMSO == v);
+                else
+                    return null;
             }
             catch (DbEntityValidationException ex)
             {

@@ -34,5 +34,16 @@ namespace MediCloud.Code.Parametro
 
             return resultados;
         }
+
+        internal static ElaboradorPPRAModel BuscarElaboradorPorID(decimal? idEPPRA)
+        {
+            if (idEPPRA != 0)
+            {
+                EPPRA elaboradorEncontrado = ControleDeElaboradorPPRA.BuscarElaboradorPorID(idEPPRA.HasValue ? (int)idEPPRA.Value : 0);
+                return injetarEmUsuarioModel(elaboradorEncontrado);
+            }
+            else
+                return null;
+        }
     }
 }

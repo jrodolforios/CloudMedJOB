@@ -179,6 +179,7 @@
     <Compile Include="Code\Clientes\CadastroDeProcedimentosMovimento.cs" />
     <Compile Include="Code\Enum\EnumParametro.cs" />
     <Compile Include="Code\Parametro\CadastroDeCidade.cs" />
+    <Compile Include="Code\Parametro\CadastroDeDadosOcupacionais.cs" />
     <Compile Include="Code\Recomendacao\CadastroDeReferente.cs" />
     <Compile Include="Code\Constantes.cs" />
     <Compile Include="Code\ControleDeSessao.cs" />
@@ -249,6 +250,7 @@
     <Compile Include="Controllers\ClienteController.cs" />
     <Compile Include="Controllers\ContadorController.cs" />
     <Compile Include="Controllers\ContatoController.cs" />
+    <Compile Include="Controllers\DadosOcupacionaisController.cs" />
     <Compile Include="Controllers\ElaboradorPCMSOController.cs" />
     <Compile Include="Controllers\ElaboradorPPRAController.cs" />
     <Compile Include="Controllers\FornecedorController.cs" />
@@ -278,6 +280,7 @@
     <Compile Include="Models\Cliente\ProcedimentoMovimentoModel.cs" />
     <Compile Include="Models\Fornecedor\FornecedorProcedimento.cs" />
     <Compile Include="Models\Parametro\CidadeModel.cs" />
+    <Compile Include="Models\Parametro\DadosOcupacionaisModel.cs" />
     <Compile Include="Models\Recomendacao\ReferenteModel.cs" />
     <Compile Include="Models\Financeiro\FaturamentoModel.cs" />
     <Compile Include="Models\Financeiro\FormaPagamentoModel.cs" />
@@ -583,6 +586,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Cidade\index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\DadosOcupacionais\DetalhamentoDadosOcupacionais.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\DadosOcupacionais\index.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

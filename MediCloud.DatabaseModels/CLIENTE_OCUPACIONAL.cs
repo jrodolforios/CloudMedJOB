@@ -31,6 +31,7 @@ namespace MediCloud.DatabaseModels
         [Column(TypeName = "numeric")]
         public decimal? IDEPCMSO { get; set; }
 
+
         [Column(TypeName = "numeric")]
         public decimal? IDEPPRA { get; set; }
 

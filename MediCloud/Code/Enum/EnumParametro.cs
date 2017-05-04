@@ -38,5 +38,12 @@ namespace MediCloud.Code.Enum
             Sergipe             = 26,
             Tocantins           = 27
         }
+
+        public enum StatusPCMSO
+        {
+            Vazio = 0,
+            PCMSOCMT = 1,
+            PCMSOTerceiro = 2
+        }
     }
 }

@@ -36,5 +36,16 @@ namespace MediCloud.Code.Parametro
 
             return resultados;
         }
+
+        internal static ElaboradorPCMSOModel BuscarElaboradorPorID(decimal? idEPCMSO)
+        {
+            if (idEPCMSO != 0)
+            {
+                EPCMSO elaboradorEncontrado = ControleDeElaboradorPCMSO.BuscarElaboradorPorID(idEPCMSO.HasValue ? (int)idEPCMSO.Value : 0);
+                return injetarEmUsuarioModel(elaboradorEncontrado);
+            }
+            else
+                return null;
+        }
     }
 }
