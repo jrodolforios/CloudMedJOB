@@ -1,22 +1,23 @@
-﻿@model MediCloud.Models.Recomendacao.SetorModel
+﻿@model MediCloud.Models.Parametro.DadosOcupacionaisModel
     @{
-        string checkedInativo = string.Empty;
-        bool SetorNovo = true;
+        string checkedNaoDeseja = string.Empty;
+        bool DadosOcupacionaisNovo = true;
 
-        ViewBag.Title = "Setor";
+        ViewBag.Title = "DadosOcupacionais";
 
         if (Model != null)
         {
-            SetorNovo = false;
+            checkedNaoDeseja = Model.NaoDeseja ? "checked" : string.Empty;
+            DadosOcupacionaisNovo = false;
         }
     }
     <script src="/assets/js/jquery-2.1.4.min.js"></script>
     <div class="page-header">
         <h1>
-            Detalhamento de Setor
+            Detalhamento de DadosOcupacionais
             <small>
                 <i class="ace-icon fa fa-angle-double-right"></i>
-                Cadastro de Setor
+                Cadastro de DadosOcupacionais
             </small>
         </h1>
     </div><!-- /.page-header -->
@@ -41,8 +42,8 @@
                     </div>
 
                     <div class="space"></div>
-                    <form method="post" class="form-horizontal" action="@Url.Content("~/Setor/DetalhamentoSetor")">
-                        <input type="hidden" id="codigoSetor" name="codigoSetor" value="@Html.ValueFor(x => x.IdSetor)" />
+                    <form method="post" class="form-horizontal" action="@Url.Content("~/DadosOcupacionais/DetalhamentoDadosOcupacionais")">
+                        <input type="hidden" id="codigoDadosOcupacionais" name="codigoDadosOcupacionais" value="@Html.ValueFor(x => x.IdClienteOcupacional)" />
                         <div class="tabbable">
                             <ul class="nav nav-tabs padding-16">
                                 <li class="active">
@@ -55,27 +56,125 @@
                         </div>
                         <div class="tab-content profile-edit-tab-content">
                             <div id="edit-basic" class="tab-pane in active">
-                                <h4 class="header blue bolder smaller">Dados do Setor</h4>
-
-                                <div class="row">
+                                <h4 class="header blue bolder smaller">Dados ocupacionais</h4>
                                     <div class="vspace-12-sm"></div>
 
-                                    <div class="col-xs-12 col-sm-8">
-                                        <div class="form-group">
-                                            <label class="col-sm-4 control-label no-padding-right" for="form-field-username">ID</label>
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Cliente &nbsp;<span class="badge badge-important mail-tag"></span></label>
 
-                                            <div class="col-sm-8">
-                                                <input class="col-xs-12 col-sm-8 componenteFormulario" type="text" id="nomeCargo" readonly name="nomeCargo" placeholder="ID do setor" value="@Html.ValueFor(x => x.IdSetor)" />
+                                        <div class="col-sm-8">
+                                            <input type="hidden" name="idCliente" id="idCliente" value="@Html.ValueFor(x => x.Cliente.IdCliente)" />
+                                            <div class="input-group">
+                                                <span class="input-group-addon">
+                                                    <i class="ace-icon fa fa-search"></i>
+                                                </span>
+                                                <input class="col-xs-12 col-sm-6 componenteFormulario" type="text" id="cliente" name="cliente" placeholder="Digite o nome do cliente" value="@Html.ValueFor(x => x.Cliente.RazaoSocial)" />
                                             </div>
                                         </div>
+                                    </div>
 
-                                        <div class="form-group">
-                                            <label class="col-sm-4 control-label no-padding-right" for="form-field-username">Nome do Setor &nbsp;<span class="badge badge-important mail-tag"></span></label>
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Não Deseja</label>
 
-                                            <div class="col-sm-8">
-                                                <input class="col-xs-12 col-sm-8 componenteFormulario" type="text" id="nomeSetor" name="nomeSetor" placeholder="Nome do setor" value="@Html.ValueFor(x => x.NomeSetor)" />
+                                    <div class="col-sm-8 ">
+                                        <div class="checkbox">
+                                            <label>
+                                                <input name="naoDeseja" type="checkbox" class="ace" @checkedNaoDeseja />
+                                                <span class="lbl"> &nbsp;</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label no-padding-right" for="form-field-username">Código NEXO </label>
+
+                                    <div class="col-sm-8">
+                                        <input class="col-xs-12 col-sm-8 componenteFormulario" type="text" id="codigoNexo" name="codigoNexo" placeholder="login do usuário" value="@Html.ValueFor(x => x.CodigoNexo)" />
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label no-padding-right" for="form-field-date">Emissão</label>
+
+                                    <div class="col-sm-8">
+                                        <div class="input-medium">
+                                            <div class="input-group">
+                                                <input class="input-medium date-picker input-mask-date" id="emissao" name="emissao" type="text" data-date-format="dd/mm/yyyy" placeholder="dd/mm/yyyy" value="@Html.ValueFor(x => x.Emissao)" />
+                                                <span class="input-group-addon">
+                                                    <i class="ace-icon fa fa-calendar"></i>
+                                                </span>
                                             </div>
                                         </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label no-padding-right" for="form-field-date">Vencimento</label>
+
+                                    <div class="col-sm-8">
+                                        <div class="input-medium">
+                                            <div class="input-group">
+                                                <input class="input-medium date-picker input-mask-date" id="vencimento" name="vencimento" type="text" data-date-format="dd/mm/yyyy" placeholder="dd/mm/yyyy" value="@Html.ValueFor(x => x.Vencimento)" />
+                                                <span class="input-group-addon">
+                                                    <i class="ace-icon fa fa-calendar"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Elaborador (PCMSO) </label>
+
+                                    <div class="col-sm-8">
+                                        <input type="hidden" name="idElaboradorPCMSO" id="idElaboradorPCMSO" value="@Html.ValueFor(x => x.ElaboradorPCMSO.IdElaboradorPCMSO)" />
+                                        <div class="input-group">
+                                            <span class="input-group-addon">
+                                                <i class="ace-icon fa fa-search"></i>
+                                            </span>
+                                            <input class="col-xs-12 col-sm-6 componenteFormulario" type="text" id="elaboradorPCMSO" name="elaboradorPCMSO" placeholder="Digite o nome do Elaborador (PCMSO)" value="@Html.ValueFor(x => x.ElaboradorPCMSO.NomeElaboradorPCMSO)" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Elaborador (PPRA) </label>
+
+                                    <div class="col-sm-8">
+                                        <input type="hidden" name="idElaboradorPPRA" id="idElaboradorPPRA" value="@Html.ValueFor(x => x.ElaboradorPPRA.IdElaboradorPPRA)" />
+                                        <div class="input-group">
+                                            <span class="input-group-addon">
+                                                <i class="ace-icon fa fa-search"></i>
+                                            </span>
+                                            <input class="col-xs-12 col-sm-6 componenteFormulario" type="text" id="elaboradorPPRA" name="elaboradorPPRA" placeholder="Digite o nome do Elaborador (PPRA)" value="@Html.ValueFor(x => x.ElaboradorPPRA.NomeElaboradorDoPPRA)" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label no-padding-right" for="form-field-username">Status do PCMSO &nbsp;<span class="badge badge-important mail-tag"></span></label>
+
+                                    <div class="col-sm-8">
+                                        <select class="chosen-select form-control" id="tipoPCMSO" name="tipoPCMSO" data-placeholder="Selecione um...">
+                                            <option value="0">.:Selecione:.</option>
+                                            <option value="1">PCMSO do CMT</option>
+                                                <option value="2">PCMSO de terceiros</option>
+                                        </select>
+                                        <script type="text/javascript">
+                                            $('#tipoPCMSO').val('@(Model != null ? (int)Model.StatusPCMSOSel : 0)');
+                                        </script>
+
+                                    </div>
+                                </div>
+
+                                <h4 class="header blue bolder smaller">Observações</h4>
+                                <div class="vspace-12-sm"></div>
+
+                                <div class="form-group">
+
+                                    <div class="col-sm-12">
+                                        <textarea class="col-sm-12 componenteFormulario" id="observacoes" name="observacoes" placeholder="observações adicionais">@Html.ValueFor(x => x.Observacao)</textarea>
                                     </div>
                                 </div>
 
@@ -85,7 +184,7 @@
                                             <i class="ace-icon fa fa-check bigger-110"></i>
                                             Salvar
                                         </button>
-                                        @if (SetorNovo)
+                                        @if (DadosOcupacionaisNovo)
                                         {
                                             <span>&nbsp; &nbsp;</span>
                                             <button class="btn" type="reset" id="limparForm">
@@ -96,7 +195,7 @@
                                         else
                                         {
                                             <span>&nbsp; &nbsp;</span>
-                                            <a href="javascript:excluirSetor(@Model.IdSetor)" class="btn btn-danger" type="reset">
+                                            <a href="javascript:excluirDadosOcupacionais(@Model.IdClienteOcupacional)" class="btn btn-danger" type="reset">
                                                 <i class="ace-icon fa fa-times bigger-110"></i>
                                                 Excluir
                                             </a>
@@ -116,10 +215,10 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h3 class="smaller lighter blue no-margin">Excluir setor</h3>
+                    <h3 class="smaller lighter blue no-margin">Excluir dados ocupacionais</h3>
                 </div>
                 <div class="modal-body">
-                    Tem certeza que deseja excluir este setor?
+                    Tem certeza que deseja excluir este dados ocupacionais?
                 </div>
                 <div class="modal-footer">
                     <button type="button" data-dismiss="modal" class="btn btn-primary" id="delete">
@@ -141,7 +240,7 @@
     <script src="/assets/js/ace-elements.min.js"></script>
     <script src="/assets/js/ace.min.js"></script>
     <script type="text/javascript">
-        function excluirSetor(codigo) {
+        function excluirDadosOcupacionais(codigo) {
             confirmDeleteModal(codigo);
         }
 
@@ -151,7 +250,7 @@
                 keyboard: false
             })
                 .one('click', '#delete', function () {
-                    window.location = "/Setor/ExcluirSetor?codigoSetor=" + codigo;
+                    window.location = "/DadosOcupacionais/ExcluirDadosOcupacionais?codigoDadosOcupacionais=" + codigo;
                 });
         }
 
@@ -190,4 +289,101 @@
             $('div.progress-bar-success').attr("style", "width: " + count + '%');
             $('.formPercent').append(count + '% ');
         }
+
+        $("#cliente").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Cliente/BuscaClienteAJAX",
+                    type: "POST",
+                    dataType: "json",
+                    data: { Prefix: request.term },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return { label: item.Name, value: item.Name, Id: item.Id };
+                        }))
+
+                    }
+                })
+            },
+            select: function (event, ui) {
+                $('#idCliente').attr('value', ui.item.Id);
+                $('#cliente').val(ui.item.label);
+                return false;
+            },
+            messages: {
+                noResults: "Sem resultados", results: ""
+            }
+        });
+        $('#cliente').on('blur', function () {
+            if ($(this).val().length === 0) {  //check for no. of characters entered
+                $('#idCliente').attr('value', 0);  // clear the textbox
+            }
+        });
+
+        $("#elaboradorPCMSO").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/ElaboradorPCMSO/BuscaElaboradorAJAX",
+                    type: "POST",
+                    dataType: "json",
+                    data: { Prefix: request.term },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return { label: item.Name, value: item.Name, Id: item.Id };
+                        }))
+
+                    }
+                })
+            },
+            select: function (event, ui) {
+                $('#idElaboradorPCMSO').attr('value', ui.item.Id);
+                $('#elaboradorPCMSO').val(ui.item.label);
+                return false;
+            },
+            messages: {
+                noResults: "Sem resultados", results: ""
+            }
+        });
+        $('#elaboradorPCMSO').on('blur', function () {
+            if ($(this).val().length === 0) {  //check for no. of characters entered
+                $('#idElaboradorPCMSO').attr('value', 0);  // clear the textbox
+            }
+        });
+
+        $("#elaboradorPPRA").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/ElaboradorPPRA/BuscaElaboradorAJAX",
+                    type: "POST",
+                    dataType: "json",
+                    data: { Prefix: request.term },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return { label: item.Name, value: item.Name, Id: item.Id };
+                        }))
+
+                    }
+                })
+            },
+            select: function (event, ui) {
+                $('#idElaboradorPPRA').attr('value', ui.item.Id);
+                $('#elaboradorPPRA').val(ui.item.label);
+                return false;
+            },
+            messages: {
+                noResults: "Sem resultados", results: ""
+            }
+        });
+        $('#elaboradorPPRA').on('blur', function () {
+            if ($(this).val().length === 0) {  //check for no. of characters entered
+                $('#idElaboradorPPRA').attr('value', 0);  // clear the textbox
+            }
+        });
+
+
+        $('.date-picker').datepicker({
+            format: 'dd/mm/yyyy',
+            language: 'pt-BR',
+        });
+        $('.input-mask-date').mask('99/99/9999');
     </script>

@@ -10,6 +10,8 @@ namespace MediCloud.Models.Parametro
 {
     public class DadosOcupacionaisModel : IModel
     {
+        public int IdClienteOcupacional { get; set; }
+
         public ClienteModel Cliente { get; set; }
 
         public bool NaoDeseja { get; set; }

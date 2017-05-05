@@ -9,6 +9,10 @@ namespace MediCloud.DatabaseModels
     public partial class CLIENTE_OCUPACIONAL
     {
         [Key]
+        [Column(TypeName = "numeric")]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public decimal IDCLIOC { get; set; }
+
         [StringLength(1)]
         public string PCMSO { get; set; }
 

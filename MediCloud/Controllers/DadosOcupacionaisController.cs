@@ -63,7 +63,7 @@ namespace MediCloud.Controllers
             }
         }
 
-        public ActionResult ExcluirSetor(int codigoDadosOcupacionais)
+        public ActionResult ExcluirDadosOcupacionais(int codigoDadosOcupacionais)
         {
             DadosOcupacionaisModel modelCargo = null;
 
@@ -84,6 +84,53 @@ namespace MediCloud.Controllers
 
                 base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
                 return View(modelCargo);
+            }
+        }
+
+        public ActionResult DetalhamentoDadosOcupacionais(int? codigoDadosOcupacionais)
+        {
+            try
+            {
+                base.EstahLogado();
+                ViewBag.Title = "Dados Ocupacionais";
+
+                DadosOcupacionaisModel model = CadastroDeDadosOcupacionais.BuscarDadosOcupacionaisPorID(codigoDadosOcupacionais.HasValue ? codigoDadosOcupacionais.Value : 0);
+
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
+                return View();
+            }
+        }
+
+        [HttpPost]
+        public ActionResult DetalhamentoDadosOcupacionais(FormCollection form)
+        {
+            DadosOcupacionaisModel modelFuncionario = null;
+            try
+            {
+                base.EstahLogado();
+                ViewBag.Title = "Dados Ocupacionais";
+
+                modelFuncionario = CadastroDeDadosOcupacionais.SalvarDadosOcupacionais(form);
+
+                base.FlashMessage("Cargo cadastrado.", MessageType.Success);
+                return View(modelFuncionario);
+            }
+            catch (InvalidOperationException ex)
+            {
+                if (!string.IsNullOrEmpty(form["codigoDadosOcupacionais"]))
+                    modelFuncionario = CadastroDeDadosOcupacionais.BuscarDadosOcupacionaisPorID(Convert.ToInt32(form["codigoDadosOcupacionais"]));
+
+                base.FlashMessage(ex.Message, MessageType.Error);
+                return View(modelFuncionario);
+            }
+            catch (Exception ex)
+            {
+                base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
+                return View();
             }
         }
     }

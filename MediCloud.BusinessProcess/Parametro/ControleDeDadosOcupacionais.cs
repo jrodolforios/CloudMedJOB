@@ -39,8 +39,8 @@ namespace MediCloud.BusinessProcess.Parametro
             CloudMedContext contexto = new CloudMedContext();
             try
             {
-                if (contexto.CLIENTE_OCUPACIONAL.Any(x => x.IDCLI == codigoDoDadosOcupacionais))
-                    contexto.CLIENTE_OCUPACIONAL.Remove(contexto.CLIENTE_OCUPACIONAL.First(x => x.IDCLI == codigoDoDadosOcupacionais));
+                if (contexto.CLIENTE_OCUPACIONAL.Any(x => x.IDCLIOC == codigoDoDadosOcupacionais))
+                    contexto.CLIENTE_OCUPACIONAL.Remove(contexto.CLIENTE_OCUPACIONAL.First(x => x.IDCLIOC == codigoDoDadosOcupacionais));
 
                 contexto.SaveChanges();
             }
@@ -59,8 +59,8 @@ namespace MediCloud.BusinessProcess.Parametro
             CloudMedContext contexto = new CloudMedContext();
             try
             {
-                if (contexto.CLIENTE_OCUPACIONAL.Any(x => x.IDCLI == codigoDoDadosOcupacionais))
-                    return contexto.CLIENTE_OCUPACIONAL.First(x => x.IDCLI == codigoDoDadosOcupacionais);
+                if (contexto.CLIENTE_OCUPACIONAL.Any(x => x.IDCLIOC == codigoDoDadosOcupacionais))
+                    return contexto.CLIENTE_OCUPACIONAL.First(x => x.IDCLIOC == codigoDoDadosOcupacionais);
                 else
                     return null;
             }
@@ -73,6 +73,51 @@ namespace MediCloud.BusinessProcess.Parametro
                 throw ex;
             }
             return null;
+        }
+
+        public static CLIENTE_OCUPACIONAL SalvarDadosOcupacionais(CLIENTE_OCUPACIONAL dadosOcupacionaisDAO)
+        {
+            CloudMedContext contexto = new CloudMedContext();
+            CLIENTE_OCUPACIONAL dadosOcupacionaisSalvo = new CLIENTE_OCUPACIONAL();
+
+            try
+            {
+
+                if (dadosOcupacionaisDAO.IDCLIOC > 0)
+                {
+                    dadosOcupacionaisSalvo = contexto.CLIENTE_OCUPACIONAL.First(x => x.IDCLIOC == dadosOcupacionaisDAO.IDCLIOC);
+
+                    dadosOcupacionaisSalvo.CODNEXO = dadosOcupacionaisDAO.CODNEXO;
+                    dadosOcupacionaisSalvo.EMISSAO = dadosOcupacionaisDAO.EMISSAO;
+                    dadosOcupacionaisSalvo.IDEPCMSO = dadosOcupacionaisDAO.IDEPCMSO;
+                    dadosOcupacionaisSalvo.IDEPPRA = dadosOcupacionaisDAO.IDEPPRA;
+                    dadosOcupacionaisSalvo.NAODESEJA = dadosOcupacionaisDAO.NAODESEJA;
+                    dadosOcupacionaisSalvo.OBSERVACAO = dadosOcupacionaisDAO.OBSERVACAO;
+                    dadosOcupacionaisSalvo.PCMSO = dadosOcupacionaisDAO.PCMSO;
+                    dadosOcupacionaisSalvo.VENCIMENTO = dadosOcupacionaisDAO.VENCIMENTO;
+                    dadosOcupacionaisSalvo.IDCLI = dadosOcupacionaisDAO.IDCLI;
+                    
+                    
+                }
+                else
+                {
+
+                    dadosOcupacionaisSalvo = contexto.CLIENTE_OCUPACIONAL.Add(dadosOcupacionaisDAO);
+                }
+
+                contexto.SaveChanges();
+                return dadosOcupacionaisSalvo;
+
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+                return null;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }

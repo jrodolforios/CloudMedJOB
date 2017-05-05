@@ -48,7 +48,7 @@
                     break;
             }
 
-        <div class="col-xs-12" id="@item.Cliente.IdCliente">
+        <div class="col-xs-12" id="@item.IdClienteOcupacional">
             <div class="media search-media">
                 <div class="media-body">
                         <h4 class="media-heading">
@@ -60,11 +60,11 @@
                         <span class="blue bolder bigger-110">Ações</span>
 
                         <div class="action-buttons bigger-150">
-                            <a href="javascript:excluirDadosOcupacionais(@item.Cliente.IdCliente);">
+                            <a href="javascript:excluirDadosOcupacionais(@item.IdClienteOcupacional);">
                                 <i class="ace-icon fa fa-trash"></i>
                             </a>
                         </div>
-                        <a href="/DadosOcupacionais/DetalhamentoDadosOcupacionais?codigoDadosOcupacionais=@item.Cliente" class="search-btn-action btn btn-sm btn-block btn-info">Editar</a>
+                        <a href="/DadosOcupacionais/DetalhamentoDadosOcupacionais?codigoDadosOcupacionais=@item.IdClienteOcupacional" class="search-btn-action btn btn-sm btn-block btn-info">Editar</a>
                     </div>
                 </div>
             </div>
