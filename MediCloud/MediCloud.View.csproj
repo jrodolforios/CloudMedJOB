@@ -255,6 +255,7 @@
     <Compile Include="Controllers\ElaboradorPPRAController.cs" />
     <Compile Include="Controllers\FornecedorController.cs" />
     <Compile Include="Controllers\FuncionarioController.cs" />
+    <Compile Include="Controllers\GrupoDeProcedimentoController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LaudoAudioController.cs" />
     <Compile Include="Controllers\LaudoVisaoController.cs" />
@@ -592,6 +593,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\DadosOcupacionais\index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\GrupoDeProcedimento\DetalhamentoGrupoDeProcedimento.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\GrupoDeProcedimento\index.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

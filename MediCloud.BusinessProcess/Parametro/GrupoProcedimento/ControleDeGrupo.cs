@@ -30,5 +30,80 @@ namespace MediCloud.BusinessProcess.Parametro.GrupoProcedimento
                 throw ex;
             }
         }
+
+        public static void DeletarGrupo(int codigoDoGrupoProcedimento)
+        {
+            CloudMedContext contexto = new CloudMedContext();
+
+            try
+            {
+                if (contexto.PROCEDIMENTO_GRUPO.Any(x => x.IDGRUPRO == codigoDoGrupoProcedimento))
+                    contexto.PROCEDIMENTO_GRUPO.Remove(contexto.PROCEDIMENTO_GRUPO.First(x => x.IDGRUPRO == codigoDoGrupoProcedimento));
+
+                contexto.SaveChanges();
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static List<PROCEDIMENTO_GRUPO> RecuperarGrupoPorTermo(string termo)
+        {
+            CloudMedContext contexto = new CloudMedContext();
+            try
+            {
+                List<PROCEDIMENTO_GRUPO> grupo = contexto.PROCEDIMENTO_GRUPO.Where(x => x.GRUPOPROCEDIMENTO.Contains(termo)).ToList();
+
+                return grupo;
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return null;
+        }
+
+        public static PROCEDIMENTO_GRUPO SalvarGrupo(PROCEDIMENTO_GRUPO grupoDAO)
+        {
+            CloudMedContext contexto = new CloudMedContext();
+            PROCEDIMENTO_GRUPO grupoSalvo = new PROCEDIMENTO_GRUPO();
+
+            try
+            {
+
+                if (grupoDAO.IDGRUPRO > 0)
+                {
+                    grupoSalvo = contexto.PROCEDIMENTO_GRUPO.First(x => x.IDGRUPRO == grupoDAO.IDGRUPRO);
+
+                    grupoSalvo.GRUPOPROCEDIMENTO = grupoDAO.GRUPOPROCEDIMENTO;
+
+                }
+                else
+                {
+                    grupoSalvo = contexto.PROCEDIMENTO_GRUPO.Add(grupoDAO);
+                }
+
+                contexto.SaveChanges();
+                return grupoSalvo;
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+                return null;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }
