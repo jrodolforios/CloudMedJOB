@@ -1,0 +1,137 @@
+﻿using MediCloud.App_Code;
+using MediCloud.Code;
+using MediCloud.Code.Parametro.GrupoProcedimento;
+using MediCloud.Models.Parametro.GrupoProcedimento;
+using MediCloud.Models.Seguranca;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+
+namespace MediCloud.Controllers
+{
+    public class SubGrupoController : BaseController
+    {
+        // GET: SubGrupo
+        public ActionResult Index()
+        {
+            EstahLogado();
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult Index(FormCollection form)
+        {
+            try
+            {
+                base.EstahLogado();
+                ViewBag.Title = "Setores";
+
+                List<SubGrupoModel> model = CadastroDeSubGrupo.RecuperarSubGrupoPorTermo(form);
+
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
+                return View();
+            }
+        }
+
+        public ActionResult DetalhamentoSubGrupo(int? codigoSubGrupo)
+        {
+            try
+            {
+                base.EstahLogado();
+                ViewBag.Title = "Setor";
+
+                SubGrupoModel model = CadastroDeSubGrupo.GetSubGrupoPorID(codigoSubGrupo.HasValue ? codigoSubGrupo.Value : 0);
+
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
+                return View();
+            }
+        }
+
+        [HttpPost]
+        public ActionResult DetalhamentoSubGrupo(FormCollection form)
+        {
+            SubGrupoModel modelFuncionario = null;
+            try
+            {
+                base.EstahLogado();
+                ViewBag.Title = "Sub grupo";
+
+                modelFuncionario = CadastroDeSubGrupo.SalvarSubGrupo(form);
+
+                base.FlashMessage("SubGrupo cadastrado.", MessageType.Success);
+                return View(modelFuncionario);
+            }
+            catch (InvalidOperationException ex)
+            {
+                if (!string.IsNullOrEmpty(form["codigoSubGrupo"]))
+                    modelFuncionario = CadastroDeSubGrupo.GetSubGrupoPorID(Convert.ToInt32(form["codigoSubGrupo"]));
+
+                base.FlashMessage(ex.Message, MessageType.Error);
+                return View(modelFuncionario);
+            }
+            catch (Exception ex)
+            {
+                base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
+                return View();
+            }
+        }
+
+        [HttpPost]
+        public JsonResult DeletarSubGrupo(int codigoDoSubGrupo)
+        {
+            ResultadoAjaxGenericoModel resultado = new ResultadoAjaxGenericoModel();
+            try
+            {
+                base.EstahLogado();
+
+                CadastroDeSubGrupo.DeletarSubGrupo(this, codigoDoSubGrupo);
+
+                resultado.mensagem = "Subgrupo excluído.";
+                resultado.acaoBemSucedida = true;
+
+                return Json(resultado, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                resultado.mensagem = Constantes.MENSAGEM_GENERICA_DE_ERRO;
+                resultado.acaoBemSucedida = false;
+
+                return Json(resultado, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        public ActionResult ExcluirSubGrupo(int codigoSubGrupo)
+        {
+            SubGrupoModel modelCargo = null;
+
+            try
+            {
+                base.EstahLogado();
+                ViewBag.Title = "Subgrupo";
+
+                CadastroDeSubGrupo.DeletarSubGrupo(this, codigoSubGrupo);
+
+                base.FlashMessage("Subgrupo excluído.", MessageType.Success);
+
+                return View("Index");
+            }
+            catch (Exception ex)
+            {
+                modelCargo = CadastroDeSubGrupo.GetSubGrupoPorID(Convert.ToInt32(codigoSubGrupo));
+
+                base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
+                return View(modelCargo);
+            }
+        }
+    }
+}

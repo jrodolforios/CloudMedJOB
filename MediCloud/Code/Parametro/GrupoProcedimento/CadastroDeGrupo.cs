@@ -50,6 +50,20 @@ namespace MediCloud.Code.Parametro.GrupoProcedimento
             return listaDeModels;
         }
 
+        internal static List<GrupoModel> RecuperarGrupoPorTermo(string termo)
+        {
+            List<GrupoModel> listaDeModels = new List<GrupoModel>();
+
+            List<PROCEDIMENTO_GRUPO> usuarioDoBanco = ControleDeGrupo.RecuperarGrupoPorTermo(termo);
+
+            usuarioDoBanco.ForEach(x =>
+            {
+                listaDeModels.Add(injetarEmUsuarioModel(x));
+            });
+
+            return listaDeModels;
+        }
+
         public static GrupoModel injetarEmUsuarioModel(FormCollection x)
         {
             return new GrupoModel()

@@ -268,6 +268,7 @@
     <Compile Include="Controllers\RiscoNaturezaController.cs" />
     <Compile Include="Controllers\SegmentoController.cs" />
     <Compile Include="Controllers\SetorController.cs" />
+    <Compile Include="Controllers\SubGrupoController.cs" />
     <Compile Include="Controllers\TabelaDePrecoController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Global.asax.cs">
@@ -599,6 +600,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\GrupoDeProcedimento\index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\SubGrupo\DetalhamentoSubGrupo.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\SubGrupo\index.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
