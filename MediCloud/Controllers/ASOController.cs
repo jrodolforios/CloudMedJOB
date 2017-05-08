@@ -7,6 +7,7 @@ using MediCloud.Code.Recomendacao;
 using MediCloud.Models.Cliente;
 using MediCloud.Models.Financeiro;
 using MediCloud.Models.Parametro;
+using MediCloud.Models.Parametro.GrupoProcedimento;
 using MediCloud.Models.Recomendacao;
 using MediCloud.Models.Seguranca;
 using System;

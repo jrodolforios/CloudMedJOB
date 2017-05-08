@@ -301,7 +301,7 @@
     <Compile Include="Models\Recomendacao\RecomendacaoModel.cs" />
     <Compile Include="Models\Recomendacao\RiscoModel.cs" />
     <Compile Include="Models\Recomendacao\SetorModel.cs" />
-    <Compile Include="Models\Parametro\TabelaPrecoModel.cs" />
+    <Compile Include="Models\Parametro\GrupoProcedimento\TabelaPrecoModel.cs" />
     <Compile Include="Models\Financeiro\ContadorModel.cs" />
     <Compile Include="Models\Fornecedor\ContatoModel.cs" />
     <Compile Include="Models\Funcionario\FuncionarioModel.cs" />
@@ -519,7 +519,6 @@
     <Folder Include="Views\ElaboradorPPRA\" />
     <Folder Include="Views\Profissional\" />
     <Folder Include="Views\Segmento\" />
-    <Folder Include="Views\TabelaDePreco\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -611,6 +610,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Procedimento\DetalhamentoProcedimento.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\TabelaDePreco\DetalhamentoTabelaDePreco.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\TabelaDePreco\index.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

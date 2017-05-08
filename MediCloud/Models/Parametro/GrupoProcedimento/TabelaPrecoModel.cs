@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Web;
 
-namespace MediCloud.Models.Parametro
+namespace MediCloud.Models.Parametro.GrupoProcedimento
 {
     public class TabelaPrecoModel : IModel
     {

@@ -26,7 +26,7 @@ namespace MediCloud.Models.Financeiro
             if (string.IsNullOrEmpty(NomeFormaPagamento))
                 erros.Add("O campo \"Nome\" é de preenchimento obrigratório");
 
-            if (TipoPagamento == EnumFinanceiro.TipoPagamento.Nenhum)
+            if (TipoPagamento == EnumFinanceiro.TipoPagamento.Vazio)
                 erros.Add("O campo \"Tipo do pagamento\" é de preenchimento obrigratório");
 
 

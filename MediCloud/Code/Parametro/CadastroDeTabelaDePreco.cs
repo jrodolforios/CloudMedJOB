@@ -3,11 +3,14 @@ using MediCloud.BusinessProcess.Recomendacao;
 using MediCloud.Code.Enum;
 using MediCloud.DatabaseModels;
 using MediCloud.Models.Parametro;
+using MediCloud.Models.Parametro.GrupoProcedimento;
 using MediCloud.Models.Recomendacao;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
+using MediCloud.Controllers;
 
 namespace MediCloud.Code.Parametro
 {
@@ -17,11 +20,26 @@ namespace MediCloud.Code.Parametro
         {
             if (IdRef != 0)
             {
-                TABELA referenteEncontrado = ControleDeTabelaPreco.buscarSetorPorID(IdRef);
+                TABELA referenteEncontrado = ControleDeTabelaPreco.buscarTabelaPorID(IdRef);
                 return injetarEmUsuarioModel(referenteEncontrado);
             }
             else
                 return null;
+        }
+
+        internal static List<TabelaPrecoModel> RecuperarTabelaDePrecoPorTermo(FormCollection form)
+        {
+            string termo = form["keywords"];
+            List<TabelaPrecoModel> listaDeModels = new List<TabelaPrecoModel>();
+
+            List<TABELA> usuarioDoBanco = ControleDeTabelaPreco.buscarTabelaPorTermo(termo);
+
+            usuarioDoBanco.ForEach(x =>
+            {
+                listaDeModels.Add(injetarEmUsuarioModel(x));
+            });
+
+            return listaDeModels;
         }
 
         private static TabelaPrecoModel injetarEmUsuarioModel(TABELA referenteEncontrado)
@@ -40,15 +58,20 @@ namespace MediCloud.Code.Parametro
 
         private static EnumFinanceiro.TipoPagamento getEnumPorString(string TIpoPagamento)
         {
-            switch (TIpoPagamento.ToUpper())
+            switch (TIpoPagamento)
             {
                 case "V":
                     return EnumFinanceiro.TipoPagamento.AVista;
                 case "P":
                     return EnumFinanceiro.TipoPagamento.APrazo;
                 default:
-                    return EnumFinanceiro.TipoPagamento.Nenhum;
+                    return EnumFinanceiro.TipoPagamento.Vazio;
             }
+        }
+
+        internal static void DeletarTabelaDePreco(TabelaDePrecoController tabelaDePrecoController, int codigoTabelaDePreco)
+        {
+            ControleDeTabelaPreco.DeletarTabelaDePreco(codigoTabelaDePreco);
         }
 
         private static string getStringPorEnum(EnumFinanceiro.TipoPagamento TIpoPagamento)
@@ -92,5 +115,30 @@ namespace MediCloud.Code.Parametro
                     
                 };
         }
+
+        internal static TabelaPrecoModel SalvarTabela(FormCollection form)
+        {
+            TabelaPrecoModel usuarioModel = injetarEmUsuarioModel(form);
+            usuarioModel.validar();
+
+            TABELA tabelaDePrecoDAO = injetarEmUsuarioDAO(usuarioModel);
+            tabelaDePrecoDAO = ControleDeTabelaPreco.SalvarTabela(tabelaDePrecoDAO);
+
+            usuarioModel = injetarEmUsuarioModel(tabelaDePrecoDAO);
+
+            return usuarioModel;
+        }
+
+        private static TabelaPrecoModel injetarEmUsuarioModel(FormCollection form)
+        {
+            return new TabelaPrecoModel()
+            {
+                IdTabela = string.IsNullOrEmpty(form["idTabela"]) ? 0 : Convert.ToInt32(form["idTabela"]),
+                NomeTabela = string.IsNullOrEmpty(form["nomeTabela"]) ? null : form["nomeTabela"],
+                TipoPagamento = string.IsNullOrEmpty(form["tipoPagamento"]) ? EnumFinanceiro.TipoPagamento.Vazio : (EnumFinanceiro.TipoPagamento)Convert.ToInt32(form["tipoPagamento"]),
+                Status = true
+            };
+        }
+
     }
 }

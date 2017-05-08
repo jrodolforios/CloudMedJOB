@@ -9,9 +9,9 @@ namespace MediCloud.Code.Enum
     {
         public enum TipoPagamento
         {
-            Nenhum,
-            AVista,
-            APrazo
+            Vazio = 0,
+            AVista = 1,
+            APrazo = 2
         }
     }
 }

@@ -44,7 +44,7 @@ namespace MediCloud.Code.Financeiro
                 case "P":
                     return EnumFinanceiro.TipoPagamento.APrazo;
                 default:
-                    return EnumFinanceiro.TipoPagamento.Nenhum;
+                    return EnumFinanceiro.TipoPagamento.Vazio;
             }
         }
 
