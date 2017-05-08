@@ -31,7 +31,7 @@ namespace MediCloud.BusinessProcess.Parametro.GrupoProcedimento
             }
         }
 
-        public static List<PROCEDIMENTO> buscarCargosPorTermo(string prefix)
+        public static List<PROCEDIMENTO> buscarProcedimentoPorTermo(string prefix)
         {
             CloudMedContext contexto = new CloudMedContext();
 
@@ -89,6 +89,70 @@ namespace MediCloud.BusinessProcess.Parametro.GrupoProcedimento
             {
                 ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
                 return new List<PROCEDIMENTO>();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static PROCEDIMENTO SalvarProcedimento(PROCEDIMENTO procedimentoDAO)
+        {
+            CloudMedContext contexto = new CloudMedContext();
+            PROCEDIMENTO setorSalvo = new PROCEDIMENTO();
+
+            try
+            {
+
+                if (procedimentoDAO.IDPRO > 0)
+                {
+                    setorSalvo = contexto.PROCEDIMENTO.First(x => x.IDPRO == procedimentoDAO.IDPRO);
+
+                    setorSalvo.ABREVIADO = procedimentoDAO.ABREVIADO;
+                    setorSalvo.CODNEXO = procedimentoDAO.CODNEXO;
+                    setorSalvo.COMPLEMENTO = procedimentoDAO.COMPLEMENTO;
+                    setorSalvo.CONFIRMARAUTOMATICO = procedimentoDAO.CONFIRMARAUTOMATICO;
+                    setorSalvo.IDFOR = procedimentoDAO.IDFOR;
+                    setorSalvo.IDPRF = procedimentoDAO.IDPRF;
+                    setorSalvo.IDSUBGRUPRO = procedimentoDAO.IDSUBGRUPRO;
+                    setorSalvo.PROCEDIMENTO1 = procedimentoDAO.PROCEDIMENTO1;
+                    setorSalvo.ZERAAUTOMATICO = procedimentoDAO.ZERAAUTOMATICO;
+
+                }
+                else
+                {
+                    setorSalvo = contexto.PROCEDIMENTO.Add(procedimentoDAO);
+                }
+
+                contexto.SaveChanges();
+                return setorSalvo;
+
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+                return null;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static void DeletarProcedimento(int codigoProcedimento)
+        {
+            CloudMedContext contexto = new CloudMedContext();
+
+            try
+            {
+                if (contexto.PROCEDIMENTO.Any(x => x.IDPRO == codigoProcedimento))
+                    contexto.PROCEDIMENTO.Remove(contexto.PROCEDIMENTO.First(x => x.IDPRO == codigoProcedimento));
+
+                contexto.SaveChanges();
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
             }
             catch (Exception ex)
             {

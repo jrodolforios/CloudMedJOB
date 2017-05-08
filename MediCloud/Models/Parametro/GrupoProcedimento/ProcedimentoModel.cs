@@ -38,7 +38,7 @@ namespace MediCloud.Models.Parametro.GrupoProcedimento
             if (string.IsNullOrEmpty(Nome))
                 erros.Add("O campo \"Nome\" é de preenchimento obrigatório");
 
-            if (SubGrupo == null && SubGrupo.IdSubGrupo <= 0)
+            if (SubGrupo == null ||SubGrupo.IdSubGrupo <= 0)
                 erros.Add("O campo \"Subgrupo\" é de preenchimento obrigatório");
 
             if (erros.Any())

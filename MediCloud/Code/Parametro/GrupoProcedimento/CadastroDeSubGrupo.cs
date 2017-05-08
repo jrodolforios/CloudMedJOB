@@ -61,6 +61,20 @@ namespace MediCloud.Code.Parametro.GrupoProcedimento
             return listaDeModels;
         }
 
+        internal static List<SubGrupoModel> RecuperarSubGrupoPorTermo(string prefix)
+        {
+            List<SubGrupoModel> listaDeModels = new List<SubGrupoModel>();
+
+            List<PROCEDIMENTO_GRUPO_SUBGRUP> usuarioDoBanco = ControleDeSubGrupo.RecuperarSubGrupoPorTermo(prefix);
+
+            usuarioDoBanco.ForEach(x =>
+            {
+                listaDeModels.Add(injetarEmUsuarioModel(x));
+            });
+
+            return listaDeModels;
+        }
+
         internal static SubGrupoModel SalvarSubGrupo(FormCollection form)
         {
             SubGrupoModel usuarioModel = injetarEmUsuarioModel(form);

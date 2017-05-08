@@ -21,6 +21,120 @@ namespace MediCloud.Controllers
         }
 
         [HttpPost]
+        public ActionResult Index(FormCollection form)
+        {
+            try
+            {
+                base.EstahLogado();
+                ViewBag.Title = "Setores";
+
+                List<ProcedimentoModel> model = CadastroDeProcedimentos.buscarProcedimento(form);
+
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
+                return View();
+            }
+        }
+
+        public ActionResult DetalhamentoProcedimento(int? codigoProcedimento)
+        {
+            try
+            {
+                base.EstahLogado();
+                ViewBag.Title = "Setor";
+
+                ProcedimentoModel model = CadastroDeProcedimentos.RecuperarProcedimentoPorID(codigoProcedimento.HasValue ? codigoProcedimento.Value : 0);
+
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
+                return View();
+            }
+        }
+
+        [HttpPost]
+        public ActionResult DetalhamentoProcedimento(FormCollection form)
+        {
+            ProcedimentoModel modelProcedimento = null;
+            try
+            {
+                base.EstahLogado();
+                ViewBag.Title = "Procedimento";
+
+                modelProcedimento = CadastroDeProcedimentos.SalvarProcedimento(form);
+
+                base.FlashMessage("Procedimento cadastrado.", MessageType.Success);
+                return View(modelProcedimento);
+            }
+            catch (InvalidOperationException ex)
+            {
+                if (!string.IsNullOrEmpty(form["codigoProcedimento"]))
+                    modelProcedimento = CadastroDeProcedimentos.RecuperarProcedimentoPorID(Convert.ToInt32(form["codigoProcedimento"]));
+
+                base.FlashMessage(ex.Message, MessageType.Error);
+                return View(modelProcedimento);
+            }
+            catch (Exception ex)
+            {
+                base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
+                return View();
+            }
+        }
+
+        [HttpPost]
+        public JsonResult DeletarProcedimento(int codigoDoProcedimento)
+        {
+            ResultadoAjaxGenericoModel resultado = new ResultadoAjaxGenericoModel();
+            try
+            {
+                base.EstahLogado();
+
+                CadastroDeProcedimentos.DeletarProcedimento(this, codigoDoProcedimento);
+
+                resultado.mensagem = "Procedimento excluído.";
+                resultado.acaoBemSucedida = true;
+
+                return Json(resultado, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                resultado.mensagem = Constantes.MENSAGEM_GENERICA_DE_ERRO;
+                resultado.acaoBemSucedida = false;
+
+                return Json(resultado, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        public ActionResult ExcluirProcedimento(int codigoProcedimento)
+        {
+            ProcedimentoModel modelCargo = null;
+
+            try
+            {
+                base.EstahLogado();
+                ViewBag.Title = "Procedimentos";
+
+                CadastroDeProcedimentos.DeletarProcedimento(this, codigoProcedimento);
+
+                base.FlashMessage("Procedimento excluído.", MessageType.Success);
+
+                return View("Index");
+            }
+            catch (Exception ex)
+            {
+                modelCargo = CadastroDeProcedimentos.RecuperarProcedimentoPorID(Convert.ToInt32(codigoProcedimento));
+
+                base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
+                return View(modelCargo);
+            }
+        }
+
+        [HttpPost]
         public JsonResult BuscarProcedimentoByFornecedorAJAX(string Prefix, int Fornecedor)
         {
             List<ProcedimentoModel> contadoresEncontrados = CadastroDeProcedimentos.RecuperarContadorPorTermoEFornecedor(Prefix, Fornecedor);
@@ -51,7 +165,7 @@ namespace MediCloud.Controllers
         [HttpPost]
         public JsonResult BuscarProcedimentoAJAX(string Prefix)
         {
-            List<ProcedimentoModel> contadoresEncontrados = CadastroDeProcedimentos.RecuperarContadorPorTermo(Prefix);
+            List<ProcedimentoModel> contadoresEncontrados = CadastroDeProcedimentos.RecuperarProcedimentoPorTermo(Prefix);
             List<AutoCompleteProcendimentoMovimentoModel> ObjList = new List<AutoCompleteProcendimentoMovimentoModel>();
 
             try

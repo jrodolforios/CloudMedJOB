@@ -517,7 +517,6 @@
     <Folder Include="Views\Contato\" />
     <Folder Include="Views\ElaboradorPCMSO\" />
     <Folder Include="Views\ElaboradorPPRA\" />
-    <Folder Include="Views\Procedimento\" />
     <Folder Include="Views\Profissional\" />
     <Folder Include="Views\Segmento\" />
     <Folder Include="Views\TabelaDePreco\" />
@@ -606,6 +605,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\SubGrupo\index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Procedimento\index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Procedimento\DetalhamentoProcedimento.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
