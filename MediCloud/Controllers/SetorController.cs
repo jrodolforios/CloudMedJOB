@@ -140,7 +140,7 @@ namespace MediCloud.Controllers
             }
         }
 
-        public ActionResult ExcluirSetor(int codigoCargo)
+        public ActionResult ExcluirSetor(int codigoSetor)
         {
             SetorModel modelCargo = null;
 
@@ -149,7 +149,7 @@ namespace MediCloud.Controllers
                 base.EstahLogado();
                 ViewBag.Title = "Setor";
 
-                CadastroDeSetor.DeletarSetor(this, codigoCargo);
+                CadastroDeSetor.DeletarSetor(this, codigoSetor);
 
                 base.FlashMessage("Setor excluído.", MessageType.Success);
 
@@ -157,7 +157,7 @@ namespace MediCloud.Controllers
             }
             catch (Exception ex)
             {
-                modelCargo = CadastroDeSetor.buscarSetorPorID(Convert.ToInt32(codigoCargo));
+                modelCargo = CadastroDeSetor.buscarSetorPorID(Convert.ToInt32(codigoSetor));
 
                 base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
                 return View(modelCargo);

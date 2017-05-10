@@ -52,6 +52,7 @@
     <Compile Include="Cliente\ControleDeProcedimentosMovimento.cs" />
     <Compile Include="Parametro\ControleDeCidade.cs" />
     <Compile Include="Parametro\ControleDeDadosOcupacionais.cs" />
+    <Compile Include="Parametro\ControleDeFechamento.cs" />
     <Compile Include="Recomendacao\ControleDeReferente.cs" />
     <Compile Include="Cliente\Reports\ASOReports.cs" />
     <Compile Include="Financeiro\ControleDeFaturamento.cs" />

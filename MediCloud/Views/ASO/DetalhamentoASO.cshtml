@@ -110,23 +110,23 @@
                     <div class="tab-content profile-edit-tab-content">
                         <div id="edit-basic" class="tab-pane in active fade">
                             <div class="action-buttons bigger-150">
-                                <a href="javascript:imprimirASO(@Model.IdASO);" class="tooltipASO" title="Imprimir (C/ Médico Coord)">
+                                <a href="javascript:imprimirASO(@Html.ValueFor(x => x.IdASO));" class="tooltipASO" title="Imprimir (C/ Médico Coord)">
                                     <i class="ace-icon purple fa fa-file-text-o"></i>
                                 </a>
                                 &nbsp;&nbsp;
-                                <a href="javascript:imprimirASOSemMedCoord(@Model.IdASO);" class="tooltipASO" title="Imprimir (S/ Médico Coord)">
+                                <a href="javascript:imprimirASOSemMedCoord(@Html.ValueFor(x => x.IdASO));" class="tooltipASO" title="Imprimir (S/ Médico Coord)">
                                     <i class="ace-icon purple fa fa-file-o"></i>
                                 </a>
                                 &nbsp;&nbsp;
-                                <a href="javascript:GerarRecibo(@Model.IdASO);" class="tooltipASO" title="Gerar recibo">
+                                <a href="javascript:GerarRecibo(@Html.ValueFor(x => x.IdASO));" class="tooltipASO" title="Gerar recibo">
                                     <i class="ace-icon orange fa fa-file-excel-o"></i>
                                 </a>
                                 &nbsp;&nbsp;
-                                <a href="javascript:GerarListaDeProcedimentos(@Model.IdASO);" class="tooltipASO" title="Lista de procedimentos">
+                                <a href="javascript:GerarListaDeProcedimentos(@Html.ValueFor(x => x.IdASO));" class="tooltipASO" title="Lista de procedimentos">
                                     <i class="ace-icon blue fa fa-list"></i>
                                 </a>
                                 &nbsp;&nbsp;
-                                <a href="javascript:GerarFichaClinica(@Model.IdASO);" class="tooltipASO" title="Ficha Clínica">
+                                <a href="javascript:GerarFichaClinica(@Html.ValueFor(x => x.IdASO));" class="tooltipASO" title="Ficha Clínica">
                                     <i class="ace-icon green fa fa-clipboard"></i>
                                 </a>
                             </div>

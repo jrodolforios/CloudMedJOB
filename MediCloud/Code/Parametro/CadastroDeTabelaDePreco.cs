@@ -11,6 +11,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using MediCloud.Controllers;
+using MediCloud.Code.Fornecedor;
+using MediCloud.Code.Parametro.GrupoProcedimento;
 
 namespace MediCloud.Code.Parametro
 {
@@ -36,23 +38,51 @@ namespace MediCloud.Code.Parametro
 
             usuarioDoBanco.ForEach(x =>
             {
-                listaDeModels.Add(injetarEmUsuarioModel(x));
+                listaDeModels.Add(injetarEmUsuarioModel(x, false));
             });
 
             return listaDeModels;
         }
 
-        private static TabelaPrecoModel injetarEmUsuarioModel(TABELA referenteEncontrado)
+        private static TabelaPrecoModel injetarEmUsuarioModel(TABELA tabelaEncontrada, bool materializarClasses = true)
         {
-            if (referenteEncontrado == null)
+            if (tabelaEncontrada == null)
                 return null;
             else
                 return new TabelaPrecoModel()
                 {
-                    IdTabela = (int)referenteEncontrado.IDTAB,
-                    NomeTabela = referenteEncontrado.TABELA1,
-                    TipoPagamento = getEnumPorString(referenteEncontrado.TIPOPAGTO),
-                    Status = referenteEncontrado.STATUS == "A"                    
+                    IdTabela = (int)tabelaEncontrada.IDTAB,
+                    NomeTabela = tabelaEncontrada.TABELA1,
+                    TipoPagamento = getEnumPorString(tabelaEncontrada.TIPOPAGTO),
+                    Status = tabelaEncontrada.STATUS == "A",
+                };
+        }
+
+        private static List<TabelaFornecedorModel> BuscarFornecedorDeTabela(decimal idTab)
+        {
+            List<TabelaFornecedorModel> listaDeModels = new List<TabelaFornecedorModel>();
+
+            List<TABELAXFORNECEDORXPROCEDIMENTO> tabelaFornecedorEncontrado = ControleDeTabelaPreco.buscarTabelaFornecedorPorIDTabela(idTab);
+
+            tabelaFornecedorEncontrado.ForEach(x =>
+            {
+                listaDeModels.Add(injetarEmTabelaFornecedorModel(x));
+            });
+
+            return listaDeModels;
+        }
+
+        private static TabelaFornecedorModel injetarEmTabelaFornecedorModel(TABELAXFORNECEDORXPROCEDIMENTO x, bool carregarClasses = false)
+        {
+            if (x == null)
+                return null;
+            else
+                return new TabelaFornecedorModel()
+                {
+                    Faturamento = x.FATURAMENTO,
+                    Fornecedor = CadastroDeFornecedor.RecuperarFornecedorPorID(x.IDFOR),
+                    Procedimento = CadastroDeProcedimentos.RecuperarProcedimentoPorID((int)x.IDPRO),
+                    Tabela = carregarClasses ? RecuperarTabelaDePrecoPorID((int)x.IDTAB) : new TabelaPrecoModel() { IdTabela = (int)x.IDTAB }
                 };
         }
 
@@ -95,7 +125,7 @@ namespace MediCloud.Code.Parametro
 
             referenteEncontrado.ForEach(x =>
             {
-                encontrados.Add(injetarEmUsuarioModel(x));
+                encontrados.Add(injetarEmUsuarioModel(x, false));
             });
 
             return encontrados;
