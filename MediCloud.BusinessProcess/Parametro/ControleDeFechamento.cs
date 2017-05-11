@@ -73,5 +73,41 @@ namespace MediCloud.BusinessProcess.Parametro
                 throw ex;
             }
         }
+
+        public static MOVIMENTO_FECHAMENTO SalvarFechamento(MOVIMENTO_FECHAMENTO fechamentoDAO)
+        {
+            CloudMedContext contexto = new CloudMedContext();
+            MOVIMENTO_FECHAMENTO setorSalvo = new MOVIMENTO_FECHAMENTO();
+
+            try
+            {
+
+                if (fechamentoDAO.IDFEC > 0)
+                {
+                    setorSalvo = contexto.MOVIMENTO_FECHAMENTO.First(x => x.IDFEC == fechamentoDAO.IDFEC);
+
+                    setorSalvo.DIA = fechamentoDAO.DIA;
+                    setorSalvo.PERIODO = fechamentoDAO.PERIODO;
+                    setorSalvo.PRAZOBOLETO = fechamentoDAO.PRAZOBOLETO;
+                }
+                else
+                {
+                    setorSalvo = contexto.MOVIMENTO_FECHAMENTO.Add(fechamentoDAO);
+                }
+
+                contexto.SaveChanges();
+                return setorSalvo;
+
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+                return null;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

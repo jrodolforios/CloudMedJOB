@@ -70,11 +70,11 @@ namespace MediCloud.Controllers
             try
             {
                 base.EstahLogado();
-                ViewBag.Title = "Setor";
+                ViewBag.Title = "Fechamento";
 
                 CadastroDeFechamento.DeletarFechamento(this, codigoFechamento);
 
-                base.FlashMessage("Setor excluído.", MessageType.Success);
+                base.FlashMessage("Fechamento excluído.", MessageType.Success);
 
                 return View("Index");
             }
@@ -84,6 +84,53 @@ namespace MediCloud.Controllers
 
                 base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
                 return View(modelFechamento);
+            }
+        }
+
+        public ActionResult DetalhamentoFechamento(int? codigoFechamento)
+        {
+            try
+            {
+                base.EstahLogado();
+                ViewBag.Title = "Fechamento";
+
+                FechamentoModel model = CadastroDeFechamento.RecuperarFechamentoPorID(codigoFechamento.HasValue ? codigoFechamento.Value : 0);
+
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
+                return View();
+            }
+        }
+
+        [HttpPost]
+        public ActionResult DetalhamentoFechamento(FormCollection form)
+        {
+            FechamentoModel modelFuncionario = null;
+            try
+            {
+                base.EstahLogado();
+                ViewBag.Title = "Fechamento";
+
+                modelFuncionario = CadastroDeFechamento.SalvarFechamento(form);
+
+                base.FlashMessage("Fechamento cadastrado.", MessageType.Success);
+                return View(modelFuncionario);
+            }
+            catch (InvalidOperationException ex)
+            {
+                if (!string.IsNullOrEmpty(form["codigoFechamento"]))
+                    modelFuncionario = CadastroDeFechamento.RecuperarFechamentoPorID(Convert.ToInt32(form["codigoFechamento"]));
+
+                base.FlashMessage(ex.Message, MessageType.Error);
+                return View(modelFuncionario);
+            }
+            catch (Exception ex)
+            {
+                base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
+                return View();
             }
         }
     }
