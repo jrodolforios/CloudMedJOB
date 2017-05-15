@@ -10,7 +10,7 @@ namespace MediCloud.Models.Parametro
     {
         public string IdProfissional { get; set; }
         public string NomeProfissional { get; set; }
-        public bool Ativo { get; set; }
+        public bool? Ativo { get; set; }
 
         public string toString()
         {

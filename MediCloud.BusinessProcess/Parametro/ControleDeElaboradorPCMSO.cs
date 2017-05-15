@@ -55,5 +55,62 @@ namespace MediCloud.BusinessProcess.Parametro
                 throw ex;
             }
         }
+
+        public static void DeletarElaboradorPCMSO(int codigoElaboradorPCMSO)
+        {
+            CloudMedContext contexto = new CloudMedContext();
+
+            try
+            {
+                if (contexto.EPCMSO.Any(x => x.IDEPCMSO == codigoElaboradorPCMSO))
+                    contexto.EPCMSO.Remove(contexto.EPCMSO.First(x => x.IDEPCMSO == codigoElaboradorPCMSO));
+
+                contexto.SaveChanges();
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static EPCMSO SalvarElaboradorPCMSO(EPCMSO elaboradorPCMSODAO)
+        {
+            CloudMedContext contexto = new CloudMedContext();
+            EPCMSO setorSalvo = new EPCMSO();
+
+            try
+            {
+
+                if (elaboradorPCMSODAO.IDEPCMSO > 0)
+                {
+                    setorSalvo = contexto.EPCMSO.First(x => x.IDEPCMSO == elaboradorPCMSODAO.IDEPCMSO);
+
+                    setorSalvo.IDEPCMSO = elaboradorPCMSODAO.IDEPCMSO;
+                    setorSalvo.ELABORADORPCMSO = elaboradorPCMSODAO.ELABORADORPCMSO;
+
+                }
+                else
+                {
+                    setorSalvo = contexto.EPCMSO.Add(elaboradorPCMSODAO);
+                }
+
+                contexto.SaveChanges();
+                return setorSalvo;
+
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+                return null;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

@@ -7,12 +7,13 @@ using MediCloud.DatabaseModels;
 using MediCloud.Models.Parametro;
 using MediCloud.BusinessProcess;
 using MediCloud.BusinessProcess.Parametro;
+using System.Web.Mvc;
 
 namespace MediCloud.Code.Parametro
 {
     public class CadastroDeElaboradorPCMSO
     {
-        internal static ElaboradorPCMSOModel injetarEmUsuarioModel(EPCMSO ePCMSO)
+        internal static ElaboradorPCMSOModel InjetarEmUsuarioModel(EPCMSO ePCMSO)
         {
             if (ePCMSO == null)
                 return null;
@@ -31,10 +32,18 @@ namespace MediCloud.Code.Parametro
 
             contadoresEncontrados.ForEach(x =>
             {
-                resultados.Add(injetarEmUsuarioModel(x));
+                resultados.Add(InjetarEmUsuarioModel(x));
             });
 
             return resultados;
+        }
+
+        internal static List<ElaboradorPCMSOModel> RecuperarElaboradorPorTermo(FormCollection form)
+        {
+            string prefix = form["keywords"];
+
+            return RecuperarElaboradorPorTermo(prefix);
+
         }
 
         internal static ElaboradorPCMSOModel BuscarElaboradorPorID(decimal? idEPCMSO)
@@ -42,10 +51,49 @@ namespace MediCloud.Code.Parametro
             if (idEPCMSO != 0)
             {
                 EPCMSO elaboradorEncontrado = ControleDeElaboradorPCMSO.BuscarElaboradorPorID(idEPCMSO.HasValue ? (int)idEPCMSO.Value : 0);
-                return injetarEmUsuarioModel(elaboradorEncontrado);
+                return InjetarEmUsuarioModel(elaboradorEncontrado);
             }
             else
                 return null;
+        }
+
+        internal static void DeletarElaboradorPCMSO(int codigoElaboradorPCMSO)
+        {
+            ControleDeElaboradorPCMSO.DeletarElaboradorPCMSO(codigoElaboradorPCMSO);
+        }
+
+        internal static ElaboradorPCMSOModel SalvarElaboradorPCMSO(FormCollection form)
+        {
+            ElaboradorPCMSOModel usuarioModel = InjetarEmUsuarioModel(form);
+            usuarioModel.validar();
+
+            EPCMSO ElaboradorPCMSODAO = InjetarEmUsuarioDAO(usuarioModel);
+            ElaboradorPCMSODAO = ControleDeElaboradorPCMSO.SalvarElaboradorPCMSO(ElaboradorPCMSODAO);
+
+            usuarioModel = InjetarEmUsuarioModel(ElaboradorPCMSODAO);
+
+            return usuarioModel;
+        }
+
+        private static EPCMSO InjetarEmUsuarioDAO(ElaboradorPCMSOModel usuarioModel)
+        {
+            if (usuarioModel == null)
+                return null;
+            else
+                return new EPCMSO()
+                {
+                    ELABORADORPCMSO = usuarioModel.NomeElaboradorPCMSO,
+                    IDEPCMSO = usuarioModel.IdElaboradorPCMSO
+                };
+        }
+
+        private static ElaboradorPCMSOModel InjetarEmUsuarioModel(FormCollection form)
+        {
+            return new ElaboradorPCMSOModel()
+            {
+                IdElaboradorPCMSO = string.IsNullOrEmpty(form["codigoElaboradorPCMSO"]) ? 0 : Convert.ToInt32(form["codigoElaboradorPCMSO"]),
+                NomeElaboradorPCMSO = string.IsNullOrEmpty(form["nomeElaboradorPCMSO"]) ? null : form["nomeElaboradorPCMSO"]
+            };
         }
     }
 }

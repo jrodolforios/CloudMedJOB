@@ -52,5 +52,62 @@ namespace MediCloud.BusinessProcess.Parametro
                 throw ex;
             }
         }
+
+        public static void DeletarSegmento(int codigoSegmento)
+        {
+            CloudMedContext contexto = new CloudMedContext();
+
+            try
+            {
+                if (contexto.SEGMENTO.Any(x => x.IDSEG == codigoSegmento))
+                    contexto.SEGMENTO.Remove(contexto.SEGMENTO.First(x => x.IDSEG == codigoSegmento));
+
+                contexto.SaveChanges();
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static SEGMENTO SalvarSegmento(SEGMENTO segmentoDAO)
+        {
+            CloudMedContext contexto = new CloudMedContext();
+            SEGMENTO setorSalvo = new SEGMENTO();
+
+            try
+            {
+
+                if (segmentoDAO.IDSEG > 0)
+                {
+                    setorSalvo = contexto.SEGMENTO.First(x => x.IDSEG == segmentoDAO.IDSEG);
+
+                    setorSalvo.IDSEG = segmentoDAO.IDSEG;
+                    setorSalvo.SEGMENTO1 = segmentoDAO.SEGMENTO1;
+
+                }
+                else
+                {
+                    setorSalvo = contexto.SEGMENTO.Add(segmentoDAO);
+                }
+
+                contexto.SaveChanges();
+                return setorSalvo;
+
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+                return null;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

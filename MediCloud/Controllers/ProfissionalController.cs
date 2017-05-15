@@ -47,5 +47,119 @@ namespace MediCloud.Controllers
                 return Json(ObjList.ToArray(), JsonRequestBehavior.AllowGet);
             }
         }
+
+        [HttpPost]
+        public ActionResult Index(FormCollection form)
+        {
+            try
+            {
+                base.EstahLogado();
+                ViewBag.Title = "Profissionais";
+
+                List<ProfissionalModel> model = CadastroDeProfissional.RecuperarContadorPorTermo(form);
+
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
+                return View();
+            }
+        }
+
+        [HttpPost]
+        public JsonResult DeletarProfissional(string codigoDoProfissional)
+        {
+            ResultadoAjaxGenericoModel resultado = new ResultadoAjaxGenericoModel();
+            try
+            {
+                base.EstahLogado();
+
+                CadastroDeProfissional.DeletarProfissional(codigoDoProfissional);
+
+                resultado.mensagem = "Profissional excluído.";
+                resultado.acaoBemSucedida = true;
+
+                return Json(resultado, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                resultado.mensagem = Constantes.MENSAGEM_GENERICA_DE_ERRO;
+                resultado.acaoBemSucedida = false;
+
+                return Json(resultado, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        public ActionResult ExcluirProfissional(string codigoProfissional)
+        {
+            ProfissionalModel modelCargo = null;
+
+            try
+            {
+                base.EstahLogado();
+                ViewBag.Title = "Profissional";
+
+                CadastroDeProfissional.DeletarProfissional(codigoProfissional);
+
+                base.FlashMessage("Profissional excluído.", MessageType.Success);
+
+                return View("Index");
+            }
+            catch (Exception ex)
+            {
+                modelCargo = CadastroDeProfissional.GetProfissionalPorID(codigoProfissional);
+
+                base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
+                return View(modelCargo);
+            }
+        }
+
+        public ActionResult DetalhamentoProfissional(string codigoProfissional)
+        {
+            try
+            {
+                base.EstahLogado();
+                ViewBag.Title = "Profissional";
+
+                ProfissionalModel model = CadastroDeProfissional.GetProfissionalPorID(codigoProfissional);
+
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
+                return View();
+            }
+        }
+
+        [HttpPost]
+        public ActionResult DetalhamentoProfissional(FormCollection form)
+        {
+            ProfissionalModel modelFuncionario = null;
+            try
+            {
+                base.EstahLogado();
+                ViewBag.Title = "Profissional";
+
+                modelFuncionario = CadastroDeProfissional.SalvarProfissional(form);
+
+                base.FlashMessage("Cargo cadastrado.", MessageType.Success);
+                return View(modelFuncionario);
+            }
+            catch (InvalidOperationException ex)
+            {
+                if (!string.IsNullOrEmpty(form["codigoCargo"]))
+                    modelFuncionario = CadastroDeProfissional.GetProfissionalPorID(form["codigoProfissional"]);
+
+                base.FlashMessage(ex.Message, MessageType.Error);
+                return View(modelFuncionario);
+            }
+            catch (Exception ex)
+            {
+                base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
+                return View();
+            }
+        }
     }
 }

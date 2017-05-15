@@ -5,6 +5,7 @@ using System.Web;
 using MediCloud.Models.Parametro;
 using MediCloud.DatabaseModels;
 using MediCloud.BusinessProcess.Parametro;
+using System.Web.Mvc;
 
 namespace MediCloud.Code.Parametro
 {
@@ -15,7 +16,7 @@ namespace MediCloud.Code.Parametro
             if (!string.IsNullOrEmpty(IdPro))
             {
                 PROFISSIONAIS usuarioencontrado = ControleDeProfissional.recuperarProfissionalPorID(IdPro);
-                return injetarEmUsuarioModel(usuarioencontrado);
+                return InjetarEmUsuarioModel(usuarioencontrado);
             }
             else
                 return null;
@@ -28,13 +29,28 @@ namespace MediCloud.Code.Parametro
 
             contadoresEncontrados.ForEach(x =>
             {
-                resultados.Add(injetarEmUsuarioModel(x));
+                resultados.Add(InjetarEmUsuarioModel(x));
             });
 
             return resultados;
         }
 
-        public static ProfissionalModel injetarEmUsuarioModel(PROFISSIONAIS x)
+        internal static List<ProfissionalModel> RecuperarContadorPorTermo(FormCollection form)
+        {
+            string prefix = form["keywords"];
+
+            List<PROFISSIONAIS> contadoresEncontrados = ControleDeProfissional.buscarCargosPorTermo(prefix);
+            List<ProfissionalModel> resultados = new List<ProfissionalModel>();
+
+            contadoresEncontrados.ForEach(x =>
+            {
+                resultados.Add(InjetarEmUsuarioModel(x));
+            });
+
+            return resultados;
+        }
+
+        public static ProfissionalModel InjetarEmUsuarioModel(PROFISSIONAIS x)
         {
             if (x == null)
                 return null;
@@ -45,6 +61,47 @@ namespace MediCloud.Code.Parametro
                     IdProfissional = x.IDPRF,
                     NomeProfissional = x.PROFISSIONAL
                 };
+        }
+
+        internal static void DeletarProfissional(string codigoDoProfissional)
+        {
+            ControleDeProfissional.DeletarProfissional(codigoDoProfissional);
+        }
+
+        internal static ProfissionalModel SalvarProfissional(FormCollection form)
+        {
+            ProfissionalModel usuarioModel = InjetarEmUsuarioModel(form);
+            usuarioModel.validar();
+
+            PROFISSIONAIS profissionalDAO = InjetarEmUsuarioDAO(usuarioModel);
+            profissionalDAO = ControleDeProfissional.SalvarProfissional(profissionalDAO);
+
+            usuarioModel = InjetarEmUsuarioModel(profissionalDAO);
+
+            return usuarioModel;
+        }
+
+        private static PROFISSIONAIS InjetarEmUsuarioDAO(ProfissionalModel usuarioModel)
+        {
+            if (usuarioModel == null)
+                return null;
+            else
+                return new PROFISSIONAIS()
+                {
+                    IDPRF = usuarioModel.IdProfissional,
+                    PROFISSIONAL = usuarioModel.NomeProfissional,
+                    STATUS = usuarioModel.Ativo.HasValue ? (usuarioModel.Ativo.Value ? "A" : "I") : "A"
+                };
+        }
+
+        private static ProfissionalModel InjetarEmUsuarioModel(FormCollection form)
+        {
+            return new ProfissionalModel()
+            {
+                Ativo = string.IsNullOrEmpty(form["inativo"]) ? true : !Convert.ToBoolean(form["inativo"].ToLower() == "on"),
+                IdProfissional = string.IsNullOrEmpty(form["codigoProfissional"]) ? (string.IsNullOrEmpty(form["idProfissional"]) ? null : form["idProfissional"]) : form["codigoProfissional"],
+                NomeProfissional = string.IsNullOrEmpty(form["nomeProfissional"]) ? null : form["nomeProfissional"]
+            };
         }
     }
 }
