@@ -11,6 +11,7 @@ using MediCloud.Code.Funcionario;
 using MediCloud.Code.Recomendacao;
 using MediCloud.Code.Parametro;
 using MediCloud.Controllers;
+using MediCloud.Models.Seguranca;
 
 namespace MediCloud.Code.Clientes
 {
@@ -225,6 +226,16 @@ namespace MediCloud.Code.Clientes
         internal static byte[] ImprimirFichaClinica(int codigoASO)
         {
             return ControleDeASO.ImprimirFichaClinica(codigoASO);
+        }
+
+        internal static void ConfirmarExame(SessaoUsuarioModel currentUser, int codigoDoProcedimentoMovimento)
+        {
+            ControleDeProcedimentosMovimento.ConfirmarExame(currentUser.login, codigoDoProcedimentoMovimento);
+        }
+
+        internal static void ConfirmarASO(SessaoUsuarioModel currentUser, int codigoDoMovimento)
+        {
+            ControleDeASO.ConfirmarASO(currentUser.login, codigoDoMovimento);
         }
     }
 }

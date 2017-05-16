@@ -54,7 +54,7 @@
                         <span class="blue bolder bigger-110">Ações</span>
 
                         <div class="action-buttons bigger-150">
-                            <a href="javascript:marcarAsoComoEntregue(@item.IdASO);" class="tooltipASO" title="Marcar ASO como entregue">
+                            <a href="javascript:ConfirmarASO(@item.IdASO);" class="tooltipASO" title="Confirmar exames deste ASO">
                                 <i class="ace-icon green fa fa-check"></i>
                             </a>
                             &nbsp;&nbsp;
@@ -140,5 +140,25 @@ else
 
     function GerarRecibo(codigo) {
         window.location.replace("/ASO/ImprimirReciboASO?codigoASO=" + codigo);
+    }
+
+    function ConfirmarASO(codigo) {
+        $.ajax({
+            url: '/ASO/ConfirmarASO?codigoDoMovimento=' + codigo,
+            type: "post",
+            cache: false,
+            success: function (savingStatus) {
+                var tipoAlert;
+                if (savingStatus.acaoBemSucedida) {
+                    tipoAlert = 'alert-success';
+                }
+                else
+                    tipoAlert = 'alert-danger';
+                $('#ASOAlerts').html('<div class="alert ' + tipoAlert + '"><a class="close" data-dismiss="alert">×</a><span>' + savingStatus.mensagem + '</span></div>');
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                $('#ASOAlerts').html('<div class="alert alert-danger"><a class="close" data-dismiss="alert">×</a><span>Ops! Não foi possível deletar este registro no servidor. Contate-nos para que possamos te ajudar melhor.</span></div>')
+            }
+        });
     }
 </script>

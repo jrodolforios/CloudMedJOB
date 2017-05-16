@@ -155,5 +155,35 @@ namespace MediCloud.BusinessProcess.Cliente
 
             return null;
         }
+
+        public static void ConfirmarExame(string login, int codigoDoProcedimentoMovimento)
+        {
+            CloudMedContext contexto = new CloudMedContext();
+            MOVIMENTO_PROCEDIMENTO usuarioSalvo = new MOVIMENTO_PROCEDIMENTO();
+
+            try
+            {
+
+                if (codigoDoProcedimentoMovimento > 0)
+                {
+                    usuarioSalvo = contexto.MOVIMENTO_PROCEDIMENTO.First(x => x.IDMOVPRO == codigoDoProcedimentoMovimento);
+
+                    usuarioSalvo.DATAREALIZADO = DateTime.Now;
+                    usuarioSalvo.USUARIOREALIZADO = login;
+
+                }
+
+                contexto.SaveChanges();
+
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

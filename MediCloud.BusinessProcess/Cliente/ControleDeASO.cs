@@ -308,6 +308,34 @@ namespace MediCloud.BusinessProcess.Cliente
             return naturezasERiscos;
         }
 
+        public static void ConfirmarASO(string login, int codigoDoMovimento)
+        {
+            CloudMedContext contexto = new CloudMedContext();
+            MOVIMENTO usuarioSalvo = new MOVIMENTO();
+
+            try
+            {
+
+                if (codigoDoMovimento > 0)
+                {
+                    usuarioSalvo = contexto.MOVIMENTO.First(x => x.IDMOV == codigoDoMovimento);
+
+                    usuarioSalvo.MOVIMENTO_PROCEDIMENTO.ToList().ForEach(x =>
+                    {
+                        ControleDeProcedimentosMovimento.ConfirmarExame(login, (int)x.IDMOVPRO);
+                    });
+                }
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public static byte[] ImprimirFichaClinica(int codigoASO)
         {
             MOVIMENTO aso = ControleDeASO.buscarASOPorId(codigoASO);

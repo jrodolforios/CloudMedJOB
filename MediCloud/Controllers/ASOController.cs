@@ -417,6 +417,54 @@ namespace MediCloud.Controllers
         }
 
         [HttpPost]
+        public JsonResult ConfirmarExame(int codigoDoProcedimentoMovimento)
+        {
+            ResultadoAjaxGenericoModel resultado = new ResultadoAjaxGenericoModel();
+            try
+            {
+                base.EstahLogado();
+
+                CadastroDeASO.ConfirmarExame(this.CurrentUser, codigoDoProcedimentoMovimento);
+
+                resultado.mensagem = "Exame confirmado.";
+                resultado.acaoBemSucedida = true;
+
+                return Json(resultado, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                resultado.mensagem = Constantes.MENSAGEM_GENERICA_DE_ERRO;
+                resultado.acaoBemSucedida = false;
+
+                return Json(resultado, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpPost]
+        public JsonResult ConfirmarASO(int codigoDoMovimento)
+        {
+            ResultadoAjaxGenericoModel resultado = new ResultadoAjaxGenericoModel();
+            try
+            {
+                base.EstahLogado();
+
+                CadastroDeASO.ConfirmarASO(this.CurrentUser, codigoDoMovimento);
+
+                resultado.mensagem = "ASO confirmado.";
+                resultado.acaoBemSucedida = true;
+
+                return Json(resultado, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                resultado.mensagem = Constantes.MENSAGEM_GENERICA_DE_ERRO;
+                resultado.acaoBemSucedida = false;
+
+                return Json(resultado, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpPost]
         public JsonResult BuscaProcedimentosParaLaudoAJAX(string Prefix)
         {
             List<ProcedimentoMovimentoModel> contadoresEncontrados = CadastroDeProcedimentosMovimento.RecuperarProcedimentoMovimentoPorTermo(Prefix);
