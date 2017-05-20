@@ -47,5 +47,119 @@ namespace MediCloud.Controllers
                 return Json(ObjList.ToArray(), JsonRequestBehavior.AllowGet);
             }
         }
+
+        [HttpPost]
+        public ActionResult Index(FormCollection form)
+        {
+            try
+            {
+                base.EstahLogado();
+                ViewBag.Title = "Contadores";
+
+                List<ContadorModel> model = CadastroDeContador.RecuperarContadorPorTermo(form);
+
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
+                return View();
+            }
+        }
+
+        public ActionResult DetalhamentoContador(int? codigoContador)
+        {
+            try
+            {
+                base.EstahLogado();
+                ViewBag.Title = "Contador";
+
+                ContadorModel model = CadastroDeContador.RecuperarContadorPorID(codigoContador.HasValue ? codigoContador.Value : 0);
+
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
+                return View();
+            }
+        }
+
+        [HttpPost]
+        public ActionResult DetalhamentoContador(FormCollection form)
+        {
+            ContadorModel modelFuncionario = null;
+            try
+            {
+                base.EstahLogado();
+                ViewBag.Title = "Contador";
+
+                modelFuncionario = CadastroDeContador.SalvarContador(form);
+
+                base.FlashMessage("Contador cadastrado.", MessageType.Success);
+                return View(modelFuncionario);
+            }
+            catch (InvalidOperationException ex)
+            {
+                if (!string.IsNullOrEmpty(form["codigoContador"]))
+                    modelFuncionario = CadastroDeContador.RecuperarContadorPorID(Convert.ToInt32(form["codigoContador"]));
+
+                base.FlashMessage(ex.Message, MessageType.Error);
+                return View(modelFuncionario);
+            }
+            catch (Exception ex)
+            {
+                base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
+                return View();
+            }
+        }
+
+        [HttpPost]
+        public JsonResult DeletarContador(int codigoDoContador)
+        {
+            ResultadoAjaxGenericoModel resultado = new ResultadoAjaxGenericoModel();
+            try
+            {
+                base.EstahLogado();
+
+                CadastroDeContador.DeletarContador(this, codigoDoContador);
+
+                resultado.mensagem = "Contador excluído.";
+                resultado.acaoBemSucedida = true;
+
+                return Json(resultado, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                resultado.mensagem = Constantes.MENSAGEM_GENERICA_DE_ERRO;
+                resultado.acaoBemSucedida = false;
+
+                return Json(resultado, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        public ActionResult ExcluirContador(int codigoContador)
+        {
+            ContadorModel modelContador = null;
+
+            try
+            {
+                base.EstahLogado();
+                ViewBag.Title = "Contador";
+
+                CadastroDeContador.DeletarContador(this, codigoContador);
+
+                base.FlashMessage("Contador excluído.", MessageType.Success);
+
+                return View("Index");
+            }
+            catch (Exception ex)
+            {
+                modelContador = CadastroDeContador.RecuperarContadorPorID(Convert.ToInt32(codigoContador));
+
+                base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
+                return View(modelContador);
+            }
+        }
     }
 }

@@ -50,6 +50,7 @@
     <Compile Include="Cliente\ControleDeCargo.cs" />
     <Compile Include="Cliente\ControleDeClientes.cs" />
     <Compile Include="Cliente\ControleDeProcedimentosMovimento.cs" />
+    <Compile Include="Financeiro\ControleDeRotaDeEntrega.cs" />
     <Compile Include="Parametro\ControleDeCidade.cs" />
     <Compile Include="Parametro\ControleDeDadosOcupacionais.cs" />
     <Compile Include="Parametro\ControleDeFechamento.cs" />

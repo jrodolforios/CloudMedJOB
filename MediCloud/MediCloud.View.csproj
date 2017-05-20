@@ -178,6 +178,7 @@
     <Compile Include="Code\Clientes\CadastroDeClientes.cs" />
     <Compile Include="Code\Clientes\CadastroDeProcedimentosMovimento.cs" />
     <Compile Include="Code\Enum\EnumParametro.cs" />
+    <Compile Include="Code\Financeiro\CadastroDeRotaDeEntrega.cs" />
     <Compile Include="Code\Parametro\CadastroDeCidade.cs" />
     <Compile Include="Code\Parametro\CadastroDeDadosOcupacionais.cs" />
     <Compile Include="Code\Parametro\CadastroDeFechamento.cs" />
@@ -255,6 +256,7 @@
     <Compile Include="Controllers\ElaboradorPCMSOController.cs" />
     <Compile Include="Controllers\ElaboradorPPRAController.cs" />
     <Compile Include="Controllers\FechamentoController.cs" />
+    <Compile Include="Controllers\FormaPagamentoController.cs" />
     <Compile Include="Controllers\FornecedorController.cs" />
     <Compile Include="Controllers\FuncionarioController.cs" />
     <Compile Include="Controllers\GrupoDeProcedimentoController.cs" />
@@ -269,6 +271,7 @@
     <Compile Include="Controllers\RecomendacaoController.cs" />
     <Compile Include="Controllers\ReferenciaController.cs" />
     <Compile Include="Controllers\RiscoNaturezaController.cs" />
+    <Compile Include="Controllers\RotaDeEntregaController.cs" />
     <Compile Include="Controllers\SegmentoController.cs" />
     <Compile Include="Controllers\SetorController.cs" />
     <Compile Include="Controllers\SubGrupoController.cs" />
@@ -284,6 +287,7 @@
     <Compile Include="Models\Cliente\ClienteModel.cs" />
     <Compile Include="Models\Cliente\ProcedimentoMovimentoModel.cs" />
     <Compile Include="Models\Financeiro\LancamentoDeContratoModel.cs" />
+    <Compile Include="Models\Financeiro\RotaDeEntregaModel.cs" />
     <Compile Include="Models\Fornecedor\FornecedorProcedimento.cs" />
     <Compile Include="Models\Parametro\CidadeModel.cs" />
     <Compile Include="Models\Parametro\DadosOcupacionaisModel.cs" />
@@ -519,7 +523,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Providers\" />
-    <Folder Include="Views\Contador\" />
     <Folder Include="Views\Contato\" />
   </ItemGroup>
   <ItemGroup>
@@ -654,6 +657,24 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\LancamentoDeContrato\index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Contador\index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Contador\DetalhamentoContador.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\RotaDeEntrega\index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\RotaDeEntrega\DetalhamentoRotaDeEntrega.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\FormaPagamento\DetalhamentoFormaPagamento.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\FormaPagamento\index.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

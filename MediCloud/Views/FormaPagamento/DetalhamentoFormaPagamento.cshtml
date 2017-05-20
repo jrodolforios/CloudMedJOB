@@ -1,0 +1,209 @@
+﻿@model MediCloud.Models.Financeiro.FormaPagamentoModel
+    @{
+        string checkedInativo = string.Empty;
+        bool FormaPagamentoNovo = true;
+
+        ViewBag.Title = "Forma de pagamento";
+
+        if (Model != null)
+        {
+            FormaPagamentoNovo = false;
+        }
+    }
+    <script src="/assets/js/jquery-2.1.4.min.js"></script>
+    <div class="page-header">
+        <h1>
+            Detalhamento de forma de pagamento
+            <small>
+                <i class="ace-icon fa fa-angle-double-right"></i>
+                Cadastro de forma de pagamento
+            </small>
+        </h1>
+    </div><!-- /.page-header -->
+    <div class="row">
+        <div class="col-xs-12">
+            <div id="user-profile-3" class="user-profile row">
+                <div class="col-sm-offset-1 col-sm-10">
+                    <div class="well well-sm">
+                        <!-- -
+                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                        &nbsp; -->
+                        <div class="inline middle blue bigger-110"> <span class="formPercent">0%</span> do cadastro concluído </div>
+
+                        &nbsp; &nbsp; &nbsp;
+                        <div style="width:200px;" data-percent="70%" class="inline middle no-margin progress progress-striped active pos-rel">
+                            <div class="progress-bar progress-bar-success" style="width:70%"></div>
+                        </div>
+
+                    </div><!-- /.well -->
+                    <div class="row">
+                        <label class="col-sm-4 control-label no-padding-right" for="form-field-username"><span class="badge badge-important mail-tag"></span>Obrigatório</label>
+                    </div>
+
+                    <div class="space"></div>
+                    <form method="post" class="form-horizontal" action="@Url.Content("~/FormaPagamento/DetalhamentoFormaPagamento")">
+                        <input type="hidden" id="codigoFormaPagamento" name="codigoFormaPagamento" value="@Html.ValueFor(x => x.IdFormaPagamento)" />
+                        <div class="tabbable">
+                            <ul class="nav nav-tabs padding-16">
+                                <li class="active">
+                                    <a data-toggle="tab" href="#edit-basic">
+                                        <i class="green ace-icon fa fa-pencil-square-o bigger-125"></i>
+                                        Cadastro
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="tab-content profile-edit-tab-content">
+                            <div id="edit-basic" class="tab-pane in active">
+                                <h4 class="header blue bolder smaller">Dados da forma de pagamento</h4>
+
+                                <div class="row">
+                                    <div class="vspace-12-sm"></div>
+
+                                    <div class="col-xs-12 col-sm-8">
+                                        <div class="form-group">
+                                            <label class="col-sm-4 control-label no-padding-right" for="form-field-username">ID</label>
+
+                                            <div class="col-sm-8">
+                                                <input class="col-xs-12 col-sm-8 componenteFormulario" type="text" id="idFormaPagamento" readonly name="idFormaPagamento" placeholder="ID do FormaPagamento" value="@Html.ValueFor(x => x.IdFormaPagamento)" />
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="col-sm-4 control-label no-padding-right" for="form-field-username">Nome da Forma de pagamento &nbsp;<span class="badge badge-important mail-tag"></span></label>
+
+                                            <div class="col-sm-8">
+                                                <input class="col-xs-12 col-sm-8 componenteFormulario" type="text" id="nomeFormaPagamento" name="nomeFormaPagamento" placeholder="Nome da Forma de pagamento" value="@Html.ValueFor(x => x.NomeFormaPagamento)" />
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="col-sm-4 control-label no-padding-right" for="form-field-username">Tipo de pagamento&nbsp;<span class="badge badge-important mail-tag"></span></label>
+
+                                            <div class="col-sm-8">
+                                                <select class="chosen-select form-control" id="tipoPagamento" name="tipoPagamento" data-placeholder="Selecione um...">
+                                                    <option value="0">.:Selecione:.</option>
+                                                    <option value="1">À Vista</option>
+                                                    <option value="2">À Prazo</option>
+                                                </select>
+                                                <script type="text/javascript">
+                                                    $('#tipoPagamento').val('@(Model != null ? (int)Model.TipoPagamento : 0)');
+                                                </script>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="clearfix form-actions">
+                                    <div class="col-md-offset-3 col-md-9">
+                                        <button class="btn btn-info" type="submit">
+                                            <i class="ace-icon fa fa-check bigger-110"></i>
+                                            Salvar
+                                        </button>
+                                        @if (FormaPagamentoNovo)
+                                        {
+                                            <span>&nbsp; &nbsp;</span>
+                                            <button class="btn" type="reset" id="limparForm">
+                                                <i class="ace-icon fa fa-undo bigger-110"></i>
+                                                Limpar
+                                            </button>
+                                        }
+                                        else
+                                        {
+                                            <span>&nbsp; &nbsp;</span>
+                                            <a href="javascript:excluirFormaPagamento(@Model.IdFormaPagamento)" class="btn btn-danger" type="reset">
+                                                <i class="ace-icon fa fa-times bigger-110"></i>
+                                                Excluir
+                                            </a>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div><!-- /.span -->
+            </div>
+        </div>
+    </div>
+
+    <div id="confirm" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3 class="smaller lighter blue no-margin">Excluir forma de pagamento</h3>
+                </div>
+                <div class="modal-body">
+                    Tem certeza que deseja excluir esta forma de pagamento?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" data-dismiss="modal" class="btn btn-primary" id="delete">
+                        <i class="ace-icon fa fa-check"></i>
+                        Sim
+                    </button>
+                    <button type="button" data-dismiss="modal" class="btn">
+                        <i class="ace-icon fa fa-times"></i>
+                        Não
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="/assets/js/jquery-ui.min.js"></script>
+    <script src="/assets/js/bootstrap-datepicker.min.js"></script>
+    <script src="/assets/js/jquery.maskedinput.min.js"></script>
+    <script src="/assets/js/jquery.ui.touch-punch.min.js"></script>
+    <script src="/assets/js/ace-elements.min.js"></script>
+    <script src="/assets/js/ace.min.js"></script>
+    <script type="text/javascript">
+        function excluirFormaPagamento(codigo) {
+            confirmDeleteModal(codigo);
+        }
+
+        function confirmDeleteModal(codigo) {
+            $('#confirm').modal({
+                backdrop: 'static',
+                keyboard: false
+            })
+                .one('click', '#delete', function () {
+                    window.location = "/FormaPagamento/ExcluirFormaPagamento?codigoFormaPagamento=" + codigo;
+                });
+        }
+
+        $("#limparForm").click(function () {
+            var cntreq3 = 0;
+            var cntvals3 = 0;
+            $(".componenteFormulario").each(atualizarProgressBar());
+        });
+
+        $(document).ready(function () {
+            $('input').on('change', function () {
+                var cntreq = 0;
+                var cntvals = 0;
+                $(".componenteFormulario").each(atualizarProgressBar());
+            });
+
+            var cntreq3 = 0;
+            var cntvals3 = 0;
+            $(".componenteFormulario").each(atualizarProgressBar());
+
+        });
+
+        function atualizarProgressBar() {
+            var cntreq = 0;
+            var cntvals = 0;
+            $(".componenteFormulario").each(function (val) {
+                cntreq++;
+                if ($(this).val() != '') {
+                    cntvals++;
+                }
+            });
+            var count = (cntvals / cntreq) * 100;
+            count = parseInt(count);
+            $('.formPercent').empty();
+            $('.progress-striped').attr("data-percent", count + '%');
+            $('div.progress-bar-success').attr("style", "width: " + count + '%');
+            $('.formPercent').append(count + '% ');
+        }
+    </script>

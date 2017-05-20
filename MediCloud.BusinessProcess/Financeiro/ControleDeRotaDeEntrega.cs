@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using MediCloud.DatabaseModels;
 using MediCloud.Persistence;
 using System.Data.Entity.Validation;
@@ -10,20 +10,20 @@ using MediCloud.BusinessProcess.Util;
 
 namespace MediCloud.BusinessProcess.Financeiro
 {
-    public class ControleDeContador
+    public class ControleDeRotaDeEntrega
     {
-        public static List<CONTADOR> BuscarContadoresPorTermo(string prefix)
+        public static List<ROTA> BuscarContadoresPorTermo(string prefix)
         {
             CloudMedContext contexto = new CloudMedContext();
 
             try
             {
-                return contexto.CONTADOR.Where(x => x.CONTADOR1.Contains(prefix)).ToList();
+                return contexto.ROTA.Where(x => x.NOMEROTA.Contains(prefix) || x.OBSERVACAO.Contains(prefix)).ToList();
             }
             catch (DbEntityValidationException ex)
             {
                 ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
-                return new List<CONTADOR>();
+                return new List<ROTA>();
             }
             catch (Exception ex)
             {
@@ -31,36 +31,14 @@ namespace MediCloud.BusinessProcess.Financeiro
             }
         }
 
-        public static CONTADOR BuscarContadorPorID(int v)
+        public static ROTA buscarRotaDeEntregaPorID(int v)
         {
             CloudMedContext contexto = new CloudMedContext();
 
-            if (v == 0)
-                return null;
-
             try
             {
-                return contexto.CONTADOR.First(x => x.IDCONT == v);
-            }
-            catch (DbEntityValidationException ex)
-            {
-                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
-                return new CONTADOR();
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-
-        }
-
-        public static CONTADOR buscarContadorPorID(int v)
-        {
-            CloudMedContext contexto = new CloudMedContext();
-            try
-            {
-                if (contexto.CONTADOR.Any(x => x.IDCONT == v))
-                    return contexto.CONTADOR.Where(x => x.IDCONT == v).First();
+                if (contexto.ROTA.Any(x => x.IDROTA == v))
+                    return contexto.ROTA.First(x => x.IDROTA == v);
                 else
                     return null;
             }
@@ -75,44 +53,25 @@ namespace MediCloud.BusinessProcess.Financeiro
             }
         }
 
-        public static void DeletarContador(int codigoContador)
+        public static ROTA SalvarRotaDeEntrega(ROTA rotaDAO)
         {
             CloudMedContext contexto = new CloudMedContext();
-            try
-            {
-                if (contexto.CONTADOR.Any(x => x.IDCONT == codigoContador))
-                    contexto.CONTADOR.Remove(contexto.CONTADOR.First(x => x.IDCONT == codigoContador));
-
-                contexto.SaveChanges();
-            }
-            catch (DbEntityValidationException ex)
-            {
-                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        public static CONTADOR SalvarContador(CONTADOR contadorDAO)
-        {
-            CloudMedContext contexto = new CloudMedContext();
-            CONTADOR setorSalvo = new CONTADOR();
+            ROTA setorSalvo = new ROTA();
 
             try
             {
 
-                if (contadorDAO.IDCONT > 0)
+                if (rotaDAO.IDROTA > 0)
                 {
-                    setorSalvo = contexto.CONTADOR.First(x => x.IDCONT == contadorDAO.IDCONT);
+                    setorSalvo = contexto.ROTA.First(x => x.IDROTA == rotaDAO.IDROTA);
 
-                    setorSalvo.CONTADOR1 = contadorDAO.CONTADOR1;
+                    setorSalvo.NOMEROTA = rotaDAO.NOMEROTA;
+                    setorSalvo.OBSERVACAO = rotaDAO.OBSERVACAO;
 
                 }
                 else
                 {
-                    setorSalvo = contexto.CONTADOR.Add(contadorDAO);
+                    setorSalvo = contexto.ROTA.Add(rotaDAO);
                 }
 
                 contexto.SaveChanges();
@@ -123,6 +82,29 @@ namespace MediCloud.BusinessProcess.Financeiro
             {
                 ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
                 return null;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static void DeletarRotaDeEntrega(int codigoRotaDeEntrega)
+        {
+            CloudMedContext contexto = new CloudMedContext();
+            ROTA setorSalvo = new ROTA();
+
+            try
+            {
+                if (contexto.ROTA.Any(x => x.IDROTA == codigoRotaDeEntrega))
+                    contexto.ROTA.Remove(contexto.ROTA.First(x => x.IDROTA == codigoRotaDeEntrega));
+
+                contexto.SaveChanges();
+
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
             }
             catch (Exception ex)
             {

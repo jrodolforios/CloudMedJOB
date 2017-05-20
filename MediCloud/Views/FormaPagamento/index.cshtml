@@ -1,0 +1,127 @@
+﻿@using System.Linq
+
+@model List<MediCloud.Models.Financeiro.FormaPagamentoModel>
+@{
+    ViewBag.Title = "Formas de pagamento";
+}
+<div class="page-header">
+    <h1>
+        Formas de pagamento
+        <small>
+            <i class="ace-icon fa fa-angle-double-right"></i>
+            Busca de formas de pagamento cadastrados
+        </small>
+    </h1>
+</div>
+<div id="FormaPagamentoAlerts"></div>
+<form method="post" action="@Url.Content("~/FormaPagamento")">
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12">
+            <div class="input-group">
+                <input type="text" class="form-control" name="keywords" placeholder="Digite aqui para buscar">
+                <div class="input-group-btn">
+                    <button type="submit" class="btn btn-default no-border btn-sm">
+                        <i class="ace-icon fa fa-search icon-on-right bigger-110"></i>
+                    </button>
+                </div>
+            </div>
+            <a href="/FormaPagamento/DetalhamentoFormaPagamento" class="btn btn-xs">+ Nova forma de pagamento</a>
+        </div>
+    </div>
+</form>
+<div class="hr"></div>
+@if (Model != null && Model.Any())
+{
+    foreach (MediCloud.Models.Financeiro.FormaPagamentoModel item in Model)
+    {
+        <div class="col-xs-12" id="@item.IdFormaPagamento">
+            <div class="media search-media">
+                <div class="media-body">
+                        <h4 class="media-heading">
+                            <span class="blue">@item.NomeFormaPagamento </span>
+                        </h4>
+                    <p><b>ID:</b> @item.IdFormaPagamento <br /> <b>Tipo:</b> @item.TipoPagamento </p>
+
+                    <div class="search-actions text-center">
+                        <span class="blue bolder bigger-110">Ações</span>
+
+                        <div class="action-buttons bigger-150">
+                            <a href="javascript:excluirFormaPagamento(@item.IdFormaPagamento);">
+                                <i class="ace-icon fa fa-trash"></i>
+                            </a>
+                        </div>
+                        <a href="/FormaPagamento/DetalhamentoFormaPagamento?codigoFormaPagamento=@item.IdFormaPagamento" class="search-btn-action btn btn-sm btn-block btn-info">Editar</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
+else
+{
+    <div class="alert alert-block alert-info">
+        Nenhum resultado para ser exibido.
+    </div>
+}
+
+<div id="confirm" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="smaller lighter blue no-margin">Excluir forma de pagamento</h3>
+            </div>
+            <div class="modal-body">
+                Tem certeza que deseja excluir esta forma de pagamento?
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-primary" id="delete">
+                    <i class="ace-icon fa fa-check"></i>
+                    Sim
+                </button>
+                <button type="button" data-dismiss="modal" class="btn">
+                    <i class="ace-icon fa fa-times"></i>
+                    Não
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    function excluirFormaPagamento(codigo) {
+        confirmDeleteModal(codigo);
+    }
+
+    function confirmDeleteModal(codigo) {
+        $('#confirm').modal({
+            backdrop: 'static',
+            keyboard: false
+        })
+            .one('click', '#delete', function () {
+                deletarFormaPagamento(codigo);
+            });
+    }
+
+    function deletarFormaPagamento(codigo) {
+        $.ajax({
+            url: '/FormaPagamento/DeletarFormaPagamento?codigoDoFormaPagamento=' + codigo,
+            type: "post",
+            cache: false,
+            success: function (savingStatus) {
+                var tipoAlert;
+                if (savingStatus.acaoBemSucedida) {
+                    tipoAlert = 'alert-success';
+                    $("#" + codigo).remove();
+                }
+                else
+                    tipoAlert = 'alert-danger';
+
+                $('#FormaPagamentoAlerts').html('<div class="alert ' + tipoAlert + '"><a class="close" data-dismiss="alert">×</a><span>' + savingStatus.mensagem + '</span></div>');
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                $('#FormaPagamentoAlerts').html('<div class="alert alert-danger"><a class="close" data-dismiss="alert">×</a><span>Ops! Não foi possível deletar este registro no servidor. Contate-nos para que possamos te ajudar melhor.</span></div>')
+            }
+        });
+    }
+</script>
