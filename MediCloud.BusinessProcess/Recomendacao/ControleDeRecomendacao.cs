@@ -40,7 +40,7 @@ namespace MediCloud.BusinessProcess.Recomendacao
             CloudMedContext contexto = new CloudMedContext();
             try
             {
-                if(contexto.RECOMENDACAO.Any(x => x.IDREC == codigoDaRecomendacao))
+                if (contexto.RECOMENDACAO.Any(x => x.IDREC == codigoDaRecomendacao))
                 {
                     contexto.RECOMENDACAO.Remove(contexto.RECOMENDACAO.First(x => x.IDREC == codigoDaRecomendacao));
                 }
@@ -86,21 +86,24 @@ namespace MediCloud.BusinessProcess.Recomendacao
             {
                 List<RECOMENDACAOXASO> ReferenciasLink = contexto.RECOMENDACAOXASO.Where(x => x.IDREC == idRec).ToList();
 
-                ReferenciasLink.ForEach(x => 
+                ReferenciasLink.ForEach(x =>
                 {
                     List<MOVIMENTO_REFERENTE> Referencias = contexto.MOVIMENTO_REFERENTE.Where(y => y.IDREF == x.IDREF).ToList();
 
                     Referencias.ForEach(y =>
                     {
-                        List<RECOMENDACAOXASOXPRO> ReferenciasProcedimentosLink = contexto.RECOMENDACAOXASOXPRO.Where(z => z.IDRECASO == x.IDRECASO).ToList();
-                        List<PROCEDIMENTO> ProcedimentosDeReferencia = new List<PROCEDIMENTO>();
-
-                        ReferenciasProcedimentosLink.ForEach(z => 
+                        if (!referenciasEProcedimentos.ContainsKey(y))
                         {
-                            ProcedimentosDeReferencia.AddRange(contexto.PROCEDIMENTO.Where(w => w.IDPRO == z.IDPRO).ToList());
-                        });
+                            List<RECOMENDACAOXASOXPRO> ReferenciasProcedimentosLink = contexto.RECOMENDACAOXASOXPRO.Where(z => z.IDRECASO == x.IDRECASO).ToList();
+                            List<PROCEDIMENTO> ProcedimentosDeReferencia = new List<PROCEDIMENTO>();
 
-                        referenciasEProcedimentos.Add(y, ProcedimentosDeReferencia);
+                            ReferenciasProcedimentosLink.ForEach(z =>
+                            {
+                                ProcedimentosDeReferencia.AddRange(contexto.PROCEDIMENTO.Where(w => w.IDPRO == z.IDPRO).ToList());
+                            });
+
+                            referenciasEProcedimentos.Add(y, ProcedimentosDeReferencia);
+                        }
                     });
                 });
             }
@@ -148,7 +151,7 @@ namespace MediCloud.BusinessProcess.Recomendacao
             {
                 RECOMENDACAOXASO recomendacaoReferente = recuperarRcomendacaoReferente(codigoRecomendacao, codigoReferencia);
 
-                if(recomendacaoReferente != null)
+                if (recomendacaoReferente != null)
                 {
                     contexto.RECOMENDACAOXASO.Remove(contexto.RECOMENDACAOXASO.First(x => x.IDRECASO == recomendacaoReferente.IDRECASO));
                     contexto.SaveChanges();
