@@ -40,6 +40,7 @@ namespace MediCloud.Models.Cliente
 
         #region contatos
         public List<ContatoModel>  Contatos { get; set; }
+        public List<EmpresaModel> Empresas { get; set; }
         #endregion
 
         #region Funcoes

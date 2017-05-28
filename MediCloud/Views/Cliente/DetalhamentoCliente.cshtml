@@ -54,10 +54,19 @@
                             </li>
                             @if (Model != null && Model.IdCliente > 0)
                             {
+
                                 <li>
                                     <a data-toggle="tab" href="#edit-settings">
+
                                         <i class="purple ace-icon fa fa-user bigger-125"></i>
                                         Contatos
+                                    </a>
+                                </li>
+                                <li>
+                                    <a data-toggle="tab" href="#edit-outrasEmpresas">
+
+                                        <i class="red ace-icon fa fa-building bigger-125"></i>
+                                        Outras empresas
                                     </a>
                                 </li>
                             }
@@ -264,8 +273,56 @@
                             {
                                 foreach (MediCloud.Models.Fornecedor.ContatoModel item in Model.Contatos)
                                 {
+                            <div class="row">
+                                <div class="col-xs-12" id="@item.IdContato">
+                                    <div class="media search-media">
+                                        <div class="media-left">
+                                            <a href="#">
+                                                <img class="media-object" data-src="holder.js/72x72" alt="72x72" src="/assets/images/avatars/contact.png" data-holder-rendered="true" style="width: 72px; height: 72px;">
+                                            </a>
+                                        </div>
+                                        <div class="media-body">
+                                            <div class="container">
+                                                <h4 class="media-heading">
+                                                    <span class="blue">@item.NomeContato </span>
+                                                </h4>
+                                            </div>
+                                            <p><b>Celular:</b> @item.TelfoneMovel <br /> <b>Fixo:</b> @item.TelefoneFixo</p>
+
+                                            <div class="search-actions text-center">
+                                                <span class="blue bolder bigger-110">Ações</span>
+
+                                                <div class="action-buttons bigger-150">
+                                                    <a href="javascript:excluirContato(@item.IdContato);">
+                                                        <i class="ace-icon fa fa-trash"></i>
+                                                    </a>
+                                                </div>
+                                                <a href="javascript:detalhamentoDoContato(@item.IdContato)" class="search-btn-action btn btn-sm btn-block btn-info">Editar</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                                }
+                            }
+                            else
+                            {
+                            <div class="alert alert-block alert-info">
+                                Nenhum contato para ser exibido.
+                            </div>
+                            }
+
+                        </div>
+
+                        <div id="edit-outrasEmpresas" class="tab-pane fade">
+                            <div class="space-10"></div>
+                            <a href="javascript:detalhamentoDaEmpresa(0)" class="btn btn-xs">+ Nova empresa</a>
+                            @if (Model != null && Model.Empresas != null && Model.Empresas.Any())
+                            {
+                                foreach (MediCloud.Models.Cliente.EmpresaModel item in Model.Empresas)
+                                {
                                     <div class="row">
-                                        <div class="col-xs-12" id="@item.IdContato">
+                                        <div class="col-xs-12" id="@item.IdEmpresa">
                                             <div class="media search-media">
                                                 <div class="media-left">
                                                     <a href="#">
@@ -275,20 +332,20 @@
                                                 <div class="media-body">
                                                     <div class="container">
                                                         <h4 class="media-heading">
-                                                            <span class="blue">@item.NomeContato </span>
+                                                            <span class="blue">@item.NomeEmpresa </span>
                                                         </h4>
                                                     </div>
-                                                    <p><b>Celular:</b> @item.TelfoneMovel <br /> <b>Fixo:</b> @item.TelefoneFixo</p>
+                                                    <p><b>Telefone:</b> @item.Telefone <br /> <b>Responsável:</b> @item.NomeResponsavel</p>
 
                                                     <div class="search-actions text-center">
                                                         <span class="blue bolder bigger-110">Ações</span>
 
                                                         <div class="action-buttons bigger-150">
-                                                            <a href="javascript:excluirContato(@item.IdContato);">
+                                                            <a href="javascript:excluirEmpresa(@item.IdEmpresa);">
                                                                 <i class="ace-icon fa fa-trash"></i>
                                                             </a>
                                                         </div>
-                                                        <a href="javascript:detalhamentoDoContato(@item.IdContato)" class="search-btn-action btn btn-sm btn-block btn-info">Editar</a>
+                                                        <a href="javascript:detalhamentoDaEmpresa(@item.IdEmpresa)" class="search-btn-action btn btn-sm btn-block btn-info">Editar</a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -299,11 +356,12 @@
                             else
                             {
                                 <div class="alert alert-block alert-info">
-                                    Nenhum contato para ser exibido.
+                                    Nenhuma empresa para ser exibido.
                                 </div>
                             }
 
                         </div>
+
                     </div>
                 </form>
             </div><!-- /.span -->
@@ -347,6 +405,30 @@
             </div>
             <div class="modal-footer">
                 <button type="button" data-dismiss="modal" class="btn btn-primary" id="deleteContato">
+                    <i class="ace-icon fa fa-check"></i>
+                    Sim
+                </button>
+                <button type="button" data-dismiss="modal" class="btn">
+                    <i class="ace-icon fa fa-times"></i>
+                    Não
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="confirmEmpresa" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="smaller lighter blue no-margin">Excluir empresa</h3>
+            </div>
+            <div class="modal-body">
+                Tem certeza que deseja excluir esta empresa?
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-primary" id="deleteEmpresa">
                     <i class="ace-icon fa fa-check"></i>
                     Sim
                 </button>
@@ -466,6 +548,68 @@
     </div>
 </div>
 
+<div id="detalhamentoEmpresa" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="smaller lighter blue no-margin">Outras empresas</h3>
+            </div>
+            <form method="post" id="formEmpresaCliente" class="form-horizontal" action="@Url.Content("~/Cliente/SalvarEmpresa")">
+                <div class="modal-body">
+                    <input type="hidden" id="codigoEmpresa" name="codigoEmpresa" value="0" />
+                    <input type="hidden" id="codigoClienteEmpresa" name="codigoClienteEmpresa" value="@Html.ValueFor(x => x.IdCliente)" />
+
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Nome &nbsp;<span class="badge badge-important mail-tag"></span></label>
+
+                        <div class="col-sm-8">
+                            <input class="col-xs-12 col-sm-6 " type="text" id="nomeEmpresa" name="nomeEmpresa" placeholder="nome da empresa" value="" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Tel. Fixo </label>
+
+                        <div class="col-sm-8">
+                            <input class="col-xs-12 col-sm-6 " type="text" id="telFixoEmpresa" name="telFixoEmpresa" placeholder="número do telefone" value="" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Nome do responsável</label>
+
+                        <div class="col-sm-8">
+                            <input class="col-xs-12 col-sm-6 " type="text" id="nomeResponsavel" name="nomeResponsavel" placeholder="nome do responsável" value="" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label no-padding-right" for="form-field-first">E-mail </label>
+
+                        <div class="col-sm-8">
+                            <input class="col-xs-12 col-sm-6 " type="text" id="emailEmpresa" name="emailEmpresa" placeholder="Endereço de email" value="" />
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary" id="salvarEmpresa">
+                        <i class="ace-icon fa fa-check"></i>
+                        Salvar
+                    </button>
+                    <button type="button" data-dismiss="modal" class="btn">
+                        <i class="ace-icon fa fa-times"></i>
+                        Cancelar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
 <script type="text/javascript">
     if ('ontouchstart' in document.documentElement) document.write("<script src='/assets/js/jquery.mobile.custom.min.js'>" + "<" + "/script>");
 </script>
@@ -483,6 +627,20 @@
 
     function excluirContato(codigo) {
         confirmDeleteModalContato(codigo);
+    }
+
+    function excluirEmpresa(codigo) {
+        confirmDeleteModalEmpresa(codigo);
+    }
+
+    function confirmDeleteModalEmpresa(codigo) {
+        $('#confirmEmpresa').modal({
+            backdrop: 'static',
+            keyboard: false
+        })
+            .one('click', '#deleteEmpresa', function () {
+                deletarEmpresa(codigo);
+            });
     }
 
     function confirmDeleteModalContato(codigo) {
@@ -525,6 +683,32 @@
         }
     }
 
+    function detalhamentoDaEmpresa(codigo) {
+        $('#detalhamentoEmpresa').modal({
+            backdrop: 'static',
+            keyboard: false
+        })
+
+        limparComponentesEmpresa();
+        if (codigo > 0) {
+            $.ajax({
+                url: '/Cliente/DetalharEmpresa?codigoDaEmpresa=' + codigo,
+                type: "post",
+                cache: false,
+                success: function (data) {
+                    $("#nomeEmpresa").attr('value', data.NomeEmpresa);
+                    $("#codigoEmpresa").attr('value', data.IdEmpresa);
+                    $("#telFixoEmpresa").attr('value', data.Telefone);
+                    $("#nomeResponsavel").attr('value', data.NomeResponsavel);
+                    $("#emailEmpresa").attr('value', data.Email);
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    $('#usuarioAlerts').html('<div class="alert alert-danger"><a class="close" data-dismiss="alert">×</a><span>Ops! Não foi possível detalhar este registro no servidor. Contate-nos para que possamos te ajudar melhor.</span></div>')
+                }
+            });
+        }
+    }
+
     function toDateFromJson(src) {
         if (src != null)
             return formatDate(new Date(parseInt(src.substr(6))));
@@ -559,9 +743,39 @@
         $("#observacoesContato").val('');
     }
 
+
+    function limparComponentesEmpresa() {
+        $("#nomeEmpresa").attr('value', "");
+        $("#codigoEmpresa").attr('value', 0);
+        $("#telFixoEmpresa").attr('value', "");
+        $("#nomeResponsavel").attr('value', "");
+        $("#emailEmpresa").attr('value', "");
+    }
+
     function deletarContato(codigo) {
         $.ajax({
             url: '/Contato/DeletarContato?codigoDoContato=' + codigo,
+            type: "post",
+            cache: false,
+            success: function (savingStatus) {
+                var tipoAlert;
+                if (savingStatus.acaoBemSucedida) {
+                    tipoAlert = 'alert-success';
+                    $("#" + codigo).remove();
+                }
+                else
+                    tipoAlert = 'alert-danger';
+                $('#usuarioAlerts').html('<div class="alert ' + tipoAlert + '"><a class="close" data-dismiss="alert">×</a><span>' + savingStatus.mensagem + '</span></div>');
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                $('#usuarioAlerts').html('<div class="alert alert-danger"><a class="close" data-dismiss="alert">×</a><span>Ops! Não foi possível deletar este registro no servidor. Contate-nos para que possamos te ajudar melhor.</span></div>')
+            }
+        });
+    }
+
+    function deletarEmpresa(codigo) {
+        $.ajax({
+            url: '/Cliente/DeletarEmpresa?codigoDaEmpresa=' + codigo,
             type: "post",
             cache: false,
             success: function (savingStatus) {
@@ -720,6 +934,7 @@
     });
 
     $('#CEP').mask('99999-999');
+    $('#telFixoEmpresa').mask('(99) 9999-9999');
     $('#telFixo').mask('(99) 9999-9999');
     $('#telMovel').mask('(99) 99999-9999');
 

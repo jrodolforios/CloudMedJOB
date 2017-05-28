@@ -59,6 +59,69 @@ namespace MediCloud.Code.Clientes
             };
         }
 
+        internal static EmpresaModel SalvarEmpresa(FormCollection form)
+        {
+            EmpresaModel empresaModel = InjetarEmUsuarioModel(form);
+            empresaModel.validar();
+
+            CLIENTE_OUTRASEMP empresaDAO = InjetarEmUsuarioDAO(empresaModel);
+            empresaDAO = ControleDeClientes.SalvarEmpresa(empresaDAO);
+
+            empresaModel = InjetarEmUsuarioModel(empresaDAO);
+
+            return empresaModel;
+        }
+
+        private static EmpresaModel InjetarEmUsuarioModel(CLIENTE_OUTRASEMP x)
+        {
+            if (x == null)
+                return null;
+            else
+                return new EmpresaModel()
+                {
+                    Cliente = new ClienteModel() { IdCliente = (int)x.IDCLI},
+                    Email = x.EMAIL,
+                    IdEmpresa = (int)x.IDEMP,
+                    NomeResponsavel = x.NOMERESP,
+                    NomeEmpresa = x.EMPRESA,
+                    Telefone = x.TELEFONE
+                };
+        }
+
+        private static CLIENTE_OUTRASEMP InjetarEmUsuarioDAO(EmpresaModel x)
+        {
+            if (x == null)
+                return null;
+            else
+                return new CLIENTE_OUTRASEMP()
+                {
+                    IDCLI = x.Cliente.IdCliente,
+                    EMAIL = x.Email,
+                    EMPRESA = x.NomeEmpresa,
+                    IDEMP = x.IdEmpresa,
+                    NOMERESP = x.NomeResponsavel,
+                    TELEFONE = x.Telefone
+                };
+        }
+
+        internal static void DeletarEmpresa(ClienteController clienteController, int codigoDaEmpresa)
+        {
+            ControleDeClientes.ExcluirEmpresa(codigoDaEmpresa);
+        }
+
+        private static EmpresaModel InjetarEmUsuarioModel(FormCollection form)
+        {
+            return new EmpresaModel()
+            {
+                Cliente = RecuperarClientePorID(string.IsNullOrEmpty(form["codigoClienteEmpresa"]) ? 0 : Convert.ToInt32(form["codigoClienteEmpresa"])),
+                Email = string.IsNullOrEmpty(form["emailEmpresa"]) ? null : form["emailEmpresa"],
+                IdEmpresa = string.IsNullOrEmpty(form["codigoEmpresa"]) ? 0 : Convert.ToInt32(form["codigoEmpresa"]),
+                NomeEmpresa = string.IsNullOrEmpty(form["nomeEmpresa"]) ? null : form["nomeEmpresa"],
+                NomeResponsavel = string.IsNullOrEmpty(form["nomeResponsavel"]) ? null : form["nomeResponsavel"],
+                Telefone = Util.ApenasNumeros(string.IsNullOrEmpty(form["telFixoEmpresa"]) ? null : form["telFixoEmpresa"])
+            };
+        }
+
         private static EnumCliente.tipoEmpresa recuperarTipoEmpresaDoForm(string v)
         {
             switch (v)
@@ -84,7 +147,10 @@ namespace MediCloud.Code.Clientes
                 Cidade = x.CIDADE,
                 CNPJ = x.CPFCNPJ,
                 Contador = CadastroDeContador.InjetarEmUsuarioModel(x.CONTADOR),
+
                 Contatos = CadastroDeContato.injetarEmUsuarioModel(x.CLIENTE_CONTATO.ToList()),
+                Empresas = BuscarEmpresasDeCliente((int)x.IDCLI),
+
                 ElaboradorDoPCMSO = CadastroDeElaboradorPCMSO.InjetarEmUsuarioModel(x.EPCMSO),
                 ElaboradorDoPPRA = CadastroDeElaboradorPPRA.InjetarEmUsuarioModel(x.EPPRA),
                 EnderecoCompleto = x.ENDERECO,
@@ -96,6 +162,20 @@ namespace MediCloud.Code.Clientes
                 UF = x.UF,
                 Observacoes = x.OBSERVACOES
             };
+        }
+
+        private static List<EmpresaModel> BuscarEmpresasDeCliente(int idCliente)
+        {
+            List<EmpresaModel> listaDeModels = new List<EmpresaModel>();
+
+            List<CLIENTE_OUTRASEMP> usuarioDoBanco = ControleDeClientes.buscarEmpresasDeCliente(idCliente);
+
+            usuarioDoBanco.ForEach(x =>
+            {
+                listaDeModels.Add(InjetarEmUsuarioModel(x));
+            });
+
+            return listaDeModels;
         }
 
         public static CLIENTE injetarEmUsuarioDAO(ClienteModel x)
@@ -119,6 +199,17 @@ namespace MediCloud.Code.Clientes
                 UF = x.UF,
                 NFUN = x.NumeroDeFuncionarios
             };
+        }
+
+        internal static EmpresaModel RecuperarEmpresaPorID(int codigoDaEmpresa)
+        {
+            if (codigoDaEmpresa != 0)
+            {
+                CLIENTE_OUTRASEMP usuarioencontrado = ControleDeClientes.BuscarEmpresa(codigoDaEmpresa);
+                return InjetarEmUsuarioModel(usuarioencontrado);
+            }
+            else
+                return null;
         }
 
         internal static List<ClienteModel> RecuperarContadorPorTermo(string prefix)

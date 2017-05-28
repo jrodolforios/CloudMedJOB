@@ -178,6 +178,7 @@
     <Compile Include="Code\Clientes\CadastroDeClientes.cs" />
     <Compile Include="Code\Clientes\CadastroDeProcedimentosMovimento.cs" />
     <Compile Include="Code\Enum\EnumParametro.cs" />
+    <Compile Include="Code\Financeiro\CadastroDeLancamentoDeContrato.cs" />
     <Compile Include="Code\Financeiro\CadastroDeRotaDeEntrega.cs" />
     <Compile Include="Code\Parametro\CadastroDeCidade.cs" />
     <Compile Include="Code\Parametro\CadastroDeDadosOcupacionais.cs" />
@@ -285,7 +286,9 @@
     <Compile Include="Models\Cliente\AutoCompleteProcendimentoMovimentoModel.cs" />
     <Compile Include="Models\Cliente\CargoModel.cs" />
     <Compile Include="Models\Cliente\ClienteModel.cs" />
+    <Compile Include="Models\Cliente\EmpresaModel.cs" />
     <Compile Include="Models\Cliente\ProcedimentoMovimentoModel.cs" />
+    <Compile Include="Models\Financeiro\DetalheContratoModel.cs" />
     <Compile Include="Models\Financeiro\LancamentoDeContratoModel.cs" />
     <Compile Include="Models\Financeiro\RotaDeEntregaModel.cs" />
     <Compile Include="Models\Fornecedor\FornecedorProcedimento.cs" />

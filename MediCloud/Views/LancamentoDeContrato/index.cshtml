@@ -1,20 +1,20 @@
 ﻿@using System.Linq
 
-@model List<MediCloud.Models.Parametro.ElaboradorPPRAModel>
+@model List<MediCloud.Models.Financeiro.LancamentoDeContratoModel>
 @{
-    ViewBag.Title = "Elaborador PPRA";
+    ViewBag.Title = "Lançamento de contratos";
 }
 <div class="page-header">
     <h1>
-        Elaborador PPRA
+        Lançamento de contratos
         <small>
             <i class="ace-icon fa fa-angle-double-right"></i>
-            Busca de Elaborador PPRA cadastrados
+            Busca de contratos lançados
         </small>
     </h1>
 </div>
-<div id="ElaboradorPPRAAlerts"></div>
-<form method="post" action="@Url.Content("~/ElaboradorPPRA")">
+<div id="LancamentoDeContratoAlerts"></div>
+<form method="post" action="@Url.Content("~/LancamentoDeContrato")">
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-12">
             <div class="input-group">
@@ -25,32 +25,36 @@
                     </button>
                 </div>
             </div>
-            <a href="/ElaboradorPPRA/DetalhamentoElaboradorPPRA" class="btn btn-xs">+ Novo ElaboradorPPRA</a>
+            <a href="/LancamentoDeContrato/DetalhamentoLancamentoDeContrato" class="btn btn-xs">+ Novo lançamento de contrato</a>
         </div>
     </div>
 </form>
 <div class="hr"></div>
 @if (Model != null && Model.Any())
 {
-    foreach (MediCloud.Models.Parametro.ElaboradorPPRAModel item in Model)
+    foreach (MediCloud.Models.Financeiro.LancamentoDeContratoModel item in Model)
     {
-        <div class="col-xs-12" id="@item.IdElaboradorPPRA">
+        <div class="col-xs-12" id="@item.IdLancamentoContrato">
             <div class="media search-media">
                 <div class="media-body">
                         <h4 class="media-heading">
-                            <span class="blue">@item.NomeElaboradorDoPPRA </span>
+                            <span class="blue">@item.FornecedorContrato.RazaoSocial </span>
                         </h4>
-                    <p><b>ID:</b> @item.IdElaboradorPPRA <br /> <br/>
+                    <p><b>Data:</b> @(item.Data.HasValue ? item.Data.Value.ToShortDateString() : string.Empty) <br /> Dia: @item.DiaDeFechamento </p>
 
                     <div class="search-actions text-center">
                         <span class="blue bolder bigger-110">Ações</span>
 
                         <div class="action-buttons bigger-150">
-                            <a href="javascript:excluirElaboradorPPRA(@item.IdElaboradorPPRA);">
-                                <i class="ace-icon fa fa-trash"></i>
+                            <a href="javascript:revisarDetalhes(@item.IdLancamentoContrato);" class="tooltipASO" title="Revisar detalhes">
+                                <i class="ace-icon purple fa fa-retweet"></i>
+                            </a>
+                            &nbsp;&nbsp;
+                            <a href="javascript:lancarMovimentos(@item.IdLancamentoContrato);" class="tooltipASO" title="Lançar movimentos">
+                                <i class="ace-icon green fa fa-share-square-o"></i>
                             </a>
                         </div>
-                        <a href="/ElaboradorPPRA/DetalhamentoElaboradorPPRA?codigoElaboradorPPRA=@item.IdElaboradorPPRA" class="search-btn-action btn btn-sm btn-block btn-info">Editar</a>
+                        <a href="/LancamentoDeContrato/DetalhamentoLancamentoDeContrato?codigoLancamentoDeContrato=@item.IdLancamentoContrato" class="search-btn-action btn btn-sm btn-block btn-info">Editar</a>
                     </div>
                 </div>
             </div>
@@ -69,10 +73,10 @@ else
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h3 class="smaller lighter blue no-margin">Excluir Elaborador PPRA</h3>
+                <h3 class="smaller lighter blue no-margin">Excluir lançamento de contrato</h3>
             </div>
             <div class="modal-body">
-                Tem certeza que deseja excluir este Elaborador PPRA?
+                Tem certeza que deseja excluir este lançamento?
             </div>
             <div class="modal-footer">
                 <button type="button" data-dismiss="modal" class="btn btn-primary" id="delete">
@@ -88,40 +92,61 @@ else
     </div>
 </div>
 
+<script src="assets/js/jquery-2.1.4.min.js"></script>
+<script src="assets/js/jquery-ui.min.js"></script>
+<script src="assets/js/jquery.ui.touch-punch.min.js"></script>
+
 <script type="text/javascript">
-    function excluirElaboradorPPRA(codigo) {
-        confirmDeleteModal(codigo);
-    }
-
-    function confirmDeleteModal(codigo) {
-        $('#confirm').modal({
-            backdrop: 'static',
-            keyboard: false
-        })
-            .one('click', '#delete', function () {
-                deletarElaboradorPPRA(codigo);
-            });
-    }
-
-    function deletarElaboradorPPRA(codigo) {
+    function lancarMovimentos(codigo) {
         $.ajax({
-            url: '/ElaboradorPPRA/DeletarElaboradorPPRA?codigoDoElaboradorPPRA=' + codigo,
+            url: '/LancamentoDeContrato/LancarMovimentos?codigoDoLancamentoDeContrato=' + codigo,
             type: "post",
             cache: false,
             success: function (savingStatus) {
                 var tipoAlert;
                 if (savingStatus.acaoBemSucedida) {
                     tipoAlert = 'alert-success';
-                    $("#" + codigo).remove();
                 }
                 else
                     tipoAlert = 'alert-danger';
 
-                $('#ElaboradorPPRAAlerts').html('<div class="alert ' + tipoAlert + '"><a class="close" data-dismiss="alert">×</a><span>' + savingStatus.mensagem + '</span></div>');
+                $('#LancamentoDeContratoAlerts').html('<div class="alert ' + tipoAlert + '"><a class="close" data-dismiss="alert">×</a><span>' + savingStatus.mensagem + '</span></div>');
             },
             error: function (xhr, ajaxOptions, thrownError) {
-                $('#ElaboradorPPRAAlerts').html('<div class="alert alert-danger"><a class="close" data-dismiss="alert">×</a><span>Ops! Não foi possível deletar este registro no servidor. Contate-nos para que possamos te ajudar melhor.</span></div>')
+                $('#LancamentoDeContratoAlerts').html('<div class="alert alert-danger"><a class="close" data-dismiss="alert">×</a><span>Ops! Não conseguimos solicitar o servidor para executar esta ação. Contate-nos para que possamos te ajudar melhor.</span></div>')
             }
         });
     }
+
+    function revisarDetalhes(codigo) {
+        $.ajax({
+            url: '/LancamentoDeContrato/RevisarDetalhes?codigoDoLancamentoDeContrato=' + codigo,
+            type: "post",
+            cache: false,
+            success: function (savingStatus) {
+                var tipoAlert;
+                if (savingStatus.acaoBemSucedida) {
+                    tipoAlert = 'alert-success';
+                }
+                else
+                    tipoAlert = 'alert-danger';
+
+                $('#LancamentoDeContratoAlerts').html('<div class="alert ' + tipoAlert + '"><a class="close" data-dismiss="alert">×</a><span>' + savingStatus.mensagem + '</span></div>');
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                $('#LancamentoDeContratoAlerts').html('<div class="alert alert-danger"><a class="close" data-dismiss="alert">×</a><span>Ops! Não conseguimos solicitar o servidor para executar esta ação. Contate-nos para que possamos te ajudar melhor.</span></div>')
+            }
+        });
+    }
+
+    $(".tooltipASO").tooltip({
+        show: null,
+        position: {
+            my: "left top",
+            at: "left bottom"
+        },
+        open: function (event, ui) {
+            ui.tooltip.animate({ top: ui.tooltip.position().top + 10 }, "fast");
+        }
+    });
 </script>

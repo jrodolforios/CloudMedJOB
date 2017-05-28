@@ -13,5 +13,13 @@ namespace MediCloud.Code.Enum
             AVista = 1,
             APrazo = 2
         }
+
+        public enum SituacaoContrato
+        {
+            vazio = 0,
+            Aberto = 1,
+            Conferencia = 2,
+            Lancado = 3
+        }
     }
 }

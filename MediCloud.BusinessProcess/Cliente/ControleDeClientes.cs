@@ -52,7 +52,7 @@ namespace MediCloud.BusinessProcess.Cliente
             {
                 ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
                 return new List<CLIENTE>();
-            } 
+            }
             catch (Exception ex)
             {
                 throw ex;
@@ -107,7 +107,7 @@ namespace MediCloud.BusinessProcess.Cliente
                     usuarioSalvo.RAZAOSOCIAL = clienteDAO.RAZAOSOCIAL;
                     usuarioSalvo.TIPOCLIENTE = clienteDAO.TIPOCLIENTE;
                     usuarioSalvo.UF = clienteDAO.UF;
-                    
+
                 }
                 else
                 {
@@ -122,6 +122,108 @@ namespace MediCloud.BusinessProcess.Cliente
             {
                 ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
                 return null;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static CLIENTE_OUTRASEMP SalvarEmpresa(CLIENTE_OUTRASEMP empresaDAO)
+        {
+            CloudMedContext contexto = new CloudMedContext();
+            CLIENTE_OUTRASEMP usuarioSalvo = new CLIENTE_OUTRASEMP();
+
+            try
+            {
+
+                if (empresaDAO.IDEMP > 0)
+                {
+                    usuarioSalvo = contexto.CLIENTE_OUTRASEMP.First(x => x.IDEMP == empresaDAO.IDEMP);
+
+                    usuarioSalvo.EMAIL = empresaDAO.EMAIL;
+                    usuarioSalvo.EMPRESA = empresaDAO.EMPRESA;
+                    usuarioSalvo.IDCLI = empresaDAO.IDCLI;
+                    usuarioSalvo.NOMERESP = empresaDAO.NOMERESP;
+                    usuarioSalvo.TELEFONE = empresaDAO.TELEFONE;
+
+                }
+                else
+                {
+                    usuarioSalvo = contexto.CLIENTE_OUTRASEMP.Add(empresaDAO);
+                }
+
+                contexto.SaveChanges();
+                return usuarioSalvo;
+
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+                return null;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static void ExcluirEmpresa(int codigoDaEmpresa)
+        {
+            CloudMedContext contexto = new CloudMedContext();
+            try
+            {
+                if (contexto.CLIENTE_OUTRASEMP.Any(x => x.IDEMP == codigoDaEmpresa))
+                    contexto.CLIENTE_OUTRASEMP.Remove(contexto.CLIENTE_OUTRASEMP.First(x => x.IDEMP == codigoDaEmpresa));
+
+                contexto.SaveChanges();
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static CLIENTE_OUTRASEMP BuscarEmpresa(int codigoDaEmpresa)
+        {
+            CloudMedContext contexto = new CloudMedContext();
+            try
+            {
+                if (contexto.CLIENTE_OUTRASEMP.Any(x => x.IDEMP == codigoDaEmpresa))
+                    return contexto.CLIENTE_OUTRASEMP.Where(x => x.IDEMP == codigoDaEmpresa).First();
+                else
+                    return null;
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+                return null;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static List<CLIENTE_OUTRASEMP> buscarEmpresasDeCliente(int idCliente)
+        {
+            CloudMedContext contexto = new CloudMedContext();
+
+            try
+            {
+                if (contexto.CLIENTE_OUTRASEMP.Any(x => x.IDCLI == idCliente))
+                    return contexto.CLIENTE_OUTRASEMP.Where(x => x.IDCLI == idCliente).ToList();
+                else
+                    return new List<CLIENTE_OUTRASEMP>();
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+                return new List<CLIENTE_OUTRASEMP>();
             }
             catch (Exception ex)
             {

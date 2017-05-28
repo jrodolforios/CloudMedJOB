@@ -17,7 +17,8 @@ namespace MediCloud.DatabaseModels
         [StringLength(50)]
         public string EMPRESA { get; set; }
 
-        public int? TELEFONE { get; set; }
+        [StringLength(15)]
+        public string TELEFONE { get; set; }
 
         [StringLength(50)]
         public string NOMERESP { get; set; }

@@ -81,6 +81,35 @@ namespace MediCloud.Controllers
         }
 
         [HttpPost]
+        public ActionResult SalvarEmpresa(FormCollection form)
+        {
+            int codigoCliente = Convert.ToInt32(form["codigoClienteEmpresa"]);
+
+            try
+            {
+                base.EstahLogado();
+                ViewBag.Title = "Clientes";
+
+                EmpresaModel model = CadastroDeClientes.SalvarEmpresa(form);
+
+                base.FlashMessage("Empresa cadastrada.", MessageType.Success);
+                Response.Redirect($"/Cliente/DetalhamentoCliente?codigoCliente={codigoCliente}");
+            }
+            catch (InvalidOperationException ex)
+            {
+                base.FlashMessage(ex.Message, MessageType.Error);
+                Response.Redirect($"/Cliente/DetalhamentoCliente?codigoCliente={codigoCliente}");
+            }
+            catch (Exception ex)
+            {
+                base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
+                Response.Redirect($"/Cliente/DetalhamentoCliente?codigoCliente={codigoCliente}");
+            }
+
+            return null;
+        }
+
+        [HttpPost]
         public JsonResult DeletarCliente(int codigoDoCliente)
         {
             ResultadoAjaxGenericoModel resultado = new ResultadoAjaxGenericoModel();
@@ -91,6 +120,30 @@ namespace MediCloud.Controllers
                 CadastroDeClientes.DeletarCliente(this, codigoDoCliente);
 
                 resultado.mensagem = "Cliente excluído.";
+                resultado.acaoBemSucedida = true;
+
+                return Json(resultado, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                resultado.mensagem = Constantes.MENSAGEM_GENERICA_DE_ERRO;
+                resultado.acaoBemSucedida = false;
+
+                return Json(resultado, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpPost]
+        public JsonResult DeletarEmpresa(int codigoDaEmpresa)
+        {
+            ResultadoAjaxGenericoModel resultado = new ResultadoAjaxGenericoModel();
+            try
+            {
+                base.EstahLogado();
+
+                CadastroDeClientes.DeletarEmpresa(this, codigoDaEmpresa);
+
+                resultado.mensagem = "Empresa excluída.";
                 resultado.acaoBemSucedida = true;
 
                 return Json(resultado, JsonRequestBehavior.AllowGet);
@@ -200,6 +253,27 @@ namespace MediCloud.Controllers
                 new AutoCompleteDefaultModel {Id=-1,Name=Constantes.MENSAGEM_GENERICA_DE_ERRO },
                 };
                 return Json(ObjList.ToArray(), JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpPost]
+        public JsonResult DetalharEmpresa(int codigoDaEmpresa)
+        {
+            try
+            {
+                EmpresaModel empresaEncontrada = CadastroDeClientes.RecuperarEmpresaPorID(codigoDaEmpresa);
+
+
+                return Json(empresaEncontrada, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                ResultadoAjaxGenericoModel resultado = new ResultadoAjaxGenericoModel();
+
+                resultado.mensagem = Constantes.MENSAGEM_GENERICA_DE_ERRO;
+                resultado.acaoBemSucedida = false;
+
+                return Json(resultado, JsonRequestBehavior.AllowGet);
             }
         }
 

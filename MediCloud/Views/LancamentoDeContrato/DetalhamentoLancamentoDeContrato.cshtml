@@ -1,193 +1,429 @@
-﻿@model MediCloud.Models.Parametro.ElaboradorPPRAModel
-    @{
-        string checkedInativo = string.Empty;
-        bool ElaboradorPPRANovo = true;
+﻿@model MediCloud.Models.Financeiro.LancamentoDeContratoModel
+@{
+    string checkedInativo = string.Empty;
+    bool LancamentoDeContratoNovo = true;
 
-        ViewBag.Title = "Elaborador PPRA";
+    ViewBag.Title = "Contrato Fixo";
 
-        if (Model != null)
-        {
-            ElaboradorPPRANovo = false;
-        }
+    if (Model != null)
+    {
+        LancamentoDeContratoNovo = false;
     }
-    <script src="/assets/js/jquery-2.1.4.min.js"></script>
-    <div class="page-header">
-        <h1>
-            Detalhamento de Elaborador PPRA
-            <small>
-                <i class="ace-icon fa fa-angle-double-right"></i>
-                Cadastro de Elaborador PPRA
-            </small>
-        </h1>
-    </div><!-- /.page-header -->
-    <div class="row">
-        <div class="col-xs-12">
-            <div id="user-profile-3" class="user-profile row">
-                <div class="col-sm-offset-1 col-sm-10">
-                    <div class="well well-sm">
-                        <!-- -
-                        <button type="button" class="close" data-dismiss="alert">&times;</button>
-                        &nbsp; -->
-                        <div class="inline middle blue bigger-110"> <span class="formPercent">0%</span> do cadastro concluído </div>
+}
+<script src="/assets/js/jquery-2.1.4.min.js"></script>
+<div class="page-header">
+    <h1>
+        Detalhamento de lançamento de contrato
+        <small>
+            <i class="ace-icon fa fa-angle-double-right"></i>
+            Cadastro de lançamento de contrato
+        </small>
+    </h1>
+</div><!-- /.page-header -->
+<div id="LancamentoDeContratoAlerts"></div>
+<div class="row">
+    <div class="col-xs-12">
+        <div id="user-profile-3" class="user-profile row">
+            <div class="col-sm-offset-1 col-sm-10">
+                <div class="well well-sm">
+                    <!-- -
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    &nbsp; -->
+                    <div class="inline middle blue bigger-110"> <span class="formPercent">0%</span> do cadastro concluído </div>
 
-                        &nbsp; &nbsp; &nbsp;
-                        <div style="width:200px;" data-percent="70%" class="inline middle no-margin progress progress-striped active pos-rel">
-                            <div class="progress-bar progress-bar-success" style="width:70%"></div>
-                        </div>
-
-                    </div><!-- /.well -->
-                    <div class="row">
-                        <label class="col-sm-4 control-label no-padding-right" for="form-field-username"><span class="badge badge-important mail-tag"></span>Obrigatório</label>
+                    &nbsp; &nbsp; &nbsp;
+                    <div style="width:200px;" data-percent="70%" class="inline middle no-margin progress progress-striped active pos-rel">
+                        <div class="progress-bar progress-bar-success" style="width:70%"></div>
                     </div>
 
-                    <div class="space"></div>
-                    <form method="post" class="form-horizontal" action="@Url.Content("~/ElaboradorPPRA/DetalhamentoElaboradorPPRA")">
-                        <input type="hidden" id="codigoElaboradorPPRA" name="codigoElaboradorPPRA" value="@Html.ValueFor(x => x.IdElaboradorPPRA)" />
-                        <div class="tabbable">
-                            <ul class="nav nav-tabs padding-16">
-                                <li class="active">
-                                    <a data-toggle="tab" href="#edit-basic">
-                                        <i class="green ace-icon fa fa-pencil-square-o bigger-125"></i>
-                                        Cadastro
+                </div><!-- /.well -->
+                <div class="row">
+                    <label class="col-sm-4 control-label no-padding-right" for="form-field-username"><span class="badge badge-important mail-tag"></span>Obrigatório</label>
+                </div>
+
+                <div class="space"></div>
+                <form method="post" class="form-horizontal" action="@Url.Content("~/LancamentoDeContrato/DetalhamentoLancamentoDeContrato")">
+
+                    <input type="hidden" id="codigoLancamentoDeContrato" name="codigoLancamentoDeContrato" value="@Html.ValueFor(x => x.IdLancamentoContrato)" />
+                    <input type="hidden" id="Total" name="Total" value="@Html.ValueFor(x => x.Total)" />
+                    <input type="hidden" id="Quantidade" name="Quantidade" value="@Html.ValueFor(x => x.Quantidade)" />
+                    <input type="hidden" id="Usuario" name="Usuario" value="@Html.ValueFor(x => x.Usuario)" />
+                    <input type="hidden" id="Data" name="Data" value="@Html.ValueFor(x => x.Data)" />
+                    <input type="hidden" id="Situacao" name="Situacao" value="@(Model != null ? (int)Model.SituacaoContrato : 0)" />
+
+                    <div class="tabbable">
+                        <ul class="nav nav-tabs padding-16">
+                            <li class="active">
+                                <a data-toggle="tab" href="#edit-basic">
+                                    <i class="green ace-icon fa fa-pencil-square-o bigger-125"></i>
+                                    Cadastro
+                                </a>
+                            </li>
+
+                            @if (Model != null && Model.IdLancamentoContrato > 0)
+                            {
+                                <li>
+                                    <a data-toggle="tab" href="#edit-settings">
+                                        <i class="purple ace-icon fa fa-file-text-o bigger-125"></i>
+                                        Detalhes do contrato
                                     </a>
                                 </li>
-                            </ul>
-                        </div>
-                        <div class="tab-content profile-edit-tab-content">
-                            <div id="edit-basic" class="tab-pane in active">
-                                <h4 class="header blue bolder smaller">Dados do Elaborador PPRA</h4>
+                            }
+                        </ul>
+                    </div>
+                    <div class="tab-content profile-edit-tab-content">
+                        <div id="edit-basic" class="tab-pane in active">
+                            <div class="action-buttons bigger-150">
+                                <a href="javascript:revisarDetalhes(@Html.ValueFor(x => x.IdLancamentoContrato));" class="tooltipASO" title="Revisar detalhes">
+                                    <i class="ace-icon purple fa fa-retweet"></i>
+                                </a>
+                                &nbsp;&nbsp;
+                                <a href="javascript:lancarMovimentos(@Html.ValueFor(x => x.IdLancamentoContrato));" class="tooltipASO" title="Lançar movimentos">
+                                    <i class="ace-icon green fa fa-share-square-o"></i>
+                                </a>
+                            </div>
+                            <h4 class="header blue bolder smaller">Dados do lançamento de contrato</h4>
 
-                                <div class="row">
-                                    <div class="vspace-12-sm"></div>
+                            <div class="vspace-12-sm"></div>
 
-                                    <div class="col-xs-12 col-sm-8">
-                                        <div class="form-group">
-                                            <label class="col-sm-4 control-label no-padding-right" for="form-field-username">ID</label>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Fornecedor&nbsp;<span class="badge badge-important mail-tag"></span> </label>
 
-                                            <div class="col-sm-8">
-                                                <input class="col-xs-12 col-sm-8 componenteFormulario" type="text" id="idElaboradorPPRA" readonly name="idElaboradorPPRA" placeholder="ID do Elaborador PPRA" value="@Html.ValueFor(x => x.IdElaboradorPPRA)" />
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label class="col-sm-4 control-label no-padding-right" for="form-field-username">Nome do Elaborador PPRA &nbsp;<span class="badge badge-important mail-tag"></span></label>
-
-                                            <div class="col-sm-8">
-                                                <input class="col-xs-12 col-sm-8 componenteFormulario" type="text" id="nomeElaboradorPPRA" name="nomeElaboradorPPRA" placeholder="Nome do ElaboradorPPRA" value="@Html.ValueFor(x => x.NomeElaboradorDoPPRA)" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="clearfix form-actions">
-                                    <div class="col-md-offset-3 col-md-9">
-                                        <button class="btn btn-info" type="submit">
-                                            <i class="ace-icon fa fa-check bigger-110"></i>
-                                            Salvar
-                                        </button>
-                                        @if (ElaboradorPPRANovo)
-                                        {
-                                            <span>&nbsp; &nbsp;</span>
-                                            <button class="btn" type="reset" id="limparForm">
-                                                <i class="ace-icon fa fa-undo bigger-110"></i>
-                                                Limpar
-                                            </button>
-                                        }
-                                        else
-                                        {
-                                            <span>&nbsp; &nbsp;</span>
-                                            <a href="javascript:excluirElaboradorPPRA(@Model.IdElaboradorPPRA)" class="btn btn-danger" type="reset">
-                                                <i class="ace-icon fa fa-times bigger-110"></i>
-                                                Excluir
-                                            </a>
-                                        }
+                                <div class="col-sm-8">
+                                    <input type="hidden" name="idFornecedor" id="idFornecedor" value="@Html.ValueFor(x => x.FornecedorContrato.IdFornecedor)" />
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <i class="ace-icon fa fa-search"></i>
+                                        </span>
+                                        <input class="col-xs-12 col-sm-6 componenteFormulario" type="text" id="fonecedor" name="fornecedor" placeholder="Digite o nome do fornecedor" value="@Html.ValueFor(x => x.FornecedorContrato.RazaoSocial)" />
                                     </div>
                                 </div>
                             </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label no-padding-right" for="form-field-username">Dia &nbsp;<span class="badge badge-important mail-tag"></span></label>
+
+                                <div class="col-sm-8">
+                                    <select class="chosen-select form-control" id="diaFechamento" name="diaFechamento" data-placeholder="Selecione um...">
+                                        <option value="0">.:Selecione:.</option>
+                                        <option value="10">Todo dia 10</option>
+                                        <option value="20">Todo dia 20</option>
+                                        <option value="30">Todo dia 30</option>
+                                    </select>
+                                    <script type="text/javascript">
+                                            $('#diaFechamento').val('@(Model != null ? Model.DiaDeFechamento : 0)');
+                                    </script>
+
+                                </div>
+
+                                <h4 class="header blue bolder smaller">&nbsp;</h4>
+                                <div class="vspace-12-sm"></div>
+
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-12 pricing-box">
+                                        <div id="detalhesContrato" class="widget-box widget-color-dark">
+                                            <div class="widget-header">
+                                                <h5 class="widget-title bigger lighter">Mais informações sobre este lançamento de contrato</h5>
+                                            </div>
+
+                                            <div class="widget-body">
+                                                <div class="widget-main">
+                                                    <ul class="list-unstyled spaced2">
+                                                        <li>
+                                                            <i class="ace-icon fa fa-check green"></i>
+                                                            ID do lançamento: <b>@Html.ValueFor(x => x.IdLancamentoContrato)</b>
+                                                        </li>
+
+                                                        <li>
+                                                            <i class="ace-icon fa fa-check green"></i>
+                                                            Total: <b>@Html.ValueFor(x => x.Total)</b>
+                                                        </li>
+
+                                                        <li>
+                                                            <i class="ace-icon fa fa-check green"></i>
+                                                            Quantidade: <b>@Html.ValueFor(x => x.Quantidade)</b>
+                                                        </li>
+
+                                                        <li>
+                                                            <i class="ace-icon fa fa-check green"></i>
+                                                            Usuário: <b>@Html.ValueFor(x => x.Usuario)</b>
+                                                        </li>
+
+                                                        <li>
+                                                            <i class="ace-icon fa fa-check green"></i>
+                                                            Data: <b>@Html.ValueFor(x => x.Data)</b>
+                                                        </li>
+                                                    </ul>
+
+                                                    <hr />
+                                                    <div class="price">
+                                                        <small>Situação do lançamento:</small>
+                                                        @if (Model != null && Model.SituacaoContrato == MediCloud.Code.Enum.EnumFinanceiro.SituacaoContrato.Conferencia)
+                                                        {
+                                                            <span class="label label-danger">Conferência</span>
+                                                        }
+                                                        else if (Model != null && Model.SituacaoContrato == MediCloud.Code.Enum.EnumFinanceiro.SituacaoContrato.Lancado)
+                                                        {
+                                                            <span class="label label-success">Lançado</span>
+                                                        }
+                                                        else if (Model != null && Model.SituacaoContrato == MediCloud.Code.Enum.EnumFinanceiro.SituacaoContrato.Aberto)
+                                                        {
+                                                            <span class="label label-primary">Aberto</span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span class="label label-default">Indefinido</span>
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="clearfix form-actions">
+                                <div class="col-md-offset-3 col-md-9">
+                                    <button class="btn btn-info" type="submit">
+                                        <i class="ace-icon fa fa-check bigger-110"></i>
+                                        Salvar
+                                    </button>
+                                    @if (LancamentoDeContratoNovo)
+                                    {
+                                        <span>&nbsp; &nbsp;</span>
+                                        <button class="btn" type="reset" id="limparForm">
+                                            <i class="ace-icon fa fa-undo bigger-110"></i>
+                                            Limpar
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        @*<span>&nbsp; &nbsp;</span>
+                                            <a href="javascript:excluirLancamentoDeContrato(@Model.IdLancamentoContrato)" class="btn btn-danger" type="reset">
+                                                <i class="ace-icon fa fa-times bigger-110"></i>
+                                                Excluir
+                                            </a>*@
+                                    }
+                                </div>
+                            </div>
                         </div>
-                    </form>
-                </div><!-- /.span -->
+
+                        <div id="edit-settings" class="tab-pane fade">
+                            <div class="space-10"></div>
+
+                            <h4 class="header blue bolder smaller">Detalhe do contrato</h4>
+                            <div class="vspace-12-sm"></div>
+
+                            @if (Model != null && Model.DetalhesContrato != null && Model.DetalhesContrato.Any())
+                            {
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <table id="simple-table" class="table  table-bordered table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>ID do ASO</th>
+                                                    <th>Total</th>
+                                                    <th>Cliente</th>
+                                                    <th>Procedimento</th>
+                                                    <th>Tabela</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (MediCloud.Models.Financeiro.DetalheContratoModel item in Model.DetalhesContrato)
+                                                {
+                                                    <tr>
+                                                        <td>@item.ASO.IdASO</td>
+                                                        <td>R$ @item.Valor.ToString("0.00")</td>
+                                                        <td>@item.Cliente.RazaoSocial</td>
+                                                        <td>@item.Procedimento.Nome</td>
+                                                        <td>@item.Tabela.NomeTabela</td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div><!-- /.span -->
+                                </div><!-- /.row -->
+                            }
+                            else
+                            {
+                                <div class="alert alert-block alert-info">
+                                    Nenhum detalhe para ser exibido.
+                                </div>
+                            }
+
+                        </div>
+
+
+
+                    </div>
+                </form>
+            </div><!-- /.span -->
+        </div>
+    </div>
+</div>
+
+<div id="confirm" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="smaller lighter blue no-margin">Excluir Elaborador PPRA</h3>
+            </div>
+            <div class="modal-body">
+                Tem certeza que deseja excluir este Elaborador PPRA?
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-primary" id="delete">
+                    <i class="ace-icon fa fa-check"></i>
+                    Sim
+                </button>
+                <button type="button" data-dismiss="modal" class="btn">
+                    <i class="ace-icon fa fa-times"></i>
+                    Não
+                </button>
             </div>
         </div>
     </div>
+</div>
+<script src="/assets/js/jquery-ui.min.js"></script>
+<script src="/assets/js/bootstrap-datepicker.min.js"></script>
+<script src="/assets/js/jquery.maskedinput.min.js"></script>
+<script src="/assets/js/jquery.ui.touch-punch.min.js"></script>
+<script src="/assets/js/ace-elements.min.js"></script>
+<script src="/assets/js/ace.min.js"></script>
+<script type="text/javascript">
+    function excluirLancamentoDeContrato(codigo) {
+        confirmDeleteModal(codigo);
+    }
 
-    <div id="confirm" class="modal fade">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h3 class="smaller lighter blue no-margin">Excluir Elaborador PPRA</h3>
-                </div>
-                <div class="modal-body">
-                    Tem certeza que deseja excluir este Elaborador PPRA?
-                </div>
-                <div class="modal-footer">
-                    <button type="button" data-dismiss="modal" class="btn btn-primary" id="delete">
-                        <i class="ace-icon fa fa-check"></i>
-                        Sim
-                    </button>
-                    <button type="button" data-dismiss="modal" class="btn">
-                        <i class="ace-icon fa fa-times"></i>
-                        Não
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <script src="/assets/js/jquery-ui.min.js"></script>
-    <script src="/assets/js/bootstrap-datepicker.min.js"></script>
-    <script src="/assets/js/jquery.maskedinput.min.js"></script>
-    <script src="/assets/js/jquery.ui.touch-punch.min.js"></script>
-    <script src="/assets/js/ace-elements.min.js"></script>
-    <script src="/assets/js/ace.min.js"></script>
-    <script type="text/javascript">
-        function excluirElaboradorPPRA(codigo) {
-            confirmDeleteModal(codigo);
-        }
-
-        function confirmDeleteModal(codigo) {
-            $('#confirm').modal({
-                backdrop: 'static',
-                keyboard: false
-            })
-                .one('click', '#delete', function () {
-                    window.location = "/ElaboradorPPRA/ExcluirElaboradorPPRA?codigoElaboradorPPRA=" + codigo;
-                });
-        }
-
-        $("#limparForm").click(function () {
-            var cntreq3 = 0;
-            var cntvals3 = 0;
-            $(".componenteFormulario").each(atualizarProgressBar());
-        });
-
-        $(document).ready(function () {
-            $('input').on('change', function () {
-                var cntreq = 0;
-                var cntvals = 0;
-                $(".componenteFormulario").each(atualizarProgressBar());
+    function confirmDeleteModal(codigo) {
+        $('#confirm').modal({
+            backdrop: 'static',
+            keyboard: false
+        })
+            .one('click', '#delete', function () {
+                window.location = "/LancamentoDeContrato/ExcluirLancamentoDeContrato?codigoLancamentoDeContrato=" + codigo;
             });
+    }
 
-            var cntreq3 = 0;
-            var cntvals3 = 0;
-            $(".componenteFormulario").each(atualizarProgressBar());
+    $("#limparForm").click(function () {
+        var cntreq3 = 0;
+        var cntvals3 = 0;
+        $(".componenteFormulario").each(atualizarProgressBar());
+    });
 
-        });
-
-        function atualizarProgressBar() {
+    $(document).ready(function () {
+        $('input').on('change', function () {
             var cntreq = 0;
             var cntvals = 0;
-            $(".componenteFormulario").each(function (val) {
-                cntreq++;
-                if ($(this).val() != '') {
-                    cntvals++;
+            $(".componenteFormulario").each(atualizarProgressBar());
+        });
+
+        var cntreq3 = 0;
+        var cntvals3 = 0;
+        $(".componenteFormulario").each(atualizarProgressBar());
+
+    });
+
+    function atualizarProgressBar() {
+        var cntreq = 0;
+        var cntvals = 0;
+        $(".componenteFormulario").each(function (val) {
+            cntreq++;
+            if ($(this).val() != '') {
+                cntvals++;
+            }
+        });
+        var count = (cntvals / cntreq) * 100;
+        count = parseInt(count);
+        $('.formPercent').empty();
+        $('.progress-striped').attr("data-percent", count + '%');
+        $('div.progress-bar-success').attr("style", "width: " + count + '%');
+        $('.formPercent').append(count + '% ');
+    }
+
+    $("#fonecedor").autocomplete({
+        source: function (request, response) {
+            $.ajax({
+                url: "/Fornecedor/BuscaFornecedorAJAX",
+                type: "POST",
+                dataType: "json",
+                data: { Prefix: request.term },
+                success: function (data) {
+                    response($.map(data, function (item) {
+                        return { label: item.Name, value: item.Name, Id: item.Id };
+                    }))
+
                 }
-            });
-            var count = (cntvals / cntreq) * 100;
-            count = parseInt(count);
-            $('.formPercent').empty();
-            $('.progress-striped').attr("data-percent", count + '%');
-            $('div.progress-bar-success').attr("style", "width: " + count + '%');
-            $('.formPercent').append(count + '% ');
+            })
+        },
+        select: function (event, ui) {
+            $('#idFornecedor').attr('value', ui.item.Id);
+            $('#fonecedor').val(ui.item.label);
+            return false;
         }
-    </script>
+    });
+    $('#fonecedor').on('blur', function () {
+        if ($(this).val().length === 0) {  //check for no. of characters entered
+            $('#idFornecedor').attr('value', 0);  // clear the textbox
+        }
+    });
+
+    $(".tooltipASO").tooltip({
+        show: null,
+        position: {
+            my: "left top",
+            at: "left bottom"
+        },
+        open: function (event, ui) {
+            ui.tooltip.animate({ top: ui.tooltip.position().top + 10 }, "fast");
+        }
+    });
+
+    function lancarMovimentos(codigo) {
+        $.ajax({
+            url: '/LancamentoDeContrato/LancarMovimentos?codigoDoLancamentoDeContrato=' + codigo,
+            type: "post",
+            cache: false,
+            success: function (savingStatus) {
+                var tipoAlert;
+                if (savingStatus.acaoBemSucedida) {
+                    tipoAlert = 'alert-success';
+
+                    location.reload();
+                }
+                else
+                    tipoAlert = 'alert-danger';
+
+                $('#LancamentoDeContratoAlerts').html('<div class="alert ' + tipoAlert + '"><a class="close" data-dismiss="alert">×</a><span>' + savingStatus.mensagem + '</span></div>');
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                $('#LancamentoDeContratoAlerts').html('<div class="alert alert-danger"><a class="close" data-dismiss="alert">×</a><span>Ops! Não conseguimos solicitar o servidor para executar esta ação. Contate-nos para que possamos te ajudar melhor.</span></div>')
+            }
+        });
+    }
+
+    function revisarDetalhes(codigo) {
+        $.ajax({
+            url: '/LancamentoDeContrato/RevisarDetalhes?codigoDoLancamentoDeContrato=' + codigo,
+            type: "post",
+            cache: false,
+            success: function (savingStatus) {
+                var tipoAlert;
+                if (savingStatus.acaoBemSucedida) {
+                    tipoAlert = 'alert-success';
+
+                    location.reload();
+                }
+                else
+                    tipoAlert = 'alert-danger';
+
+                $('#LancamentoDeContratoAlerts').html('<div class="alert ' + tipoAlert + '"><a class="close" data-dismiss="alert">×</a><span>' + savingStatus.mensagem + '</span></div>');
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                $('#LancamentoDeContratoAlerts').html('<div class="alert alert-danger"><a class="close" data-dismiss="alert">×</a><span>Ops! Não conseguimos solicitar o servidor para executar esta ação. Contate-nos para que possamos te ajudar melhor.</span></div>')
+            }
+        });
+    }
+</script>
