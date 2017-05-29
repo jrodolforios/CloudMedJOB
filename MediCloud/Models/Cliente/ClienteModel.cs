@@ -1,6 +1,7 @@
 ﻿using MediCloud.Models.Financeiro;
 using MediCloud.Models.Fornecedor;
 using MediCloud.Models.Parametro;
+using MediCloud.Models.Parametro.GrupoProcedimento;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,6 +42,7 @@ namespace MediCloud.Models.Cliente
         #region contatos
         public List<ContatoModel>  Contatos { get; set; }
         public List<EmpresaModel> Empresas { get; set; }
+        public List<TabelaPrecoModel> Tabelas { get; set; }
         #endregion
 
         #region Funcoes

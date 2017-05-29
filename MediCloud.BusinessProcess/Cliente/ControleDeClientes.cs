@@ -230,5 +230,57 @@ namespace MediCloud.BusinessProcess.Cliente
                 throw ex;
             }
         }
+
+        public static void AdicionarTabela(int codigoCliente, int codigoTabela)
+        {
+            CloudMedContext contexto = new CloudMedContext();
+            CLIENTE cliente;
+            try
+            {
+                if (contexto.CLIENTE.Any(x => x.IDCLI == codigoCliente))
+                {
+                    cliente = contexto.CLIENTE.First(x => x.IDCLI == codigoCliente);
+
+                    if (!cliente.TABELA.Any(x => x.IDTAB == codigoTabela))
+                        cliente.TABELA.Add(contexto.TABELA.First(x => x.IDTAB == codigoTabela));
+                }
+
+                contexto.SaveChanges();
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static void excluirTabelaDeCliente(int codigoCliente, int codigoTabela)
+        {
+            CloudMedContext contexto = new CloudMedContext();
+            CLIENTE cliente;
+            try
+            {
+                if (contexto.CLIENTE.Any(x => x.IDCLI == codigoCliente))
+                {
+                    cliente = contexto.CLIENTE.First(x => x.IDCLI == codigoCliente);
+
+                    if (cliente.TABELA.Any(x => x.IDTAB == codigoTabela))
+                        cliente.TABELA.Remove(contexto.TABELA.First(x => x.IDTAB == codigoTabela));
+                }
+
+                contexto.SaveChanges();
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

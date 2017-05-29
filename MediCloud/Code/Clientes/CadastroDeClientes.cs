@@ -150,6 +150,7 @@ namespace MediCloud.Code.Clientes
 
                 Contatos = CadastroDeContato.injetarEmUsuarioModel(x.CLIENTE_CONTATO.ToList()),
                 Empresas = BuscarEmpresasDeCliente((int)x.IDCLI),
+                Tabelas = CadastroDeTabelaDePreco.BuscarTabelasDeCliente((int)x.IDCLI),
 
                 ElaboradorDoPCMSO = CadastroDeElaboradorPCMSO.InjetarEmUsuarioModel(x.EPCMSO),
                 ElaboradorDoPPRA = CadastroDeElaboradorPPRA.InjetarEmUsuarioModel(x.EPPRA),
@@ -225,6 +226,11 @@ namespace MediCloud.Code.Clientes
             return resultados;
         }
 
+        internal static void AdicionarTabela(int codigoCliente, int codigoTabela)
+        {
+            ControleDeClientes.AdicionarTabela(codigoCliente, codigoTabela);
+        }
+
         private static string getTipoClienteBanco(EnumCliente.tipoEmpresa tipoEmpresa)
         {
             switch (tipoEmpresa)
@@ -238,6 +244,11 @@ namespace MediCloud.Code.Clientes
                 default:
                     return null;
             }
+        }
+
+        internal static void DeletarTabelaDeCliente(int codigoCliente, int codigoTabela)
+        {
+            ControleDeClientes.excluirTabelaDeCliente(codigoCliente, codigoTabela);
         }
 
         internal static void DeletarCliente(ClienteController clienteController, int codigoDoUsuario)

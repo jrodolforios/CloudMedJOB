@@ -29,12 +29,11 @@ namespace MediCloud.Code.Parametro
                 return null;
         }
 
-        internal static List<TabelaPrecoModel> RecuperarTabelaDePrecoPorTermo(FormCollection form)
+        internal static List<TabelaPrecoModel> RecuperarTabelaDePrecoPorTermo(string prefix)
         {
-            string termo = form["keywords"];
             List<TabelaPrecoModel> listaDeModels = new List<TabelaPrecoModel>();
 
-            List<TABELA> usuarioDoBanco = ControleDeTabelaPreco.buscarTabelaPorTermo(termo);
+            List<TABELA> usuarioDoBanco = ControleDeTabelaPreco.buscarTabelaPorTermo(prefix);
 
             usuarioDoBanco.ForEach(x =>
             {
@@ -42,6 +41,13 @@ namespace MediCloud.Code.Parametro
             });
 
             return listaDeModels;
+        }
+
+        internal static List<TabelaPrecoModel> RecuperarTabelaDePrecoPorTermo(FormCollection form)
+        {
+            string termo = form["keywords"];
+
+            return RecuperarTabelaDePrecoPorTermo(termo);
         }
 
         private static TabelaPrecoModel injetarEmUsuarioModel(TABELA tabelaEncontrada, bool materializarClasses = true)
@@ -170,5 +176,18 @@ namespace MediCloud.Code.Parametro
             };
         }
 
+        internal static List<TabelaPrecoModel> BuscarTabelasDeCliente(int idCliente)
+        {
+            List<TABELA> referenteEncontrado = ControleDeTabelaPreco.RecuperarTabelasDeCLiente(idCliente);
+
+            List<TabelaPrecoModel> encontrados = new List<TabelaPrecoModel>();
+
+            referenteEncontrado.ForEach(x =>
+            {
+                encontrados.Add(injetarEmUsuarioModel(x, false));
+            });
+
+            return encontrados;
+        }
     }
 }

@@ -277,6 +277,52 @@ namespace MediCloud.Controllers
             }
         }
 
+        [HttpPost]
+        public JsonResult AdicionarTabela(int codigoCliente, int codigoTabela)
+        {
+            ResultadoAjaxGenericoModel resultado = new ResultadoAjaxGenericoModel();
+            try
+            {
+                base.EstahLogado();
 
+                CadastroDeClientes.AdicionarTabela(codigoCliente, codigoTabela);
+
+                resultado.mensagem = "Tabela adicionada.";
+                resultado.acaoBemSucedida = true;
+
+                return Json(resultado, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                resultado.mensagem = Constantes.MENSAGEM_GENERICA_DE_ERRO;
+                resultado.acaoBemSucedida = false;
+
+                return Json(resultado, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpPost]
+        public JsonResult DeletarTabela(int codigoCliente, int codigoTabela)
+        {
+            ResultadoAjaxGenericoModel resultado = new ResultadoAjaxGenericoModel();
+            try
+            {
+                base.EstahLogado();
+
+                CadastroDeClientes.DeletarTabelaDeCliente(codigoCliente, codigoTabela);
+
+                resultado.mensagem = "Tabela excluída.";
+                resultado.acaoBemSucedida = true;
+
+                return Json(resultado, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                resultado.mensagem = Constantes.MENSAGEM_GENERICA_DE_ERRO;
+                resultado.acaoBemSucedida = false;
+
+                return Json(resultado, JsonRequestBehavior.AllowGet);
+            }
+        }
     }
 }

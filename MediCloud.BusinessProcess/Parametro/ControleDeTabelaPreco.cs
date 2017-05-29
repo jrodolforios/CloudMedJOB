@@ -149,5 +149,26 @@ namespace MediCloud.BusinessProcess.Parametro
                 throw ex;
             }
         }
+
+        public static List<TABELA> RecuperarTabelasDeCLiente(int idCliente)
+        {
+            CloudMedContext contexto = new CloudMedContext();
+            try
+            {
+                if (idCliente > 0)
+                    return contexto.TABELA.Where(x => x.CLIENTE.Any(y => y.IDCLI == idCliente)).ToList();
+                else
+                    return new List<TABELA>();
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+                return new List<TABELA>();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

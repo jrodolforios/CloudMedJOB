@@ -69,6 +69,14 @@
                                         Outras empresas
                                     </a>
                                 </li>
+
+                                <li>
+                                    <a data-toggle="tab" href="#edit-table">
+
+                                        <i class="red ace-icon fa fa-usd bigger-125"></i>
+                                        Tabelas disponíveis
+                                    </a>
+                                </li>
                             }
                         </ul>
                     </div>
@@ -266,6 +274,7 @@
                                 </div>
                             </div>
                         </div>
+
                         <div id="edit-settings" class="tab-pane fade">
                             <div class="space-10"></div>
                             <a href="javascript:detalhamentoDoContato(0)" class="btn btn-xs">+ Novo contato</a>
@@ -362,6 +371,57 @@
 
                         </div>
 
+                        <div id="edit-table" class="tab-pane in fade">
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Adicionar Tabela</label>
+
+                                <div class="col-sm-8">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <i class="ace-icon fa fa-search"></i>
+                                        </span>
+                                        <input class="col-xs-12 col-sm-6" type="text" id="tabela" name="tabela" placeholder="Insira uma tabela" value="" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row" id="tables">
+                                <h4 class="header blue bolder smaller">Tabelas disponíveis</h4>
+                                <div class="vspace-12-sm"></div>
+                                @if (Model != null && Model.Tabelas.Any())
+                                {
+                                    foreach (MediCloud.Models.Parametro.GrupoProcedimento.TabelaPrecoModel item in Model.Tabelas)
+                                    {
+                                        <div class="col-xs-12" id="@item.IdTabela">
+                                            <div class="media search-media">
+                                                <div class="media-body">
+                                                    <h4 class="media-heading">
+                                                        <span class="blue">@item.NomeTabela</span>
+                                                    </h4>
+                                                    <p><b>ID:</b> @item.IdTabela<br /> <b>Tipo:</b> @item.TipoPagamento</p>
+
+                                                    <div class="search-actions text-center">
+                                                        <span class="blue bolder bigger-110">Ações</span>
+
+                                                        <div class="action-buttons bigger-150">
+                                                            <a href="javascript:excluirTabela(@item.IdTabela);">
+                                                                <i class="ace-icon fa fa-trash"></i>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                }
+                                else
+                                {
+                                    <div class="alert alert-block alert-info">
+                                        Nenhuma tabela para ser exibido.
+                                    </div>
+                                }
+                            </div>
+                        </div>
                     </div>
                 </form>
             </div><!-- /.span -->
@@ -972,5 +1032,71 @@
         $('.progress-striped').attr("data-percent", count + '%');
         $('div.progress-bar-success').attr("style", "width: " + count + '%');
         $('.formPercent').append(count + '% ');
+    }
+
+    $("#tabela").autocomplete({
+        source: function (request, response) {
+            $.ajax({
+                url: "/TabelaDePreco/BuscaTabelaAJAX",
+                type: "POST",
+                dataType: "json",
+                data: { Prefix: request.term },
+                success: function (data) {
+                    response($.map(data, function (item) {
+                        return { label: item.Name, value: item.Name, Id: item.Id };
+                    }))
+
+                }
+            })
+        },
+        select: function (event, ui) {
+            $('#tabela').val('');
+
+            $.ajax({
+                url: '/Cliente/AdicionarTabela?codigoCliente=' + $("#codigoCliente").val() + "&codigoTabela=" + ui.item.Id,
+                type: "post",
+                cache: false,
+                success: function (savingStatus) {
+                    var tipoAlert;
+                    if (savingStatus.acaoBemSucedida)
+                        tipoAlert = 'alert-success';
+                    else
+                        tipoAlert = 'alert-danger';
+                    $('#tables').load(document.URL + ' #tables');
+                    $('#recomendacaoAlerts').html('<div class="alert ' + tipoAlert + '"><a class="close" data-dismiss="alert">×</a><span>' + savingStatus.mensagem + '</span></div>');
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    $('#recomendacaoAlerts').html('<div class="alert alert-danger"><a class="close" data-dismiss="alert">×</a><span>Ops! Não foi possível bloquear este usuário no servidor. Contate-nos para que possamos te ajudar melhor.</span></div>')
+                }
+            });
+
+            return false;
+        },
+        messages: {
+            noResults: "Sem resultados", results: ""
+        }
+    });
+    $('#tabela').on('blur', function () {
+        $('#tabela').attr('value', '');  // clear the textbox
+    });
+
+    function excluirTabela(codigo) {
+        $.ajax({
+            url: '/Cliente/DeletarTabela?codigoCliente=' + $("#codigoCliente").val() + "&codigoTabela=" + codigo,
+            type: "post",
+            cache: false,
+            success: function (savingStatus) {
+                var tipoAlert;
+                if (savingStatus.acaoBemSucedida)
+                    tipoAlert = 'alert-success';
+                else
+                    tipoAlert = 'alert-danger';
+                $('#tables').load(document.URL + ' #tables');
+                $('#recomendacaoAlerts').html('<div class="alert ' + tipoAlert + '"><a class="close" data-dismiss="alert">×</a><span>' + savingStatus.mensagem + '</span></div>');
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                $('#recomendacaoAlerts').html('<div class="alert alert-danger"><a class="close" data-dismiss="alert">×</a><span>Ops! Não foi possível bloquear este usuário no servidor. Contate-nos para que possamos te ajudar melhor.</span></div>')
+            }
+        });
     }
 </script>

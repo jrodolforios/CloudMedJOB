@@ -98,7 +98,7 @@ namespace MediCloud.Controllers
 
                 CadastroDeRecomendacao.DeletarProcedimentoDeRecomendacao(codigoRecomendacao, codigoReferencia, codigoprocedimento);
 
-                resultado.mensagem = "Risco excluído.";
+                resultado.mensagem = "Procedimento excluído.";
                 resultado.acaoBemSucedida = true;
 
                 return Json(resultado, JsonRequestBehavior.AllowGet);
