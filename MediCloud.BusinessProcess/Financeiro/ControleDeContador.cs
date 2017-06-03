@@ -31,29 +31,6 @@ namespace MediCloud.BusinessProcess.Financeiro
             }
         }
 
-        public static CONTADOR BuscarContadorPorID(int v)
-        {
-            CloudMedContext contexto = new CloudMedContext();
-
-            if (v == 0)
-                return null;
-
-            try
-            {
-                return contexto.CONTADOR.First(x => x.IDCONT == v);
-            }
-            catch (DbEntityValidationException ex)
-            {
-                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
-                return new CONTADOR();
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-
-        }
-
         public static CONTADOR buscarContadorPorID(int v)
         {
             CloudMedContext contexto = new CloudMedContext();

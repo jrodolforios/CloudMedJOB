@@ -40,6 +40,11 @@ namespace MediCloud.Code.Financeiro
         internal static List<FormaPagamentoModel> RecuperarFormaPagamentoPorTermo(FormCollection form) 
         {
             string prefix = form["keywords"];
+            return RecuperarFormaPagamentoPorTermo(prefix);
+        }
+
+        internal static List<FormaPagamentoModel> RecuperarFormaPagamentoPorTermo(string prefix)
+        {
             List<FORMADEPAGAMENTO> formasEncotnradas = ControleDeFormaDePagamento.RecuperarFormaDePagamentoPorTermo(prefix);
             List<FormaPagamentoModel> resultados = new List<FormaPagamentoModel>();
 

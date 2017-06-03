@@ -16,9 +16,14 @@ namespace MediCloud.Code.Parametro
         internal static List<CidadeModel> buscarCidade(FormCollection form)
         {
             string termo = form["keywords"];
+            return buscarCidade(termo);
+        }
+
+        internal static List<CidadeModel> buscarCidade(string prefix)
+        {
             List<CidadeModel> listaDeModels = new List<CidadeModel>();
 
-            List<CIDADE> usuarioDoBanco = ControleDeCidade.buscarCidadePorTermo(termo);
+            List<CIDADE> usuarioDoBanco = ControleDeCidade.buscarCidadePorTermo(prefix);
 
             usuarioDoBanco.ForEach(x =>
             {

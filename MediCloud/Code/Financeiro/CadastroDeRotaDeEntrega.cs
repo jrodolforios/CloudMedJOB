@@ -16,6 +16,11 @@ namespace MediCloud.Code.Financeiro
         {
             string prefix = form["keywords"];
 
+            return RecuperarRotaDeEntregaPorTermo(prefix);
+        }
+
+        internal static List<RotaDeEntregaModel> RecuperarRotaDeEntregaPorTermo(string prefix)
+        {
             List<ROTA> contadoresEncontrados = ControleDeRotaDeEntrega.BuscarContadoresPorTermo(prefix);
             List<RotaDeEntregaModel> resultados = new List<RotaDeEntregaModel>();
 

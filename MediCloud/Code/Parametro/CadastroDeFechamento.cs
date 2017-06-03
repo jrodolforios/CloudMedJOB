@@ -15,9 +15,14 @@ namespace MediCloud.Code.Parametro
         internal static List<FechamentoModel> BuscarFechamentoPorTermo(FormCollection form)
         {
             string termo = form["keywords"];
+            return BuscarFechamentoPorTermo(termo);
+        }
+
+        internal static List<FechamentoModel> BuscarFechamentoPorTermo(string prefix)
+        {
             List<FechamentoModel> listaDeModels = new List<FechamentoModel>();
 
-            List<MOVIMENTO_FECHAMENTO> usuarioDoBanco = ControleDeFechamento.buscarCidadePorTermo(termo);
+            List<MOVIMENTO_FECHAMENTO> usuarioDoBanco = ControleDeFechamento.buscarCidadePorTermo(prefix);
 
             usuarioDoBanco.ForEach(x =>
             {
