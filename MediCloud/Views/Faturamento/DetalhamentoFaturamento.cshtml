@@ -300,70 +300,171 @@
                     <input type="hidden" id="codigoFaturamentoNotaFiscal" name="codigoFaturamentoNotaFiscal" value="@Html.ValueFor(x => x.IdFaturamento)" />
 
                     <div class="form-group">
-                        <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Nome &nbsp;<span class="badge badge-important mail-tag"></span></label>
+                        <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Número da Nota Fiscal</label>
 
                         <div class="col-sm-8">
-                            <input class="col-xs-12 col-sm-6 " type="text" id="nomeContato" name="nomeContato" placeholder="nome do contato" value="" />
+                            <input class="col-xs-12 col-sm-6 " type="text" id="numeroNF" name="numeroNF" placeholder="Número da NF" value="" />
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Razão Social&nbsp;<span class="badge badge-important mail-tag"></span></label>
+
+                        <div class="col-sm-8">
+                            <input class="col-xs-12 col-sm-6 " type="text" id="razaoSocial" name="razaoSocial" placeholder="Razão Social" value="" />
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Departamento &nbsp;<span class="badge badge-important mail-tag"></span></label>
+                        <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Imprime nota fiscal</label>
 
-                        <div class="col-sm-8">
-                            <select class="form-control" id="departamento" name="departamento">
-                                <option value="">..:Selecione:..</option>
-                                <option value="ADM">Administrativo</option>
-                                <option value="COB">Cobrança</option>
-                                <option value="COM">Comercial</option>
-                                <option value="CON">Contratos</option>
-                                <option value="FIN">Financeiro</option>
-                                <option value="JUR">Jurídico</option>
-                                <option value="DIR">Diretoria</option>
-                                <option value="OUT">Outros</option>
-                            </select>
+                        <div class="col-sm-8 ">
+                            <div class="checkbox">
+                                <label>
+                                    <input name="imprimeNF" type="checkbox" class="ace" />
+                                    <span class="lbl"> &nbsp;</span>
+                                </label>
+                            </div>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Função &nbsp;<span class="badge badge-important mail-tag"></span></label>
+                        <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Valor total </label>
 
                         <div class="col-sm-8">
-                            <input class="col-xs-12 col-sm-6 " type="text" id="funcao" name="funcao" placeholder="Função do contato" value="" />
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    R$
+                                </span>
+                                <input class="col-xs-12 col-sm-5" type="text" id="valorTotal" name="valorTotal" placeholder="Valor Total" value="" />
+                            </div>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Tel. Fixo </label>
+                        <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Desconto ASO </label>
 
                         <div class="col-sm-8">
-                            <input class="col-xs-12 col-sm-6 " type="text" id="telFixo" name="telFixo" placeholder="número do telefone" value="" />
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    R$
+                                </span>
+                                <input class="col-xs-12 col-sm-5" type="text" id="descontoASO" name="descontoASO" placeholder="Desconto" value="" />
+                            </div>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Tel. Móvel </label>
+                        <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Desconto IRRF </label>
 
                         <div class="col-sm-8">
-                            <input class="col-xs-12 col-sm-6 " type="text" id="telMovel" name="telMovel" placeholder="número do celular" value="" />
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    R$
+                                </span>
+                                <input class="col-xs-12 col-sm-5" type="text" id="descontoIRRF" name="descontoIRRF" placeholder="Desconto" value="" />
+                            </div>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label class="col-sm-4 control-label no-padding-right" for="form-field-first">E-mail </label>
+                        <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Desconto PIS/CONFINS </label>
 
                         <div class="col-sm-8">
-                            <input class="col-xs-12 col-sm-6 " type="text" id="email" name="email" placeholder="Endereço de email" value="" />
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    R$
+                                </span>
+                                <input class="col-xs-12 col-sm-5" type="text" id="descontoPISCONFINS" name="descontoPISCONFINS" placeholder="Desconto" value="" />
+                            </div>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label class="col-sm-4 control-label no-padding-right" for="form-field-date">Data de nascimento</label>
+                        <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Desconto ISS </label>
+
+                        <div class="col-sm-8">
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    R$
+                                </span>
+                                <input class="col-xs-12 col-sm-5" type="text" id="descontoISS" name="descontoISS" placeholder="Desconto" value="" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Endereço </label>
+
+                        <div class="col-sm-8">
+                            <input class="col-xs-12 col-sm-6 " type="text" id="endereco" name="endereco" placeholder="Endereço" value="" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Bairro </label>
+
+                        <div class="col-sm-8">
+                            <input class="col-xs-12 col-sm-6 " type="text" id="bairro" name="bairro" placeholder="Bairro" value="" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Cidade </label>
+
+                        <div class="col-sm-8">
+                            <input class="col-xs-12 col-sm-6 " type="text" id="cidade" name="cidade" placeholder="Cidade" value="" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label no-padding-right" for="form-field-first">CEP </label>
+
+                        <div class="col-sm-8">
+                            <input class="col-xs-12 col-sm-6 " type="text" id="CEP" name="CEP" placeholder="CEP" value="" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label no-padding-right" for="form-field-first">UF </label>
+
+                        <div class="col-sm-8">
+                            <input class="col-xs-12 col-sm-6 " type="text" id="estado" name="estado" placeholder="UF" value="" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label no-padding-right" for="form-field-first">CPF/CNPJ/CEI </label>
+
+                        <div class="col-sm-8">
+                            <input class="col-xs-12 col-sm-6 " type="text" id="cpf" name="cpf" placeholder="Documento" value="" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Inscrição Estadual </label>
+
+                        <div class="col-sm-8">
+                            <input class="col-xs-12 col-sm-6 " type="text" id="InscricaoEstadual" name="InscricaoEstadual" placeholder="Documento" value="" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Inscrição Municipal </label>
+
+                        <div class="col-sm-8">
+                            <input class="col-xs-12 col-sm-6 " type="text" id="InscricaoMunicipal" name="InscricaoMunicipal" placeholder="Documento" value="" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label no-padding-right" for="form-field-date">Data de Emissão</label>
 
                         <div class="col-sm-8">
                             <div class="input-medium">
                                 <div class="input-group">
-                                    <input class="input-medium date-picker input-mask-date" id="dataNascimento" name="dataNascimento" type="text" data-date-format="dd/mm/yyyy" placeholder="dd/mm/yyyy" value="" />
+                                    <input class="input-medium date-picker input-mask-date" id="dataEmissao" name="dataEmissao" type="text" data-date-format="dd/mm/yyyy" placeholder="dd/mm/yyyy" value="" />
                                     <span class="input-group-addon">
                                         <i class="ace-icon fa fa-calendar"></i>
                                     </span>
@@ -371,16 +472,9 @@
                             </div>
                         </div>
                     </div>
-
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label no-padding-right" for="form-field-date">Observações</label>
-                        <div class="col-sm-12">
-                            <textarea class="col-sm-12" id="observacoesContato" name="observacoesContato" placeholder="observações adicionais"></textarea>
-                        </div>
-                    </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary" id="salvarContato">
+                    <button type="submit" class="btn btn-primary" id="salvarNotaFiscal">
                         <i class="ace-icon fa fa-check"></i>
                         Salvar
                     </button>
@@ -534,11 +628,27 @@
                                             limparComponentesNotaFiscal();
                                             if (codigo > 0) {
                                                 $.ajax({
-                                                    url: '/NotaFiscal/DetalharNotaFiscal?codigoDaNotaFiscal=' + codigo,
+                                                    url: '/NotaFiscal/DetalharNotaFiscal?codigoDoNotaFiscal=' + codigo,
                                                     type: "post",
                                                     cache: false,
                                                     success: function (data) {
-                 
+                                                        $("#numeroNF").attr('value', data.NumeroNotaFiscal);
+                                                        $("#razaoSocial").attr('value', data.RazaoSocial);
+                                                        $("#imprimeNF").attr('checked', data.Imprime);
+                                                        $("#valorTotal").attr('value', data.ValorTotal);
+                                                        $("#descontoASO").attr('value', data.ValorDescontoPorPrazo);
+                                                        $("#descontoIRRF").attr('value', data.ValorIRRF);
+                                                        $("#descontoPISCONFINS").attr('value', data.ValorPISCONFINS);
+                                                        $("#descontoISS").attr('value', data.ValorISS);
+                                                        $("#endereco").attr('value', data.Endereco);
+                                                        $("#bairro").attr('value', data.Bairro);
+                                                        $("#cidade").attr('value', data.Cidade);
+                                                        $("#CEP").attr('value', data.CEP);
+                                                        $("#estado").attr('value', data.Estado);
+                                                        $("#cpf").attr('value', data.CNPJ);
+                                                        $("#InscricaoEstadual").attr('value', data.InscricaoEstadual);
+                                                        $("#InscricaoMunicipal").attr('value', data.InscricaoMunicipal);
+                                                        $("#dataEmissao").attr('value', toDateFromJson(data.DataEmissao));
                                                     },
                                                     error: function (xhr, ajaxOptions, thrownError) {
                                                         $('#usuarioAlerts').html('<div class="alert alert-danger"><a class="close" data-dismiss="alert">×</a><span>Ops! Não foi possível detalhar este registro no servidor. Contate-nos para que possamos te ajudar melhor.</span></div>')
@@ -548,6 +658,45 @@
                                         }
 
                                         function limparComponentesNotaFiscal() {
-       
+                                            $("#numeroNF").attr('value', '');
+                                            $("#razaoSocial").attr('value', '');
+                                            $("#imprimeNF").attr('checked',false);
+                                            $("#valorTotal").attr('value', '');
+                                            $("#descontoASO").attr('value', '');
+                                            $("#descontoIRRF").attr('value', '');
+                                            $("#descontoPISCONFINS").attr('value', '');
+                                            $("#descontoISS").attr('value', '');
+                                            $("#endereco").attr('value', '');
+                                            $("#bairro").attr('value', '');
+                                            $("#cidade").attr('value', '');
+                                            $("#CEP").attr('value', '');
+                                            $("#estado").attr('value', '');
+                                            $("#cpf").attr('value', '');
+                                            $("#InscricaoEstadual").attr('value', '');
+                                            $("#InscricaoMunicipal").attr('value', '');
+                                            $("#dataEmissao").attr('value', '');
+                                            $("#observacoesContato").val('');
+                                        }
+
+                                        function toDateFromJson(src) {
+                                            if (src != null)
+                                                return formatDate(new Date(parseInt(src.substr(6))));
+                                            else
+                                                return '';
+                                        }
+
+                                        function formatDate(date) {
+                                            var monthNames = [
+                                                "January", "February", "March",
+                                                "April", "May", "June", "July",
+                                                "August", "September", "October",
+                                                "November", "December"
+                                            ];
+
+                                            var day = date.getDate();
+                                            var monthIndex = date.getMonth();
+                                            var year = date.getFullYear();
+
+                                            return day + '/' + ("0" + (monthIndex + 1)).slice(-2) + '/' + year;
                                         }
 </script>

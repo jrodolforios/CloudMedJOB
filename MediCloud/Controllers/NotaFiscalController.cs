@@ -80,5 +80,27 @@ namespace MediCloud.Controllers
                 return Json(resultado, JsonRequestBehavior.AllowGet);
             }
         }
+
+
+        [HttpPost]
+        public JsonResult DetalharNotaFiscal(int codigoDoNotaFiscal)
+        {
+            try
+            {
+                NotaFiscalModel contadoresEncontrados = CadastroDeNotaFiscal.RecuperarNotaFiscalPorID(codigoDoNotaFiscal);
+
+
+                return Json(contadoresEncontrados, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                ResultadoAjaxGenericoModel resultado = new ResultadoAjaxGenericoModel();
+
+                resultado.mensagem = Constantes.MENSAGEM_GENERICA_DE_ERRO;
+                resultado.acaoBemSucedida = false;
+
+                return Json(resultado, JsonRequestBehavior.AllowGet);
+            }
+        }
     }
 }
