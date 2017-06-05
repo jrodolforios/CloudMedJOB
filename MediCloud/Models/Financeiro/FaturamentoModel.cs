@@ -14,7 +14,7 @@ namespace MediCloud.Models.Financeiro
         public int Ano { get; set; }
 
         public string Usuario { get; set; }
-        public DateTime Data { get; set; }
+        public DateTime? Data { get; set; }
 
         public decimal? Valor { get; set; }
 
@@ -26,6 +26,8 @@ namespace MediCloud.Models.Financeiro
         public int IdClienteFim { get { return 999999; } }
 
         public DateTime? DataLimite { get; set; }
+
+        public List<NotaFiscalModel> NotasFiscais { get; set; }
 
         public string toString()
         {

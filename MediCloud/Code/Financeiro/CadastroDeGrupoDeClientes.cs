@@ -18,12 +18,17 @@ namespace MediCloud.Code.Financeiro
         {
             string prefix = form["keywords"];
 
+            return RecuperarSegmentoPorTermo(prefix);
+        }
+
+        internal static List<GrupoDeClientesModel> RecuperarSegmentoPorTermo(string prefix)
+        {
             List<CLIENTE_GRUPO> contadoresEncontrados = ControleDeGrupoDeClientes.BuscarContadoresPorTermo(prefix);
             List<GrupoDeClientesModel> resultados = new List<GrupoDeClientesModel>();
 
             contadoresEncontrados.ForEach(x =>
             {
-                resultados.Add(InjetarEmUsuarioModel(x)); 
+                resultados.Add(InjetarEmUsuarioModel(x));
             });
 
             return resultados;
@@ -63,12 +68,12 @@ namespace MediCloud.Code.Financeiro
                 };
         }
 
-        internal static GrupoDeClientesModel RecuperarGrupoDeCLientesPorID(int v)
+        internal static GrupoDeClientesModel RecuperarGrupoDeCLientesPorID(int v, bool carregarClasses = true)
         {
             if (v != 0)
             {
                 CLIENTE_GRUPO referenteEncontrado = ControleDeGrupoDeClientes.RecuperarGrupoDeCLientesPorID(v);
-                return InjetarEmUsuarioModel(referenteEncontrado, true);
+                return InjetarEmUsuarioModel(referenteEncontrado, carregarClasses);
             }
             else
                 return null;

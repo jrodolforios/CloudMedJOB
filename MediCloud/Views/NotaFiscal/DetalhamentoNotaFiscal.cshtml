@@ -1,0 +1,281 @@
+﻿@model MediCloud.Models.Financeiro.NotaFiscalModel
+@{
+    string checkedInativo = string.Empty;
+
+    ViewBag.Title = "Nota fiscal";
+
+}
+<script src="/assets/js/jquery-2.1.4.min.js"></script>
+<div class="page-header">
+    <h1>
+        Detalhamento de nota fiscal
+        <small>
+            <i class="ace-icon fa fa-angle-double-right"></i>
+            Cadastro de nota fiscal
+        </small>
+    </h1>
+</div><!-- /.page-header -->
+<div class="row">
+    <div class="col-xs-12">
+        <div id="user-profile-3" class="user-profile row">
+            <div class="col-sm-offset-1 col-sm-10">
+
+
+                <div class="space"></div>
+                <form method="post" class="form-horizontal" action="@Url.Content("~/NotaFiscal/DetalhamentoNotaFiscal")">
+                    <input type="hidden" id="codigoNotaFiscal" name="codigoNotaFiscal" value="@Html.ValueFor(x => x.IdNotaFiscal)" />
+                    <div class="tabbable">
+                        <ul class="nav nav-tabs padding-16">
+                            <li class="active">
+                                <a data-toggle="tab" href="#edit-basic">
+                                    <i class="green ace-icon fa fa-pencil-square-o bigger-125"></i>
+                                    Cadastro
+                                </a>
+                            </li>
+
+                            <li>
+                                <a data-toggle="tab" href="#edit-items">
+                                    <i class="purple ace-icon fa fa-list bigger-125"></i>
+                                    Itens
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="tab-content profile-edit-tab-content">
+                        <div id="edit-basic" class="tab-pane in fade active">
+                            <h4 class="header blue bolder smaller">Dados da nota fiscal</h4>
+                            <div class="vspace-12-sm"></div>
+
+                            <div class="profile-user-info">
+                                <div class="profile-info-row">
+                                    <div class="profile-info-name"> Número </div>
+
+                                    <div class="profile-info-value">
+                                        <span>@Html.ValueFor(x => x.NumeroNotaFiscal)</span>
+                                    </div>
+                                </div>
+
+                                <div class="profile-info-row">
+                                    <div class="profile-info-name">Razão Social </div>
+
+                                    <div class="profile-info-value">
+                                        <span>@Html.ValueFor(x => x.RazaoSocial)</span>
+                                    </div>
+                                </div>
+
+                                <div class="profile-info-row">
+                                    <div class="profile-info-name"> Data de emissão </div>
+                                    <div class="profile-info-value">
+                                        <span>@(Model?.DataEmissao?.ToShortDateString())</span>
+                                    </div>
+                                </div>
+
+                                <div class="profile-info-row">
+                                    <div class="profile-info-name"> Endereço </div>
+
+                                    <div class="profile-info-value">
+                                        <span>@Html.ValueFor(x => x.Endereco)</span>
+                                    </div>
+                                </div>
+
+                                <div class="profile-info-row">
+                                    <div class="profile-info-name"> Bairro </div>
+
+                                    <div class="profile-info-value">
+                                        <span>@Html.ValueFor(x => x.Bairro)</span>
+                                    </div>
+                                </div>
+
+                                <div class="profile-info-row">
+                                    <div class="profile-info-name"> Cidade </div>
+
+                                    <div class="profile-info-value">
+                                        <span>@Html.ValueFor(x => x.Cidade)</span>
+                                    </div>
+                                </div>
+
+                                <div class="profile-info-row">
+                                    <div class="profile-info-name"> UF </div>
+
+                                    <div class="profile-info-value">
+                                        <span>@Html.ValueFor(x => x.Estado)</span>
+                                    </div>
+                                </div>
+
+                                <div class="profile-info-row">
+                                    <div class="profile-info-name"> CEP </div>
+
+                                    <div class="profile-info-value">
+                                        <span>@Html.ValueFor(x => x.CEP)</span>
+                                    </div>
+                                </div>
+
+                                <div class="profile-info-row">
+                                    <div class="profile-info-name"> CPF/CNPJ/CEI </div>
+
+                                    <div class="profile-info-value">
+                                        <span>@Html.ValueFor(x => x.CNPJ)</span>
+                                    </div>
+                                </div>
+
+                                <div class="profile-info-row">
+                                    <div class="profile-info-name"> Inscrição Estadual </div>
+
+                                    <div class="profile-info-value">
+                                        <span>@Html.ValueFor(x => x.InscricaoEstadual)</span>
+                                    </div>
+                                </div>
+
+                                <div class="profile-info-row">
+                                    <div class="profile-info-name"> Inscrição Municipal </div>
+
+                                    <div class="profile-info-value">
+                                        <span>@Html.ValueFor(x => x.InscricaoMunicipal)</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <h4 class="header blue bolder smaller">Valores</h4>
+                            <div class="vspace-12-sm"></div>
+
+                            <div class="profile-user-info">
+                                <div class="profile-info-row">
+                                    <div class="profile-info-name"> Desconto de prazo </div>
+
+                                    <div class="profile-info-value">
+                                        <span>R$ @(Model?.ValorDescontoPorPrazo?.ToString("0.00"))</span>
+                                    </div>
+                                </div>
+
+                                <div class="profile-info-row">
+                                    <div class="profile-info-name">Desconto IRRF </div>
+
+                                    <div class="profile-info-value">
+                                        <span>R$ @(Model?.ValorIRRF?.ToString("0.00"))</span>
+                                    </div>
+                                </div>
+
+                                <div class="profile-info-row">
+                                    <div class="profile-info-name"> Desconto ISS </div>
+                                    <div class="profile-info-value">
+                                        <span>R$ @(Model?.ValorISS?.ToString("0.00"))</span>
+                                    </div>
+                                </div>
+
+                                <div class="profile-info-row">
+                                    <div class="profile-info-name"> Desconto PIS/CONFINS </div>
+
+                                    <div class="profile-info-value">
+                                        <span>R$ @(Model?.ValorPISCONFINS?.ToString("0.00"))</span>
+                                    </div>
+                                </div>
+
+                                <div class="profile-info-row">
+                                    <div class="profile-info-name"> Total Bruto </div>
+
+                                    <div class="profile-info-value">
+                                        <span><b>R$ @(Model?.ValorTotal?.ToString("0.00"))</b></span>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="clearfix form-actions">
+                                <div class="col-md-offset-3 col-md-9">
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="edit-items" class="tab-pane in fade">
+                            <h4 class="header blue bolder smaller">Itens da nota fiscal</h4>
+                            <div class="vspace-12-sm"></div>
+
+                            @if (Model != null && Model.DetalhesNotaFiscal != null && Model.DetalhesNotaFiscal.Any())
+                            {
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <table id="simple-table" class="table  table-bordered table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>SubGrupo</th>
+                                                    <th>Quantidade</th>
+                                                    <th>Valor Unitário</th>
+                                                    <th>Valor Total</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (MediCloud.Models.Financeiro.DetalheNotaFiscalModel item in Model.DetalhesNotaFiscal)
+                                                {
+                                                    <tr>
+                                                        <td>@item.SubGrupo</td>
+                                                        <td>@item.Quantidade</td>
+                                                        <td>R$ @(item.ValorUnitario?.ToString("0.00"))</td>
+                                                        <td>R$ @(item.Total?.ToString("0.00"))</td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div><!-- /.span -->
+                                </div><!-- /.row -->
+                            }
+                            else
+                            {
+                                <div class="alert alert-block alert-info">
+                                    Nenhum detalhe para ser exibido.
+                                </div>
+                            }
+                            
+                        </div>
+
+                    </div>
+                </form>
+            </div><!-- /.span -->
+        </div>
+    </div>
+</div>
+
+<script src="/assets/js/jquery-ui.min.js"></script>
+<script src="/assets/js/bootstrap-datepicker.min.js"></script>
+<script src="/assets/js/jquery.maskedinput.min.js"></script>
+<script src="/assets/js/jquery.ui.touch-punch.min.js"></script>
+<script src="/assets/js/ace-elements.min.js"></script>
+<script src="/assets/js/ace.min.js"></script>
+<script type="text/javascript">
+
+    $("#limparForm").click(function () {
+        var cntreq3 = 0;
+        var cntvals3 = 0;
+        $(".componenteFormulario").each(atualizarProgressBar());
+    });
+
+    $(document).ready(function () {
+        $('input').on('change', function () {
+            var cntreq = 0;
+            var cntvals = 0;
+            $(".componenteFormulario").each(atualizarProgressBar());
+        });
+
+        var cntreq3 = 0;
+        var cntvals3 = 0;
+        $(".componenteFormulario").each(atualizarProgressBar());
+
+    });
+
+    function atualizarProgressBar() {
+        var cntreq = 0;
+        var cntvals = 0;
+        $(".componenteFormulario").each(function (val) {
+            cntreq++;
+            if ($(this).val() != '') {
+                cntvals++;
+            }
+        });
+        var count = (cntvals / cntreq) * 100;
+        count = parseInt(count);
+        $('.formPercent').empty();
+        $('.progress-striped').attr("data-percent", count + '%');
+        $('div.progress-bar-success').attr("style", "width: " + count + '%');
+        $('.formPercent').append(count + '% ');
+    }
+</script>

@@ -9,17 +9,22 @@ namespace MediCloud.DatabaseModels
     [Table("SLNOTAFISCAL")]
     public partial class SLNOTAFISCAL
     {
-        [Column(TypeName = "numeric")]
+        [Key]
+        [Column(Order = 4, TypeName = "numeric")]
         public decimal? QUANTIDADE { get; set; }
 
         public decimal? VLR_UNITARIO { get; set; }
 
+        [Key]
+        [Column(Order = 5)]
         public decimal? TOTAL_ITEM { get; set; }
 
         [Key]
         [Column(Order = 0, TypeName = "numeric")]
         public decimal IDNF { get; set; }
 
+        [Key]
+        [Column(Order = 2)]
         [StringLength(30)]
         public string SUBGRUPO { get; set; }
 
@@ -71,16 +76,10 @@ namespace MediCloud.DatabaseModels
         [Column(TypeName = "numeric")]
         public decimal? IDCLI { get; set; }
 
-        [Key]
-        [Column(Order = 2)]
         public decimal ISSNF { get; set; }
 
-        [Key]
-        [Column(Order = 3)]
         public decimal IRRFNF { get; set; }
 
-        [Key]
-        [Column(Order = 4)]
         public decimal PISCOFINSCSSL { get; set; }
 
         public decimal? DESCONTONOPRAZO { get; set; }

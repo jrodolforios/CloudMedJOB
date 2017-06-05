@@ -33,7 +33,7 @@ namespace MediCloud.Models.Financeiro
         public string Usuario { get; set; }
 
         public string InscricaoEstadual { get; set; }
-        public string InscricaoMUnicipal { get; set; }
+        public string InscricaoMunicipal { get; set; }
         public string CNPJ { get; set; }
 
         public string IdBB { get; set; }
@@ -44,7 +44,7 @@ namespace MediCloud.Models.Financeiro
         public string Observacao { get; set; }
 
         public EnumFinanceiro.ImprimeNotaFiscal ImprimeNotaFiscal { get; set; }
-        public EnumFinanceiro.ModoDeEntrega ModoDeDentrega { get; set; }
+        public EnumFinanceiro.ModoDeEntrega ModoDeDeEntrega { get; set; }
 
         public string toString()
         {

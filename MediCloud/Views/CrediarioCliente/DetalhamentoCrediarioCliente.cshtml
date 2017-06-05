@@ -1,22 +1,26 @@
-﻿@model MediCloud.Models.Parametro.SegmentoModel
+﻿@model MediCloud.Models.Financeiro.CrediarioClienteModel
     @{
-        string checkedInativo = string.Empty;
-        bool SegmentoNovo = true;
+        string checkedBloqueado = string.Empty;
+        string checkedImprimeNF = string.Empty;
+        bool CrediarioClienteNovo = true;
 
-        ViewBag.Title = "Segmento";
+        ViewBag.Title = "Crediário de cliente";
 
         if (Model != null)
         {
-            SegmentoNovo = false;
+            checkedImprimeNF = (Model.Imprime.HasValue ? Model.Imprime.Value : false) ? "checked" : string.Empty;
+            checkedBloqueado = (Model.Bloqueado.HasValue ? Model.Bloqueado.Value : false) ? "checked" : string.Empty;
+
+            CrediarioClienteNovo = false;
         }
     }
     <script src="/assets/js/jquery-2.1.4.min.js"></script>
     <div class="page-header">
         <h1>
-            Detalhamento de Segmento
+            Detalhamento de crediário de cliente
             <small>
                 <i class="ace-icon fa fa-angle-double-right"></i>
-                Cadastro de Segmento
+                Cadastro de crediário de cliente
             </small>
         </h1>
     </div><!-- /.page-header -->
@@ -41,8 +45,8 @@
                     </div>
 
                     <div class="space"></div>
-                    <form method="post" class="form-horizontal" action="@Url.Content("~/Segmento/DetalhamentoSegmento")">
-                        <input type="hidden" id="codigoSegmento" name="codigoSegmento" value="@Html.ValueFor(x => x.IdSegmento)" />
+                    <form method="post" class="form-horizontal" action="@Url.Content("~/CrediarioCliente/DetalhamentoCrediarioCliente")">
+                        <input type="hidden" id="codigoCrediarioCliente" name="codigoCrediarioCliente" value="@Html.ValueFor(x => x.IdCrediarioCliente)" />
                         <div class="tabbable">
                             <ul class="nav nav-tabs padding-16">
                                 <li class="active">
@@ -55,27 +59,179 @@
                         </div>
                         <div class="tab-content profile-edit-tab-content">
                             <div id="edit-basic" class="tab-pane in active">
-                                <h4 class="header blue bolder smaller">Dados do Segmento</h4>
-
-                                <div class="row">
+                                <h4 class="header blue bolder smaller">Dados do crediário de cliente</h4>
                                     <div class="vspace-12-sm"></div>
 
-                                    <div class="col-xs-12 col-sm-8">
-                                        <div class="form-group">
-                                            <label class="col-sm-4 control-label no-padding-right" for="form-field-username">ID</label>
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Cliente &nbsp;<span class="badge badge-important mail-tag"></span></label>
 
-                                            <div class="col-sm-8">
-                                                <input class="col-xs-12 col-sm-8 componenteFormulario" type="text" id="idSegmento" readonly name="idSegmento" placeholder="ID do Segmento" value="@Html.ValueFor(x => x.IdSegmento)" />
-                                            </div>
+                                    <div class="col-sm-8">
+                                        <input type="hidden" name="idCliente" id="idCliente" value="@Html.ValueFor(x => x.Cliente.IdCliente)" />
+                                        <div class="input-group">
+                                            <span class="input-group-addon">
+                                                <i class="ace-icon fa fa-search"></i>
+                                            </span>
+                                            <input class="col-xs-12 col-sm-6 componenteFormulario" type="text" id="cliente" name="cliente" placeholder="Digite o nome do cliente" value="@Html.ValueFor(x => x.Cliente.RazaoSocial)" />
                                         </div>
+                                    </div>
+                                </div>
 
-                                        <div class="form-group">
-                                            <label class="col-sm-4 control-label no-padding-right" for="form-field-username">Nome do Segmento &nbsp;<span class="badge badge-important mail-tag"></span></label>
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Grupo de clientes &nbsp;<span class="badge badge-important mail-tag"></span></label>
 
-                                            <div class="col-sm-8">
-                                                <input class="col-xs-12 col-sm-8 componenteFormulario" type="text" id="nomeSegmento" name="nomeSegmento" placeholder="Nome do Segmento" value="@Html.ValueFor(x => x.NomeSegmento)" />
-                                            </div>
+                                    <div class="col-sm-8">
+                                        <input type="hidden" name="idGrupoDeCliente" id="idGrupoDeCliente" value="@Html.ValueFor(x => x.GrupoDeClientes.IdGrupoCliente)" />
+                                        <div class="input-group">
+                                            <span class="input-group-addon">
+                                                <i class="ace-icon fa fa-search"></i>
+                                            </span>
+                                            <input class="col-xs-12 col-sm-6 componenteFormulario" type="text" id="GrupoDeCliente" name="GrupoDeCliente" placeholder="Digite o nome do cliente" value="@Html.ValueFor(x => x.GrupoDeClientes.NomeGrupo)" />
                                         </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Tabela &nbsp;<span class="badge badge-important mail-tag"></span></label>
+
+                                    <div class="col-sm-8">
+                                        <input type="hidden" name="idTabela" id="idTabela" value="@Html.ValueFor(x => x.Tabela.IdTabela)" />
+                                        <div class="input-group">
+                                            <span class="input-group-addon">
+                                                <i class="ace-icon fa fa-search"></i>
+                                            </span>
+                                            <input class="col-xs-12 col-sm-6 componenteFormulario" type="text" id="Tabela" name="Tabela" placeholder="Digite o nome do cliente" value="@Html.ValueFor(x => x.Tabela.NomeTabela)" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Dia do fechamento </label>
+
+                                    <div class="col-sm-8">
+                                        <input type="hidden" name="idFechamento" id="idFechamento" value="@Html.ValueFor(x => x.Fechamento.IdFechamento)" />
+                                        <div class="input-group">
+                                            <span class="input-group-addon">
+                                                <i class="ace-icon fa fa-search"></i>
+                                            </span>
+                                            <input class="col-xs-12 col-sm-6 componenteFormulario" type="text" id="Fechamento" name="Fechamento" placeholder="Digite o dia de fechamento" value="@Html.ValueFor(x => x.Fechamento.PeriodoApuracao)" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Inscrição Municipal</label>
+
+                                    <div class="col-sm-8">
+                                        <input class="col-xs-12 col-sm-8 componenteFormulario" type="text" id="inscricaoMunicipal" name="inscricaoMunicipal" placeholder="razão social" value="@Html.ValueFor(x => x.InscricaoMunicipal)" />
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Inscrição Estadual</label>
+
+                                    <div class="col-sm-8">
+                                        <input class="col-xs-12 col-sm-8 componenteFormulario" type="text" id="inscricaoEstadual" name="inscricaoEstadual" placeholder="razão social" value="@Html.ValueFor(x => x.InscricaoEstadual)" />
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Bloqueado</label>
+
+                                    <div class="col-sm-8 ">
+                                        <div class="checkbox">
+                                            <label>
+                                                <input name="bloqueado" type="checkbox" class="ace" @checkedBloqueado />
+                                                <span class="lbl"> &nbsp;</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Imprime nota fiscal</label>
+
+                                    <div class="col-sm-8 ">
+                                        <div class="checkbox">
+                                            <label>
+                                                <input name="imprimeNF" type="checkbox" class="ace" @checkedImprimeNF />
+                                                <span class="lbl"> &nbsp;</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <h4 class="header blue bolder smaller">Dados para cobrança</h4>
+                                <div class="vspace-12-sm"></div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label no-padding-right" for="form-field-first">CPF/CNPJ/CEI</label>
+
+                                    <div class="col-sm-8">
+                                        <input class="col-xs-12 col-sm-8 componenteFormulario" type="text" id="CNPJ" name="CNPJ" placeholder="CNPJ" value="@Html.ValueFor(x => x.CNPJ)" />
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Tipo</label>
+
+                                    <div class="col-sm-8">
+                                        <select class="form-control" id="tipoEmpresa" name="tipoEmpresa">
+                                            <option value="0">..:Selecione:..</option>
+                                            <option value="2">Pessoa Jurídica</option>
+                                            <option value="1">Pessoa Física</option>
+                                            <option value="3">CEI</option>
+                                        </select>
+                                        <script type="text/javascript">
+                                                $('#tipoEmpresa').val('@(Model == null ? 0 : (int)Model.TipoEmpresa)');
+                                        </script>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Empresa (Sacado)</label>
+
+                                    <div class="col-sm-8">
+                                        <input class="col-xs-12 col-sm-8 componenteFormulario" type="text" id="empresaSacado" name="empresaSacado" placeholder="razão social" value="@Html.ValueFor(x => x.EmpresaSacado)" />
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Rua (com nº) </label>
+
+                                    <div class="col-sm-8">
+                                        <textarea class="col-sm-12 componenteFormulario" id="endereco" name="endereco" placeholder="digíte o nome da rua com número e complemento">@Html.ValueFor(x => x.Endereco)</textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Bairro </label>
+
+                                    <div class="col-sm-8">
+                                        <input class="col-xs-12 col-sm-6 componenteFormulario" type="text" id="bairro" name="bairro" placeholder="nome do bairro" value="@Html.ValueFor(x => x.Bairro)" />
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Cidade </label>
+
+                                    <div class="col-sm-8">
+                                        <input class="col-xs-12 col-sm-6 componenteFormulario" type="text" id="cidade" name="cidade" placeholder="nome da cidade" value="@Html.ValueFor(x => x.Cidade)" />
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label no-padding-right" for="form-field-first">CEP </label>
+
+                                    <div class="col-sm-8">
+                                        <input class="col-xs-12 col-sm-3 componenteFormulario" type="text" id="CEP" name="CEP" placeholder="número do CEP" value="@Html.ValueFor(x => x.CEP)" />
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label no-padding-right" for="form-field-first">UF </label>
+
+                                    <div class="col-sm-8">
+                                        <input class="col-xs-12 col-sm-1 componenteFormulario" type="text" id="UF" name="UF" placeholder="sigla do UF" value="@Html.ValueFor(x => x.Estado)" />
                                     </div>
                                 </div>
 
@@ -85,7 +241,7 @@
                                             <i class="ace-icon fa fa-check bigger-110"></i>
                                             Salvar
                                         </button>
-                                        @if (SegmentoNovo)
+                                        @if (CrediarioClienteNovo)
                                         {
                                             <span>&nbsp; &nbsp;</span>
                                             <button class="btn" type="reset" id="limparForm">
@@ -96,7 +252,7 @@
                                         else
                                         {
                                             <span>&nbsp; &nbsp;</span>
-                                            <a href="javascript:excluirSegmento(@Model.IdSegmento)" class="btn btn-danger" type="reset">
+                                            <a href="javascript:excluirCrediarioCliente(@Model.IdCrediarioCliente)" class="btn btn-danger" type="reset">
                                                 <i class="ace-icon fa fa-times bigger-110"></i>
                                                 Excluir
                                             </a>
@@ -116,10 +272,10 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h3 class="smaller lighter blue no-margin">Excluir Segmento</h3>
+                    <h3 class="smaller lighter blue no-margin">Excluir crediário de cliente</h3>
                 </div>
                 <div class="modal-body">
-                    Tem certeza que deseja excluir este Segmento?
+                    Tem certeza que deseja excluir este crediário de cliente?
                 </div>
                 <div class="modal-footer">
                     <button type="button" data-dismiss="modal" class="btn btn-primary" id="delete">
@@ -141,7 +297,7 @@
     <script src="/assets/js/ace-elements.min.js"></script>
     <script src="/assets/js/ace.min.js"></script>
     <script type="text/javascript">
-        function excluirSegmento(codigo) {
+        function excluirCrediarioCliente(codigo) {
             confirmDeleteModal(codigo);
         }
 
@@ -151,7 +307,7 @@
                 keyboard: false
             })
                 .one('click', '#delete', function () {
-                    window.location = "/Segmento/ExcluirSegmento?codigoSegmento=" + codigo;
+                    window.location = "/CrediarioCliente/ExcluirCrediarioCliente?codigoCrediarioCliente=" + codigo;
                 });
         }
 
@@ -190,4 +346,124 @@
             $('div.progress-bar-success').attr("style", "width: " + count + '%');
             $('.formPercent').append(count + '% ');
         }
+
+        $("#cliente").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Cliente/BuscaClienteAJAX",
+                    type: "POST",
+                    dataType: "json",
+                    data: { Prefix: request.term },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return { label: item.Name, value: item.Name, Id: item.Id };
+                        }))
+
+                    }
+                })
+            },
+            select: function (event, ui) {
+                $('#idCliente').attr('value', ui.item.Id);
+                $('#cliente').val(ui.item.label);
+                return false;
+            },
+            messages: {
+                noResults: "Sem resultados", results: ""
+            }
+        });
+        $('#GrupoDeCliente').on('blur', function () {
+            if ($(this).val().length === 0) {  //check for no. of characters entered
+                $('#idCliente').attr('value', 0);  // clear the textbox
+            }
+        });
+
+        $("#GrupoDeCliente").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/GrupoDeClientes/BuscaGrupoDeClientesAJAX",
+                    type: "POST",
+                    dataType: "json",
+                    data: { Prefix: request.term },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return { label: item.Name, value: item.Name, Id: item.Id };
+                        }))
+
+                    }
+                })
+            },
+            select: function (event, ui) {
+                $('#idGrupoDeCliente').attr('value', ui.item.Id);
+                $('#GrupoDeCliente').val(ui.item.label);
+                return false;
+            },
+            messages: {
+                noResults: "Sem resultados", results: ""
+            }
+        });
+        $('#GrupoDeCliente').on('blur', function () {
+            if ($(this).val().length === 0) {  //check for no. of characters entered
+                $('#idGrupoDeCliente').attr('value', 0);  // clear the textbox
+            }
+        });
+
+        $("#Tabela").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/TabelaDePreco/BuscaTabelaAJAX",
+                    type: "POST",
+                    dataType: "json",
+                    data: { Prefix: request.term },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return { label: item.Name, value: item.Name, Id: item.Id };
+                        }))
+
+                    }
+                })
+            },
+            select: function (event, ui) {
+                $('#idTabela').attr('value', ui.item.Id);
+                $('#Tabela').val(ui.item.label);
+                return false;
+            },
+            messages: {
+                noResults: "Sem resultados", results: ""
+            }
+        });
+        $('#Tabela').on('blur', function () {
+            if ($(this).val().length === 0) {  //check for no. of characters entered
+                $('#idTabela').attr('value', 0);  // clear the textbox
+            }
+        });
+
+        $("#Fechamento").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Fechamento/BuscaFechamentoAJAX",
+                    type: "POST",
+                    dataType: "json",
+                    data: { Prefix: request.term },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return { label: item.Name, value: item.Name, Id: item.Id };
+                        }))
+
+                    }
+                })
+            },
+            select: function (event, ui) {
+                $('#idFechamento').attr('value', ui.item.Id);
+                $('#Fechamento').val(ui.item.label);
+                return false;
+            },
+            messages: {
+                noResults: "Sem resultados", results: ""
+            }
+        });
+        $('#Fechamento').on('blur', function () {
+            if ($(this).val().length === 0) {  //check for no. of characters entered
+                $('#idFechamento').attr('value', 0);  // clear the textbox
+            }
+        });
     </script>
