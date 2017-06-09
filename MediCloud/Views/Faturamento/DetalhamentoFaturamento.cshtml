@@ -294,10 +294,19 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h3 class="smaller lighter blue no-margin">Contato de cliente</h3>
             </div>
-            <form method="post" id="formContatoCliente" class="form-horizontal" action="@Url.Content("~/Cliente/SalvarContato")">
+            <form method="post" id="formNotaFiscalFaturamento" class="form-horizontal" action="@Url.Content("~/Faturamento/SalvarNotaFiscal")">
                 <div class="modal-body">
                     <input type="hidden" id="codigoNotaFiscal" name="codigoNotaFiscal" value="0" />
                     <input type="hidden" id="codigoFaturamentoNotaFiscal" name="codigoFaturamentoNotaFiscal" value="@Html.ValueFor(x => x.IdFaturamento)" />
+
+                    <input type="hidden" id="idCidadeCobranca" name="idCidadeCobranca" value="0" />
+                    <input type="hidden" id="idCliente" name="idCliente" value="0" />
+                    <input type="hidden" id="dataVencimento" name="dataVencimento" value="" />
+                    <input type="hidden" id="idFormaPagamento" name="idFormaPagamento" value="0" />
+                    <input type="hidden" id="idGrupoClientes" name="idGrupoClientes" value="0" />
+                    <input type="hidden" id="imprimeNotaFiscal" name="imprimeNotaFiscal" value="0" />
+                    <input type="hidden" id="modoEntrega" name="modoEntrega" value="0" />
+                    <input type="hidden" id="observacao" name="observacao" value="" />
 
                     <div class="form-group">
                         <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Número da Nota Fiscal</label>
@@ -633,6 +642,7 @@
                                                     cache: false,
                                                     success: function (data) {
                                                         $("#numeroNF").attr('value', data.NumeroNotaFiscal);
+                                                        $("#codigoNotaFiscal").attr('value', data.IdNotaFiscal);
                                                         $("#razaoSocial").attr('value', data.RazaoSocial);
                                                         $("#imprimeNF").attr('checked', data.Imprime);
                                                         $("#valorTotal").attr('value', data.ValorTotal);
@@ -649,6 +659,16 @@
                                                         $("#InscricaoEstadual").attr('value', data.InscricaoEstadual);
                                                         $("#InscricaoMunicipal").attr('value', data.InscricaoMunicipal);
                                                         $("#dataEmissao").attr('value', toDateFromJson(data.DataEmissao));
+
+                                                        //Ocultos
+                                                        $("#dataVencimento").attr('value', toDateFromJson(data.DataVencimento));
+                                                        $("#observacao").attr('value', data.ObservacaoNF);
+                                                        $("#modoEntrega").attr('value', data.ModoEntrega);
+                                                        $("#imprimeNotaFiscal").attr('value', data.ImprimeNotaFiscal);
+                                                        $("#idGrupoClientes").attr('value', data.GrupoDeCliente.IdGrupoCliente);
+                                                        $("#idFormaPagamento").attr('value', data.FormaDePagamento.IdFormaPagamento);
+                                                        $("#idCliente").attr('value', data.Cliente.IdCliente);
+                                                        $("#idCidadeCobranca").attr('value', data.CidadeCobranca.IdCidade);
                                                     },
                                                     error: function (xhr, ajaxOptions, thrownError) {
                                                         $('#usuarioAlerts').html('<div class="alert alert-danger"><a class="close" data-dismiss="alert">×</a><span>Ops! Não foi possível detalhar este registro no servidor. Contate-nos para que possamos te ajudar melhor.</span></div>')
@@ -658,6 +678,7 @@
                                         }
 
                                         function limparComponentesNotaFiscal() {
+                                            $("#codigoNotaFiscal").attr('value', '');
                                             $("#numeroNF").attr('value', '');
                                             $("#razaoSocial").attr('value', '');
                                             $("#imprimeNF").attr('checked',false);
@@ -676,6 +697,16 @@
                                             $("#InscricaoMunicipal").attr('value', '');
                                             $("#dataEmissao").attr('value', '');
                                             $("#observacoesContato").val('');
+
+                                            //Ocultos
+                                            $("#dataVencimento").attr('value', '');
+                                            $("#observacao").attr('value', '');
+                                            $("#modoEntrega").attr('value','');
+                                            $("#imprimeNotaFiscal").attr('value', '');
+                                            $("#idGrupoClientes").attr('value', '');
+                                            $("#idFormaPagamento").attr('value', '');
+                                            $("#idCliente").attr('value', '');
+                                            $("#idCidadeCobranca").attr('value', '');
                                         }
 
                                         function toDateFromJson(src) {

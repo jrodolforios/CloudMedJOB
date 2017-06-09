@@ -111,5 +111,65 @@ namespace MediCloud.BusinessProcess.Financeiro
                 throw ex;
             }
         }
+
+        public static NOTAFISCAL SalvarNotaFiscal(NOTAFISCAL z)
+        {
+            CloudMedContext contexto = new CloudMedContext();
+            NOTAFISCAL setorSalvo = new NOTAFISCAL();
+
+            try
+            {
+                if (z.IDNF > 0)
+                {
+                    setorSalvo = contexto.NOTAFISCAL.First(x => x.IDNF == z.IDNF);
+
+                    setorSalvo.BAIRRO = z.BAIRRO;
+                    setorSalvo.CEP = z.CEP;
+                    setorSalvo.CIDADE = z.CIDADE;
+                    setorSalvo.CPFCNPJ = z.CPFCNPJ;
+                    setorSalvo.DATAEMISSAO = z.DATAEMISSAO;
+                    setorSalvo.DATAVENCIMENTO = z.DATAVENCIMENTO;
+                    setorSalvo.DESCONTONOPRAZO = z.DESCONTONOPRAZO;
+                    setorSalvo.ENDERECO = z.ENDERECO;
+                    setorSalvo.ENTREGA = z.ENTREGA;
+                    setorSalvo.IDBBCOBRANCA = z.IDBBCOBRANCA;
+                    setorSalvo.IDCID = z.IDCID;
+                    setorSalvo.IDCLI = z.IDCLI;
+                    setorSalvo.IDCLIGRU = z.IDCLIGRU;
+                    setorSalvo.IDFAT = z.IDFAT;
+                    setorSalvo.IDFORPAG = z.IDFORPAG;
+                    setorSalvo.IMPRIME = z.IMPRIME;
+                    setorSalvo.INSCESTADUAL = z.INSCESTADUAL;
+                    setorSalvo.INSCMUNICIPAL = z.INSCMUNICIPAL;
+                    setorSalvo.IRRFNF = z.IRRFNF;
+                    setorSalvo.ISSNF = z.ISSNF;
+                    setorSalvo.NF = z.NF;
+                    setorSalvo.NUMNF = z.NUMNF;
+                    setorSalvo.OBSNF = z.OBSNF;
+                    setorSalvo.PISCOFINSCSSL = z.PISCOFINSCSSL;
+                    setorSalvo.RAZAOSOCIAL = z.RAZAOSOCIAL;
+                    setorSalvo.TOTALNOTA = z.TOTALNOTA;
+                    setorSalvo.UF = z.UF;
+                    
+                }
+                else
+                {
+                    setorSalvo = contexto.NOTAFISCAL.Add(z);
+                }
+
+                contexto.SaveChanges();
+                return setorSalvo;
+
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+                return null;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

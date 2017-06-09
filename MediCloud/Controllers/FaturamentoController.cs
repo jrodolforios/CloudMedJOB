@@ -135,6 +135,35 @@ namespace MediCloud.Controllers
         }
 
         [HttpPost]
+        public ActionResult SalvarNotaFiscal(FormCollection form)
+        {
+            int codigoFaturamento = Convert.ToInt32(form["codigoFaturamentoNotaFiscal"]);
+
+            try
+            {
+                base.EstahLogado();
+                ViewBag.Title = "Faturamento";
+
+                NotaFiscalModel model = CadastroDeNotaFiscal.SalvarNotaFiscal(form);
+
+                base.FlashMessage("Nota fiscal cadastrada.", MessageType.Success);
+                Response.Redirect($"/Faturamento/DetalhamentoFaturamento?codigoFaturamento={codigoFaturamento}");
+            }
+            catch (InvalidOperationException ex)
+            {
+                base.FlashMessage(ex.Message, MessageType.Error);
+                Response.Redirect($"/Faturamento/DetalhamentoFaturamento?codigoFaturamento={codigoFaturamento}");
+            }
+            catch (Exception ex)
+            {
+                base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
+                Response.Redirect($"/Faturamento/DetalhamentoFaturamento?codigoFaturamento={codigoFaturamento}");
+            }
+
+            return null;
+        }
+
+        [HttpPost]
         public JsonResult FecharFaturamento(int codigoFaturamento)
         {
             ResultadoAjaxGenericoModel resultado = new ResultadoAjaxGenericoModel();

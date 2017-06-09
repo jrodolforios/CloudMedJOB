@@ -12,7 +12,7 @@ namespace MediCloud.BusinessProcess.Financeiro
 {
     public class ControleDeFaturamento
     {
-        public static FATURAMENTO buscarCargoPorID(decimal? idFat)
+        public static FATURAMENTO buscarFaturamentoPorID(decimal? idFat)
         {
             CloudMedContext contexto = new CloudMedContext();
             try

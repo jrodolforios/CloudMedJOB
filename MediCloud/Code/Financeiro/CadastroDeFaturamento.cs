@@ -15,7 +15,7 @@ namespace MediCloud.Code.Financeiro
         {
             if (idFat.HasValue && idFat != 0)
             {
-                FATURAMENTO faturamentoEncontrado = ControleDeFaturamento.buscarCargoPorID(idFat);
+                FATURAMENTO faturamentoEncontrado = ControleDeFaturamento.buscarFaturamentoPorID(idFat);
                 return InjetarEmUsuarioModel(faturamentoEncontrado, carregarClasses);
             }
             else

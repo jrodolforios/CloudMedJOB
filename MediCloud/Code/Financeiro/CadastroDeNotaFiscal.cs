@@ -9,6 +9,7 @@ using MediCloud.BusinessProcess.Financeiro;
 using MediCloud.Code.Parametro;
 using MediCloud.Code.Clientes;
 using MediCloud.Code.Enum;
+using MediCloud.BusinessProcess.Util;
 
 namespace MediCloud.Code.Financeiro
 {
@@ -122,6 +123,89 @@ namespace MediCloud.Code.Financeiro
             }
             else
                 return null;
+        }
+
+        internal static NotaFiscalModel SalvarNotaFiscal(FormCollection form)
+        {
+            NotaFiscalModel notaFiscalModel = injetarEmUsuarioModel(form);
+            notaFiscalModel.validar();
+
+            NOTAFISCAL notaFiscalDAO = injetarEmUsuarioDAO(notaFiscalModel);
+            notaFiscalDAO = ControleDeNotaFiscal.SalvarNotaFiscal(notaFiscalDAO);
+
+            notaFiscalModel = InjetarEmUsuarioModel(notaFiscalDAO);
+
+            return notaFiscalModel;
+        }
+
+        private static NOTAFISCAL injetarEmUsuarioDAO(NotaFiscalModel x)
+        {
+            return new NOTAFISCAL()
+            {
+                BAIRRO = x.Bairro,
+                CEP = x.CEP,
+                CIDADE = x.Cidade,
+                CPFCNPJ = x.CNPJ,
+                DATAEMISSAO = x.DataEmissao,
+                DATAVENCIMENTO = x.DataVencimento,
+                DESCONTONOPRAZO = x.ValorDescontoPorPrazo,
+                ENDERECO = x.Endereco,
+                ENTREGA = ConverterModoDeEntregaDeStringParaEnum(x.ModoEntrega),
+                IDBBCOBRANCA = x.IdBB,
+                IDCID = x.CidadeCobranca?.IdCidade,
+                IDCLI = x.Cliente?.IdCliente,
+                IDCLIGRU = x.GrupoDeCliente?.IdGrupoCliente,
+                IDFAT = x.Faturamento?.IdFaturamento,
+                IDFORPAG = x.FormaDePagamento?.IdFormaPagamento,
+                IDNF = x.IdNotaFiscal,
+                IMPRIME = x.Imprime ? "S" : "N",
+                INSCESTADUAL = x.InscricaoEstadual,
+                INSCMUNICIPAL = x.InscricaoMunicipal,
+                IRRFNF = x.ValorIRRF,
+                ISSNF = x.ValorISS,
+                NF = ConverterImprimeNotaFiscalDeStringParaEnum(x.ImprimeNotaFiscal),
+                NUMNF = x.NumeroNotaFiscal,
+                OBSNF = x.ObservacaoNF,
+                PISCOFINSCSSL = x.ValorPISCONFINS,
+                RAZAOSOCIAL = x.RazaoSocial,
+                TOTALNOTA = x.ValorTotal,
+                UF = x.Estado
+            };
+        }
+
+        private static NotaFiscalModel injetarEmUsuarioModel(FormCollection form)
+        {
+            return new NotaFiscalModel()
+            {
+                Bairro = string.IsNullOrEmpty(form["bairro"]) ? null : form["bairro"],
+                CEP = string.IsNullOrEmpty(form["CEP"]) ? null : Util.ApenasNumeros(form["CEP"]),
+                Cidade = string.IsNullOrEmpty(form["cidade"]) ? null : form["cidade"],
+                CidadeCobranca = CadastroDeCidade.RecuperarCidadePorID(string.IsNullOrEmpty(form["idCidadeCobranca"]) ? 0 : Convert.ToInt32(form["idCidadeCobranca"])),
+                Cliente = CadastroDeClientes.RecuperarClientePorID(string.IsNullOrEmpty(form["idCliente"]) ? 0 : Convert.ToInt32(form["idCliente"])),
+                CNPJ = string.IsNullOrEmpty(form["cpf"]) ? null : Util.ApenasNumeros(form["cpf"]),
+                DataEmissao = string.IsNullOrEmpty(form["dataEmissao"]) ? null : (DateTime?)Convert.ToDateTime(form["dataEmissao"]),
+                DataVencimento = string.IsNullOrEmpty(form["dataVencimento"]) ? null : (DateTime?)Convert.ToDateTime(form["dataVencimento"]),
+                Endereco = string.IsNullOrEmpty(form["endereco"]) ? null : form["endereco"],
+                Estado = string.IsNullOrEmpty(form["estado"]) ? null : form["estado"],
+                Faturamento = CadastroDeFaturamento.RecuperarFaturamentoPorID(string.IsNullOrEmpty(form["codigoFaturamentoNotaFiscal"]) ? 0 : Convert.ToInt32(form["codigoFaturamentoNotaFiscal"])),
+                FormaDePagamento = CadastroFormaPagamento.RecuperarFormaPagamentoPorID(string.IsNullOrEmpty(form["idFormaPagamento"]) ? 0 : Convert.ToInt32(form["idFormaPagamento"])),
+                GrupoDeCliente = CadastroDeGrupoDeClientes.RecuperarGrupoDeCLientesPorID(string.IsNullOrEmpty(form["idGrupoClientes"]) ? 0 : Convert.ToInt32(form["idGrupoClientes"])),
+                IdBB = null,
+                IdNotaFiscal = string.IsNullOrEmpty(form["codigoNotaFiscal"]) ? 0 : Convert.ToInt32(form["codigoNotaFiscal"]),
+                Imprime = string.IsNullOrEmpty(form["imprimeNF"]) ? false : Convert.ToBoolean(form["imprimeNF"].ToLower() == "on"),
+                ImprimeNotaFiscal = string.IsNullOrEmpty(form["imprimeNotaFiscal"]) ? EnumFinanceiro.ImprimeNotaFiscal.vazio : (EnumFinanceiro.ImprimeNotaFiscal)Convert.ToInt32(form["imprimeNotaFiscal"]),
+                InscricaoEstadual = string.IsNullOrEmpty(form["InscricaoEstadual"]) ? null : form["InscricaoEstadual"],
+                InscricaoMunicipal = string.IsNullOrEmpty(form["InscricaoMunicipal"]) ? null : form["InscricaoMunicipal"],
+                ModoEntrega = string.IsNullOrEmpty(form["modoEntrega"]) ? EnumFinanceiro.ModoDeEntrega.vazio : (EnumFinanceiro.ModoDeEntrega)Convert.ToInt32(form["modoEntrega"]),
+                NumeroNotaFiscal = string.IsNullOrEmpty(form["numeroNF"]) ? null : form["numeroNF"],
+                ObservacaoNF = string.IsNullOrEmpty(form["observacao"]) ? null : form["observacao"],
+                RazaoSocial = string.IsNullOrEmpty(form["razaoSocial"]) ? null : form["razaoSocial"],
+                ValorDescontoPorPrazo = string.IsNullOrEmpty(form["descontoASO"]) ? null : (decimal?)Convert.ToDecimal(form["descontoASO"]),
+                ValorIRRF = string.IsNullOrEmpty(form["descontoIRRF"]) ? null : (decimal?)Convert.ToDecimal(form["descontoIRRF"]),
+                ValorISS = string.IsNullOrEmpty(form["descontoISS"]) ? null : (decimal?)Convert.ToDecimal(form["descontoISS"]),
+                ValorPISCONFINS = string.IsNullOrEmpty(form["descontoPISCONFINS"]) ? null : (decimal?)Convert.ToDecimal(form["descontoPISCONFINS"]),
+                ValorTotal = string.IsNullOrEmpty(form["valorTotal"]) ? null : (decimal?)Convert.ToDecimal(form["valorTotal"])
+            };
         }
 
         internal static List<NotaFiscalModel> RecuperarNotaFiscalPorTermo(FormCollection form)
