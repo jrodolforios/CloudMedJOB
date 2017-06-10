@@ -51,6 +51,7 @@
     <Compile Include="Cliente\ControleDeClientes.cs" />
     <Compile Include="Cliente\ControleDeProcedimentosMovimento.cs" />
     <Compile Include="Financeiro\ControleDeCrediarioCliente.cs" />
+    <Compile Include="Financeiro\ControleDeFechamentoCaixa.cs" />
     <Compile Include="Financeiro\ControleDeGrupoDeClientes.cs" />
     <Compile Include="Financeiro\ControleDeLancamentoDeContratoFixo.cs" />
     <Compile Include="Financeiro\ControleDeNotaFiscal.cs" />

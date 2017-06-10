@@ -88,6 +88,7 @@ namespace MediCloud.BusinessProcess.Financeiro
             catch (Exception ex)
             {
                 throw ex;
+                
             }
         }
 

@@ -1,0 +1,349 @@
+﻿@model MediCloud.Models.Financeiro.FechamentoCaixaModel
+@{
+    string checkedInativo = string.Empty;
+    bool FechamentoCaixaNovo = true;
+
+    ViewBag.Title = "Caixa";
+
+    if (Model != null)
+    {
+        FechamentoCaixaNovo = false;
+    }
+}
+<script src="/assets/js/jquery-2.1.4.min.js"></script>
+<div class="page-header">
+    <h1>
+        Detalhamento de Caixa
+        <small>
+            <i class="ace-icon fa fa-angle-double-right"></i>
+            Cadastro de Caixa
+        </small>
+    </h1>
+</div><!-- /.page-header -->
+<div class="row">
+    <div class="col-xs-12">
+        <div id="user-profile-3" class="user-profile row">
+            <div class="col-sm-offset-1 col-sm-10">
+                <div class="well well-sm">
+                    <!-- -
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    &nbsp; -->
+                    <div class="inline middle blue bigger-110"> <span class="formPercent">0%</span> do cadastro concluído </div>
+
+                    &nbsp; &nbsp; &nbsp;
+                    <div style="width:200px;" data-percent="70%" class="inline middle no-margin progress progress-striped active pos-rel">
+                        <div class="progress-bar progress-bar-success" style="width:70%"></div>
+                    </div>
+
+                </div><!-- /.well -->
+                <div class="row">
+                    <label class="col-sm-4 control-label no-padding-right" for="form-field-username"><span class="badge badge-important mail-tag"></span>Obrigatório</label>
+                </div>
+
+                <div class="space"></div>
+                <form method="post" class="form-horizontal" action="@Url.Content("~/FechamentoCaixa/DetalhamentoFechamentoCaixa")">
+                    <input type="hidden" id="codigoFechamentoCaixa" name="codigoFechamentoCaixa" value="@Html.ValueFor(x => x.IdFechamentoCaixa)" />
+                    <div class="tabbable">
+                        <ul class="nav nav-tabs padding-16">
+                            <li class="active">
+                                <a data-toggle="tab" href="#edit-basic">
+                                    <i class="green ace-icon fa fa-pencil-square-o bigger-125"></i>
+                                    Cadastro
+                                </a>
+                            </li>
+                            @if (Model != null && Model.IdFechamentoCaixa > 0)
+                            {
+
+                                <li>
+                                    <a data-toggle="tab" href="#edit-settings">
+
+                                        <i class="purple ace-icon fa fa-file-excel-o bigger-125"></i>
+                                        Detalhes do fechamento
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                    <div class="tab-content profile-edit-tab-content">
+                        <div id="edit-basic" class="tab-pane in active">
+                            <div class="action-buttons bigger-150">
+                                <a href="javascript:fecharCaixa(@Html.ValueFor(x => x.IdFechamentoCaixa));" class="tooltipASO" title="Fechar Caixa">
+                                    <i class="ace-icon green fa fa-file-text-o"></i>
+                                </a>
+                            </div>
+                            <h4 class="header blue bolder smaller">Dados do Caixa</h4>
+                            <div class="vspace-12-sm"></div>
+
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label no-padding-right" for="form-field-username">ID</label>
+
+                                <div class="col-sm-8">
+                                    <input class="col-xs-12 col-sm-8 componenteFormulario" type="text" id="idFechamentoCaixa" readonly name="idFechamentoCaixa" placeholder="ID do FechamentoCaixa" value="@Html.ValueFor(x => x.IdFechamentoCaixa)" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label no-padding-right" for="form-field-date">Data &nbsp;<span class="badge badge-important mail-tag"></span></label>
+
+                                <div class="col-sm-8">
+                                    <div class="input-medium">
+                                        <div class="input-group">
+                                            <input class="input-medium date-picker input-mask-date" id="data" name="data" type="text" data-date-format="dd/mm/yyyy" placeholder="dd/mm/aaaa" value="@Html.ValueFor(x => x.Data)" />
+                                            <span class="input-group-addon">
+                                                <i class="ace-icon fa fa-calendar"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label no-padding-right" for="form-field-username">Período</label>
+
+                                <div class="col-sm-8">
+                                    <select class="chosen-select form-control" id="periodo" name="periodo" data-placeholder="Selecione um...">
+                                        <option value="0">.:Selecione:.</option>
+                                        <option value="1">Manhã</option>
+                                        <option value="2">Tarde</option>
+                                        <option value="3">Dia inteiro</option>
+                                    </select>
+                                    <script type="text/javascript">
+                                        $('#periodo').val('@(Model == null ? 0 : (int)Model.Periodo)');
+                                    </script>
+
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label no-padding-right" for="form-field-username">Quantidade de procedimentos</label>
+
+                                <div class="col-sm-8">
+                                    <input class="col-xs-12 col-sm-8 componenteFormulario" type="text" id="quantidade" readonly name="quantidade" placeholder="Quantidade de procedimentos" value="@Html.ValueFor(x => x.Quantidade)" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label no-padding-right" for="form-field-username">Total do caixa</label>
+
+                                <div class="col-sm-8">
+                                    <input class="col-xs-12 col-sm-8 componenteFormulario" type="text" id="total" readonly name="total" placeholder="Total do caixa" value="@Html.ValueFor(x => x.Valor)" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label no-padding-right" for="form-field-username">Data do fechamento</label>
+
+                                <div class="col-sm-8">
+                                    <input class="col-xs-12 col-sm-8 componenteFormulario" type="text" id="dataFechamento" readonly name="dataFechamento" placeholder="Data do fechamento" value="@Html.ValueFor(x => x.DataFechamento)" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label no-padding-right" for="form-field-username">Usuário</label>
+
+                                <div class="col-sm-8">
+                                    <input class="col-xs-12 col-sm-8 componenteFormulario" type="text" id="usuario" readonly name="usuario" placeholder="Usuário" value="@Html.ValueFor(x => x.Usuario)" />
+                                </div>
+                            </div>
+
+                            <div class="space"></div>
+                            <h4 class="header blue bolder smaller">Observações</h4>
+
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <textarea class="col-sm-12 componenteFormulario" id="observacoes" name="observacoes" placeholder="observações adicionais">@Html.ValueFor(x => x.Observacoes)</textarea>
+                                </div>
+                            </div>
+
+                            <div class="clearfix form-actions">
+                                <div class="col-md-offset-3 col-md-9">
+                                    <button class="btn btn-info" type="submit">
+                                        <i class="ace-icon fa fa-check bigger-110"></i>
+                                        Salvar
+                                    </button>
+                                    @if (FechamentoCaixaNovo)
+                                    {
+                                        <span>&nbsp; &nbsp;</span>
+                                            <button class="btn" type="reset" id="limparForm">
+                                                <i class="ace-icon fa fa-undo bigger-110"></i>
+                                                Limpar
+                                            </button>
+                                    }
+                                    else
+                                    {
+                                        <span>&nbsp; &nbsp;</span>
+                                            <a href="javascript:excluirFechamentoCaixa(@Model.IdFechamentoCaixa)" class="btn btn-danger" type="reset">
+                                                <i class="ace-icon fa fa-times bigger-110"></i>
+                                                Excluir
+                                            </a>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="edit-settings" class="tab-pane fade">
+                            <div class="space-10"></div>
+
+                            <h4 class="header blue bolder smaller">Detalhe do Caixa</h4>
+                            <div class="vspace-12-sm"></div>
+
+                            @if (Model != null && Model.detalhesFechamentoCaixa != null && Model.detalhesFechamentoCaixa.Any())
+                            {
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <table id="simple-table" class="table  table-bordered table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Valor</th>
+                                                    <th>Usuário</th>
+                                                    <th>Tipo de pagamento</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (MediCloud.Models.Financeiro.DetalheFechamentoCaixaModel item in Model.detalhesFechamentoCaixa)
+                                                {
+                                                    <tr>
+                                                        <td>R$ @item.Valor</td>
+                                                        <td>@item.Usuario</td>
+                                                        <td>@item.TipoPagamento.ToString()</td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div><!-- /.span -->
+                                </div><!-- /.row -->
+                            }
+                            else
+                            {
+                                <div class="alert alert-block alert-info">
+                                    Nenhum detalhe para ser exibido.
+                                </div>
+                            }
+
+                        </div>
+                    </div>
+                </form>
+            </div><!-- /.span -->
+        </div>
+    </div>
+</div>
+
+<div id="confirm" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="smaller lighter blue no-margin">Excluir Caixa</h3>
+            </div>
+            <div class="modal-body">
+                Tem certeza que deseja excluir este Caixa?
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-primary" id="delete">
+                    <i class="ace-icon fa fa-check"></i>
+                    Sim
+                </button>
+                <button type="button" data-dismiss="modal" class="btn">
+                    <i class="ace-icon fa fa-times"></i>
+                    Não
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/assets/js/jquery-ui.min.js"></script>
+<script src="/assets/js/bootstrap-datepicker.min.js"></script>
+<script src="/assets/js/jquery.maskedinput.min.js"></script>
+<script src="/assets/js/jquery.ui.touch-punch.min.js"></script>
+<script src="/assets/js/ace-elements.min.js"></script>
+<script src="/assets/js/ace.min.js"></script>
+<script type="text/javascript">
+    function fecharCaixa(codigo) {
+        $.ajax({
+            url: '/FechamentoCaixa/FecharCaixa?codigoFechamentoCaixa=' + codigo,
+            type: "post",
+            cache: false,
+            success: function (savingStatus) {
+                var tipoAlert;
+                if (savingStatus.acaoBemSucedida) {
+                    tipoAlert = 'alert-success';
+
+                    location.reload();
+                }
+                else
+                    tipoAlert = 'alert-danger';
+                $('#FaturamentoAlerts').html('<div class="alert ' + tipoAlert + '"><a class="close" data-dismiss="alert">×</a><span>' + savingStatus.mensagem + '</span></div>');
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                $('#FaturamentoAlerts').html('<div class="alert alert-danger"><a class="close" data-dismiss="alert">×</a><span>Ops! Não foi possível executar esta ação com o servidor. Contate-nos para que possamos te ajudar melhor.</span></div>')
+            }
+        });
+    }
+
+    $(".tooltipASO").tooltip({
+        show: null,
+        position: {
+            my: "left top",
+            at: "left bottom"
+        },
+        open: function (event, ui) {
+            ui.tooltip.animate({ top: ui.tooltip.position().top + 10 }, "fast");
+        }
+    });
+
+    function excluirFechamentoCaixa(codigo) {
+        confirmDeleteModal(codigo);
+    }
+
+    function confirmDeleteModal(codigo) {
+        $('#confirm').modal({
+            backdrop: 'static',
+            keyboard: false
+        })
+            .one('click', '#delete', function () {
+                window.location = "/FechamentoCaixa/ExcluirFechamentoCaixa?codigoFechamentoCaixa=" + codigo;
+            });
+    }
+
+    $("#limparForm").click(function () {
+        var cntreq3 = 0;
+        var cntvals3 = 0;
+        $(".componenteFormulario").each(atualizarProgressBar());
+    });
+
+    $(document).ready(function () {
+        $('input').on('change', function () {
+            var cntreq = 0;
+            var cntvals = 0;
+            $(".componenteFormulario").each(atualizarProgressBar());
+        });
+
+        var cntreq3 = 0;
+        var cntvals3 = 0;
+        $(".componenteFormulario").each(atualizarProgressBar());
+
+    });
+
+    function atualizarProgressBar() {
+        var cntreq = 0;
+        var cntvals = 0;
+        $(".componenteFormulario").each(function (val) {
+            cntreq++;
+            if ($(this).val() != '') {
+                cntvals++;
+            }
+        });
+        var count = (cntvals / cntreq) * 100;
+        count = parseInt(count);
+        $('.formPercent').empty();
+        $('.progress-striped').attr("data-percent", count + '%');
+        $('div.progress-bar-success').attr("style", "width: " + count + '%');
+        $('.formPercent').append(count + '% ');
+    }
+
+    $('.date-picker').datepicker({
+        format: 'dd/mm/yyyy',
+        language: 'pt-BR',
+    });
+    $('.input-mask-date').mask('99/99/9999');
+</script>

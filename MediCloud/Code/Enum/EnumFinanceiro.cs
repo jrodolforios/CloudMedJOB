@@ -38,5 +38,13 @@ namespace MediCloud.Code.Enum
             Correio = 3,
             BuscaNoLocal = 4
         }
+
+        public enum PeriodoFechamentoCaixa
+        {
+            vazio = 0,
+            Manha = 1,
+            Tarde = 2,
+            DiaInteiro = 3
+        }
     }
 }

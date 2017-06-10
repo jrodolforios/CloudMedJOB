@@ -179,15 +179,19 @@
     <Compile Include="Code\Clientes\CadastroDeProcedimentosMovimento.cs" />
     <Compile Include="Code\Enum\EnumParametro.cs" />
     <Compile Include="Code\Financeiro\CadastroDeCrediarioCliente.cs" />
+    <Compile Include="Code\Financeiro\CadastroDeFechamentoCaixa.cs" />
     <Compile Include="Code\Financeiro\CadastroDeGrupoDeClientes.cs" />
     <Compile Include="Code\Financeiro\CadastroDeLancamentoDeContrato.cs" />
     <Compile Include="Code\Financeiro\CadastroDeNotaFiscal.cs" />
     <Compile Include="Code\Financeiro\CadastroDeRotaDeEntrega.cs" />
     <Compile Include="Controllers\CrediarioClienteController.cs" />
     <Compile Include="Controllers\FaturamentoController.cs" />
+    <Compile Include="Controllers\FechamentoCaixaController.cs" />
     <Compile Include="Controllers\NotaFiscalController.cs" />
     <Compile Include="Models\Financeiro\CrediarioClienteModel.cs" />
+    <Compile Include="Models\Financeiro\DetalheFechamentoCaixaModel.cs" />
     <Compile Include="Models\Financeiro\DetalheNotaFiscalModel.cs" />
+    <Compile Include="Models\Financeiro\FechamentoCaixaModel.cs" />
     <Compile Include="Models\Financeiro\GrupoDeClientesModel.cs" />
     <Compile Include="Code\Parametro\CadastroDeCidade.cs" />
     <Compile Include="Code\Parametro\CadastroDeDadosOcupacionais.cs" />
@@ -713,6 +717,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Faturamento\index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\FechamentoCaixa\DetalhamentoFechamentoCaixa.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\FechamentoCaixa\index.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
