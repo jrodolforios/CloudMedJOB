@@ -1,4 +1,5 @@
 ﻿using MediCloud.App_Code;
+using MediCloud.BusinessProcess.Util;
 using MediCloud.Code;
 using MediCloud.Code.Fornecedor;
 using MediCloud.Models.Financeiro;
@@ -41,6 +42,7 @@ namespace MediCloud.Controllers
             }
             catch (Exception ex)
             {
+                ExceptionUtil.GerarLogDeExcecao(ex, Request.Url.ToString());
                 ObjList = new List<AutoCompleteDefaultModel>()
                 {
                 new AutoCompleteDefaultModel {Id=-1,Name=Constantes.MENSAGEM_GENERICA_DE_ERRO },
@@ -63,6 +65,7 @@ namespace MediCloud.Controllers
             }
             catch (Exception ex)
             {
+                ExceptionUtil.GerarLogDeExcecao(ex, Request.Url.ToString());
                 base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
                 return View();
             }
@@ -85,6 +88,7 @@ namespace MediCloud.Controllers
             }
             catch (Exception ex)
             {
+                ExceptionUtil.GerarLogDeExcecao(ex, Request.Url.ToString());
                 resultado.mensagem = Constantes.MENSAGEM_GENERICA_DE_ERRO;
                 resultado.acaoBemSucedida = false;
 
@@ -109,6 +113,7 @@ namespace MediCloud.Controllers
             }
             catch (Exception ex)
             {
+                ExceptionUtil.GerarLogDeExcecao(ex, Request.Url.ToString());
                 modelFornecedor = CadastroDeFornecedor.RecuperarFornecedorPorID(Convert.ToInt32(codigoFornecedor));
 
                 base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
@@ -129,6 +134,7 @@ namespace MediCloud.Controllers
             }
             catch (Exception ex)
             {
+                ExceptionUtil.GerarLogDeExcecao(ex, Request.Url.ToString());
                 base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
                 return View();
             }
@@ -158,6 +164,7 @@ namespace MediCloud.Controllers
             }
             catch (Exception ex)
             {
+                ExceptionUtil.GerarLogDeExcecao(ex, Request.Url.ToString());
                 base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
                 return View();
             }
@@ -180,11 +187,13 @@ namespace MediCloud.Controllers
             }
             catch (InvalidOperationException ex)
             {
+                ExceptionUtil.GerarLogDeExcecao(ex, Request.Url.ToString());
                 base.FlashMessage(ex.Message, MessageType.Error);
                 Response.Redirect($"/Fornecedor/DetalhamentoFornecedor?codigoFornecedor={codigoFornecedor}");
             }
             catch (Exception ex)
             {
+                ExceptionUtil.GerarLogDeExcecao(ex, Request.Url.ToString());
                 base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
                 Response.Redirect($"/Fornecedor/DetalhamentoFornecedor?codigoFornecedor={codigoFornecedor}");
             }
@@ -209,11 +218,13 @@ namespace MediCloud.Controllers
             }
             catch (InvalidOperationException ex)
             {
+                ExceptionUtil.GerarLogDeExcecao(ex, Request.Url.ToString());
                 base.FlashMessage(ex.Message, MessageType.Error);
                 Response.Redirect($"/Fornecedor/DetalhamentoFornecedor?codigoFornecedor={codigoFornecedor}");
             }
             catch (Exception ex)
             {
+                ExceptionUtil.GerarLogDeExcecao(ex, Request.Url.ToString());
                 base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
                 Response.Redirect($"/Fornecedor/DetalhamentoFornecedor?codigoFornecedor={codigoFornecedor}");
             }
@@ -233,6 +244,7 @@ namespace MediCloud.Controllers
             }
             catch (Exception ex)
             {
+                ExceptionUtil.GerarLogDeExcecao(ex, Request.Url.ToString());
                 ResultadoAjaxGenericoModel resultado = new ResultadoAjaxGenericoModel();
 
                 resultado.mensagem = Constantes.MENSAGEM_GENERICA_DE_ERRO;
@@ -259,6 +271,7 @@ namespace MediCloud.Controllers
             }
             catch (Exception ex)
             {
+                ExceptionUtil.GerarLogDeExcecao(ex, Request.Url.ToString());
                 resultado.mensagem = Constantes.MENSAGEM_GENERICA_DE_ERRO;
                 resultado.acaoBemSucedida = false;
 

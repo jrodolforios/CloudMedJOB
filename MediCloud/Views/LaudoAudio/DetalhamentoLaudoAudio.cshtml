@@ -62,6 +62,11 @@
                     </div>
                     <div class="tab-content profile-edit-tab-content">
                         <div id="edit-basic" class="tab-pane in active">
+                            <div class="action-buttons bigger-150">
+                                <a href="javascript:imprimirAudiometria(@Html.ValueFor(x => x.IdLaudoAudio));" class="tooltipASO" title="Imprimir Audiometria">
+                                    <i class="ace-icon purple fa fa-file-text-o"></i>
+                                </a>
+                            </div>
                             <h4 class="header blue bolder smaller">Dados da audiometria</h4>
                             <div class="vspace-12-sm"></div>
 
@@ -311,7 +316,18 @@
 <script src="/assets/js/jquery.ui.touch-punch.min.js"></script>
 <script src="/assets/js/ace-elements.min.js"></script>
 <script src="/assets/js/ace.min.js"></script>
+<script src="/assets/js/chosen.jquery.min.js"></script>
 <script type="text/javascript">
+    $(".tooltipASO").tooltip({
+        show: null,
+        position: {
+            my: "left top",
+            at: "left bottom"
+        },
+        open: function (event, ui) {
+            ui.tooltip.animate({ top: ui.tooltip.position().top + 10 }, "fast");
+        }
+    });
     function excluirLaudoAudio(codigo) {
         confirmDeleteModal(codigo);
     }
@@ -394,4 +410,8 @@
         language: 'pt-BR',
     });
     $('.input-mask-date').mask('99/99/9999');
+
+    function imprimirAudiometria(codigo) {
+        window.location.replace("/LaudoAudio/ImprimirAudiometria?codigoAudiometria=" + codigo);
+    }
 </script>

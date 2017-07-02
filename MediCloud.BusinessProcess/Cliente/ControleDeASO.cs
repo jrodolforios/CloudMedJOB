@@ -13,7 +13,7 @@ namespace MediCloud.BusinessProcess.Cliente
 {
     public class ControleDeASO
     {
-        public static List<MOVIMENTO> buscarCliente(string termo)
+        public static List<MOVIMENTO> buscarASO(string termo)
         {
             CloudMedContext contexto = new CloudMedContext();
 
@@ -26,7 +26,8 @@ namespace MediCloud.BusinessProcess.Cliente
                 else
                 {
                     return contexto.MOVIMENTO.Where(x => x.CLIENTE.NOMEFANTASIA.Contains(termo)
-                        || x.FUNCIONARIO.FUNCIONARIO1.Contains(termo)).ToList();
+                        || x.FUNCIONARIO.FUNCIONARIO1.Contains(termo)
+                        || ((int)x.IDMOV).ToString() == termo).ToList();
                 }
             }
             catch (DbEntityValidationException ex)

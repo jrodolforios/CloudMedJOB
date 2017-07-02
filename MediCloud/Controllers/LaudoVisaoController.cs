@@ -1,4 +1,5 @@
 ﻿using MediCloud.App_Code;
+using MediCloud.BusinessProcess.Util;
 using MediCloud.Code;
 using MediCloud.Code.Laudo;
 using MediCloud.Models.Laudo;
@@ -33,6 +34,7 @@ namespace MediCloud.Controllers
             }
             catch (Exception ex)
             {
+                ExceptionUtil.GerarLogDeExcecao(ex, Request.Url.ToString());
                 base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
                 return View();
             }
@@ -56,7 +58,7 @@ namespace MediCloud.Controllers
             catch (Exception ex)
             {
                 modelCargo = CadastroDeLaudoVisao.recuperarLaudoVisaoPorID(Convert.ToInt32(codigoLaudoVisao));
-
+                ExceptionUtil.GerarLogDeExcecao(ex, Request.Url.ToString());
                 base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
                 return View(modelCargo);
             }
@@ -76,6 +78,7 @@ namespace MediCloud.Controllers
             }
             catch (Exception ex)
             {
+                ExceptionUtil.GerarLogDeExcecao(ex, Request.Url.ToString());
                 base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
                 return View();
             }
@@ -98,6 +101,7 @@ namespace MediCloud.Controllers
             }
             catch (Exception ex)
             {
+                ExceptionUtil.GerarLogDeExcecao(ex, Request.Url.ToString());
                 resultado.mensagem = Constantes.MENSAGEM_GENERICA_DE_ERRO;
                 resultado.acaoBemSucedida = false;
 
@@ -129,6 +133,7 @@ namespace MediCloud.Controllers
             }
             catch (Exception ex)
             {
+                ExceptionUtil.GerarLogDeExcecao(ex, Request.Url.ToString());
                 base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
                 return View();
             }
@@ -152,6 +157,7 @@ namespace MediCloud.Controllers
             }
             catch (Exception ex)
             {
+                ExceptionUtil.GerarLogDeExcecao(ex, Request.Url.ToString());
                 base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
                 Response.Redirect("/RaioX/DetalhamentoLaudoVisao?codigoLaudoVisao=" + codigoLaudo.ToString());
                 return null;

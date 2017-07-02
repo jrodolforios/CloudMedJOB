@@ -1,4 +1,5 @@
 ﻿using MediCloud.App_Code;
+using MediCloud.BusinessProcess.Util;
 using MediCloud.Code;
 using MediCloud.Code.Fornecedor;
 using MediCloud.Models.Fornecedor;
@@ -37,6 +38,7 @@ namespace MediCloud.Controllers
             }
             catch (Exception ex)
             {
+                ExceptionUtil.GerarLogDeExcecao(ex, Request.Url.ToString());
                 resultado.mensagem = Constantes.MENSAGEM_GENERICA_DE_ERRO;
                 resultado.acaoBemSucedida = false;
 
@@ -61,6 +63,7 @@ namespace MediCloud.Controllers
             }
             catch (Exception ex)
             {
+                ExceptionUtil.GerarLogDeExcecao(ex, Request.Url.ToString());
                 resultado.mensagem = Constantes.MENSAGEM_GENERICA_DE_ERRO;
                 resultado.acaoBemSucedida = false;
 
@@ -80,6 +83,7 @@ namespace MediCloud.Controllers
             }
             catch (Exception ex)
             {
+                ExceptionUtil.GerarLogDeExcecao(ex, Request.Url.ToString());
                 ResultadoAjaxGenericoModel resultado = new ResultadoAjaxGenericoModel();
 
                 resultado.mensagem = Constantes.MENSAGEM_GENERICA_DE_ERRO;
@@ -101,6 +105,7 @@ namespace MediCloud.Controllers
             }
             catch (Exception ex)
             {
+                ExceptionUtil.GerarLogDeExcecao(ex, Request.Url.ToString());
                 ResultadoAjaxGenericoModel resultado = new ResultadoAjaxGenericoModel();
 
                 resultado.mensagem = Constantes.MENSAGEM_GENERICA_DE_ERRO;

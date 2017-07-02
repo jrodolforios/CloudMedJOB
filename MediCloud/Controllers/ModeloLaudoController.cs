@@ -1,4 +1,5 @@
 ﻿using MediCloud.App_Code;
+using MediCloud.BusinessProcess.Util;
 using MediCloud.Code;
 using MediCloud.Code.Laudo;
 using MediCloud.Models.Laudo;
@@ -34,6 +35,7 @@ namespace MediCloud.Controllers
             }
             catch (Exception ex)
             {
+                ExceptionUtil.GerarLogDeExcecao(ex, Request.Url.ToString());
                 base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
                 return View();
             }
@@ -52,6 +54,7 @@ namespace MediCloud.Controllers
             }
             catch (Exception ex)
             {
+                ExceptionUtil.GerarLogDeExcecao(ex, Request.Url.ToString());
                 base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
                 return View();
             }
@@ -81,6 +84,7 @@ namespace MediCloud.Controllers
             }
             catch (Exception ex)
             {
+                ExceptionUtil.GerarLogDeExcecao(ex, Request.Url.ToString());
                 base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
                 return View();
             }
@@ -103,6 +107,7 @@ namespace MediCloud.Controllers
             }
             catch (Exception ex)
             {
+                ExceptionUtil.GerarLogDeExcecao(ex, Request.Url.ToString());
                 resultado.mensagem = Constantes.MENSAGEM_GENERICA_DE_ERRO;
                 resultado.acaoBemSucedida = false;
 
@@ -131,6 +136,7 @@ namespace MediCloud.Controllers
             }
             catch (Exception ex)
             {
+                ExceptionUtil.GerarLogDeExcecao(ex, Request.Url.ToString());
                 ObjList = new List<AutoCompleteDefaultModeloLaudoModel>()
                 {
                 new AutoCompleteDefaultModeloLaudoModel {Id=-1,Name=Constantes.MENSAGEM_GENERICA_DE_ERRO },
@@ -156,6 +162,7 @@ namespace MediCloud.Controllers
             }
             catch (Exception ex)
             {
+                ExceptionUtil.GerarLogDeExcecao(ex, Request.Url.ToString());
                 modelCargo = CadastroDeModeloLaudo.RecuperarModeloPorID(Convert.ToInt32(codigoModeloLaudo));
 
                 base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MediCloud.BusinessProcess.Util;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -18,6 +19,15 @@ namespace MediCloud.View
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+        }
+
+        void Application_Error(object sender, EventArgs e)
+        {
+            Exception exc = Server.GetLastError();
+            HttpContext con = HttpContext.Current;
+            con.Request.Url.ToString();
+
+            ExceptionUtil.GerarLogDeExcecao(exc, con.Request.Url.ToString());
         }
     }
 }

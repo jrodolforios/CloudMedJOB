@@ -1,4 +1,5 @@
 ﻿using MediCloud.App_Code;
+using MediCloud.BusinessProcess.Util;
 using MediCloud.Code;
 using MediCloud.Models.Seguranca;
 using System;
@@ -19,6 +20,7 @@ namespace MediCloud.View.Controllers
             }
             catch (Exception ex)
             {
+                ExceptionUtil.GerarLogDeExcecao(ex, Request.Url.ToString());
                 base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
                 return View();
             }
@@ -43,6 +45,7 @@ namespace MediCloud.View.Controllers
             }
             catch (Exception ex)
             {
+                ExceptionUtil.GerarLogDeExcecao(ex, Request.Url.ToString());
                 base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
                 return View();
             }
@@ -63,6 +66,7 @@ namespace MediCloud.View.Controllers
             }
             catch (Exception ex)
             {
+                ExceptionUtil.GerarLogDeExcecao(ex, Request.Url.ToString());
                 base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
                 return View();
             }
@@ -81,6 +85,7 @@ namespace MediCloud.View.Controllers
             }
             catch (Exception ex)
             {
+                ExceptionUtil.GerarLogDeExcecao(ex, Request.Url.ToString());
                 base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
                 return View();
             }
@@ -99,6 +104,7 @@ namespace MediCloud.View.Controllers
             }
             catch (Exception ex)
             {
+                ExceptionUtil.GerarLogDeExcecao(ex, Request.Url.ToString());
                 base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
                 return View();
             }
@@ -121,6 +127,7 @@ namespace MediCloud.View.Controllers
             }
             catch (Exception ex)
             {
+                ExceptionUtil.GerarLogDeExcecao(ex, Request.Url.ToString());
                 modelUsuario = CadastroDeUsuarios.RecuperarUsuarioPorID(Convert.ToInt32(codigoUsuario));
 
                 base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
@@ -152,6 +159,7 @@ namespace MediCloud.View.Controllers
             }
             catch (Exception ex)
             {
+                ExceptionUtil.GerarLogDeExcecao(ex, Request.Url.ToString());
                 base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
                 return View();
             }
@@ -171,6 +179,7 @@ namespace MediCloud.View.Controllers
             }
             catch (Exception ex)
             {
+                ExceptionUtil.GerarLogDeExcecao(ex, Request.Url.ToString());
                 base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
                 return View();
             }
@@ -193,6 +202,7 @@ namespace MediCloud.View.Controllers
             }
             catch (ArgumentException ex)
             {
+                ExceptionUtil.GerarLogDeExcecao(ex, Request.Url.ToString());
                 resultado.mensagem = ex.Message;
                 resultado.acaoBemSucedida = false;
 
@@ -200,6 +210,7 @@ namespace MediCloud.View.Controllers
             }
             catch (Exception ex)
             {
+                ExceptionUtil.GerarLogDeExcecao(ex, Request.Url.ToString());
                 resultado.mensagem = Constantes.MENSAGEM_GENERICA_DE_ERRO;
                 resultado.acaoBemSucedida = false;
 
@@ -224,6 +235,7 @@ namespace MediCloud.View.Controllers
             }
             catch (Exception ex)
             {
+                ExceptionUtil.GerarLogDeExcecao(ex, Request.Url.ToString());
                 resultado.mensagem = Constantes.MENSAGEM_GENERICA_DE_ERRO;
                 resultado.acaoBemSucedida = false;
 
@@ -248,6 +260,7 @@ namespace MediCloud.View.Controllers
             }
             catch (Exception ex)
             {
+                ExceptionUtil.GerarLogDeExcecao(ex, Request.Url.ToString());
                 resultado.mensagem = Constantes.MENSAGEM_GENERICA_DE_ERRO;
                 resultado.acaoBemSucedida = false;
 

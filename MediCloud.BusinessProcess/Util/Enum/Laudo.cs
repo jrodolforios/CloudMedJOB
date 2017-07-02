@@ -12,7 +12,8 @@ namespace MediCloud.BusinessProcess.Util.Enum
         {
             indefinido = 0,
             imprimirLaudoRaioX = 1,
-            imprimirLaudoVisao = 2
+            imprimirLaudoVisao = 2,
+            imprimirAudiometria = 3,
         }
     }
 }

@@ -44,6 +44,8 @@ namespace MediCloud.BusinessProcess.Util
                     return recoverTemplateByFileName(path + tipoLaudoReport.ToString() + ".html");
                 case LaudoReportEnum.imprimirLaudoVisao:
                     return recoverTemplateByFileName(path + tipoLaudoReport.ToString() + ".html");
+                case LaudoReportEnum.imprimirAudiometria:
+                    return recoverTemplateByFileName(path + tipoLaudoReport.ToString() + ".html");
                 default:
                     return string.Empty;
             }

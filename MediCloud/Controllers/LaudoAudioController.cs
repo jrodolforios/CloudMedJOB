@@ -1,4 +1,5 @@
 ﻿using MediCloud.App_Code;
+using MediCloud.BusinessProcess.Util;
 using MediCloud.Code;
 using MediCloud.Code.Laudo;
 using MediCloud.Models.Laudo;
@@ -33,6 +34,7 @@ namespace MediCloud.Controllers
             }
             catch (Exception ex)
             {
+                ExceptionUtil.GerarLogDeExcecao(ex, Request.Url.ToString());
                 base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
                 return View();
             }
@@ -55,6 +57,7 @@ namespace MediCloud.Controllers
             }
             catch (Exception ex)
             {
+                ExceptionUtil.GerarLogDeExcecao(ex, Request.Url.ToString());
                 modelCargo = CadastroDeLaudoAudio.RecuperarLaudoAudioPorID(Convert.ToInt32(codigoLaudoAudio));
 
                 base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
@@ -76,6 +79,7 @@ namespace MediCloud.Controllers
             }
             catch (Exception ex)
             {
+                ExceptionUtil.GerarLogDeExcecao(ex, Request.Url.ToString());
                 base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
                 return View();
             }
@@ -98,10 +102,36 @@ namespace MediCloud.Controllers
             }
             catch (Exception ex)
             {
+                ExceptionUtil.GerarLogDeExcecao(ex, Request.Url.ToString());
                 resultado.mensagem = Constantes.MENSAGEM_GENERICA_DE_ERRO;
                 resultado.acaoBemSucedida = false;
 
                 return Json(resultado, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        public FileResult ImprimirAudiometria(int codigoAudiometria)
+        {
+            LaudoAudioModel laudoAudio = null;
+            byte[] arquivo = null;
+            try
+            {
+                base.EstahLogado();
+
+                laudoAudio = CadastroDeLaudoAudio.RecuperarLaudoAudioPorID(codigoAudiometria);
+
+                arquivo = CadastroDeLaudoAudio.ImprimirAudiometria(codigoAudiometria);
+
+                byte[] fileBytes = arquivo;
+                string fileName = laudoAudio.toString() + ".pdf";
+                return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, fileName);
+            }
+            catch (Exception ex)
+            {
+                ExceptionUtil.GerarLogDeExcecao(ex, Request.Url.ToString());
+                base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
+                Response.Redirect("/ASO");
+                return null;
             }
         }
 
@@ -129,6 +159,7 @@ namespace MediCloud.Controllers
             }
             catch (Exception ex)
             {
+                ExceptionUtil.GerarLogDeExcecao(ex, Request.Url.ToString());
                 base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
                 return View();
             }

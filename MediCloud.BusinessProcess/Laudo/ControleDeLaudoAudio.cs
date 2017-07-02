@@ -7,6 +7,7 @@ using MediCloud.DatabaseModels;
 using MediCloud.Persistence;
 using System.Data.Entity.Validation;
 using MediCloud.BusinessProcess.Util;
+using MediCloud.BusinessProcess.Laudo.Reports;
 
 namespace MediCloud.BusinessProcess.Laudo
 {
@@ -26,7 +27,8 @@ namespace MediCloud.BusinessProcess.Laudo
                 {
                     return contexto.LAUDOAUD.Where(x => x.MOVIMENTO_PROCEDIMENTO.MOVIMENTO.FUNCIONARIO.FUNCIONARIO1.Contains(prefix)
                     || x.MOVIMENTO_PROCEDIMENTO.MOVIMENTO.CLIENTE.NOMEFANTASIA.Contains(prefix)
-                    || x.MOVIMENTO_PROCEDIMENTO.PROCEDIMENTO.PROCEDIMENTO1.Contains(prefix)).ToList();
+                    || x.MOVIMENTO_PROCEDIMENTO.PROCEDIMENTO.PROCEDIMENTO1.Contains(prefix)
+                    || ((int)x.MOVIMENTO_PROCEDIMENTO.MOVIMENTO.IDMOV).ToString() == prefix).ToList();
                 }
             }
             catch (DbEntityValidationException ex)
@@ -155,6 +157,16 @@ namespace MediCloud.BusinessProcess.Laudo
             {
                 throw ex;
             }
+        }
+
+        public static byte[] ImprimirAudiometria(int codigoAudiometria)
+        {
+            LAUDOAUD audiometria = ControleDeLaudoAudio.BuscarLaudoAudioPorId(codigoAudiometria);
+            INFORMACOES_CLINICA infoClinica = Util.Util.RecuperarInformacoesDaClinica();
+
+            LaudoReports Report = new LaudoReports(audiometria, Util.Enum.Laudo.LaudoReportEnum.imprimirAudiometria, infoClinica);
+
+            return Report.generate();
         }
     }
 }

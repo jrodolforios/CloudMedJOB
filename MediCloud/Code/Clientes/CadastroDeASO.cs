@@ -17,22 +17,22 @@ namespace MediCloud.Code.Clientes
 {
     public class CadastroDeASO
     {
-        internal static List<ASOModel> buscarCargo(FormCollection form)
+        internal static List<ASOModel> buscarASO(FormCollection form)
         {
             string termo = form["keywords"];
             List<ASOModel> listaDeModels = new List<ASOModel>();
 
-            List<MOVIMENTO> usuarioDoBanco = ControleDeASO.buscarCliente(termo);
+            List<MOVIMENTO> usuarioDoBanco = ControleDeASO.buscarASO(termo);
 
             usuarioDoBanco.ForEach(x =>
             {
-                listaDeModels.Add(injetarEmUsuarioModel(x));
+                listaDeModels.Add(injetarEmUsuarioModel(x, false));
             });
 
             return listaDeModels;
         }
 
-        public static ASOModel injetarEmUsuarioModel(MOVIMENTO x)
+        public static ASOModel injetarEmUsuarioModel(MOVIMENTO x, bool carregarClasses = true)
         {
             if (x == null)
                 return null;
@@ -42,20 +42,20 @@ namespace MediCloud.Code.Clientes
                     Cargo = CadastroDeCargo.RecuperarCargoPorID((int)x.IDCGO),
                     Cliente = CadastroDeClientes.RecuperarClientePorID((int)x.IDCLI),
                     Data = x.DATA,
-                    FormaPagamento = CadastroFormaPagamento.RecuperarFormaPagamentoPorID((int)x.IDFORPAG),
+                    FormaPagamento = carregarClasses ? CadastroFormaPagamento.RecuperarFormaPagamentoPorID((int)x.IDFORPAG) : new Models.Financeiro.FormaPagamentoModel() {IdFormaPagamento = (int)x.IDFORPAG },
                     Funcionario = CadastroDeFuncionario.RecuperarFuncionarioPorID((int)x.IDFUN),
                     IdASO = (int)x.IDMOV,
                     Observacao = x.OBSERVACAO,
-                    Referente = CadastroDeReferente.RecuperarReferentePorID((int)x.IDREF),
-                    Setor = CadastroDeSetor.RecuperarSetorPorID((int)x.IDSETOR),
-                    Tabela = CadastroDeTabelaDePreco.RecuperarTabelaDePrecoPorID((int)x.IDTAB),
+                    Referente = carregarClasses ? CadastroDeReferente.RecuperarReferentePorID((int)x.IDREF) : (x.IDREF.HasValue ? new Models.Recomendacao.ReferenteModel() { IdReferencia = (int)x.IDREF } : new Models.Recomendacao.ReferenteModel()),
+                    Setor = carregarClasses ? CadastroDeSetor.RecuperarSetorPorID((int)x.IDSETOR) : new Models.Recomendacao.SetorModel() {IdSetor = (int)x.IDSETOR },
+                    Tabela = carregarClasses ? CadastroDeTabelaDePreco.RecuperarTabelaDePrecoPorID((int)x.IDTAB) : new Models.Parametro.GrupoProcedimento.TabelaPrecoModel() { IdTabela = (int)x.IDTAB },
                     Status = x.STATUS,
                     Usuario = x.USUARIO,
                     CaixaPendente = x.CAIXAPENDENTE.HasValue ? x.CAIXAPENDENTE.Value : false,
                     IdFechamentoCaixa = x.IDFCX,
-                    Faturamento = CadastroDeFaturamento.RecuperarFaturamentoPorID(x.IDFAT),
+                    Faturamento = carregarClasses ? CadastroDeFaturamento.RecuperarFaturamentoPorID(x.IDFAT) : (x.IDFAT.HasValue ? new Models.Financeiro.FaturamentoModel() { IdFaturamento = (int)x.IDFAT} : new Models.Financeiro.FaturamentoModel()),
 
-                    ProcedimentosMovimento = CadastroDeProcedimentosMovimento.BuscarProcedimentosDeMovimentoPorIDMovimento(x.IDMOV),
+                    ProcedimentosMovimento = carregarClasses ? CadastroDeProcedimentosMovimento.BuscarProcedimentosDeMovimentoPorIDMovimento(x.IDMOV) : new List<ProcedimentoMovimentoModel>(),
 
                     AnexosMovimento = CarregarArquivosDeASOSemBinarios(x.IDMOV)
 
@@ -111,12 +111,12 @@ namespace MediCloud.Code.Clientes
                 };
         }
 
-        internal static ASOModel RecuperarASOPorID(int idASO)
+        internal static ASOModel RecuperarASOPorID(int idASO, bool materializarClassesDoMovimento = true)
         {
 
             MOVIMENTO ASOEncontrada = ControleDeASO.buscarASOPorId(idASO);
 
-            return injetarEmUsuarioModel(ASOEncontrada);
+            return injetarEmUsuarioModel(ASOEncontrada, materializarClassesDoMovimento);
         }
 
         internal static ASOModel SalvarASO(FormCollection form)

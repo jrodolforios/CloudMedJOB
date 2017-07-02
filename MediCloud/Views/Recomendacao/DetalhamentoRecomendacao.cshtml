@@ -267,7 +267,7 @@
                                                                         tipoAlert = 'alert-success';
                                                                     else
                                                                         tipoAlert = 'alert-danger';
-                                                                    $('#ProcedimentoRecomendacao@(item.Key.IdReferencia)@(Model.IdRecomendacao)').load(document.URL + ' #ProcedimentoRecomendacao@(item.Key.IdReferencia)@(Model.IdRecomendacao)');
+                                                                    $('#ProcedimentoRecomendacao@(item.Key.IdReferencia)@(Model.IdRecomendacao)').load("/Recomendacao/DetalhamentoRecomendacao?codigoRecomendacao=" + $("#codigoRecomendacao").val()  + ' #ProcedimentoRecomendacao@(item.Key.IdReferencia)@(Model.IdRecomendacao)');
                                                                     $('#recomendacaoAlerts').html('<div class="alert ' + tipoAlert + '"><a class="close" data-dismiss="alert">×</a><span>' + savingStatus.mensagem + '</span></div>');
                                                                 },
                                                                 error: function (xhr, ajaxOptions, thrownError) {
@@ -380,7 +380,7 @@
                                                                     tipoAlert = 'alert-success';
                                                                 else
                                                                     tipoAlert = 'alert-danger';
-                                                                $('#risks').load(document.URL + ' #risks');
+                                                                $('#risks').load("/Recomendacao/DetalhamentoRecomendacao?codigoRecomendacao=" + $("#codigoRecomendacao").val()  + ' #risks');
                                                                 $('#recomendacaoAlerts').html('<div class="alert ' + tipoAlert + '"><a class="close" data-dismiss="alert">×</a><span>' + savingStatus.mensagem + '</span></div>');
                                                             },
                                                             error: function (xhr, ajaxOptions, thrownError) {
@@ -400,7 +400,7 @@
                                                                     tipoAlert = 'alert-success';
                                                                 else
                                                                     tipoAlert = 'alert-danger';
-                                                                $('#ProcedimentoRecomendacao' + referencia + recomendacao).load(document.URL + ' #ProcedimentoRecomendacao' + referencia + recomendacao);
+                                                                $('#ProcedimentoRecomendacao' + referencia + recomendacao).load("/Recomendacao/DetalhamentoRecomendacao?codigoRecomendacao=" + $("#codigoRecomendacao").val() + ' #ProcedimentoRecomendacao' + referencia + recomendacao);
 
                                                                 $('#recomendacaoAlerts').html('<div class="alert ' + tipoAlert + '"><a class="close" data-dismiss="alert">×</a><span>' + savingStatus.mensagem + '</span></div>');
                                                             },
@@ -574,7 +574,7 @@
                                                                         tipoAlert = 'alert-success';
                                                                     else
                                                                         tipoAlert = 'alert-danger';
-                                                                    $('#risks').load(document.URL + ' #risks');
+                                                                    $('#risks').load("/Recomendacao/DetalhamentoRecomendacao?codigoRecomendacao=" + $("#codigoRecomendacao").val() + ' #risks');
                                                                     $('#recomendacaoAlerts').html('<div class="alert ' + tipoAlert + '"><a class="close" data-dismiss="alert">×</a><span>' + savingStatus.mensagem + '</span></div>');
                                                                 },
                                                                 error: function (xhr, ajaxOptions, thrownError) {

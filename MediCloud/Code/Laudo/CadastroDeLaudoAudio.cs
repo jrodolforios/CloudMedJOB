@@ -22,7 +22,7 @@ namespace MediCloud.Code.Laudo
 
             usuarioDoBanco.ForEach(x =>
             {
-                listaDeModels.Add(InjetarEmUsuarioModel(x));
+                listaDeModels.Add(InjetarEmUsuarioModel(x, false));
             });
 
             return listaDeModels;
@@ -32,10 +32,10 @@ namespace MediCloud.Code.Laudo
         {
             LAUDOAUD LaudoRXEncontrado = ControleDeLaudoAudio.BuscarLaudoAudioPorId(v);
 
-            return InjetarEmUsuarioModel(LaudoRXEncontrado);
+            return InjetarEmUsuarioModel(LaudoRXEncontrado,false);
         }
 
-        private static LaudoAudioModel InjetarEmUsuarioModel(LAUDOAUD x)
+        private static LaudoAudioModel InjetarEmUsuarioModel(LAUDOAUD x, bool materializarClassesDoMovimento = true)
         {
             if (x == null)
                 return null;
@@ -81,7 +81,7 @@ namespace MediCloud.Code.Laudo
                     OEO6K = x.OEO6K,
                     OEO8K = x.OEO8K,
                     
-                    ProcedimentoMovimento = CadastroDeProcedimentosMovimento.BuscarProcedimentoDeMovimentoPorID((int)x.IDMOVPRO, true)
+                    ProcedimentoMovimento = CadastroDeProcedimentosMovimento.BuscarProcedimentoDeMovimentoPorID((int)x.IDMOVPRO, true, materializarClassesDoMovimento)
                 };
         }
 
@@ -129,6 +129,11 @@ namespace MediCloud.Code.Laudo
 
                 ProcedimentoMovimento = CadastroDeProcedimentosMovimento.BuscarProcedimentoDeMovimentoPorID(string.IsNullOrEmpty(form["idProcedimentoMovimento"]) ? 0 : Convert.ToInt32(form["idProcedimentoMovimento"]))
             };
+        }
+
+        internal static byte[] ImprimirAudiometria(int codigoAudiometria)
+        {
+            return ControleDeLaudoAudio.ImprimirAudiometria(codigoAudiometria);
         }
 
         private static LAUDOAUD InjetarEmCargoModelDAO(LaudoAudioModel x)

@@ -39,6 +39,7 @@
         public virtual DbSet<LAUDOAV> LAUDOAV { get; set; }
         public virtual DbSet<LAUDORX> LAUDORX { get; set; }
         public virtual DbSet<LOGS> LOGS { get; set; }
+        public virtual DbSet<LOG_ERRO> LOG_ERRO { get; set; }
         public virtual DbSet<MODELOLAUDO> MODELOLAUDO { get; set; }
         public virtual DbSet<MOVIMENTO> MOVIMENTO { get; set; }
         public virtual DbSet<MOVIMENTO_ARQUIVOS> MOVIMENTO_ARQUIVOS { get; set; }

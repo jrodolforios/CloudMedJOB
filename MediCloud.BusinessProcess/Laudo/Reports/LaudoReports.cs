@@ -15,6 +15,7 @@ namespace MediCloud.BusinessProcess.Laudo.Reports
     public class LaudoReports
     {
         LAUDORX _laudoRX = null;
+        LAUDOAUD _laudoAud = null;
         LAUDOAV _laudoVisao = null;
         LaudoReportEnum _tipoLaudoReport = LaudoReportEnum.indefinido;
         INFORMACOES_CLINICA _infoClinica = null;
@@ -22,6 +23,13 @@ namespace MediCloud.BusinessProcess.Laudo.Reports
         public LaudoReports(LAUDOAV laudoVisao, LaudoReportEnum tipoLaudoReport, INFORMACOES_CLINICA infoClinica)
         {
             _laudoVisao = laudoVisao;
+            _tipoLaudoReport = tipoLaudoReport;
+            _infoClinica = infoClinica;
+        }
+
+        public LaudoReports(LAUDOAUD laudoAudio, LaudoReportEnum tipoLaudoReport, INFORMACOES_CLINICA infoClinica)
+        {
+            _laudoAud = laudoAudio;
             _tipoLaudoReport = tipoLaudoReport;
             _infoClinica = infoClinica;
         }
@@ -47,12 +55,30 @@ namespace MediCloud.BusinessProcess.Laudo.Reports
                 case LaudoReportEnum.imprimirLaudoVisao:
                     retorno = PdfFactory.create(EnumPdfType.TuesPechkin).Parse(substituirParametrosLaudoVisao(template));
                     break;
+                case LaudoReportEnum.imprimirAudiometria:
+                    retorno = PdfFactory.create(EnumPdfType.TuesPechkin).Parse(substituirParametrosLaudoAud(template));
+                    break;
                 default:
                     retorno = null;
                     break;
             }
 
             return retorno;
+        }
+
+        private string substituirParametrosLaudoAud(string template)
+        {
+            template = template.Replace("[%DescricaoClinica%]", _infoClinica.DADOSCABECALHOREL);
+            template = template.Replace("[%LogoEmpresa%]", _infoClinica.URLLOGO);
+
+            template = template.Replace("[%NomePaciente%]", _laudoAud.MOVIMENTO_PROCEDIMENTO.MOVIMENTO.FUNCIONARIO.FUNCIONARIO1);
+            template = template.Replace("[%RGPaciente%]", _laudoAud.MOVIMENTO_PROCEDIMENTO.MOVIMENTO.FUNCIONARIO.RG);
+            template = template.Replace("[%NomeCliente%]", _laudoAud.MOVIMENTO_PROCEDIMENTO.MOVIMENTO.CLIENTE.RAZAOSOCIAL);
+            template = template.Replace("[%DataNascimento%]", _laudoAud.MOVIMENTO_PROCEDIMENTO.MOVIMENTO.FUNCIONARIO.NASCIMENTO?.ToShortDateString());
+            template = template.Replace("[%NomeReferente%]", _laudoAud.MOVIMENTO_PROCEDIMENTO.MOVIMENTO.MOVIMENTO_REFERENTE.NOMEREFERENCIA);
+            template = template.Replace("[%NomeCargo%]", _laudoAud.MOVIMENTO_PROCEDIMENTO.MOVIMENTO.CARGO.CARGO1);
+
+            return template;
         }
 
         #region imprimirLaudoVisao

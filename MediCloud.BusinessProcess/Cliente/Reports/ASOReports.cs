@@ -122,6 +122,7 @@ namespace MediCloud.BusinessProcess.Cliente.Reports
         #region imprimirComMedCoord
         private string substituirParametrosMedCoord(string template)
         {
+
             template = template.Replace("[%Cliente%]", _movimento.CLIENTE.NOMEFANTASIA);
             template = template.Replace("[%Funcionario%]", _movimento.FUNCIONARIO.FUNCIONARIO1);
             template = template.Replace("[%Setor%]", _movimento.SETOR.SETOR1);

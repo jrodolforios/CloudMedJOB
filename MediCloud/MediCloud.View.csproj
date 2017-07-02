@@ -411,6 +411,7 @@
     <Content Include="assets\images\gallery\thumb-5.jpg" />
     <Content Include="assets\images\gallery\thumb-6.jpg" />
     <Content Include="assets\images\login-background.jpeg" />
+    <Content Include="assets\images\logos\cmo.jpg" />
     <Content Include="assets\images\placeholder\165x90.png" />
     <Content Include="assets\images\placeholder\255x150.png" />
     <Content Include="assets\images\placeholder\530x270.png" />
@@ -723,6 +724,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\FechamentoCaixa\index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

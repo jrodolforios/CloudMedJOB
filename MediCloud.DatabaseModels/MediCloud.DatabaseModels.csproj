@@ -90,6 +90,7 @@
     <Compile Include="LAUDORX.cs" />
     <Compile Include="LCTOSCAIXA.cs" />
     <Compile Include="LCTOSCONTAS.cs" />
+    <Compile Include="LOG_ERRO.cs" />
     <Compile Include="LOGS.cs" />
     <Compile Include="MODELOLAUDO.cs" />
     <Compile Include="MOVIMENTO.cs" />

@@ -123,6 +123,9 @@
     <Content Include="Templates\ASO\imprimirComMedCoord.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Templates\Laudo\imprimirAudiometria.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Templates\Laudo\imprimirLaudoVisao.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
