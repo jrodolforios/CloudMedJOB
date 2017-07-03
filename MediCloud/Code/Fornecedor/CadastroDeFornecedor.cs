@@ -36,7 +36,7 @@ namespace MediCloud.Code.Fornecedor
 
             contadoresEncontrados.ForEach(x =>
             {
-                resultados.Add(InjetarEmUsuarioModel(x));
+                resultados.Add(InjetarEmUsuarioModel(x, false));
             });
 
             return resultados;

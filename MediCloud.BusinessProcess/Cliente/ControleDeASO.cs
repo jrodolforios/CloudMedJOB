@@ -96,7 +96,7 @@ namespace MediCloud.BusinessProcess.Cliente
                     usuarioSalvo.OBSERVACAO = ASODAO.OBSERVACAO;
                     usuarioSalvo.STATUS = ASODAO.STATUS;
                     usuarioSalvo.TIPO = ASODAO.TIPO;
-                    usuarioSalvo.USUARIO = ASODAO.USUARIO;   
+                    usuarioSalvo.USUARIO = ASODAO.USUARIO;
 
                 }
                 else
@@ -128,7 +128,7 @@ namespace MediCloud.BusinessProcess.Cliente
             MOVIMENTO ASOASerEntregue = null;
             try
             {
-                if(contexto.MOVIMENTO.Any(x => x.IDMOV == codigoASO))
+                if (contexto.MOVIMENTO.Any(x => x.IDMOV == codigoASO))
                 {
                     ASOASerEntregue = contexto.MOVIMENTO.First(x => x.IDMOV == codigoASO);
 
@@ -156,7 +156,7 @@ namespace MediCloud.BusinessProcess.Cliente
             {
                 var lista = contexto.MOVIMENTO_ARQUIVOS.Where(x => x.IDMOV == iDMOV);
 
-                foreach(var item in lista)
+                foreach (var item in lista)
                 {
                     listaBancoSemBinarios.Add(new MOVIMENTO_ARQUIVOS()
                     {
@@ -243,7 +243,7 @@ namespace MediCloud.BusinessProcess.Cliente
                     contexto.MOVIMENTO_ARQUIVOS.Remove(contexto.MOVIMENTO_ARQUIVOS.First(x => x.IDARQUIVO == codigoArquivo));
 
                 contexto.SaveChanges();
-                
+
             }
             catch (DbEntityValidationException ex)
             {
@@ -275,26 +275,27 @@ namespace MediCloud.BusinessProcess.Cliente
                 List<RECOMENDACAO> recomendacao = contexto.RECOMENDACAO.Where(x => x.IDCLI == mov.IDCLI && x.IDCGO == mov.IDCGO && x.IDSETOR == mov.IDSETOR).ToList();
 
                 List<RECOMENDACAOXRISCO> recomendacaoRisco = new List<RECOMENDACAOXRISCO>();
-                recomendacao.ForEach(x => 
+                recomendacao.ForEach(x =>
                 {
                     recomendacaoRisco.AddRange(contexto.RECOMENDACAOXRISCO.Where(y => y.IDREC == x.IDREC));
                 });
 
                 List<RISCO> riscos = new List<RISCO>();
-                recomendacaoRisco.ForEach(x => 
+                recomendacaoRisco.ForEach(x =>
                 {
                     riscos.AddRange(contexto.RISCO.Where(y => y.IDRISCO == x.IDRISCO));
                 });
 
                 List<NATUREZA> naturezas = new List<NATUREZA>();
-                riscos.ForEach(x => 
+                riscos.ForEach(x =>
                 {
                     naturezas.AddRange(contexto.NATUREZA.Where(y => y.IDNAT == x.IDNAT));
                 });
 
-                naturezas.ForEach(x => 
+                naturezas.ForEach(x =>
                 {
-                    naturezasERiscos.Add(x, riscos.Where(y => y.IDNAT == x.IDNAT).ToList());
+                    if (!naturezasERiscos.Keys.Any(y => y == x))
+                        naturezasERiscos.Add(x, riscos.Where(y => y.IDNAT == x.IDNAT).ToList());
                 });
             }
             catch (DbEntityValidationException ex)
@@ -381,7 +382,7 @@ namespace MediCloud.BusinessProcess.Cliente
         {
             decimal soma = 0;
 
-            MOV.MOVIMENTO_PROCEDIMENTO.ToList().ForEach(x => 
+            MOV.MOVIMENTO_PROCEDIMENTO.ToList().ForEach(x =>
             {
                 soma += x.TOTAL.HasValue ? x.TOTAL.Value : 0;
             });

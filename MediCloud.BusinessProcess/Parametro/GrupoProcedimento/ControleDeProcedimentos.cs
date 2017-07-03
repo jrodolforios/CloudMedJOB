@@ -77,13 +77,19 @@ namespace MediCloud.BusinessProcess.Parametro.GrupoProcedimento
         public static List<PROCEDIMENTO> buscarCargosPorTermoEFornecedor(string prefix, int fornecedor)
         {
             CloudMedContext contexto = new CloudMedContext();
-
+            List<PROCEDIMENTO> procedimentosEncontrados = new List<PROCEDIMENTO>();
             try
             {
-                return contexto.PROCEDIMENTO.Where(x => (x.PROCEDIMENTO1.Contains(prefix)
+                List<PROCEDIMENTO> procedimentos = contexto.PROCEDIMENTO.Where(x => (x.PROCEDIMENTO1.Contains(prefix)
                 || x.ABREVIADO.Contains(prefix))
-                && (int)x.IDFOR == fornecedor
                 ).ToList();
+
+                procedimentos.ForEach(x => 
+                {
+                    if (x.FORNECEDORXPROCEDIMENTO.Any(y => y.IDFOR == fornecedor))
+                        procedimentosEncontrados.Add(x);
+
+                });
             }
             catch (DbEntityValidationException ex)
             {
@@ -94,6 +100,8 @@ namespace MediCloud.BusinessProcess.Parametro.GrupoProcedimento
             {
                 throw ex;
             }
+
+            return procedimentosEncontrados;
         }
 
         public static PROCEDIMENTO SalvarProcedimento(PROCEDIMENTO procedimentoDAO)

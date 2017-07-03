@@ -41,12 +41,17 @@ namespace MediCLoud.Pdf.Entity
                     //    All = 0.5,
                     //    Unit = Unit.Centimeters
                     //}
+                   Margins =
+                    {
+                        Top = 0.5
+                    }
                 },
                 Objects = {
                     new ObjectSettings {
                         HtmlText = html,
                         ProduceExternalLinks = true,
                         HeaderSettings = { 
+                            
                         },
                         FooterSettings = {
                         },

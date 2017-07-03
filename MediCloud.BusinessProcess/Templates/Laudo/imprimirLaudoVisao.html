@@ -37,6 +37,7 @@
 
         .corpo {
             border: 1px solid black;
+            margin-top: 25px;
         }
 
         .dadosEmpresa {
@@ -64,7 +65,8 @@
         .tituloRelatorioEsquerda {
             border: 1px solid black;
             text-align: left;
-            margin: 3px 3px 3px 3px;
+            margin: 5px 5px 5px 5px;
+            padding: 5px 5px 5px 5px;
         }
 
         .tituloRelatorioSemAlinhamento {
@@ -88,16 +90,17 @@
 
         .Assinatura {
             display: table;
+            width: 100%
         }
 
         .AssinaturaDireita {
             float: left;
-            width: 50%;
+            width: 80%;
             border-right: solid 1px black;
         }
 
         .AssinaturaEsquerda {
-            margin-left: 50%;
+            margin-left: 20%;
         }
 
         .Centralizado {
@@ -115,6 +118,10 @@
         .cabecalhoSuperior {
             display: table;
         }
+
+        .cabecalho{
+
+        }
     </style>
 </head>
 <body>
@@ -125,7 +132,7 @@
                 <div class="dadosEmpresa">[%InformacoesClinica%]</div>
             </div>
             &nbsp;
-            <div class="tituloRelatorio"><h3>Laudo de Acuidade Visual</h3></div>
+            <div class="tituloRelatorio"><h2>Laudo de Acuidade Visual</h2></div>
         </div>
 
         <div class="tituloRelatorioEsquerda"><b>NOME:</b> [%Paciente%]</div>
@@ -135,7 +142,7 @@
         <div class="tituloRelatorioEsquerda"><b>RG:</b> [%RG%]</div>
 
         <div class="tituloRelatorioSemAlinhamento">
-            <h2 class="Centralizado">Avaliação Oftamológica</h2>
+            <h3 class="Centralizado">Avaliação Oftamológica</h3>
 
             <hr class="line" />
 
@@ -165,11 +172,11 @@
         <div class="tituloRelatorioEsquerda"><b>CONCLUSÃO</b><br /> [%Conclusao%]</div>
 
         <div class="Assinatura">
-            <div class="AssinaturaDireita Centralizado">
+            <div class="AssinaturaDireita">
                 <h2><b> CARIMBO/ASS. MÉDICO</b></h2>
             </div>
             <div class="AssinaturaEsquerda">
-                <h2><b> DATA</b></h2>
+                <h2>&nbsp;&nbsp;<b> DATA</b></h2>
                 <p class="Centralizado">[%Data%]</p>
                 <p>&nbsp;</p>
                 <p>&nbsp;</p>
