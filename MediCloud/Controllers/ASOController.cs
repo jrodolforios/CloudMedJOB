@@ -290,7 +290,7 @@ namespace MediCloud.Controllers
             {
                 base.EstahLogado();
 
-                aso = CadastroDeASO.RecuperarASOPorID(codigoASO);
+                aso = CadastroDeASO.RecuperarASOPorID(codigoASO, false);
 
                 arquivo = CadastroDeASO.ImprimirFichaClinica(codigoASO);
 
@@ -315,7 +315,7 @@ namespace MediCloud.Controllers
             {
                 base.EstahLogado();
 
-                aso = CadastroDeASO.RecuperarASOPorID(codigoASO);
+                aso = CadastroDeASO.RecuperarASOPorID(codigoASO, false);
 
                 arquivo = CadastroDeASO.ImprimirASOComMedCoord(codigoASO);
 
@@ -340,9 +340,34 @@ namespace MediCloud.Controllers
             {
                 base.EstahLogado();
 
-                aso = CadastroDeASO.RecuperarASOPorID(codigoASO);
+                aso = CadastroDeASO.RecuperarASOPorID(codigoASO, false);
 
                 arquivo = CadastroDeASO.ImprimirASOSemMedCoord(codigoASO);
+
+                byte[] fileBytes = arquivo;
+                string fileName = aso.toString() + ".pdf";
+                return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, fileName);
+            }
+            catch (Exception ex)
+            {
+                ExceptionUtil.GerarLogDeExcecao(ex, Request.Url.ToString());
+                base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
+                Response.Redirect("/ASO");
+                return null;
+            }
+        }
+
+        public FileResult ImprimirOrdemDeServico(int codigoASO)
+        {
+            ASOModel aso = null;
+            byte[] arquivo = null;
+            try
+            {
+                base.EstahLogado();
+
+                aso = CadastroDeASO.RecuperarASOPorID(codigoASO, false);
+
+                arquivo = CadastroDeASO.ImprimirOrdemDeServico(codigoASO);
 
                 byte[] fileBytes = arquivo;
                 string fileName = aso.toString() + ".pdf";
@@ -366,7 +391,7 @@ namespace MediCloud.Controllers
             {
                 base.EstahLogado();
 
-                aso = CadastroDeASO.RecuperarASOPorID(codigoASO);
+                aso = CadastroDeASO.RecuperarASOPorID(codigoASO, false);
 
                 arquivo = CadastroDeASO.ImprimirListaDeProcedimentos(codigoASO);
 
@@ -391,7 +416,7 @@ namespace MediCloud.Controllers
             {
                 base.EstahLogado();
 
-                aso = CadastroDeASO.RecuperarASOPorID(codigoASO);
+                aso = CadastroDeASO.RecuperarASOPorID(codigoASO,false);
 
                 arquivo = CadastroDeASO.ImprimirReciboASO(codigoASO);
 

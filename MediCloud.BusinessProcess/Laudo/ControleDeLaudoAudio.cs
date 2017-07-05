@@ -91,7 +91,7 @@ namespace MediCloud.BusinessProcess.Laudo
             try
             {
 
-                if (LaudoAudioDAO.IDMOVPRO > 0)
+                if (LaudoAudioDAO.IDLAUDO > 0)
                 {
                     laudoAudioSalvo = contexto.LAUDOAUD.First(x => x.IDLAUDO == LaudoAudioDAO.IDLAUDO);
 

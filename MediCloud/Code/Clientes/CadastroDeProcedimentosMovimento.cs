@@ -133,17 +133,31 @@ namespace MediCloud.Code.Clientes
             return injetarEmUsuarioModel(ControleDeProcedimentosMovimento.buscarProcedimentoMovimentoPorId(codigoDoProcedimentoMovimento), materializarMovimento, materializarClassesDoMovimento);
         }
 
-        internal static List<ProcedimentoMovimentoModel> RecuperarProcedimentoMovimentoPorTermo(string prefix)
+        internal static List<ProcedimentoMovimentoModel> RecuperarProcedimentoMovimentoPorTermo(string prefix, bool materializarObjetos = true)
         {
             List<MOVIMENTO_PROCEDIMENTO> contadoresEncontrados = ControleDeProcedimentosMovimento.buscarProcedimentoMovimento(prefix);
             List<ProcedimentoMovimentoModel> resultados = new List<ProcedimentoMovimentoModel>();
 
             contadoresEncontrados.ForEach(x =>
             {
-                resultados.Add(injetarEmUsuarioModel(x));
+                resultados.Add(injetarEmUsuarioModelParaAjax(x));
             });
 
             return resultados;
+        }
+
+        private static ProcedimentoMovimentoModel injetarEmUsuarioModelParaAjax(MOVIMENTO_PROCEDIMENTO x)
+        {
+            if (x == null)
+                return new ProcedimentoMovimentoModel();
+            else
+                return new ProcedimentoMovimentoModel()
+                {
+                    IdMovimentoProcedimento = (int)x.IDMOVPRO,
+                    Procedimento = new Models.Parametro.GrupoProcedimento.ProcedimentoModel() {IdProcedimento = (int)x.IDPRO, Nome = x.PROCEDIMENTO.PROCEDIMENTO1 },
+                    DataExame = x.DATAEXAME,
+                    DataRealizado = x.DATAREALIZADO
+                };
         }
     }
 }

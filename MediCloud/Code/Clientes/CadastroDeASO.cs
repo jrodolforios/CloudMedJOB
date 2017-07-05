@@ -46,7 +46,7 @@ namespace MediCloud.Code.Clientes
                     Funcionario = CadastroDeFuncionario.RecuperarFuncionarioPorID((int)x.IDFUN),
                     IdASO = (int)x.IDMOV,
                     Observacao = x.OBSERVACAO,
-                    Referente = carregarClasses ? CadastroDeReferente.RecuperarReferentePorID((int)x.IDREF) : (x.IDREF.HasValue ? new Models.Recomendacao.ReferenteModel() { IdReferencia = (int)x.IDREF } : new Models.Recomendacao.ReferenteModel()),
+                    Referente = CadastroDeReferente.RecuperarReferentePorID((int)x.IDREF),
                     Setor = carregarClasses ? CadastroDeSetor.RecuperarSetorPorID((int)x.IDSETOR) : new Models.Recomendacao.SetorModel() {IdSetor = (int)x.IDSETOR },
                     Tabela = carregarClasses ? CadastroDeTabelaDePreco.RecuperarTabelaDePrecoPorID((int)x.IDTAB) : new Models.Parametro.GrupoProcedimento.TabelaPrecoModel() { IdTabela = (int)x.IDTAB },
                     Status = x.STATUS,
@@ -236,6 +236,11 @@ namespace MediCloud.Code.Clientes
         internal static void ConfirmarASO(SessaoUsuarioModel currentUser, int codigoDoMovimento)
         {
             ControleDeASO.ConfirmarASO(currentUser.login, codigoDoMovimento);
+        }
+
+        internal static byte[] ImprimirOrdemDeServico(int codigoASO)
+        {
+            return ControleDeASO.ImprimirOrdemDeServico(codigoASO);
         }
     }
 }

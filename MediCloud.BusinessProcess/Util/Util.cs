@@ -7,6 +7,10 @@ using MediCloud.DatabaseModels;
 using MediCloud.Persistence;
 using System.Data.Entity.Validation;
 using System.Globalization;
+using System.Net.Mail;
+using System.Configuration;
+using System.Net;
+using System.Web.Script.Serialization;
 
 namespace MediCloud.BusinessProcess.Util
 {
@@ -70,6 +74,50 @@ namespace MediCloud.BusinessProcess.Util
             string data = diasemana + ", " + dia + " de " + mes + " de " + ano;
 
             return data;
+        }
+
+        internal static void EnviarEmailDeErro(LOG_ERRO logPersistido)
+        {
+            StringBuilder str = new StringBuilder();
+            string informacaoDaClinica = RecuperarInformacoesDaClinica().DADOSCABECALHOREL;
+            string json = new JavaScriptSerializer().Serialize(logPersistido);
+            string destinatario = ConfigurationManager.AppSettings["RemetenteEmail"].ToString();
+
+            str.Append(informacaoDaClinica);
+            str.Append("<br/><br/>");
+
+            str.Append(json);
+
+            EnviarEmail(destinatario, "[Log_Erro] Exceção lançada no CloudMed", str.ToString());
+        }
+
+        public static void EnviarEmail (string destinatarios, string assunto, string corpo)
+        {
+            string remetente = ConfigurationManager.AppSettings["RemetenteEmail"].ToString();
+            int porta = Convert.ToInt32(ConfigurationManager.AppSettings["PortaEmail"].ToString());
+            string hostSMTP = ConfigurationManager.AppSettings["HostSMTPEmail"].ToString();
+
+            string nomeUsuario = ConfigurationManager.AppSettings["NomeUsuarioEmail"].ToString();
+            string senhaUsuario = ConfigurationManager.AppSettings["SenhaUsuarioEmail"].ToString();
+            bool habilitarSSL = Convert.ToBoolean(ConfigurationManager.AppSettings["HabilitarSSLEmail"].ToString());
+
+
+            MailMessage mail = new MailMessage(remetente, destinatarios);
+
+            SmtpClient client = new SmtpClient();
+            client.Port = porta;
+            client.DeliveryMethod = SmtpDeliveryMethod.Network;
+            client.UseDefaultCredentials = false;
+            client.Host = hostSMTP;
+            client.ServicePoint.MaxIdleTime = 1;
+
+            client.Credentials = new NetworkCredential(nomeUsuario, senhaUsuario);
+            client.EnableSsl = habilitarSSL;
+
+            mail.Subject = assunto;
+            mail.IsBodyHtml = true;
+            mail.Body = corpo;
+            client.Send(mail);
         }
 
         // O método toExtenso recebe um valor do tipo decimal

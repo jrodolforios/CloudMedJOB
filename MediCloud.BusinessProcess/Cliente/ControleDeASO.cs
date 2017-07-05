@@ -338,6 +338,16 @@ namespace MediCloud.BusinessProcess.Cliente
             }
         }
 
+        public static byte[] ImprimirOrdemDeServico(int codigoASO)
+        {
+            MOVIMENTO aso = ControleDeASO.buscarASOPorId(codigoASO);
+            INFORMACOES_CLINICA infoClinica = Util.Util.RecuperarInformacoesDaClinica();
+
+            ASOReports Report = new ASOReports(aso, Util.Enum.Cliente.ASOReportEnum.imprimirOrdemServicoASO, infoClinica);
+
+            return Report.generate();
+        }
+
         public static byte[] ImprimirFichaClinica(int codigoASO)
         {
             MOVIMENTO aso = ControleDeASO.buscarASOPorId(codigoASO);

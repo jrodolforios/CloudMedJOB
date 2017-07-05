@@ -54,12 +54,48 @@ namespace MediCloud.BusinessProcess.Cliente.Reports
                 case ASOReportEnum.imprimirFichaClinica:
                     retorno = PdfFactory.create(EnumPdfType.TuesPechkin).Parse(substituirParametrosFichaClinica(template));
                     break;
+                case ASOReportEnum.imprimirOrdemServicoASO:
+                    retorno = PdfFactory.create(EnumPdfType.TuesPechkin).Parse(substituirParametrosOrdemDeServico(template));
+                    break;
                 default:
                     retorno = null;
                     break;
             }
 
             return retorno;
+        }
+
+        private string substituirParametrosOrdemDeServico(string template)
+        {
+            StringBuilder relatorioProcessado = new StringBuilder();
+            string ordemDeServicoTemp = string.Empty;
+            this._movimento.MOVIMENTO_PROCEDIMENTO.ToList().ForEach(x => 
+            {
+                ordemDeServicoTemp = template;
+
+                ordemDeServicoTemp = ordemDeServicoTemp.Replace("[%DadosEmpresaCabecalho%]", _infoClinica.DADOSCABECALHOREL);
+                ordemDeServicoTemp = ordemDeServicoTemp.Replace("[%LogoEmpresa%]", _infoClinica.URLLOGO);
+
+                ordemDeServicoTemp = ordemDeServicoTemp.Replace("[%IDMOV%]", ((int)_movimento.IDMOV).ToString());
+                ordemDeServicoTemp = ordemDeServicoTemp.Replace("[%IDMOVPRO%]", ((int)x.IDMOVPRO).ToString());
+                ordemDeServicoTemp = ordemDeServicoTemp.Replace("[%NomeEmpresa%]", _movimento.CLIENTE.RAZAOSOCIAL);
+                ordemDeServicoTemp = ordemDeServicoTemp.Replace("[%NomeFuncionario%]", _movimento.FUNCIONARIO.FUNCIONARIO1);
+                ordemDeServicoTemp = ordemDeServicoTemp.Replace("[%Cargo%]", _movimento.CARGO.CARGO1);
+
+                ordemDeServicoTemp = ordemDeServicoTemp.Replace("[%RG%]", _movimento.FUNCIONARIO.RG);
+                ordemDeServicoTemp = ordemDeServicoTemp.Replace("[%DataNascimento%]", _movimento.FUNCIONARIO.NASCIMENTO?.ToShortDateString());
+                ordemDeServicoTemp = ordemDeServicoTemp.Replace("[%Referente%]", _movimento.MOVIMENTO_REFERENTE.NOMEREFERENCIA);
+                ordemDeServicoTemp = ordemDeServicoTemp.Replace("[%NomeProcedimento%]", x.PROCEDIMENTO.PROCEDIMENTO1);
+
+                ordemDeServicoTemp = ordemDeServicoTemp.Replace("[%DataAgora%]", DateTime.Now.ToShortDateString());
+
+                ordemDeServicoTemp += "<div style=\"page-break-before:always; \"> </div>";
+
+                relatorioProcessado.Append(ordemDeServicoTemp);
+                
+            });
+
+            return relatorioProcessado.ToString();
         }
 
         #region imprimirSemMedCoord
@@ -74,6 +110,7 @@ namespace MediCloud.BusinessProcess.Cliente.Reports
             template = template.Replace("[%CalculoIdade%]", Util.Util.CalcularIdade(_movimento.FUNCIONARIO.NASCIMENTO).ToString());
             template = template.Replace("[%exposicao%]", PreencherRiscosENaturezas(_riscosENaturezas));
             template = template.Replace("[%procedimentos%]", PreencherProcedimentos(_movimento.MOVIMENTO_PROCEDIMENTO.ToList()));
+            template = template.Replace("[%Referencia%]", _movimento.MOVIMENTO_REFERENTE.NOMEREFERENCIA);
 
             template = template.Replace("[%DadosEmpresaCabecalho%]", _infoClinica.DADOSCABECALHOREL);
             template = template.Replace("[%CidadeEstadoClinica%]", _infoClinica.CIDADEESTADOCLINICA);
@@ -133,6 +170,7 @@ namespace MediCloud.BusinessProcess.Cliente.Reports
             template = template.Replace("[%CalculoIdade%]", Util.Util.CalcularIdade(_movimento.FUNCIONARIO.NASCIMENTO).ToString());
             template = template.Replace("[%exposicao%]", PreencherRiscosENaturezas(_riscosENaturezas));
             template = template.Replace("[%procedimentos%]", PreencherProcedimentos(_movimento.MOVIMENTO_PROCEDIMENTO.ToList()));
+            template = template.Replace("[%Referencia%]", _movimento.MOVIMENTO_REFERENTE.NOMEREFERENCIA);
 
             template = template.Replace("[%DadosEmpresaCabecalho%]", _infoClinica.DADOSCABECALHOREL);
             template = template.Replace("[%CidadeEstadoClinica%]", _infoClinica.CIDADEESTADOCLINICA);

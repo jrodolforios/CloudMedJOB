@@ -2,6 +2,7 @@
 using MediCloud.Persistence;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data.Entity.Validation;
 using System.Linq;
 using System.Text;
@@ -30,6 +31,8 @@ namespace MediCloud.BusinessProcess.Util
         public static void GerarLogDeExcecao(Exception exc, string url = "")
         {
             CloudMedContext contexto = new CloudMedContext();
+            bool enviarEmail = Convert.ToBoolean(ConfigurationManager.AppSettings["EnviarEmailDeErro"].ToString());
+
             try
             {
                 LOG_ERRO log = new LOG_ERRO()
@@ -41,10 +44,11 @@ namespace MediCloud.BusinessProcess.Util
                     URL = url
                 };
 
-                contexto.LOG_ERRO.Add(log);
+                LOG_ERRO logPersistido = contexto.LOG_ERRO.Add(log);
                 contexto.SaveChanges();
 
-
+                if (enviarEmail)
+                    Util.EnviarEmailDeErro(logPersistido);
             }
             catch (DbEntityValidationException ex)
             {

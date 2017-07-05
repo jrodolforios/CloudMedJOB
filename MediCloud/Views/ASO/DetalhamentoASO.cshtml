@@ -130,6 +130,10 @@
                                     <i class="ace-icon blue fa fa-list"></i>
                                 </a>
                                 &nbsp;&nbsp;
+                                <a href="javascript:GerarOrdemDeServico(@Html.ValueFor(x => x.IdASO));" class="tooltipASO" title="Ordem de Serviço">
+                                    <i class="ace-icon blue fa fa-calculator "></i>
+                                </a>
+                                &nbsp;&nbsp;
                                 <a href="javascript:ConfirmarASO(@Html.ValueFor(x => x.IdASO));" class="tooltipASO" title="Confirmar exames dete ASO">
                                     <i class="ace-icon green fa fa-check"></i>
                                 </a>
@@ -1300,5 +1304,9 @@
 
                                                     function GerarFichaClinica(codigo) {
                                                         window.location.replace("/ASO/ImprimirFichaClinica?codigoASO=" + codigo);
+                                                    }
+
+                                                    function GerarOrdemDeServico(codigo) {
+                                                        window.location.replace("/ASO/ImprimirOrdemDeServico?codigoASO=" + codigo);
                                                     } 
 </script>
