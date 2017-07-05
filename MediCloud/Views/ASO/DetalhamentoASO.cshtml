@@ -924,7 +924,7 @@
                                                                 url: "/Procedimento/BuscarProcedimentoByFornecedorAJAX",
                                                                 type: "POST",
                                                                 dataType: "json",
-                                                                data: { Prefix: request.term, Fornecedor: $('#idFornecedor').attr('value') },
+                                                                data: { Prefix: request.term, Fornecedor: $('#idFornecedor').attr('value'), Tabela: $('#tabela').val() },
                                                                 success: function (data) {
                                                                     response($.map(data, function (item) {
                                                                         return { label: item.Name, value: item.Name, Id: item.Id, Value: item.Value };

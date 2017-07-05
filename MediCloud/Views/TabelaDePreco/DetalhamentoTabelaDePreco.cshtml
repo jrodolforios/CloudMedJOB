@@ -51,6 +51,15 @@
                                     Cadastro
                                 </a>
                             </li>
+                            @if (Model != null && Model.IdTabela >= 0)
+                            {
+                                <li>
+                                    <a data-toggle="tab" href="#edit-prices">
+                                        <i class="blue ace-icon fa fa-usd bigger-125"></i>
+                                        Preços
+                                    </a>
+                                </li>
+                            }
                         </ul>
                     </div>
                     <div class="tab-content profile-edit-tab-content">
@@ -100,22 +109,62 @@
                                     </button>
                                     @if (TabelaDePrecoNovo)
                                     {
-                                        <span>&nbsp; &nbsp;</span>
-                                        <button class="btn" type="reset" id="limparForm">
-                                            <i class="ace-icon fa fa-undo bigger-110"></i>
-                                            Limpar
-                                        </button>
+                                    <span>&nbsp; &nbsp;</span>
+                                    <button class="btn" type="reset" id="limparForm">
+                                        <i class="ace-icon fa fa-undo bigger-110"></i>
+                                        Limpar
+                                    </button>
                                     }
                                     else
                                     {
-                                        <span>&nbsp; &nbsp;</span>
-                                        <a href="javascript:excluirTabelaDePreco(@Model.IdTabela)" class="btn btn-danger" type="reset">
-                                            <i class="ace-icon fa fa-times bigger-110"></i>
-                                            Excluir
-                                        </a>
+                                    <span>&nbsp; &nbsp;</span>
+                                    <a href="javascript:excluirTabelaDePreco(@Model.IdTabela)" class="btn btn-danger" type="reset">
+                                        <i class="ace-icon fa fa-times bigger-110"></i>
+                                        Excluir
+                                    </a>
                                     }
                                 </div>
                             </div>
+                        </div>
+
+                        <div id="edit-prices" class="tab-pane in fade">
+                            <div class="space-10"></div>
+                            <a href="javascript:detalhamentoTabelaValor(0)" class="btn btn-xs">+ Novo item</a>
+                            @if (Model != null && Model.ValorTabelaPreco != null && Model.ValorTabelaPreco.Any())
+                            {
+                                foreach (MediCloud.Models.Parametro.GrupoProcedimento.ValorTabelaDePrecoModel item in Model.ValorTabelaPreco)
+                                {
+                                    <div class="row">
+                                        <div class="col-xs-12" id="@(item.GetId())">
+                                            <div class="media search-media">
+                                                <div class="media-body">
+                                                        <h4 class="media-heading">
+                                                            <span class="blue">@item.Fornecedor.RazaoSocial </span>
+                                                        </h4>
+                                                    <p><b>Procedimento:</b> @item.Procedimento.Nome <br /> <b>Valor:</b> R$@item.Valor</p>
+
+                                                    <div class="search-actions text-center">
+                                                        <span class="blue bolder bigger-110">Ações</span>
+
+                                                        <div class="action-buttons bigger-150">
+                                                            <a href="javascript:excluirTabelaValor(@item.GetId());">
+                                                                <i class="ace-icon fa fa-trash"></i>
+                                                            </a>
+                                                        </div>
+                                                        <a href="javascript:detalhamentoTabelaValor(@item.GetId())" class="search-btn-action btn btn-sm btn-block btn-info">Editar</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <div class="alert alert-block alert-info">
+                                    Nenhum contato para ser exibido.
+                                </div>
+                            }
                         </div>
                     </div>
                 </form>
@@ -147,6 +196,58 @@
         </div>
     </div>
 </div>
+
+<div id="detalhamentoValorTabela" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="smaller lighter blue no-margin">Contato de cliente</h3>
+            </div>
+            <form method="post" id="formContatoCliente" class="form-horizontal" action="@Url.Content("~/Cliente/SalvarContato")">
+                <div class="modal-body">
+                    <input type="hidden" id="codigoContato" name="codigoValorTabela" value="0" />
+                    <input type="hidden" id="codigoClienteContato" name="codigoTabela" value="@Html.ValueFor(x => x.IdTabela)" />
+
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Nome &nbsp;<span class="badge badge-important mail-tag"></span></label>
+
+                        <div class="col-sm-8">
+                            <input class="col-xs-12 col-sm-6 " type="text" id="nomeContato" name="nomeContato" placeholder="nome do contato" value="" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Função &nbsp;<span class="badge badge-important mail-tag"></span></label>
+
+                        <div class="col-sm-8">
+                            <input class="col-xs-12 col-sm-6 " type="text" id="funcao" name="funcao" placeholder="Função do contato" value="" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label no-padding-right" for="form-field-first">E-mail </label>
+
+                        <div class="col-sm-8">
+                            <input class="col-xs-12 col-sm-6 " type="text" id="email" name="email" placeholder="Endereço de email" value="" />
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary" id="salvarContato">
+                        <i class="ace-icon fa fa-check"></i>
+                        Salvar
+                    </button>
+                    <button type="button" data-dismiss="modal" class="btn">
+                        <i class="ace-icon fa fa-times"></i>
+                        Cancelar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <script src="/assets/js/jquery-ui.min.js"></script>
 <script src="/assets/js/bootstrap-datepicker.min.js"></script>
 <script src="/assets/js/jquery.maskedinput.min.js"></script>
@@ -203,4 +304,35 @@
         $('div.progress-bar-success').attr("style", "width: " + count + '%');
         $('.formPercent').append(count + '% ');
     }
+
+    function detalhamentoTabelaValor(codigo) {
+        $('#detalhamentoValorTabela').modal({
+            backdrop: 'static',
+            keyboard: false
+        })
+
+        limparComponentesValorTabela();
+        if (codigo > 0) {
+            $.ajax({
+                url: '/TabelaPreco/DetalharValorTabela?codigoDoValorTabela=' + codigo,
+                type: "post",
+                cache: false,
+                success: function (data) {
+                    $("#nomeEmpresa").attr('value', data.NomeEmpresa);
+                    $("#codigoEmpresa").attr('value', data.IdEmpresa);
+                    $("#telFixoEmpresa").attr('value', data.Telefone);
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    $('#usuarioAlerts').html('<div class="alert alert-danger"><a class="close" data-dismiss="alert">×</a><span>Ops! Não foi possível detalhar este registro no servidor. Contate-nos para que possamos te ajudar melhor.</span></div>')
+                }
+            });
+        }
+
+        function limparComponentesValorTabela() {
+            $("#nomeEmpresa").attr('value', "");
+            $("#codigoEmpresa").attr('value', 0);
+            $("#telFixoEmpresa").attr('value', "");
+        }
+    }
+
 </script>

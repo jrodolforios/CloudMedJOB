@@ -311,6 +311,7 @@
     <Compile Include="Models\Parametro\DadosOcupacionaisModel.cs" />
     <Compile Include="Models\Parametro\FechamentoModel.cs" />
     <Compile Include="Models\Parametro\GrupoProcedimento\TabelaFornecedorModel.cs" />
+    <Compile Include="Models\Parametro\GrupoProcedimento\ValorTabelaDePrecoModel.cs" />
     <Compile Include="Models\Recomendacao\ReferenteModel.cs" />
     <Compile Include="Models\Financeiro\FaturamentoModel.cs" />
     <Compile Include="Models\Financeiro\FormaPagamentoModel.cs" />

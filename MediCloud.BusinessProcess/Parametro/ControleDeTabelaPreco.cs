@@ -92,6 +92,26 @@ namespace MediCloud.BusinessProcess.Parametro
             }
         }
 
+        public static List<TABELAXFORNECEDORXPROCEDIMENTO> recuperarValoresTabelaDePreco(int idTabela)
+        {
+            CloudMedContext contexto = new CloudMedContext();
+            try
+            {
+                if (contexto.TABELAXFORNECEDORXPROCEDIMENTO.Any(x => x.IDTAB == idTabela))
+                    return contexto.TABELAXFORNECEDORXPROCEDIMENTO.Where(x => x.IDTAB == idTabela).ToList();
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            return new List<TABELAXFORNECEDORXPROCEDIMENTO>();
+        }
+
         public static List<TABELAXFORNECEDORXPROCEDIMENTO> buscarTabelaFornecedorPorIDTabela(decimal idTab)
         {
             CloudMedContext contexto = new CloudMedContext();

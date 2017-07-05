@@ -14,6 +14,8 @@ namespace MediCloud.Models.Parametro.GrupoProcedimento
         public bool Status { get; set; }
         public EnumFinanceiro.TipoPagamento TipoPagamento { get; set; }
 
+        public List<ValorTabelaDePrecoModel> ValorTabelaPreco { get; set; }
+
         public string toString()
         {
             return NomeTabela;

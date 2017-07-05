@@ -141,16 +141,16 @@ namespace MediCloud.Controllers
         }
 
         [HttpPost]
-        public JsonResult BuscarProcedimentoByFornecedorAJAX(string Prefix, int Fornecedor)
+        public JsonResult BuscarProcedimentoByFornecedorAJAX(string Prefix, int Fornecedor, int Tabela)
         {
-            List<ProcedimentoModel> contadoresEncontrados = CadastroDeProcedimentos.RecuperarContadorPorTermoEFornecedor(Prefix, Fornecedor);
+            List<ProcedimentoModel> contadoresEncontrados = CadastroDeProcedimentos.RecuperarContadorPorTermoEFornecedor(Prefix, Fornecedor, Tabela);
             List<AutoCompleteProcendimentoMovimentoModel> ObjList = new List<AutoCompleteProcendimentoMovimentoModel>();
 
             try
             {
                 contadoresEncontrados.ForEach(x =>
                 {
-                    ObjList.Add(new AutoCompleteProcendimentoMovimentoModel() { Id = x.IdProcedimento, Name = x.Nome, Value = CadastroDeProcedimentos.BuscarValorProcedimentoPorIDFornecedor(x.IdProcedimento, Fornecedor) });
+                    ObjList.Add(new AutoCompleteProcendimentoMovimentoModel() { Id = x.IdProcedimento, Name = x.Nome, Value = CadastroDeProcedimentos.BuscarValorProcedimentoPorIDFornecedor(x.IdProcedimento, Fornecedor, Tabela) });
                 });
 
                 //Searching records from list using LINQ query  

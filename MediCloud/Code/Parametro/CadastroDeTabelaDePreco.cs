@@ -61,6 +61,35 @@ namespace MediCloud.Code.Parametro
                     NomeTabela = tabelaEncontrada.TABELA1,
                     TipoPagamento = getEnumPorString(tabelaEncontrada.TIPOPAGTO),
                     Status = tabelaEncontrada.STATUS == "A",
+
+                    ValorTabelaPreco = materializarClasses ? recuperarValoresTabelaDePreco((int)tabelaEncontrada.IDTAB) : new List<ValorTabelaDePrecoModel>()
+                };
+        }
+
+        private static List<ValorTabelaDePrecoModel> recuperarValoresTabelaDePreco(int idTabela)
+        {
+            List<TABELAXFORNECEDORXPROCEDIMENTO> valoresEncontrados = ControleDeTabelaPreco.recuperarValoresTabelaDePreco(idTabela);
+            List<ValorTabelaDePrecoModel> listaDeModels = new List<ValorTabelaDePrecoModel>();
+
+            valoresEncontrados.ForEach(x =>
+            {
+                listaDeModels.Add(injetarEmValoresModel(x));
+            });
+
+            return listaDeModels;
+        }
+
+        private static ValorTabelaDePrecoModel injetarEmValoresModel(TABELAXFORNECEDORXPROCEDIMENTO x)
+        {
+            if (x == null)
+                return null;
+            else
+                return new ValorTabelaDePrecoModel()
+                {
+                    Fornecedor = new Models.Fornecedor.FornecedorModel() { IdFornecedor = (int)x.IDFOR, RazaoSocial = x.FORNECEDOR.RAZAOSOCIAL },
+                    Procedimento = new ProcedimentoModel() { IdProcedimento = (int)x.IDPRO, Nome = x.PROCEDIMENTO.PROCEDIMENTO1 },
+                    Tabela = new TabelaPrecoModel() { IdTabela = (int)x.IDTAB },
+                    Valor = x.FATURAMENTO
                 };
         }
 

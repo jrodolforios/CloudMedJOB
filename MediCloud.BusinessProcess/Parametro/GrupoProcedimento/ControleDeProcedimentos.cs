@@ -52,14 +52,14 @@ namespace MediCloud.BusinessProcess.Parametro.GrupoProcedimento
             }
         }
 
-        public static decimal BuscarValorProcedimentoPorIDFornecedor(int procedimento, int fornecedor)
+        public static decimal BuscarValorProcedimentoPorIDFornecedor(int procedimento, int fornecedor, int tabela)
         {
             CloudMedContext contexto = new CloudMedContext();
 
             try
             {
-                if (contexto.TABELAXFORNECEDORXPROCEDIMENTO.Any(x => x.IDPRO == procedimento && x.IDFOR == fornecedor))
-                    return contexto.TABELAXFORNECEDORXPROCEDIMENTO.First(x => x.IDPRO == procedimento && x.IDFOR == fornecedor).FATURAMENTO;
+                if (contexto.TABELAXFORNECEDORXPROCEDIMENTO.Any(x => x.IDPRO == procedimento && x.IDFOR == fornecedor && x.IDTAB == tabela))
+                    return contexto.TABELAXFORNECEDORXPROCEDIMENTO.First(x => x.IDPRO == procedimento && x.IDFOR == fornecedor && x.IDTAB == tabela).FATURAMENTO;
                 else
                     return 0;
             }
@@ -74,7 +74,7 @@ namespace MediCloud.BusinessProcess.Parametro.GrupoProcedimento
             }
         }
 
-        public static List<PROCEDIMENTO> buscarCargosPorTermoEFornecedor(string prefix, int fornecedor)
+        public static List<PROCEDIMENTO> buscarCargosPorTermoEFornecedor(string prefix, int fornecedor, int tabela)
         {
             CloudMedContext contexto = new CloudMedContext();
             List<PROCEDIMENTO> procedimentosEncontrados = new List<PROCEDIMENTO>();
@@ -86,7 +86,7 @@ namespace MediCloud.BusinessProcess.Parametro.GrupoProcedimento
 
                 procedimentos.ForEach(x => 
                 {
-                    if (x.FORNECEDORXPROCEDIMENTO.Any(y => y.IDFOR == fornecedor))
+                    if (x.TABELAXFORNECEDORXPROCEDIMENTO.Any(y => y.IDFOR == fornecedor && y.IDTAB == tabela))
                         procedimentosEncontrados.Add(x);
 
                 });

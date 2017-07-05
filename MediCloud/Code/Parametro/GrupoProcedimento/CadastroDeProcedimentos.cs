@@ -51,14 +51,14 @@ namespace MediCloud.Code.Parametro.GrupoProcedimento
             return resultados;
         }
 
-        internal static decimal BuscarValorProcedimentoPorIDFornecedor(int procedimento, int fornecedor)
+        internal static decimal BuscarValorProcedimentoPorIDFornecedor(int procedimento, int fornecedor, int tabela)
         {
-            return ControleDeProcedimentos.BuscarValorProcedimentoPorIDFornecedor(procedimento, fornecedor);
+            return ControleDeProcedimentos.BuscarValorProcedimentoPorIDFornecedor(procedimento, fornecedor, tabela);
         }
 
-        internal static List<ProcedimentoModel> RecuperarContadorPorTermoEFornecedor(string prefix, int fornecedor)
+        internal static List<ProcedimentoModel> RecuperarContadorPorTermoEFornecedor(string prefix, int fornecedor, int tabela)
         {
-            List<PROCEDIMENTO> contadoresEncontrados = ControleDeProcedimentos.buscarCargosPorTermoEFornecedor(prefix, fornecedor);
+            List<PROCEDIMENTO> contadoresEncontrados = ControleDeProcedimentos.buscarCargosPorTermoEFornecedor(prefix, fornecedor, tabela);
             List<ProcedimentoModel> resultados = new List<ProcedimentoModel>();
 
             contadoresEncontrados.ForEach(x =>
