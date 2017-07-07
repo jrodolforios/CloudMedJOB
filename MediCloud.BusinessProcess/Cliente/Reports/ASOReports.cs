@@ -69,31 +69,34 @@ namespace MediCloud.BusinessProcess.Cliente.Reports
         {
             StringBuilder relatorioProcessado = new StringBuilder();
             string ordemDeServicoTemp = string.Empty;
-            this._movimento.MOVIMENTO_PROCEDIMENTO.ToList().ForEach(x => 
-            {
-                ordemDeServicoTemp = template;
+            if (this._movimento.MOVIMENTO_PROCEDIMENTO.Any())
+                this._movimento.MOVIMENTO_PROCEDIMENTO.ToList().ForEach(x =>
+                {
+                    ordemDeServicoTemp = template;
 
-                ordemDeServicoTemp = ordemDeServicoTemp.Replace("[%DadosEmpresaCabecalho%]", _infoClinica.DADOSCABECALHOREL);
-                ordemDeServicoTemp = ordemDeServicoTemp.Replace("[%LogoEmpresa%]", _infoClinica.URLLOGO);
+                    ordemDeServicoTemp = ordemDeServicoTemp.Replace("[%DadosEmpresaCabecalho%]", _infoClinica.DADOSCABECALHOREL);
+                    ordemDeServicoTemp = ordemDeServicoTemp.Replace("[%LogoEmpresa%]", _infoClinica.URLLOGO);
 
-                ordemDeServicoTemp = ordemDeServicoTemp.Replace("[%IDMOV%]", ((int)_movimento.IDMOV).ToString());
-                ordemDeServicoTemp = ordemDeServicoTemp.Replace("[%IDMOVPRO%]", ((int)x.IDMOVPRO).ToString());
-                ordemDeServicoTemp = ordemDeServicoTemp.Replace("[%NomeEmpresa%]", _movimento.CLIENTE.RAZAOSOCIAL);
-                ordemDeServicoTemp = ordemDeServicoTemp.Replace("[%NomeFuncionario%]", _movimento.FUNCIONARIO.FUNCIONARIO1);
-                ordemDeServicoTemp = ordemDeServicoTemp.Replace("[%Cargo%]", _movimento.CARGO.CARGO1);
+                    ordemDeServicoTemp = ordemDeServicoTemp.Replace("[%IDMOV%]", ((int)_movimento.IDMOV).ToString());
+                    ordemDeServicoTemp = ordemDeServicoTemp.Replace("[%IDMOVPRO%]", ((int)x.IDMOVPRO).ToString());
+                    ordemDeServicoTemp = ordemDeServicoTemp.Replace("[%NomeEmpresa%]", _movimento.CLIENTE.RAZAOSOCIAL);
+                    ordemDeServicoTemp = ordemDeServicoTemp.Replace("[%NomeFuncionario%]", _movimento.FUNCIONARIO.FUNCIONARIO1);
+                    ordemDeServicoTemp = ordemDeServicoTemp.Replace("[%Cargo%]", _movimento.CARGO.CARGO1);
 
-                ordemDeServicoTemp = ordemDeServicoTemp.Replace("[%RG%]", _movimento.FUNCIONARIO.RG);
-                ordemDeServicoTemp = ordemDeServicoTemp.Replace("[%DataNascimento%]", _movimento.FUNCIONARIO.NASCIMENTO?.ToShortDateString());
-                ordemDeServicoTemp = ordemDeServicoTemp.Replace("[%Referente%]", _movimento.MOVIMENTO_REFERENTE.NOMEREFERENCIA);
-                ordemDeServicoTemp = ordemDeServicoTemp.Replace("[%NomeProcedimento%]", x.PROCEDIMENTO.PROCEDIMENTO1);
+                    ordemDeServicoTemp = ordemDeServicoTemp.Replace("[%RG%]", _movimento.FUNCIONARIO.RG);
+                    ordemDeServicoTemp = ordemDeServicoTemp.Replace("[%DataNascimento%]", _movimento.FUNCIONARIO.NASCIMENTO?.ToShortDateString());
+                    ordemDeServicoTemp = ordemDeServicoTemp.Replace("[%Referente%]", _movimento.MOVIMENTO_REFERENTE.NOMEREFERENCIA);
+                    ordemDeServicoTemp = ordemDeServicoTemp.Replace("[%NomeProcedimento%]", x.PROCEDIMENTO.PROCEDIMENTO1);
 
-                ordemDeServicoTemp = ordemDeServicoTemp.Replace("[%DataAgora%]", DateTime.Now.ToShortDateString());
+                    ordemDeServicoTemp = ordemDeServicoTemp.Replace("[%DataAgora%]", DateTime.Now.ToShortDateString());
 
-                ordemDeServicoTemp += "<div style=\"page-break-before:always; \"> </div>";
+                    ordemDeServicoTemp += "<div style=\"page-break-before:always; \"> </div>";
 
-                relatorioProcessado.Append(ordemDeServicoTemp);
-                
-            });
+                    relatorioProcessado.Append(ordemDeServicoTemp);
+
+                });
+            else
+                throw new InvalidOperationException("Não é possível imprimir ordens de serviço pois nenhum procedimento foi cadastrado para este movimento.");
 
             return relatorioProcessado.ToString();
         }

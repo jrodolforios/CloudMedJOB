@@ -68,7 +68,7 @@ namespace MediCloud.View.Controllers
             {
                 ExceptionUtil.GerarLogDeExcecao(ex, Request.Url.ToString());
                 base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
-                return View();
+                return null;
             }
 
             return null;

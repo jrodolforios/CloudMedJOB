@@ -14,6 +14,7 @@ namespace MediCloud.View
     {
         protected void Application_Start()
         {
+
             AreaRegistration.RegisterAllAreas();
             GlobalConfiguration.Configure(WebApiConfig.Register);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
@@ -28,6 +29,12 @@ namespace MediCloud.View
             con.Request.Url.ToString();
 
             ExceptionUtil.GerarLogDeExcecao(exc, con.Request.Url.ToString());
+        }
+
+        void Session_Start(object sender, EventArgs e)
+        {
+            // Code that runs when a new session is started
+            string sessionId = Session.SessionID;
         }
     }
 }

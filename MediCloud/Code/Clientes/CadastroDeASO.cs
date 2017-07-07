@@ -48,12 +48,12 @@ namespace MediCloud.Code.Clientes
                     Observacao = x.OBSERVACAO,
                     Referente = CadastroDeReferente.RecuperarReferentePorID((int)x.IDREF),
                     Setor = carregarClasses ? CadastroDeSetor.RecuperarSetorPorID((int)x.IDSETOR) : new Models.Recomendacao.SetorModel() {IdSetor = (int)x.IDSETOR },
-                    Tabela = carregarClasses ? CadastroDeTabelaDePreco.RecuperarTabelaDePrecoPorID((int)x.IDTAB) : new Models.Parametro.GrupoProcedimento.TabelaPrecoModel() { IdTabela = (int)x.IDTAB },
+                    Tabela = carregarClasses ? CadastroDeTabelaDePreco.RecuperarTabelaDePrecoPorID((int)x.IDTAB, false) : new Models.Parametro.GrupoProcedimento.TabelaPrecoModel() { IdTabela = (int)x.IDTAB },
                     Status = x.STATUS,
                     Usuario = x.USUARIO,
                     CaixaPendente = x.CAIXAPENDENTE.HasValue ? x.CAIXAPENDENTE.Value : false,
                     IdFechamentoCaixa = x.IDFCX,
-                    Faturamento = carregarClasses ? CadastroDeFaturamento.RecuperarFaturamentoPorID(x.IDFAT) : (x.IDFAT.HasValue ? new Models.Financeiro.FaturamentoModel() { IdFaturamento = (int)x.IDFAT} : new Models.Financeiro.FaturamentoModel()),
+                    Faturamento = carregarClasses ? CadastroDeFaturamento.RecuperarFaturamentoPorID(x.IDFAT, false) : (x.IDFAT.HasValue ? new Models.Financeiro.FaturamentoModel() { IdFaturamento = (int)x.IDFAT} : new Models.Financeiro.FaturamentoModel()),
 
                     ProcedimentosMovimento = carregarClasses ? CadastroDeProcedimentosMovimento.BuscarProcedimentosDeMovimentoPorIDMovimento(x.IDMOV) : new List<ProcedimentoMovimentoModel>(),
 

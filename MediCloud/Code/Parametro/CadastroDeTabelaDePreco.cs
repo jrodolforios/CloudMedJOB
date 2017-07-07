@@ -18,12 +18,12 @@ namespace MediCloud.Code.Parametro
 {
     public class CadastroDeTabelaDePreco
     {
-        internal static TabelaPrecoModel RecuperarTabelaDePrecoPorID(int IdRef)
+        internal static TabelaPrecoModel RecuperarTabelaDePrecoPorID(int IdRef, bool carregarLista = true)
         {
             if (IdRef != 0)
             {
                 TABELA referenteEncontrado = ControleDeTabelaPreco.buscarTabelaPorID(IdRef);
-                return injetarEmUsuarioModel(referenteEncontrado);
+                return injetarEmUsuarioModel(referenteEncontrado, carregarLista);
             }
             else
                 return null;
@@ -64,6 +64,11 @@ namespace MediCloud.Code.Parametro
 
                     ValorTabelaPreco = materializarClasses ? recuperarValoresTabelaDePreco((int)tabelaEncontrada.IDTAB) : new List<ValorTabelaDePrecoModel>()
                 };
+        }
+
+        internal static void DeletarValorTabela(int codigoValorTabela)
+        {
+            ControleDeTabelaPreco.DeletarValorTabela(codigoValorTabela);
         }
 
         private static List<ValorTabelaDePrecoModel> recuperarValoresTabelaDePreco(int idTabela)
@@ -166,6 +171,13 @@ namespace MediCloud.Code.Parametro
             return encontrados;
         }
 
+        internal static ValorTabelaDePrecoModel buscarValorDeTabela(int codigoDoValorTabela)
+        {
+            TABELAXFORNECEDORXPROCEDIMENTO valorTabela = ControleDeTabelaPreco.buscarValorDeTabela(codigoDoValorTabela);
+
+            return injetarEmValoresModel(valorTabela);
+        }
+
         internal static TABELA injetarEmUsuarioDAO(TabelaPrecoModel x)
         {
             if (x == null)
@@ -202,6 +214,44 @@ namespace MediCloud.Code.Parametro
                 NomeTabela = string.IsNullOrEmpty(form["nomeTabela"]) ? null : form["nomeTabela"],
                 TipoPagamento = string.IsNullOrEmpty(form["tipoPagamento"]) ? EnumFinanceiro.TipoPagamento.Vazio : (EnumFinanceiro.TipoPagamento)Convert.ToInt32(form["tipoPagamento"]),
                 Status = true
+            };
+        }
+
+        internal static ValorTabelaDePrecoModel SalvarValorTabela(FormCollection form)
+        {
+            ValorTabelaDePrecoModel valorTabelaModel = InjetarEmValorTabelaModel(form);
+            valorTabelaModel.validar();
+
+            TABELAXFORNECEDORXPROCEDIMENTO tabelaDePrecoDAO = injetarEmValorTabelaDAO(valorTabelaModel);
+            tabelaDePrecoDAO = ControleDeTabelaPreco.SalvarValorTabela(tabelaDePrecoDAO);
+
+            valorTabelaModel = injetarEmValoresModel(tabelaDePrecoDAO);
+
+            return valorTabelaModel;
+        }
+
+        private static TABELAXFORNECEDORXPROCEDIMENTO injetarEmValorTabelaDAO(ValorTabelaDePrecoModel valorTabelaModel)
+        {
+            if (valorTabelaModel == null)
+                return null;
+            else
+                return new TABELAXFORNECEDORXPROCEDIMENTO()
+                {
+                    IDFOR = valorTabelaModel.Fornecedor.IdFornecedor,
+                    IDPRO = valorTabelaModel.Procedimento.IdProcedimento,
+                    IDTAB = valorTabelaModel.Tabela.IdTabela,
+                    FATURAMENTO = valorTabelaModel.Valor
+                };
+        }
+
+        private static ValorTabelaDePrecoModel InjetarEmValorTabelaModel(FormCollection form)
+        {
+            return new ValorTabelaDePrecoModel()
+            {
+                Fornecedor = CadastroDeFornecedor.RecuperarFornecedorPorID(string.IsNullOrEmpty(form["idFornecedor"]) ? 0 : Convert.ToInt32(form["idFornecedor"])),
+                Procedimento = CadastroDeProcedimentos.RecuperarProcedimentoPorID(string.IsNullOrEmpty(form["idProcedimento"]) ? 0 : Convert.ToInt32(form["idProcedimento"])),
+                Tabela = new TabelaPrecoModel() { IdTabela = string.IsNullOrEmpty(form["codigoTabela"]) ? 0 : Convert.ToInt32(form["codigoTabela"]) },
+                Valor = string.IsNullOrEmpty(form["valor"]) ? 0 : Convert.ToDecimal(form["valor"])
             };
         }
 

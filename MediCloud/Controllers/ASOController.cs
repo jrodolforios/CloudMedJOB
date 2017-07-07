@@ -518,7 +518,7 @@ namespace MediCloud.Controllers
             {
                 contadoresEncontrados.ForEach(x =>
                 {
-                    ObjList.Add(new AutoCompleteDefaultModel() { Id = x.IdMovimentoProcedimento, Name = (x.Procedimento?.Nome + " - " + (x.DataExame.HasValue ? x.DataRealizado.Value.ToShortDateString() : string.Empty)) });
+                    ObjList.Add(new AutoCompleteDefaultModel() { Id = x.IdMovimentoProcedimento, Name = (x.Procedimento?.Nome + " - " + (x.DataExame.HasValue ? x.DataExame.Value.ToShortDateString() : string.Empty)) });
                 });
 
                 //Searching records from list using LINQ query  

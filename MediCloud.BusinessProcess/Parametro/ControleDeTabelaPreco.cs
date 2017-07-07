@@ -92,6 +92,26 @@ namespace MediCloud.BusinessProcess.Parametro
             }
         }
 
+        public static void DeletarValorTabela(int codigoValorTabela)
+        {
+            CloudMedContext contexto = new CloudMedContext();
+            try
+            {
+                if (contexto.TABELAXFORNECEDORXPROCEDIMENTO.Any(x => (((int)x.TABELA.IDTAB).ToString() + ((int)x.FORNECEDOR.IDFOR).ToString() + ((int)x.PROCEDIMENTO.IDPRO).ToString()) == ((int)codigoValorTabela).ToString()))
+                    contexto.TABELAXFORNECEDORXPROCEDIMENTO.Remove(contexto.TABELAXFORNECEDORXPROCEDIMENTO.First(x => (((int)x.TABELA.IDTAB).ToString() + ((int)x.FORNECEDOR.IDFOR).ToString() + ((int)x.PROCEDIMENTO.IDPRO).ToString()) == ((int)codigoValorTabela).ToString()));
+
+                contexto.SaveChanges();
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public static List<TABELAXFORNECEDORXPROCEDIMENTO> recuperarValoresTabelaDePreco(int idTabela)
         {
             CloudMedContext contexto = new CloudMedContext();
@@ -184,6 +204,67 @@ namespace MediCloud.BusinessProcess.Parametro
             {
                 ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
                 return new List<TABELA>();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static TABELAXFORNECEDORXPROCEDIMENTO buscarValorDeTabela(int codigoDoValorTabela)
+        {
+            CloudMedContext contexto = new CloudMedContext();
+            try
+            {
+                if (codigoDoValorTabela > 0)
+                    return contexto.TABELAXFORNECEDORXPROCEDIMENTO.First(x => (((int)x.TABELA.IDTAB).ToString() + ((int)x.FORNECEDOR.IDFOR).ToString() + ((int)x.PROCEDIMENTO.IDPRO).ToString()) == codigoDoValorTabela.ToString());
+                else
+                    return new TABELAXFORNECEDORXPROCEDIMENTO();
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+                return new TABELAXFORNECEDORXPROCEDIMENTO();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static TABELAXFORNECEDORXPROCEDIMENTO SalvarValorTabela(TABELAXFORNECEDORXPROCEDIMENTO tabelaDePrecoDAO)
+        {
+            CloudMedContext contexto = new CloudMedContext();
+            TABELAXFORNECEDORXPROCEDIMENTO setorSalvo = new TABELAXFORNECEDORXPROCEDIMENTO();
+
+            try
+            {
+
+                if (contexto.TABELAXFORNECEDORXPROCEDIMENTO.Any(x => x.IDTAB == tabelaDePrecoDAO.IDTAB && x.IDPRO == tabelaDePrecoDAO.IDPRO && x.IDFOR == tabelaDePrecoDAO.IDFOR))
+                {
+                    setorSalvo = contexto.TABELAXFORNECEDORXPROCEDIMENTO.First(x => x.IDTAB == tabelaDePrecoDAO.IDTAB && x.IDPRO == tabelaDePrecoDAO.IDPRO && x.IDFOR == tabelaDePrecoDAO.IDFOR);
+
+                    setorSalvo.FATURAMENTO = tabelaDePrecoDAO.FATURAMENTO;
+
+                }
+                else
+                {
+                    setorSalvo = contexto.TABELAXFORNECEDORXPROCEDIMENTO.Add(tabelaDePrecoDAO);
+                }
+
+                contexto.SaveChanges();
+                contexto.Dispose();
+
+                contexto = new CloudMedContext();
+                setorSalvo = contexto.TABELAXFORNECEDORXPROCEDIMENTO.First(x => x.IDTAB == tabelaDePrecoDAO.IDTAB && x.IDPRO == tabelaDePrecoDAO.IDPRO && x.IDFOR == tabelaDePrecoDAO.IDFOR);
+
+                return setorSalvo;
+
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+                return null;
             }
             catch (Exception ex)
             {

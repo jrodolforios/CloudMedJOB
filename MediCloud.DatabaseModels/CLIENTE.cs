@@ -31,11 +31,11 @@ namespace MediCloud.DatabaseModels
         public decimal IDCLI { get; set; }
 
         [Required]
-        [StringLength(50)]
+        [StringLength(100)]
         public string NOMEFANTASIA { get; set; }
 
         [Required]
-        [StringLength(50)]
+        [StringLength(100)]
         public string RAZAOSOCIAL { get; set; }
 
         [Column(TypeName = "ntext")]
@@ -44,7 +44,7 @@ namespace MediCloud.DatabaseModels
         [StringLength(15)]
         public string CPFCNPJ { get; set; }
 
-        [StringLength(40)]
+        [StringLength(100)]
         public string ENDERECO { get; set; }
 
         [StringLength(15)]

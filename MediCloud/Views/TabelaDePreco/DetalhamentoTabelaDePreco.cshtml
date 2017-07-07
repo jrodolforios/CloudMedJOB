@@ -197,6 +197,30 @@
     </div>
 </div>
 
+<div id="confirmValorTabela" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="smaller lighter blue no-margin">Excluir valor de tabela</h3>
+            </div>
+            <div class="modal-body">
+                Tem certeza que deseja excluir este valor da tabela?
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-primary" id="deleteValorTabela">
+                    <i class="ace-icon fa fa-check"></i>
+                    Sim
+                </button>
+                <button type="button" data-dismiss="modal" class="btn">
+                    <i class="ace-icon fa fa-times"></i>
+                    Não
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div id="detalhamentoValorTabela" class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -204,34 +228,52 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h3 class="smaller lighter blue no-margin">Contato de cliente</h3>
             </div>
-            <form method="post" id="formContatoCliente" class="form-horizontal" action="@Url.Content("~/Cliente/SalvarContato")">
+            <form method="post" id="formValorTabela" class="form-horizontal" action="@Url.Content("~/TabelaDePreco/SalvarValorTabela")">
                 <div class="modal-body">
-                    <input type="hidden" id="codigoContato" name="codigoValorTabela" value="0" />
-                    <input type="hidden" id="codigoClienteContato" name="codigoTabela" value="@Html.ValueFor(x => x.IdTabela)" />
+                    <input type="hidden" id="codigoValorTabela" name="codigoValorTabela" value="0" />
+                    <input type="hidden" id="codigoTabela" name="codigoTabela" value="@Html.ValueFor(x => x.IdTabela)" />
 
                     <div class="form-group">
-                        <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Nome &nbsp;<span class="badge badge-important mail-tag"></span></label>
+                        <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Procedimento &nbsp;<span class="badge badge-important mail-tag"></span></label>
 
                         <div class="col-sm-8">
-                            <input class="col-xs-12 col-sm-6 " type="text" id="nomeContato" name="nomeContato" placeholder="nome do contato" value="" />
+                            <input type="hidden" name="idProcedimento" id="idProcedimento" value="" />
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <i class="ace-icon fa fa-search"></i>
+                                </span>
+                                <input class="col-xs-12 col-sm-6" type="text" id="procedimento" name="procedimento" placeholder="Procedimento" value="" />
+                            </div>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Função &nbsp;<span class="badge badge-important mail-tag"></span></label>
+                        <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Fornecedor </label>
 
                         <div class="col-sm-8">
-                            <input class="col-xs-12 col-sm-6 " type="text" id="funcao" name="funcao" placeholder="Função do contato" value="" />
+                            <input type="hidden" name="idFornecedor" id="idFornecedor" value="" />
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <i class="ace-icon fa fa-search"></i>
+                                </span>
+                                <input class="col-xs-12 col-sm-6" type="text" id="fornecedor" name="fornecedor" placeholder="Digite o nome do fornecedor" value="" />
+                            </div>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label class="col-sm-4 control-label no-padding-right" for="form-field-first">E-mail </label>
+                        <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Valor </label>
 
                         <div class="col-sm-8">
-                            <input class="col-xs-12 col-sm-6 " type="text" id="email" name="email" placeholder="Endereço de email" value="" />
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    R$
+                                </span>
+                                <input class="col-xs-12 col-sm-5" type="text" id="valor" name="valor" placeholder="Valor" value="" />
+                            </div>
                         </div>
                     </div>
+
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary" id="salvarContato">
@@ -314,13 +356,18 @@
         limparComponentesValorTabela();
         if (codigo > 0) {
             $.ajax({
-                url: '/TabelaPreco/DetalharValorTabela?codigoDoValorTabela=' + codigo,
+                url: '/TabelaDePreco/DetalharValorTabela?codigoDoValorTabela=' + codigo,
                 type: "post",
                 cache: false,
                 success: function (data) {
-                    $("#nomeEmpresa").attr('value', data.NomeEmpresa);
-                    $("#codigoEmpresa").attr('value', data.IdEmpresa);
-                    $("#telFixoEmpresa").attr('value', data.Telefone);
+                    $("#procedimento").attr('value', data.Procedimento.Nome);
+                    $("#idProcedimento").attr('value', data.Procedimento.IdProcedimento);
+
+                    $("#fornecedor").attr('value', data.Fornecedor.RazaoSocial);
+                    $("#idFornecedor").attr('value', data.Fornecedor.IdFornecedor);
+
+                    $("#valor").attr('value', data.Valor);
+                    $("#valor").attr('value', $("#valor").attr('value').replace('.',','));
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
                     $('#usuarioAlerts').html('<div class="alert alert-danger"><a class="close" data-dismiss="alert">×</a><span>Ops! Não foi possível detalhar este registro no servidor. Contate-nos para que possamos te ajudar melhor.</span></div>')
@@ -329,10 +376,102 @@
         }
 
         function limparComponentesValorTabela() {
-            $("#nomeEmpresa").attr('value', "");
-            $("#codigoEmpresa").attr('value', 0);
-            $("#telFixoEmpresa").attr('value', "");
+            $("#procedimento").attr('value', '');
+            $("#idProcedimento").attr('value', '');
+
+            $("#fornecedor").attr('value', '');
+            $("#idFornecedor").attr('value', '');
+
+            $("#valor").attr('value', '');
         }
     }
 
+    $("#procedimento").autocomplete({
+        source: function (request, response) {
+            $.ajax({
+                url: "/procedimento/BuscarProcedimentoAJAX",
+                type: "POST",
+                dataType: "json",
+                data: { Prefix: request.term },
+                success: function (data) {
+                    response($.map(data, function (item) {
+                        return { label: item.Name, value: item.Name, Id: item.Id };
+                    }))
+
+                }
+            })
+        },
+        select: function (event, ui) {
+            $('#idProcedimento').attr('value', ui.item.Id);
+            $('#procedimento').val(ui.item.label);
+            return false;
+        }
+    });
+    $('#procedimento').on('blur', function () {
+        if ($(this).val().length === 0) {  //check for no. of characters entered
+            $('#idProcedimento').attr('value', 0);  // clear the textbox
+        }
+    });
+
+    $("#fornecedor").autocomplete({
+        source: function (request, response) {
+            $.ajax({
+                url: "/Fornecedor/BuscaFornecedorAJAX",
+                type: "POST",
+                dataType: "json",
+                data: { Prefix: request.term },
+                success: function (data) {
+                    response($.map(data, function (item) {
+                        return { label: item.Name, value: item.Name, Id: item.Id };
+                    }))
+
+                }
+            })
+        },
+        select: function (event, ui) {
+            $('#idFornecedor').attr('value', ui.item.Id);
+            $('#fornecedor').val(ui.item.label);
+            return false;
+        }
+    });
+    $('#fornecedor').on('blur', function () {
+        if ($(this).val().length === 0) {  //check for no. of characters entered
+            $('#idFornecedor').attr('value', 0);  // clear the textbox
+        }
+    });
+
+    function excluirTabelaValor(codigo) {
+        confirmDeleteModalTabelaValor(codigo);
+    }
+
+    function confirmDeleteModalTabelaValor(codigo) {
+        $('#confirmValorTabela').modal({
+            backdrop: 'static',
+            keyboard: false
+        })
+            .one('click', '#deleteValorTabela', function () {
+                deletarValorTabela(codigo);
+            });
+    }
+
+    function deletarValorTabela(codigo) {
+        $.ajax({
+            url: '/TabelaDePreco/ExcluirValorTabela?codigoValorTabela=' + codigo,
+            type: "post",
+            cache: false,
+            success: function (savingStatus) {
+                var tipoAlert;
+                if (savingStatus.acaoBemSucedida) {
+                    tipoAlert = 'alert-success';
+                    $("#" + codigo).remove();
+                }
+                else
+                    tipoAlert = 'alert-danger';
+                $('#usuarioAlerts').html('<div class="alert ' + tipoAlert + '"><a class="close" data-dismiss="alert">×</a><span>' + savingStatus.mensagem + '</span></div>');
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                $('#usuarioAlerts').html('<div class="alert alert-danger"><a class="close" data-dismiss="alert">×</a><span>Ops! Não foi possível deletar este registro no servidor. Contate-nos para que possamos te ajudar melhor.</span></div>')
+            }
+        });
+    }
 </script>

@@ -77,7 +77,7 @@ namespace MediCloud.Code.Financeiro
                     InscricaoMunicipal = x.INSCMUNICIPAL,
                     ModoDeDeEntrega = ConverterModoDeEntregaDeStringParaEnum(x.ENTREGA),
                     Observacao = x.OBSNF,
-                    Tabela = CadastroDeTabelaDePreco.RecuperarTabelaDePrecoPorID((int)x.IDTAB),
+                    Tabela = CadastroDeTabelaDePreco.RecuperarTabelaDePrecoPorID((int)x.IDTAB, false),
                     TipoEmpresa = ConverterTipoEmpresaDeStringParaEnum(x.TIPOEMPRESA),
                     Usuario = x.USUARIO
                 };

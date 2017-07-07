@@ -17,15 +17,15 @@ namespace MediCloud.BusinessProcess.Util
             string rs = "";
             foreach (var eve in ex.EntityValidationErrors)
             {
-                rs = string.Format("Validação de \"{0}\" em \"{1}\" apresentou o seguinte problema de validação:", eve.Entry.Entity.GetType().Name, eve.Entry.State);
+                rs = string.Format("O cadastro de \"{0}\" apresentou o seguinte problema de validação:", eve.Entry.Entity.GetType().Name);
                 Console.WriteLine(rs);
 
                 foreach (var ve in eve.ValidationErrors)
                 {
-                    rs += "" + string.Format("- Propriedade: \"{0}\", Erro: \"{1}\"", ve.PropertyName, ve.ErrorMessage);
+                    rs += "" + string.Format("\r\n- {0}", ve.ErrorMessage);
                 }
             }
-            throw new Exception(rs);
+            throw new InvalidOperationException(rs);
         }
 
         public static void GerarLogDeExcecao(Exception exc, string url = "")
