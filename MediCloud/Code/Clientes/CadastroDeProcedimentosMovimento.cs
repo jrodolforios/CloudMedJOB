@@ -154,7 +154,7 @@ namespace MediCloud.Code.Clientes
                 return new ProcedimentoMovimentoModel()
                 {
                     IdMovimentoProcedimento = (int)x.IDMOVPRO,
-                    Procedimento = new Models.Parametro.GrupoProcedimento.ProcedimentoModel() {IdProcedimento = (int)x.IDPRO, Nome = x.PROCEDIMENTO.PROCEDIMENTO1 },
+                    Procedimento = new Models.Parametro.GrupoProcedimento.ProcedimentoModel() {IdProcedimento = x.IDPRO.HasValue ? (int)x.IDPRO : 0, Nome = x.PROCEDIMENTO?.PROCEDIMENTO1 },
                     DataExame = x.DATAEXAME,
                     DataRealizado = x.DATAREALIZADO
                 };
