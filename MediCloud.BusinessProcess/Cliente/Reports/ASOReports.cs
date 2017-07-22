@@ -270,7 +270,7 @@ namespace MediCloud.BusinessProcess.Cliente.Reports
             template = template.Replace("[%RazaoSocialCliente%]", _movimento.CLIENTE.RAZAOSOCIAL);
             template = template.Replace("[%RG%]", _movimento.FUNCIONARIO.RG);
             template = template.Replace("[%NomeClinica%]", _infoClinica.NOMECLINICA);
-            template = template.Replace("[%DataHora%]", DateTime.Now.ToShortDateString());
+            template = template.Replace("[%DataHora%]", _movimento.DATA.ToShortDateString());
             template = template.Replace("[%IdMov%]", ((int)_movimento.IDMOV).ToString());
             template = template.Replace("[%PCMSO%]", _movimento.CLIENTE.EPCMSO?.ELABORADORPCMSO);
             template = template.Replace("[%FormaPag%]", _movimento.FORMADEPAGAMENTO.FORMADEPAGAMENTO1);
