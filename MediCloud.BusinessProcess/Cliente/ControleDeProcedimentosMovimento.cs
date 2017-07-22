@@ -37,7 +37,9 @@ namespace MediCloud.BusinessProcess.Cliente
 
             try
             {
-                contexto.MOVIMENTO_PROCEDIMENTO.Remove(contexto.MOVIMENTO_PROCEDIMENTO.First(x => x.IDMOVPRO == codigoProcedimento));
+                if (contexto.MOVIMENTO_PROCEDIMENTO.Any(x => x.IDMOVPRO == codigoProcedimento))
+                    contexto.MOVIMENTO_PROCEDIMENTO.Remove(contexto.MOVIMENTO_PROCEDIMENTO.First(x => x.IDMOVPRO == codigoProcedimento));
+
                 contexto.SaveChanges();
             }
             catch (DbEntityValidationException ex)
@@ -122,7 +124,10 @@ namespace MediCloud.BusinessProcess.Cliente
 
             try
             {
-                return contexto.MOVIMENTO_PROCEDIMENTO.First(x => x.IDMOVPRO == codigoDoProcedimentoMovimento);
+                if (contexto.MOVIMENTO_PROCEDIMENTO.Any(x => x.IDMOVPRO == codigoDoProcedimentoMovimento))
+                    return contexto.MOVIMENTO_PROCEDIMENTO.First(x => x.IDMOVPRO == codigoDoProcedimentoMovimento);
+                else
+                    return null;
             }
             catch (DbEntityValidationException ex)
             {
@@ -140,7 +145,7 @@ namespace MediCloud.BusinessProcess.Cliente
             CloudMedContext contexto = new CloudMedContext();
             try
             {
-                List<MOVIMENTO_PROCEDIMENTO> funcionario = contexto.MOVIMENTO_PROCEDIMENTO.Where(x => x.MOVIMENTO.CLIENTE.NOMEFANTASIA.Contains(prefix) || x.MOVIMENTO.FUNCIONARIO.FUNCIONARIO1.Contains(prefix) ).ToList();
+                List<MOVIMENTO_PROCEDIMENTO> funcionario = contexto.MOVIMENTO_PROCEDIMENTO.Where(x => x.MOVIMENTO.CLIENTE.NOMEFANTASIA.Contains(prefix) || x.MOVIMENTO.FUNCIONARIO.FUNCIONARIO1.Contains(prefix)).ToList();
 
                 return funcionario;
             }

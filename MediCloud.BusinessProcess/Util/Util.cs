@@ -253,5 +253,11 @@ namespace MediCloud.BusinessProcess.Util
                 return montagem;
             }
         }
+
+        internal static string InserirMascaraCNPJ(string CNPJ)
+        {
+            ulong CNPJTratado = Convert.ToUInt64(ApenasNumeros(CNPJ));
+            return CNPJTratado.ToString(@"00\.000\.000\/0000\-00");
+        }
     }
 }

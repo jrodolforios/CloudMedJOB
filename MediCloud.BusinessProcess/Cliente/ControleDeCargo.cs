@@ -86,6 +86,8 @@ namespace MediCloud.BusinessProcess.Cliente
 
             try
             {
+                if (contexto.CARGO.Any(x => x.CARGO1 == cargoDAO.CARGO1))
+                    throw new InvalidOperationException("Já existe um cargo no sistema com este mesmo nome.");
 
                 if (cargoDAO.IDCGO > 0)
                 {

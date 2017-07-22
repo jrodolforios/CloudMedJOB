@@ -165,9 +165,12 @@ namespace MediCloud.Controllers
         }
 
         [HttpPost]
-        public JsonResult BuscaFuncionarioDeClienteAJAX(int IdCliente, string Prefix)
+        public JsonResult BuscaFuncionarioDeClienteAJAX(int? IdCliente, string Prefix)
         {
-            List<FuncionarioModel> contadoresEncontrados = CadastroDeFuncionario.RecuperarContadorPorTermoECliente(Prefix, IdCliente);
+            if (!IdCliente.HasValue)
+                return null;
+
+            List<FuncionarioModel> contadoresEncontrados = CadastroDeFuncionario.RecuperarContadorPorTermoECliente(Prefix, IdCliente.Value);
             List<AutoCompleteDefaultModel> ObjList = new List<AutoCompleteDefaultModel>();
 
             try

@@ -65,6 +65,7 @@ namespace MediCloud.BusinessProcess.Cliente.Reports
             return retorno;
         }
 
+        #region imprimirOrdemServicoASO
         private string substituirParametrosOrdemDeServico(string template)
         {
             StringBuilder relatorioProcessado = new StringBuilder();
@@ -100,11 +101,13 @@ namespace MediCloud.BusinessProcess.Cliente.Reports
 
             return relatorioProcessado.ToString();
         }
+        #endregion
 
         #region imprimirSemMedCoord
         private string substituirParametrosSemMedCoord(string template)
         {
             template = template.Replace("[%Cliente%]", _movimento.CLIENTE.NOMEFANTASIA);
+            template = template.Replace("[%CNPJCliente%]", Util.Util.InserirMascaraCNPJ(_movimento.CLIENTE.CPFCNPJ));
             template = template.Replace("[%Funcionario%]", _movimento.FUNCIONARIO.FUNCIONARIO1);
             template = template.Replace("[%Setor%]", _movimento.SETOR.SETOR1);
             template = template.Replace("[%Cargo%]", _movimento.CARGO.CARGO1);
@@ -164,6 +167,7 @@ namespace MediCloud.BusinessProcess.Cliente.Reports
         {
 
             template = template.Replace("[%Cliente%]", _movimento.CLIENTE.NOMEFANTASIA);
+            template = template.Replace("[%CNPJCliente%]", Util.Util.InserirMascaraCNPJ(_movimento.CLIENTE.CPFCNPJ));
             template = template.Replace("[%Funcionario%]", _movimento.FUNCIONARIO.FUNCIONARIO1);
             template = template.Replace("[%Setor%]", _movimento.SETOR.SETOR1);
             template = template.Replace("[%Cargo%]", _movimento.CARGO.CARGO1);

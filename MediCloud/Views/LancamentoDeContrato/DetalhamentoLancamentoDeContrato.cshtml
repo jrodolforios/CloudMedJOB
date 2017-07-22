@@ -73,15 +73,18 @@
                     </div>
                     <div class="tab-content profile-edit-tab-content">
                         <div id="edit-basic" class="tab-pane in active">
-                            <div class="action-buttons bigger-150">
-                                <a href="javascript:revisarDetalhes(@Html.ValueFor(x => x.IdLancamentoContrato));" class="tooltipASO" title="Revisar detalhes">
-                                    <i class="ace-icon purple fa fa-retweet"></i>
-                                </a>
-                                &nbsp;&nbsp;
-                                <a href="javascript:lancarMovimentos(@Html.ValueFor(x => x.IdLancamentoContrato));" class="tooltipASO" title="Lançar movimentos">
-                                    <i class="ace-icon green fa fa-share-square-o"></i>
-                                </a>
-                            </div>
+                            @if (Model != null && Model.IdLancamentoContrato > 0)
+                            {
+                                <div class="action-buttons bigger-150">
+                                    <a href="javascript:revisarDetalhes(@Html.ValueFor(x => x.IdLancamentoContrato));" class="tooltipASO" title="Revisar detalhes">
+                                        <i class="ace-icon purple fa fa-retweet"></i>
+                                    </a>
+                                    &nbsp;&nbsp;
+                                    <a href="javascript:lancarMovimentos(@Html.ValueFor(x => x.IdLancamentoContrato));" class="tooltipASO" title="Lançar movimentos">
+                                        <i class="ace-icon green fa fa-share-square-o"></i>
+                                    </a>
+                                </div>
+                            }
                             <h4 class="header blue bolder smaller">Dados do lançamento de contrato</h4>
 
                             <div class="vspace-12-sm"></div>
@@ -217,39 +220,39 @@
 
                             @if (Model != null && Model.DetalhesContrato != null && Model.DetalhesContrato.Any())
                             {
-                                <div class="row">
-                                    <div class="col-xs-12">
-                                        <table id="simple-table" class="table  table-bordered table-hover">
-                                            <thead>
-                                                <tr>
-                                                    <th>ID do ASO</th>
-                                                    <th>Total</th>
-                                                    <th>Cliente</th>
-                                                    <th>Procedimento</th>
-                                                    <th>Tabela</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach (MediCloud.Models.Financeiro.DetalheContratoModel item in Model.DetalhesContrato)
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <table id="simple-table" class="table  table-bordered table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>ID do ASO</th>
+                                                <th>Total</th>
+                                                <th>Cliente</th>
+                                                <th>Procedimento</th>
+                                                <th>Tabela</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (MediCloud.Models.Financeiro.DetalheContratoModel item in Model.DetalhesContrato)
                                                 {
-                                                    <tr>
-                                                        <td>@item.ASO.IdASO</td>
-                                                        <td>R$ @item.Valor.ToString("0.00")</td>
-                                                        <td>@item.Cliente.RazaoSocial</td>
-                                                        <td>@item.Procedimento.Nome</td>
-                                                        <td>@item.Tabela.NomeTabela</td>
-                                                    </tr>
+                                                <tr>
+                                                    <td>@item.ASO.IdASO</td>
+                                                    <td>R$ @item.Valor.ToString("0.00")</td>
+                                                    <td>@item.Cliente.RazaoSocial</td>
+                                                    <td>@item.Procedimento.Nome</td>
+                                                    <td>@item.Tabela.NomeTabela</td>
+                                                </tr>
                                                 }
-                                            </tbody>
-                                        </table>
-                                    </div><!-- /.span -->
-                                </div><!-- /.row -->
+                                        </tbody>
+                                    </table>
+                                </div><!-- /.span -->
+                            </div><!-- /.row -->
                             }
                             else
                             {
-                                <div class="alert alert-block alert-info">
-                                    Nenhum detalhe para ser exibido.
-                                </div>
+                            <div class="alert alert-block alert-info">
+                                Nenhum detalhe para ser exibido.
+                            </div>
                             }
 
                         </div>

@@ -109,35 +109,38 @@
                     </div>
                     <div class="tab-content profile-edit-tab-content">
                         <div id="edit-basic" class="tab-pane in active fade">
-                            <div class="action-buttons bigger-150">
-                                <a href="javascript:imprimirASO(@Html.ValueFor(x => x.IdASO));" class="tooltipASO" title="Imprimir (C/ Médico Coord)">
-                                    <i class="ace-icon purple fa fa-file-text-o"></i>
-                                </a>
-                                &nbsp;&nbsp;
-                                <a href="javascript:imprimirASOSemMedCoord(@Html.ValueFor(x => x.IdASO));" class="tooltipASO" title="Imprimir (S/ Médico Coord)">
-                                    <i class="ace-icon purple fa fa-file-o"></i>
-                                </a>
-                                &nbsp;&nbsp;
-                                <a href="javascript:GerarRecibo(@Html.ValueFor(x => x.IdASO));" class="tooltipASO" title="Gerar recibo">
-                                    <i class="ace-icon orange fa fa-file-excel-o"></i>
-                                </a>
-                                &nbsp;&nbsp;
-                                <a href="javascript:GerarFichaClinica(@Html.ValueFor(x => x.IdASO));" class="tooltipASO" title="Ficha Clínica">
-                                    <i class="ace-icon green fa fa-clipboard"></i>
-                                </a>
-                                &nbsp;&nbsp;
-                                <a href="javascript:GerarListaDeProcedimentos(@Html.ValueFor(x => x.IdASO));" class="tooltipASO" title="Lista de procedimentos">
-                                    <i class="ace-icon blue fa fa-list"></i>
-                                </a>
-                                &nbsp;&nbsp;
-                                <a href="javascript:GerarOrdemDeServico(@Html.ValueFor(x => x.IdASO));" class="tooltipASO" title="Ordem de Serviço">
-                                    <i class="ace-icon blue fa fa-calculator "></i>
-                                </a>
-                                &nbsp;&nbsp;
-                                <a href="javascript:ConfirmarASO(@Html.ValueFor(x => x.IdASO));" class="tooltipASO" title="Confirmar exames dete ASO">
-                                    <i class="ace-icon green fa fa-check"></i>
-                                </a>
-                            </div>
+                            @if (Model != null && Model.IdASO > 0)
+                            {
+                                <div class="action-buttons bigger-150">
+                                    <a href="javascript:imprimirASO(@Html.ValueFor(x => x.IdASO));" class="tooltipASO" title="Imprimir (C/ Médico Coord)">
+                                        <i class="ace-icon purple fa fa-file-text-o"></i>
+                                    </a>
+                                    &nbsp;&nbsp;
+                                    <a href="javascript:imprimirASOSemMedCoord(@Html.ValueFor(x => x.IdASO));" class="tooltipASO" title="Imprimir (S/ Médico Coord)">
+                                        <i class="ace-icon purple fa fa-file-o"></i>
+                                    </a>
+                                    &nbsp;&nbsp;
+                                    <a href="javascript:GerarRecibo(@Html.ValueFor(x => x.IdASO));" class="tooltipASO" title="Gerar recibo">
+                                        <i class="ace-icon orange fa fa-file-excel-o"></i>
+                                    </a>
+                                    &nbsp;&nbsp;
+                                    <a href="javascript:GerarFichaClinica(@Html.ValueFor(x => x.IdASO));" class="tooltipASO" title="Ficha Clínica">
+                                        <i class="ace-icon green fa fa-clipboard"></i>
+                                    </a>
+                                    &nbsp;&nbsp;
+                                    <a href="javascript:GerarListaDeProcedimentos(@Html.ValueFor(x => x.IdASO));" class="tooltipASO" title="Lista de procedimentos">
+                                        <i class="ace-icon blue fa fa-list"></i>
+                                    </a>
+                                    &nbsp;&nbsp;
+                                    <a href="javascript:GerarOrdemDeServico(@Html.ValueFor(x => x.IdASO));" class="tooltipASO" title="Ordem de Serviço">
+                                        <i class="ace-icon blue fa fa-calculator "></i>
+                                    </a>
+                                    &nbsp;&nbsp;
+                                    <a href="javascript:ConfirmarASO(@Html.ValueFor(x => x.IdASO));" class="tooltipASO" title="Confirmar exames deste ASO">
+                                        <i class="ace-icon green fa fa-check"></i>
+                                    </a>
+                                </div>
+                            }
                             <h4 class="header blue bolder smaller">Dados do ASO</h4>
 
                             <div class="vspace-12-sm"></div>
@@ -429,43 +432,43 @@
                             {
                                 foreach (MediCloud.Models.Cliente.ArquivoMovimentoModel item in Model.AnexosMovimento)
                                 {
-                                    <div class="row">
-                                        <div class="col-xs-12" id="@item.IdArquivo">
-                                            <div class="media search-media">
-                                                <div class="media-left">
-                                                    <a href="#">
-                                                        <img class="media-object" data-src="holder.js/72x72" alt="72x72" src="/assets/images/avatars/document-download-flat.png" data-holder-rendered="true" style="width: 72px; height: 72px;">
+                            <div class="row">
+                                <div class="col-xs-12" id="@item.IdArquivo">
+                                    <div class="media search-media">
+                                        <div class="media-left">
+                                            <a href="#">
+                                                <img class="media-object" data-src="holder.js/72x72" alt="72x72" src="/assets/images/avatars/document-download-flat.png" data-holder-rendered="true" style="width: 72px; height: 72px;">
+                                            </a>
+                                        </div>
+                                        <div class="media-body">
+                                            <div class="container">
+                                                <h4 class="media-heading">
+                                                    <span class="blue">@item.NomeArquivo </span>
+                                                </h4>
+                                            </div>
+                                            <p><b>Data de envio:</b><br /> @item.DataEnvio.ToShortDateString()</p>
+
+                                            <div class="search-actions text-center">
+                                                <span class="blue bolder bigger-110">Ações</span>
+
+                                                <div class="action-buttons bigger-150">
+                                                    <a href="javascript:excluirArquivoMovimento(@item.IdArquivo);">
+                                                        <i class="ace-icon fa fa-trash"></i>
                                                     </a>
                                                 </div>
-                                                <div class="media-body">
-                                                    <div class="container">
-                                                        <h4 class="media-heading">
-                                                            <span class="blue">@item.NomeArquivo </span>
-                                                        </h4>
-                                                    </div>
-                                                    <p><b>Data de envio:</b><br /> @item.DataEnvio.ToShortDateString()</p>
-
-                                                    <div class="search-actions text-center">
-                                                        <span class="blue bolder bigger-110">Ações</span>
-
-                                                        <div class="action-buttons bigger-150">
-                                                            <a href="javascript:excluirArquivoMovimento(@item.IdArquivo);">
-                                                                <i class="ace-icon fa fa-trash"></i>
-                                                            </a>
-                                                        </div>
-                                                        <a href="javascript:baixarArquivoMovimento(@item.IdArquivo)" class="search-btn-action btn btn-sm btn-block btn-info"><i class="ace-icon fa fa-arrow-down"></i>Baixar</a>
-                                                    </div>
-                                                </div>
+                                                <a href="javascript:baixarArquivoMovimento(@item.IdArquivo)" class="search-btn-action btn btn-sm btn-block btn-info"><i class="ace-icon fa fa-arrow-down"></i>Baixar</a>
                                             </div>
                                         </div>
                                     </div>
+                                </div>
+                            </div>
                                 }
                             }
                             else
                             {
-                                <div class="alert alert-block alert-info">
-                                    Nenhum arquivo para ser exibido.
-                                </div>
+                            <div class="alert alert-block alert-info">
+                                Nenhum arquivo para ser exibido.
+                            </div>
                             }
 
                         </div>
@@ -745,7 +748,7 @@
                                                             }
                                                         });
                                                     }
-                                                    
+
                                                     function ConfirmarASO(codigo) {
                                                         $.ajax({
                                                             url: '/ASO/ConfirmarASO?codigoDoMovimento=' + codigo,
@@ -1293,14 +1296,14 @@
                                                     function imprimirASOSemMedCoord(codigo) {
                                                         window.location.replace("/ASO/ImprimirASOSemMedCoord?codigoASO=" + codigo);
                                                     }
-                                                    
+
                                                     function GerarRecibo(codigo) {
                                                         window.location.replace("/ASO/ImprimirReciboASO?codigoASO=" + codigo);
-                                                    } 
+                                                    }
 
                                                     function GerarListaDeProcedimentos(codigo) {
                                                         window.location.replace("/ASO/ImprimirListaDeProcedimentos?codigoASO=" + codigo);
-                                                    } 
+                                                    }
 
                                                     function GerarFichaClinica(codigo) {
                                                         window.location.replace("/ASO/ImprimirFichaClinica?codigoASO=" + codigo);
@@ -1308,5 +1311,5 @@
 
                                                     function GerarOrdemDeServico(codigo) {
                                                         window.location.replace("/ASO/ImprimirOrdemDeServico?codigoASO=" + codigo);
-                                                    } 
+                                                    }
 </script>

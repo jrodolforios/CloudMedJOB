@@ -66,11 +66,14 @@
                     </div>
                     <div class="tab-content profile-edit-tab-content">
                         <div id="edit-basic" class="tab-pane in active">
-                            <div class="action-buttons bigger-150">
-                                <a href="javascript:fecharCaixa(@Html.ValueFor(x => x.IdFechamentoCaixa));" class="tooltipASO" title="Fechar Caixa">
-                                    <i class="ace-icon green fa fa-file-text-o"></i>
-                                </a>
-                            </div>
+                            @if (Model != null && Model.IdFechamentoCaixa > 0)
+                            {
+                                <div class="action-buttons bigger-150">
+                                    <a href="javascript:fecharCaixa(@Html.ValueFor(x => x.IdFechamentoCaixa));" class="tooltipASO" title="Fechar Caixa">
+                                        <i class="ace-icon green fa fa-file-text-o"></i>
+                                    </a>
+                                </div>
+                            }
                             <h4 class="header blue bolder smaller">Dados do Caixa</h4>
                             <div class="vspace-12-sm"></div>
 
@@ -164,18 +167,18 @@
                                     @if (FechamentoCaixaNovo)
                                     {
                                         <span>&nbsp; &nbsp;</span>
-                                            <button class="btn" type="reset" id="limparForm">
-                                                <i class="ace-icon fa fa-undo bigger-110"></i>
-                                                Limpar
-                                            </button>
+                                        <button class="btn" type="reset" id="limparForm">
+                                            <i class="ace-icon fa fa-undo bigger-110"></i>
+                                            Limpar
+                                        </button>
                                     }
                                     else
                                     {
                                         <span>&nbsp; &nbsp;</span>
-                                            <a href="javascript:excluirFechamentoCaixa(@Model.IdFechamentoCaixa)" class="btn btn-danger" type="reset">
-                                                <i class="ace-icon fa fa-times bigger-110"></i>
-                                                Excluir
-                                            </a>
+                                        <a href="javascript:excluirFechamentoCaixa(@Model.IdFechamentoCaixa)" class="btn btn-danger" type="reset">
+                                            <i class="ace-icon fa fa-times bigger-110"></i>
+                                            Excluir
+                                        </a>
                                     }
                                 </div>
                             </div>

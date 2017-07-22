@@ -90,6 +90,11 @@ namespace MediCloud.BusinessProcess.Laudo
 
             try
             {
+                if(contexto.LAUDOAUD.Any(x => LaudoAudioDAO.IDLAUDO == x.IDLAUDO && LaudoAudioDAO.IDMOVPRO == x.IDMOVPRO))
+                {
+                    throw new InvalidOperationException("Já foi cadastrada uma audiometría para este Movimento.");
+                }
+
 
                 if (LaudoAudioDAO.IDLAUDO > 0)
                 {

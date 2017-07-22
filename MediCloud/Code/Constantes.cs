@@ -8,7 +8,7 @@ namespace MediCloud.Code
     public class Constantes
     {
         public const string MENSAGENS_ALERTAS = "AlertaMensagem";
-        public const string MENSAGEM_GENERICA_DE_ERRO = "Ops! Parece que aconteceu algo de errado :( (Se o problema persistir, procure o nosso suporte)";
+        public const string MENSAGEM_GENERICA_DE_ERRO = "Ops! Algo deu errado, dê uma revisada na sua ação e caso o problema persista basta nos procurar.";
 
         public const string NOME_SESSAO_USUARIO = "UserSession";
     }

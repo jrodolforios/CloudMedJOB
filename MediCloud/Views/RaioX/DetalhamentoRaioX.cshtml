@@ -63,11 +63,14 @@
                     </div>
                     <div class="tab-content profile-edit-tab-content">
                         <div id="edit-basic" class="tab-pane in active">
-                            <div class="action-buttons bigger-150">
-                                <a href="javascript:imprimirLaudo(@(Model?.ProcedimentoMovimento?.IdMovimentoProcedimento));" class="tooltipASO" title="Imprimir laudo">
-                                    <i class="ace-icon purple fa fa-print"></i>
-                                </a>
-                            </div>
+                            @if (Model != null && Model.ProcedimentoMovimento != null && Model.ProcedimentoMovimento.IdMovimentoProcedimento > 0)
+                            {
+                                <div class="action-buttons bigger-150">
+                                    <a href="javascript:imprimirLaudo(@(Model?.ProcedimentoMovimento?.IdMovimentoProcedimento));" class="tooltipASO" title="Imprimir laudo">
+                                        <i class="ace-icon purple fa fa-print"></i>
+                                    </a>
+                                </div>
+                            }
                             <h4 class="header blue bolder smaller">Configurações</h4>
 
                             <div class="row">

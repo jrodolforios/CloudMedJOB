@@ -110,6 +110,8 @@ namespace MediCloud.BusinessProcess.Funcionario
 
             try
             {
+                if (contexto.FUNCIONARIO.Any(x => x.FUNCIONARIO1 == funcionarioDAO.FUNCIONARIO1 && x.IDCLI == funcionarioDAO.IDCLI))
+                    throw new Exception("Já existe um funcionário com este nome cadastrado para o cliente indicado.");
 
                 if (funcionarioDAO.IDFUN > 0)
                 {
