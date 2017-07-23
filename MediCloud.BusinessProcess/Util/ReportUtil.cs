@@ -8,6 +8,7 @@ using static MediCloud.BusinessProcess.Util.Enum.Cliente;
 using System.IO;
 using System.Configuration;
 using static MediCloud.BusinessProcess.Util.Enum.Laudo;
+using static MediCloud.BusinessProcess.Util.Enum.Financeiro;
 
 namespace MediCloud.BusinessProcess.Util
 {
@@ -31,6 +32,20 @@ namespace MediCloud.BusinessProcess.Util
                     return recoverTemplateByFileName(path + tipoASOReport.ToString() + ".html");
                 case ASOReportEnum.imprimirOrdemServicoASO:
                     return recoverTemplateByFileName(path + tipoASOReport.ToString() + ".html");
+                default:
+                    return string.Empty;
+            }
+        }
+
+        internal static string GetRelatorioFinanceiroTemplate(object tipoASOReport)
+        {
+            string path = ConfigurationManager.AppSettings["TemplatesPath"] + "\\Financeiro\\";
+
+            switch (tipoASOReport)
+            {
+                case FinanceiroReportEnum.imprimirRelatorioDeMovimentos:
+                    return recoverTemplateByFileName(path + tipoASOReport.ToString() + ".html");
+
                 default:
                     return string.Empty;
             }

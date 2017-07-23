@@ -1,0 +1,290 @@
+﻿@model MediCloud.Models.Cliente.ASOModel
+@{
+    ViewBag.Title = "Relatório de Movimentos";
+}
+<script src="/assets/js/jquery-2.1.4.min.js"></script>
+<div class="page-header">
+    <h1>
+        Relatórios Financeiros
+        <small>
+            <i class="ace-icon fa fa-angle-double-right"></i>
+            Relatório de Movimentos
+        </small>
+    </h1>
+</div><!-- /.page-header -->
+<div class="row">
+    <div class="col-xs-12">
+        <div id="user-profile-3" class="user-profile row">
+            <div class="col-sm-offset-1 col-sm-10">
+
+                <div class="space"></div>
+                <form method="post" class="form-horizontal" action="@Url.Content("~/RelatoriosFinanceiros/RelatorioDeMovimento")">
+                    <div class="tabbable">
+                        <ul class="nav nav-tabs padding-16">
+                            <li class="active">
+                                <a data-toggle="tab" href="#edit-basic">
+                                    <i class="green ace-icon fa fa-pencil-square-o bigger-125"></i>
+                                    Filtro
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="tab-content profile-edit-tab-content">
+                        <div id="edit-basic" class="tab-pane in active">
+                            <h4 class="header blue bolder smaller">Filtros do relatório</h4>
+                            <div class="vspace-12-sm"></div>
+
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Procedimento </label>
+
+                                <div class="col-sm-8">
+                                    <input type="hidden" name="idProcedimento" id="idProcedimento" value="" />
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <i class="ace-icon fa fa-search"></i>
+                                        </span>
+                                        <input class="col-xs-12 col-sm-6" type="text" id="procedimento" name="procedimento" placeholder="Digite o procedimento" value="" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Profissional </label>
+
+                                <div class="col-sm-8">
+                                    <input type="hidden" name="idProfissional" id="idProfissional" value="" />
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <i class="ace-icon fa fa-search"></i>
+                                        </span>
+                                        <input class="col-xs-12 col-sm-6" type="text" id="profissional" name="profissional" placeholder="Digite o nome do profissional" value="" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label no-padding-right" for="form-field-date">Data do exame</label>
+
+                                <div class="col-sm-8">
+                                    <div class="input-medium">
+                                        <div class="input-group">
+                                            <input class="input-medium date-picker input-mask-date" id="dataExameInicio" name="dataExameInicio" type="text" data-date-format="dd/mm/yyyy" placeholder="dd/mm/aaaa" value="" />
+                                            <span class="input-group-addon">
+                                                <i class="ace-icon fa fa-calendar"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="input-medium">
+                                        <div class="input-group">
+                                            <input class="input-medium date-picker input-mask-date" id="dataExameFim" name="dataExameFim" type="text" data-date-format="dd/mm/yyyy" placeholder="dd/mm/aaaa" value="" />
+                                            <span class="input-group-addon">
+                                                <i class="ace-icon fa fa-calendar"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label no-padding-right" for="form-field-date">Data do movimento</label>
+
+                                <div class="col-sm-8">
+                                    <div class="input-medium">
+                                        <div class="input-group">
+                                            <input class="input-medium date-picker input-mask-date" id="dataMovimentoInicio" name="dataMovimentoInicio" type="text" data-date-format="dd/mm/yyyy" placeholder="dd/mm/aaaa" value="" />
+                                            <span class="input-group-addon">
+                                                <i class="ace-icon fa fa-calendar"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="input-medium">
+                                        <div class="input-group">
+                                            <input class="input-medium date-picker input-mask-date" id="dataMovimentoFim" name="dataMovimentoFim" type="text" data-date-format="dd/mm/yyyy" placeholder="dd/mm/aaaa" value="" />
+                                            <span class="input-group-addon">
+                                                <i class="ace-icon fa fa-calendar"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Funcionário</label>
+
+                                <div class="col-sm-8">
+                                    <input type="hidden" name="idFuncionario" id="idFuncionario" value="" />
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <i class="ace-icon fa fa-search"></i>
+                                        </span>
+                                        <input class="col-xs-12 col-sm-6 componenteFormulario" type="text" id="funcionario" name="funcionario" placeholder="Digite o nome do Funcionário" value="" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Cliente</label>
+
+                                <div class="col-sm-8">
+                                    <input type="hidden" name="idCliente" id="idCliente" value="" />
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <i class="ace-icon fa fa-search"></i>
+                                        </span>
+                                        <input class="col-xs-12 col-sm-6 componenteFormulario" type="text" id="cliente" name="cliente" placeholder="Digite o nome do cliente" value="" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="clearfix form-actions">
+                                <div class="col-md-offset-3 col-md-9">
+                                    <button class="btn btn-info" type="submit">
+                                        <i class="ace-icon fa fa-circle-o-notch bigger-110"></i>
+                                        Gerar
+                                    </button>
+                                    <span>&nbsp; &nbsp;</span>
+                                    <button class="btn" type="reset" id="limparForm">
+                                        <i class="ace-icon fa fa-undo bigger-110"></i>
+                                        Limpar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div><!-- /.span -->
+        </div>
+    </div>
+</div>
+<script src="/assets/js/jquery-ui.min.js"></script>
+<script src="/assets/js/bootstrap-datepicker.min.js"></script>
+<script src="/assets/js/jquery.maskedinput.min.js"></script>
+<script src="/assets/js/jquery.ui.touch-punch.min.js"></script>
+<script src="/assets/js/ace-elements.min.js"></script>
+<script src="/assets/js/ace.min.js"></script>
+<script type="text/javascript">
+    $('.date-picker').datepicker({
+        format: 'dd/mm/yyyy',
+        language: 'pt-BR',
+    });
+    $('.input-mask-date').mask('99/99/9999');
+
+    $("#profissional").autocomplete({
+        source: function (request, response) {
+            $.ajax({
+                url: "/Profissional/BuscarProfissionalAJAX",
+                type: "POST",
+                dataType: "json",
+                data: { Prefix: request.term },
+                success: function (data) {
+                    response($.map(data, function (item) {
+                        return { label: item.Name, value: item.Name, Id: item.Id };
+                    }))
+
+                }
+            })
+        },
+        select: function (event, ui) {
+            $('#idProfissional').attr('value', ui.item.Id);
+            $('#profissional').val(ui.item.label);
+            return false;
+        },
+        messages: {
+            noResults: "Sem resultados", results: ""
+        }
+    });
+    $('#profissional').on('blur', function () {
+        if ($(this).val().length === 0) {  //check for no. of characters entered
+            $('#idProfissional').attr('value', 0);  // clear the textbox
+        }
+    });
+
+    $("#procedimento").autocomplete({
+        source: function (request, response) {
+            $.ajax({
+                url: "/Procedimento/BuscarProcedimentoAJAX",
+                type: "POST",
+                dataType: "json",
+                data: { Prefix: request.term },
+                success: function (data) {
+                    response($.map(data, function (item) {
+                        return { label: item.Name, value: item.Name, Id: item.Id, Value: item.Value };
+                    }))
+                }
+            })
+        },
+        select: function (event, ui) {
+            $('#idProcedimento').attr('value', ui.item.Id);
+            $('#procedimento').val(ui.item.label);
+            return false;
+        },
+        messages: {
+            noResults: "Sem resultados", results: ""
+        }
+    });
+    $('#procedimento').on('blur', function () {
+        if ($(this).val().length === 0) {  //check for no. of characters entered
+            $('#idProcedimento').attr('value', 0);  // clear the textbox
+        }
+    });
+
+    $("#funcionario").autocomplete({
+        source: function (request, response) {
+            $.ajax({
+                url: "/Funcionario/BuscaFuncionarioAJAX",
+                type: "POST",
+                dataType: "json",
+                data: { Prefix: request.term },
+                success: function (data) {
+                    response($.map(data, function (item) {
+                        return { label: item.Name, value: item.Name, Id: item.Id };
+                    }))
+
+                }
+            })
+        },
+        select: function (event, ui) {
+            $('#idFuncionario').attr('value', ui.item.Id);
+            $('#funcionario').val(ui.item.label);
+            return false;
+        },
+        messages: {
+            noResults: "Sem resultados", results: ""
+        }
+    });
+    $('#funcionario').on('blur', function () {
+        if ($(this).val().length === 0) {  //check for no. of characters entered
+            $('#idFuncionario').attr('value', 0);  // clear the textbox
+        }
+    });
+
+    $("#cliente").autocomplete({
+        source: function (request, response) {
+            $.ajax({
+                url: "/Cliente/BuscaClienteAJAX",
+                type: "POST",
+                dataType: "json",
+                data: { Prefix: request.term },
+                success: function (data) {
+                    response($.map(data, function (item) {
+                        return { label: item.Name, value: item.Name, Id: item.Id };
+                    }))
+
+                }
+            })
+        },
+        select: function (event, ui) {
+            $('#idCliente').attr('value', ui.item.Id);
+            $('#cliente').val(ui.item.label);
+            return false;
+        },
+        messages: {
+            noResults: "Sem resultados", results: ""
+        }
+    });
+    $('#cliente').on('blur', function () {
+        if ($(this).val().length === 0) {  //check for no. of characters entered
+            $('#idCliente').attr('value', 0);  // clear the textbox
+        }
+    });
+</script>

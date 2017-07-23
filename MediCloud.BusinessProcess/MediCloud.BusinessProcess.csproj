@@ -57,6 +57,8 @@
     <Compile Include="Financeiro\ControleDeLancamentoDeContratoFixo.cs" />
     <Compile Include="Financeiro\ControleDeNotaFiscal.cs" />
     <Compile Include="Financeiro\ControleDeRotaDeEntrega.cs" />
+    <Compile Include="Financeiro\Reports\ControleDeRelatoriosFinanceiros.cs" />
+    <Compile Include="Financeiro\Reports\FinanceiroReports.cs" />
     <Compile Include="Parametro\ControleDeCidade.cs" />
     <Compile Include="Parametro\ControleDeDadosOcupacionais.cs" />
     <Compile Include="Parametro\ControleDeFechamento.cs" />
@@ -86,6 +88,7 @@
     <Compile Include="Recomendacao\ControleDeRiscos.cs" />
     <Compile Include="Recomendacao\ControleDeSetor.cs" />
     <Compile Include="Segurança\ControleDeAcesso.cs" />
+    <Compile Include="Util\Enum\Financeiro.cs" />
     <Compile Include="Util\Enum\Laudo.cs" />
     <Compile Include="Util\Enum\Cliente.cs" />
     <Compile Include="Util\ExceptionUtil.cs" />
@@ -127,6 +130,7 @@
     <Content Include="Templates\ASO\imprimirComMedCoord.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Templates\Financeiro\imprimirRelatorioDeMovimentos.html" />
     <Content Include="Templates\Laudo\imprimirAudiometria.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

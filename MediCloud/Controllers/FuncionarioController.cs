@@ -17,6 +17,7 @@ namespace MediCloud.Controllers
         // GET: Funcionario
         public ActionResult Index()
         {
+            EstahLogado();
             return View();
         }
 
@@ -28,7 +29,7 @@ namespace MediCloud.Controllers
                 base.EstahLogado();
                 ViewBag.Title = "Usuários";
 
-                List<FuncionarioModel> model = CadastroDeFuncionario.buscarUsuarios(form);
+                List<FuncionarioModel> model = CadastroDeFuncionario.BuscarFuncionarios(form);
 
                 return View(model);
             }
@@ -171,6 +172,35 @@ namespace MediCloud.Controllers
                 return null;
 
             List<FuncionarioModel> contadoresEncontrados = CadastroDeFuncionario.RecuperarContadorPorTermoECliente(Prefix, IdCliente.Value);
+            List<AutoCompleteDefaultModel> ObjList = new List<AutoCompleteDefaultModel>();
+
+            try
+            {
+                contadoresEncontrados.ForEach(x =>
+                {
+                    ObjList.Add(new AutoCompleteDefaultModel() { Id = x.IdFuncionario, Name = x.NomeCompleto });
+                });
+
+                //Searching records from list using LINQ query  
+                var results = (from N in ObjList
+                               select new { N.Id, N.Name }).ToArray();
+                return Json(results, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                ExceptionUtil.GerarLogDeExcecao(ex, Request.Url.ToString());
+                ObjList = new List<AutoCompleteDefaultModel>()
+                {
+                new AutoCompleteDefaultModel {Id=-1,Name=Constantes.MENSAGEM_GENERICA_DE_ERRO },
+                };
+                return Json(ObjList.ToArray(), JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpPost]
+        public JsonResult BuscaFuncionarioAJAX(string Prefix)
+        {
+            List<FuncionarioModel> contadoresEncontrados = CadastroDeFuncionario.RecuperarFuncionarioPorTermo(Prefix);
             List<AutoCompleteDefaultModel> ObjList = new List<AutoCompleteDefaultModel>();
 
             try

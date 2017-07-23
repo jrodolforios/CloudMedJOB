@@ -15,12 +15,17 @@ namespace MediCloud.Code.Funcionario
 {
     public class CadastroDeFuncionario
     {
-        internal static List<FuncionarioModel> buscarUsuarios(FormCollection form)
+        internal static List<FuncionarioModel> BuscarFuncionarios(FormCollection form)
         {
             string termo = form["keywords"];
+            return RecuperarFuncionarioPorTermo(termo);
+        }
+
+        internal static List<FuncionarioModel> RecuperarFuncionarioPorTermo(string prefix)
+        {
             List<FuncionarioModel> listaDeModels = new List<FuncionarioModel>();
 
-            List<FUNCIONARIO> usuarioDoBanco = ControleDeFuncionario.buscarFuncionario(termo);
+            List<FUNCIONARIO> usuarioDoBanco = ControleDeFuncionario.buscarFuncionario(prefix);
 
             usuarioDoBanco.ForEach(x =>
             {
@@ -29,6 +34,7 @@ namespace MediCloud.Code.Funcionario
 
             return listaDeModels;
         }
+
 
         public static FuncionarioModel injetarEmUsuarioModel(FUNCIONARIO x)
         {

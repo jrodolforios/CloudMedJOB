@@ -1,0 +1,159 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style type="text/css">
+        body {
+            font-family: Arial;
+            font-size: 8pt;
+        }
+
+        .line {
+            display: block;
+            height: 1px;
+            border: 0;
+            border-top: 1px solid black;
+            margin: 1em 0;
+            padding: 0;
+        }
+
+        .lineWrite {
+            display: block;
+            height: 1px;
+            border: 0;
+            border-top: 1px solid black;
+            margin: 1.5em 0;
+            padding: 0;
+        }
+
+        .dotted {
+            display: block;
+            height: 1px;
+            border: 0;
+            border-top: 1px dashed black;
+            margin: 1em 0;
+            padding: 0;
+        }
+
+        .corpo {
+            border: 1px solid black;
+        }
+
+        .dadosEmpresa {
+            width: 70%;
+            float: left;
+            text-align: center;
+        }
+
+        .logoEmpresa {
+            width: 30%;
+            float: left;
+            text-align: center;
+        }
+
+            .logoEmpresa img {
+                width: 120pt;
+            }
+
+        .tituloRelatorio {
+            border: 1px solid black;
+            text-align: center;
+            margin: 3px 3px 3px 3px;
+        }
+
+        .conteudoRelatorio {
+            padding-top: 5px;
+            margin: 3px 3px 3px 3px;
+        }
+
+        .campo {
+            font-weight: bold;
+        }
+
+        .opcoes {
+            word-wrap: normal;
+            display: block;
+        }
+
+        .Assinatura {
+            display: table;
+            width: 100%;
+        }
+
+        .AssinaturaDireita {
+            float: left;
+            width: 50%;
+            border-right: solid 1px black;
+        }
+
+        .AssinaturaEsquerda {
+            margin-left: 50%;
+        }
+
+        .Centralizado {
+            text-align: center;
+        }
+
+        .alignLeft {
+            text-align: left;
+        }
+
+        .alignRight {
+            float: right;
+        }
+    </style>
+</head>
+<body>
+    <div class="cabecalho">
+        <div class="cabecalhoSuperior">
+            <div class="logoEmpresa"><img src="[%LogoEmpresa%]" alt="Logo da empresa" /></div>
+            <div class="dadosEmpresa"><h2><b>Relatório de Movimentos</b></h2></div>
+        </div>
+    </div>
+    <table width="100%" >
+        <tr style="font-weight:bold">
+            <td style="border-bottom:solid 1px">PROCEDIMENTO</td>
+            <td style="border-bottom:solid 1px">PROFISSIONAL</td>
+            <td style="border-bottom:solid 1px">IDMOV</td>
+            <td style="border-bottom:solid 1px">FORNECEDOR</td>
+            <td style="border-bottom:solid 1px">USUÁRIO</td>
+            <td style="border-bottom:solid 1px">TABELA</td>
+            <td style="border-bottom:solid 1px">DATA</td>
+            <td style="border-bottom:solid 1px">DATAMOV</td>
+            <td style="border-bottom:solid 1px">VALOR</td>
+            <td style="border-bottom:solid 1px">DESC.</td>
+            <td style="border-bottom:solid 1px">TOTAL</td>
+        </tr>
+
+        [%CorpoRelatorio%]
+
+        <!--<tr>
+            <td colspan=""11"">&nbsp;</td>
+        </tr>
+        <tr>
+            <td colspan=""10"" style=""border-bottom:dashed 1px"">NOME DO CARA</td>
+            <td colspan=""10"" style=""border-bottom:dashed 1px"">R$0,00</td>
+        </tr>
+        <tr>
+            <td>PROCEDIMENTO</td>
+            <td>PROFISSIONAL</td>
+            <td>IDMOV</td>
+            <td>FORNECEDOR</td>
+            <td>USUÁRIO</td>
+            <td>TABELA</td>
+            <td>DATA</td>
+            <td>DATAMOV</td>
+            <td>VALOR</td>
+            <td>DESC.</td>
+            <td>TOTAL</td>
+        </tr>-->
+    </table>
+    <br />
+    <br/>
+    <div style="text-align:right">
+        <b>Contagem: [%Contagem%] &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Total: R$[%ValorTotal%]</b>
+    </div>
+</body>
+</html>
