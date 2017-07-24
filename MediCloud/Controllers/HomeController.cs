@@ -1,4 +1,7 @@
 ﻿using MediCloud.App_Code;
+using MediCloud.BusinessProcess.Util;
+using MediCloud.Code.Clientes;
+using MediCloud.Models.Seguranca;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +17,14 @@ namespace MediCloud.View.Controllers
             base.EstahLogado();
             ViewBag.Title = "Início";
 
-            return View();
+            IndexModel model = new IndexModel()
+            {
+                MovimentosNaoFaturados = CadastroDeASO.ContagemDeASOsNaoFaturados(),
+                MovimentosNoMês = CadastroDeASO.ContagemASOsNoMes(),
+                ProcedimentosNoMes = CadastroDeProcedimentosMovimento.ContagemProcedimentosNoMes()
+            };
+
+            return View(model);
         }
     }
 }

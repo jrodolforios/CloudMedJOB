@@ -52,6 +52,25 @@ namespace MediCloud.BusinessProcess.Cliente
             }
         }
 
+        public static int ContagemProcedimentosNoMes()
+        {
+            CloudMedContext contexto = new CloudMedContext();
+
+            try
+            {
+                return contexto.MOVIMENTO_PROCEDIMENTO.Count(x => x.DATAEXAME.HasValue ? (x.DATAEXAME.Value.Month == DateTime.Now.Month && x.DATAEXAME.Value.Year == DateTime.Now.Year) : false);
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public static MOVIMENTO_PROCEDIMENTO SalvarProcedimentoMovimento(MOVIMENTO_PROCEDIMENTO procedimentoMovimentoDAO)
         {
             CloudMedContext contexto = new CloudMedContext();

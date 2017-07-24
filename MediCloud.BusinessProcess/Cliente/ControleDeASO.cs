@@ -41,6 +41,44 @@ namespace MediCloud.BusinessProcess.Cliente
             }
         }
 
+        public static int ContagemASOsNoMes()
+        {
+            CloudMedContext contexto = new CloudMedContext();
+
+            try
+            {
+                return contexto.MOVIMENTO.Count(x => x.DATAMOV.HasValue ? (x.DATAMOV.Value.Month == DateTime.Now.Month && x.DATAMOV.Value.Year == DateTime.Now.Year) : false);
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static int ContagemDeASOsNaoFaturados()
+        {
+            CloudMedContext contexto = new CloudMedContext();
+
+            try
+            {
+                return contexto.MOVIMENTO.Count(x => x.IDFCX == null || x.IDFCX <= 0);
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public static MOVIMENTO buscarASOPorId(int idASO)
         {
             CloudMedContext contexto = new CloudMedContext();

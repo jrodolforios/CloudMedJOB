@@ -32,6 +32,16 @@ namespace MediCloud.Code.Clientes
             return listaDeModels;
         }
 
+        internal static int ContagemASOsNoMes()
+        {
+            return ControleDeASO.ContagemASOsNoMes();
+        }
+
+        internal static int ContagemDeASOsNaoFaturados()
+        {
+            return ControleDeASO.ContagemDeASOsNaoFaturados();
+        }
+
         public static ASOModel injetarEmUsuarioModel(MOVIMENTO x, bool carregarClasses = true)
         {
             if (x == null)

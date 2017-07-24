@@ -1,4 +1,5 @@
-﻿<style type="text/css">
+﻿@model  MediCloud.Models.Seguranca.IndexModel
+<style type="text/css">
     div.container4 {
         height: 40em;
         position: relative;
@@ -20,5 +21,62 @@
         }
 </style>
 <div class=container4>
-    <p><i class="fa fa-stethoscope"></i></p>
+    <div class="col-sm-12 infobox-container">
+        <div class="infobox infobox-green">
+            <div class="infobox-icon">
+                <i class="ace-icon fa fa-user"></i>
+            </div>
+
+            <div class="infobox-data">
+                <span class="infobox-data-number">[Em Breve]</span>
+                <div class="infobox-content">Convocações no mês</div>
+            </div>
+        </div>
+
+        <div class="infobox infobox-pink">
+            <div class="infobox-icon">
+                <i class="ace-icon fa fa-book"></i>
+            </div>
+
+            <div class="infobox-data">
+                <span class="infobox-data-number">[Em Breve]</span>
+                <div class="infobox-content">PCMSO à vencer</div>
+            </div>
+        </div>
+
+        <div class="infobox infobox-blue">
+            <div class="infobox-icon">
+                <i class="ace-icon fa fa-file-text-o "></i>
+            </div>
+
+            <div class="infobox-data">
+                <span class="infobox-data-number">@Model.MovimentosNaoFaturados</span>
+                <div class="infobox-content">Mov. não faturados</div>
+            </div>
+        </div>
+
+        <div class="infobox infobox-red">
+            <div class="infobox-icon">
+                <i class="ace-icon fa fa-line-chart"></i>
+            </div>
+
+            <div class="infobox-data">
+                <span class="infobox-data-number">@Model.MovimentosNoMês</span>
+                <div class="infobox-content">ASOs no mês</div>
+            </div>
+        </div>
+
+        <div class="infobox infobox-green">
+            <div class="infobox-icon">
+                <i class="ace-icon fa fa-user-md"></i>
+            </div>
+
+            <div class="infobox-data">
+                <span class="infobox-data-number">@Model.ProcedimentosNoMes</span>
+                <div class="infobox-content">Proc. no mês</div>
+            </div>
+        </div>
+
+    </div>
+   <p><i class="fa fa-stethoscope"></i></p>
 </div>

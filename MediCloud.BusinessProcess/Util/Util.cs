@@ -23,6 +23,7 @@ namespace MediCloud.BusinessProcess.Util
             else
                 return null;
         }
+
         public static int CalcularIdade(DateTime? nascimento)
         {
             if (nascimento.HasValue)

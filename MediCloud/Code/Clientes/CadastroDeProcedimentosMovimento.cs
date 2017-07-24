@@ -31,6 +31,11 @@ namespace MediCloud.Code.Clientes
             return listaDeModels;
         }
 
+        internal static int ContagemProcedimentosNoMes()
+        {
+            return ControleDeProcedimentosMovimento.ContagemProcedimentosNoMes();
+        }
+
         private static ProcedimentoMovimentoModel injetarEmUsuarioModel(MOVIMENTO_PROCEDIMENTO x, bool materializarMovimento = false, bool materializarClassesDoMovimento = true)
         {
             if (x == null)
