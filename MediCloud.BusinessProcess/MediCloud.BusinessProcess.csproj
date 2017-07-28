@@ -130,7 +130,9 @@
     <Content Include="Templates\ASO\imprimirComMedCoord.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Templates\Financeiro\imprimirRelatorioDeMovimentos.html" />
+    <Content Include="Templates\Financeiro\imprimirRelatorioDeMovimentos.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Templates\Laudo\imprimirAudiometria.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
