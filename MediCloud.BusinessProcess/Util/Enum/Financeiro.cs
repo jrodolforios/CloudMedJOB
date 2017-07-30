@@ -11,7 +11,8 @@ namespace MediCloud.BusinessProcess.Util.Enum
         public enum FinanceiroReportEnum
         {
             indefinido = 0,
-            imprimirRelatorioDeMovimentos = 1
+            imprimirRelatorioDeMovimentos = 1,
+            imprimirRelatorioAnaliticoDeFaturamento = 2
         }
     }
 }

@@ -17,7 +17,7 @@ namespace MediCloud.BusinessProcess.Financeiro.Reports
         private FinanceiroReportEnum _tipoRelatorioFinanceiro;
         private INFORMACOES_CLINICA _informacoesDaClinica;
 
-        public FinanceiroReports(List<MOVIMENTO> reportResult, INFORMACOES_CLINICA informacoesDaClinica,FinanceiroReportEnum imprimirRelatorioDeMovimentos)
+        public FinanceiroReports(List<MOVIMENTO> reportResult, INFORMACOES_CLINICA informacoesDaClinica, FinanceiroReportEnum imprimirRelatorioDeMovimentos)
         {
             this._reportResult = reportResult;
             this._tipoRelatorioFinanceiro = imprimirRelatorioDeMovimentos;
@@ -35,12 +35,113 @@ namespace MediCloud.BusinessProcess.Financeiro.Reports
                 case FinanceiroReportEnum.imprimirRelatorioDeMovimentos:
                     retorno = PdfFactory.create(EnumPdfType.TuesPechkin).ParseOrientacao(substituirParametrosRelatorioDeMovimentos(template), TipoOrientacaoPdf.Paisagem);
                     break;
+                case FinanceiroReportEnum.imprimirRelatorioAnaliticoDeFaturamento:
+                    retorno = PdfFactory.create(EnumPdfType.TuesPechkin).ParseOrientacao(substituirParametrosRelatorioAnaliticoDeFaturamento(template), TipoOrientacaoPdf.Retrato);
+                    break;
                 default:
                     retorno = null;
                     break;
             }
 
             return retorno;
+        }
+
+        private string substituirParametrosRelatorioAnaliticoDeFaturamento(string template)
+        {
+            string corpoRelatorio = string.Empty;
+            string relatorioFinal = string.Empty;
+            FATURAMENTO faturamento;
+
+            _reportResult.Where(idFat => idFat.IDFAT != null).Select(idFat => idFat.IDFAT).Distinct().ToList().ForEach(idFat =>
+            {
+
+                _reportResult.Where(idCli => idCli.IDFAT == idFat).Select(idCli => idCli.IDCLI).Distinct().ToList().ForEach(idCli =>
+                {
+                    faturamento = _reportResult.Where(x => x.IDCLI == idCli && x.IDFAT == idFat).First().FATURAMENTO;
+                    relatorioFinal += $@"<div class=""cabecalho"">
+                                        <div class=""cabecalhoSuperior"">
+                                            <div class=""logoEmpresa""><img src=""{_informacoesDaClinica.URLLOGO}"" alt=""Logo da empresa"" /></div>
+                                            <div class=""dadosEmpresa""><h2><b>Relatório Analítico de Faturamento</b></h2></div>
+                                            <div class=""dadosRelatorio"">{faturamento.MES + "/" + faturamento.ANO + " - " + idFat}</div>
+                                        </div>
+                                    </div>
+                                    <table width=""100%"" >
+                                        <tr>
+                                            <td style=""width:20%"" >&nbsp;</td>
+                                            <td style=""width:60%"">
+                                                <table style=""text-align: center; width:100%"">
+                                                    <tr >
+                                                        <td style=""border-bottom:1px solid; font-size:12pt""><b>Grupo de Clientes:</b></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style=""font-size:14pt""><b>{_reportResult.Where(y => y.IDCLI == idCli && y.IDFAT == idFat).First().CLIENTE.RAZAOSOCIAL}</b></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style=""font-size:10pt"">{_reportResult.Where(y => y.IDCLI == idCli && y.IDFAT == idFat).First().CLIENTE.RAZAOSOCIAL}</td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                            <td style=""width:20%"">&nbsp;</td>
+                                        </tr>
+                                    </table>
+                                    <table width=""100%"" >
+                                        <tr style=""font-weight:bold"">
+                                            <td style=""border-bottom:solid 1px"">Funcionário</td>
+                                            <td style=""border-bottom:solid 1px"">Cargo</td>
+                                            <td style=""border-bottom:solid 1px"">Exame</td>
+                                            <td style=""border-bottom:solid 1px"">Data</td>
+                                            <td style=""border-bottom:solid 1px"">Valor</td>
+                                            <td style=""border-bottom:solid 1px"">Observação</td>
+                                        </tr>";
+
+                    _reportResult.Where(idFun => idFun.IDCLI == idCli && idFun.IDFAT == idFat).Select(idFun => idFun.IDFUN).Distinct().ToList().ForEach(idFun =>
+                    {
+                        _reportResult.Where(idCgo => idCgo.IDFUN == idFun && idCgo.IDFAT == idFat && idCgo.IDCLI == idCli).Select(idCgo => idCgo.IDCGO).Distinct().ToList().ForEach(idCgo =>
+                        {
+                            relatorioFinal += $@"<tr>
+                                                <td colspan=""6"">&nbsp;</td>
+                                            </tr>
+                                            <tr>
+                                                <td style=""border-bottom:solid 1px""><b>{_reportResult.Where(x => x.IDFUN == idFun && x.IDCGO == idCgo && x.IDFAT == idFat).First().FUNCIONARIO.FUNCIONARIO1}</b></td>
+                                                <td style=""border-bottom:solid 1px""><b>{_reportResult.Where(x => x.IDFUN == idFun && x.IDCGO == idCgo && x.IDFAT == idFat).First().CARGO.CARGO1}</b></td>
+                                                <td colspan=""4"" style=""border-bottom:solid 1px"">&nbsp;</td>
+                                            </tr>";
+
+                            _reportResult.Where(idMovPro => idMovPro.IDCGO == idCgo && idMovPro.IDFAT == idFat && idMovPro.IDCLI == idCli && idMovPro.IDFUN == idFun).First().MOVIMENTO_PROCEDIMENTO?.Distinct().ToList().ForEach(idMovPro =>
+                            {
+                                relatorioFinal += $@"<tr>
+                                                    <td colspan=""2"" >&nbsp;</td>
+                                                    <td style=""font-size:7pt"">{idMovPro.PROCEDIMENTO?.PROCEDIMENTO1}</td>
+                                                    <td style=""font-size:7pt"">{idMovPro.DATAEXAME?.ToShortDateString()}</td>
+                                                    <td style=""font-size:7pt"">{idMovPro.TOTAL}</td>
+                                                    <td style=""font-size:7pt"">{idMovPro.OBSMOVTO}</td>
+                                                </tr>";
+                            });
+
+                            relatorioFinal += $@"<tr>
+                                                <td colspan=""2"">&nbsp;</td>
+                                                <td style=""font-size:7pt; border-top:solid 1px; font-weight:bold;"">Exames: {_reportResult.Where(idMovPro => idMovPro.IDCGO == idCgo && idMovPro.IDFAT == idFat && idMovPro.IDCLI == idCli && idMovPro.IDFUN == idFun).First().MOVIMENTO_PROCEDIMENTO?.Count()}</td>
+                                                <td style=""font-size:7pt; border-top:solid 1px; font-weight:bold;"">Total:</td>
+                                                <td style=""font-size:7pt; border-top:solid 1px; font-weight:bold;"">R$ {_reportResult.Where(idMovPro => idMovPro.IDCGO == idCgo && idMovPro.IDFAT == idFat && idMovPro.IDCLI == idCli && idMovPro.IDFUN == idFun).First().MOVIMENTO_PROCEDIMENTO?.Select(x => x.TOTAL).Sum()}</td>
+                                                <td style=""font-size:7pt; border-top:solid 1px; font-weight:bold;"">&nbsp;</td>
+                                            </tr>";
+                        });
+                    });
+
+                    relatorioFinal += $@"</table>
+                                    <br />
+                                    <br/>
+                                    <div style=""text-align:right"">
+                                        <b>Total da Empresa: R${_reportResult.Where(x => x.IDCLI == idCli && x.IDFAT == idFat).Sum(x => x.MOVIMENTO_PROCEDIMENTO?.Sum(y => y.VALOR))}</b>
+                                    </div>
+                                    <div style=""page-break-before: always;""> </div>";
+                });
+            });
+
+            template = template.Replace("[%CorpoRelatorio%]", relatorioFinal);
+
+
+            return template;
         }
 
         private string substituirParametrosRelatorioDeMovimentos(string template)

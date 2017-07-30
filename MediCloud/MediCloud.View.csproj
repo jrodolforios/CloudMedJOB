@@ -735,6 +735,7 @@
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile1.pubxml" />
     <Content Include="Views\RelatoriosFinanceiros\RelatorioDeMovimento.cshtml" />
+    <Content Include="Views\RelatoriosFinanceiros\RelatorioAnalitoDeFaturamento.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -45,6 +45,8 @@ namespace MediCloud.BusinessProcess.Util
             {
                 case FinanceiroReportEnum.imprimirRelatorioDeMovimentos:
                     return recoverTemplateByFileName(path + tipoASOReport.ToString() + ".html");
+                case FinanceiroReportEnum.imprimirRelatorioAnaliticoDeFaturamento:
+                    return recoverTemplateByFileName(path + tipoASOReport.ToString() + ".html");
 
                 default:
                     return string.Empty;

@@ -32,7 +32,20 @@ namespace MediCloud.Code.Financeiro.Reports
             int idCliente = string.IsNullOrEmpty(form["idCliente"]) ? 0 : Convert.ToInt32(form["idCliente"]);
             #endregion
 
-            return ControleDeRelatoriosFinanceiros.ImprimirASOComMedCoord(idProcedimento,IdProfissional, dataDoExame.DataInicial, dataDoExame.DataFinal, dataDoMovimento.DataInicial, dataDoMovimento.DataFinal, idFuncionario, idCliente);
+            return ControleDeRelatoriosFinanceiros.ImprimirRelatorioDeMovimentos(idProcedimento,IdProfissional, dataDoExame.DataInicial, dataDoExame.DataFinal, dataDoMovimento.DataInicial, dataDoMovimento.DataFinal, idFuncionario, idCliente);
+        }
+
+        internal static byte[] GerarRelatorioAnaliticoDeFaturamento(FormCollection form)
+        {
+            #region Recuperação dos filtros
+            int idCliente = string.IsNullOrEmpty(form["idCliente"]) ? 0 : Convert.ToInt32(form["idCliente"]);
+            int idGrupoDeClientes = string.IsNullOrEmpty(form["idGrupoDeClientes"]) ? 0 : Convert.ToInt32(form["idGrupoDeClientes"]);
+            int idProcedimento = string.IsNullOrEmpty(form["idProcedimento"]) ? 0 : Convert.ToInt32(form["idProcedimento"]);
+            int idFaturamento = string.IsNullOrEmpty(form["idFaturamento"]) ? 0 : Convert.ToInt32(form["idFaturamento"]);
+            #endregion
+
+            return ControleDeRelatoriosFinanceiros.ImprimirRelatorioAnaliticoDeFaturamento(idCliente, idGrupoDeClientes, idProcedimento, idFaturamento);
+
         }
     }
 }

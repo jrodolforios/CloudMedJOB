@@ -12,9 +12,8 @@ namespace MediCloud.BusinessProcess.Financeiro.Reports
 {
     public class ControleDeRelatoriosFinanceiros
     {
-        public static byte[] ImprimirASOComMedCoord(int idProcedimento, string idProfissional, DateTime? dataInicialExame, DateTime? dataFinalExame, DateTime? dataInicialMovimento, DateTime? dataFinalMovimento, int idFuncionario, int idCliente)
+        public static byte[] ImprimirRelatorioDeMovimentos(int idProcedimento, string idProfissional, DateTime? dataInicialExame, DateTime? dataFinalExame, DateTime? dataInicialMovimento, DateTime? dataFinalMovimento, int idFuncionario, int idCliente)
         {
-
             CloudMedContext contexto = new CloudMedContext();
 
             try
@@ -23,10 +22,10 @@ namespace MediCloud.BusinessProcess.Financeiro.Reports
 
                 List<MOVIMENTO_PROCEDIMENTO> tempProc = new List<MOVIMENTO_PROCEDIMENTO>();
                 List<MOVIMENTO> reportResult = contexto.MOVIMENTO.Where(
-                    
-                    x => x.MOVIMENTO_PROCEDIMENTO.Any(y => 
+
+                    x => x.MOVIMENTO_PROCEDIMENTO.Any(y =>
                     y.IDMOV == x.IDMOV
-                    && (idProcedimento <= 0 ? true : y.IDPRO == idProcedimento) 
+                    && (idProcedimento <= 0 ? true : y.IDPRO == idProcedimento)
                     && (string.IsNullOrEmpty(idProfissional) ? true : y.IDPRF == idProfissional)
                     && ((dataFinalExame.HasValue && dataFinalExame.HasValue) ? ((y.DATAEXAME.HasValue ? y.DATAEXAME.Value >= (dataInicialExame.HasValue ? dataInicialExame.Value : DateTime.MaxValue) : true) && (y.DATAEXAME.HasValue ? y.DATAEXAME.Value <= (dataFinalExame.HasValue ? dataFinalExame.Value : DateTime.MinValue) : true)) : true)
                     )
@@ -36,7 +35,8 @@ namespace MediCloud.BusinessProcess.Financeiro.Reports
                     && (idCliente <= 0 ? true : x.IDCLI == idCliente)
                     ).ToList();
 
-                reportResult.ForEach(x => {
+                reportResult.ForEach(x =>
+                {
                     tempProc.Clear();
                     tempProc.AddRange(x.MOVIMENTO_PROCEDIMENTO.Where(y =>
                     y.IDMOV == x.IDMOV
@@ -47,13 +47,73 @@ namespace MediCloud.BusinessProcess.Financeiro.Reports
 
                     x.MOVIMENTO_PROCEDIMENTO.Clear();
 
-                    tempProc.ForEach(y => 
+                    tempProc.ForEach(y =>
                     {
                         x.MOVIMENTO_PROCEDIMENTO.Add(y);
                     });
                 });
 
                 FinanceiroReports Report = new FinanceiroReports(reportResult, informacoesDaClinica, Util.Enum.Financeiro.FinanceiroReportEnum.imprimirRelatorioDeMovimentos);
+
+                return Report.generate();
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+                return null;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static byte[] ImprimirRelatorioAnaliticoDeFaturamento(int idCliente, int idGrupoDeClientes, int idProcedimento, int idFaturamento)
+        {
+            CloudMedContext contexto = new CloudMedContext();
+
+            try
+            {
+                INFORMACOES_CLINICA informacoesDaClinica = Util.Util.RecuperarInformacoesDaClinica();
+
+                List<MOVIMENTO_PROCEDIMENTO> tempProc = new List<MOVIMENTO_PROCEDIMENTO>();
+
+                List<int> idClientes = new List<int>();
+
+                if (idCliente > 0)
+                    idClientes.Add(idCliente);
+
+                idClientes.AddRange(contexto.CLIENTE_CREDIARIO.Where(x => x.IDCLIGRU == idGrupoDeClientes).Select(x => (int)x.IDCLI).ToList());
+
+                List<MOVIMENTO> reportResult = contexto.MOVIMENTO.Where(
+
+                    x => x.MOVIMENTO_PROCEDIMENTO.Any(y =>
+                    y.IDMOV == x.IDMOV
+                    && (idProcedimento <= 0 ? true : y.IDPRO == idProcedimento)
+                    && (idFaturamento <= 0 ? true : y.IDFAT == idFaturamento)
+                    )
+                    && (idFaturamento <= 0 ? true : x.IDFAT == idFaturamento)
+                    && (idCliente <= 0 ? true : idClientes.Contains((int)x.IDCLI))
+                    ).ToList();
+
+                reportResult.ForEach(x =>
+                {
+                    tempProc.Clear();
+                    tempProc.AddRange(x.MOVIMENTO_PROCEDIMENTO.Where(y =>
+                    y.IDMOV == x.IDMOV
+                    && (idProcedimento <= 0 ? true : y.IDPRO == idProcedimento)
+                    && (idFaturamento <= 0 ? true : y.IDFAT == idFaturamento)
+                    ).ToList());
+
+                    x.MOVIMENTO_PROCEDIMENTO.Clear();
+
+                    tempProc.ForEach(y =>
+                    {
+                        x.MOVIMENTO_PROCEDIMENTO.Add(y);
+                    });
+                });
+
+                FinanceiroReports Report = new FinanceiroReports(reportResult, informacoesDaClinica, Util.Enum.Financeiro.FinanceiroReportEnum.imprimirRelatorioAnaliticoDeFaturamento);
 
                 return Report.generate();
             }

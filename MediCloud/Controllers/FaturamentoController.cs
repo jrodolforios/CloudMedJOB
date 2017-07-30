@@ -195,5 +195,35 @@ namespace MediCloud.Controllers
                 return Json(resultado, JsonRequestBehavior.AllowGet);
             }
         }
+
+        [HttpPost]
+        public JsonResult BuscaFaturamentoAJAX(string Prefix)
+        {
+            List<FaturamentoModel> contadoresEncontrados = CadastroDeFaturamento.RecuperarFaturamentoPorTermo(Prefix);
+            List<AutoCompleteProcendimentoMovimentoModel> ObjList = new List<AutoCompleteProcendimentoMovimentoModel>();
+
+            try
+            {
+                contadoresEncontrados.ForEach(x =>
+                {
+                    ObjList.Add(new AutoCompleteProcendimentoMovimentoModel() { Id = x.IdFaturamento, Name = x.toString() });
+                });
+
+                //Searching records from list using LINQ query  
+                var results = (from N in ObjList
+                               select new { N.Id, N.Name }).ToArray();
+                return Json(results, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                ExceptionUtil.GerarLogDeExcecao(ex, Request.Url.ToString());
+                ObjList = new List<AutoCompleteProcendimentoMovimentoModel>()
+                {
+                new AutoCompleteProcendimentoMovimentoModel {Id=-1,Name=Constantes.MENSAGEM_GENERICA_DE_ERRO, Value = -1 },
+                };
+                return Json(ObjList.ToArray(), JsonRequestBehavior.AllowGet);
+            }
+        }
+
     }
 }

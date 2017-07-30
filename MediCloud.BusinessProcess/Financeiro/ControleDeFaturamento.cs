@@ -41,7 +41,8 @@ namespace MediCloud.BusinessProcess.Financeiro
             {
                 return contexto.FATURAMENTO.Where(x => prefix.Contains(x.ANO.ToString())
                                                     || prefix.Contains(x.MES.ToString())
-                                                    || prefix.Contains(x.DIA.ToString())).ToList();
+                                                    || prefix.Contains(x.DIA.ToString())
+                                                    || prefix.Contains(((int)x.IDFAT).ToString())).ToList();
             }
             catch (DbEntityValidationException ex)
             {

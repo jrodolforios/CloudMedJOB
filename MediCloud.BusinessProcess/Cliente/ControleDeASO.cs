@@ -66,7 +66,7 @@ namespace MediCloud.BusinessProcess.Cliente
 
             try
             {
-                return contexto.MOVIMENTO.Count(x => x.IDFCX == null || x.IDFCX <= 0);
+                return contexto.MOVIMENTO.Count(x => x.IDFAT == null || x.IDFAT <= 0);
             }
             catch (DbEntityValidationException ex)
             {
