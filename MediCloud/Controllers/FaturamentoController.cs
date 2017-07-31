@@ -171,8 +171,7 @@ namespace MediCloud.Controllers
             return null;
         }
 
-        [HttpPost]
-        public JsonResult FecharFaturamento(int codigoFaturamento)
+        public ActionResult FecharFaturamento(int codigoFaturamento)
         {
             ResultadoAjaxGenericoModel resultado = new ResultadoAjaxGenericoModel();
             try
@@ -184,7 +183,8 @@ namespace MediCloud.Controllers
                 resultado.mensagem = "Ação executada.";
                 resultado.acaoBemSucedida = true;
 
-                return Json(resultado, JsonRequestBehavior.AllowGet);
+                Response.Redirect($"/Faturamento/DetalhamentoFaturamento?codigoFaturamento={codigoFaturamento}");
+                return null;
             }
             catch (Exception ex)
             {
@@ -192,7 +192,8 @@ namespace MediCloud.Controllers
                 resultado.mensagem = Constantes.MENSAGEM_GENERICA_DE_ERRO;
                 resultado.acaoBemSucedida = false;
 
-                return Json(resultado, JsonRequestBehavior.AllowGet);
+                Response.Redirect($"/Faturamento/DetalhamentoFaturamento?codigoFaturamento={codigoFaturamento}");
+                return null;
             }
         }
 

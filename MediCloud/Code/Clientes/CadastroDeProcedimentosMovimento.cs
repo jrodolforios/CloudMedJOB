@@ -55,7 +55,7 @@ namespace MediCloud.Code.Clientes
                     Valor = x.VALOR,
                     observacao = x.OBSMOVTO,
 
-                    Faturamento = CadastroDeFaturamento.RecuperarFaturamentoPorID(x.IDFAT),
+                    Faturamento = CadastroDeFaturamento.RecuperarFaturamentoPorID(x.IDFAT, false),
                     Fornecedor = CadastroDeFornecedor.RecuperarFornecedorPorID(x.IDFOR),
                     Procedimento = CadastroDeProcedimentos.RecuperarProcedimentoPorID((int)(x.IDPRO.HasValue ? x.IDPRO.Value : 0)),
                     Profissional = CadastroDeProfissional.GetProfissionalPorID(x.IDPRF)

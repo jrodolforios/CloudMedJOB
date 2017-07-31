@@ -42,7 +42,7 @@
                 </div>
 
                 <div class="space"></div>
-                <form method="post" class="form-horizontal" action="@Url.Content("~/Cliente/DetalhamentoCliente")">
+                <form method="post" autocomplete="off" class="form-horizontal" action="@Url.Content("~/Cliente/DetalhamentoCliente")">
                     <input type="hidden" id="codigoCliente" name="codigoCliente" value="@Html.ValueFor(x => x.IdCliente)" />
                     <div class="tabbable">
                         <ul class="nav nav-tabs padding-16">
@@ -508,7 +508,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h3 class="smaller lighter blue no-margin">Contato de cliente</h3>
             </div>
-            <form method="post" id="formContatoCliente" class="form-horizontal" action="@Url.Content("~/Cliente/SalvarContato")">
+            <form method="post" autocomplete="off" id="formContatoCliente" class="form-horizontal" action="@Url.Content("~/Cliente/SalvarContato")">
                 <div class="modal-body">
                     <input type="hidden" id="codigoContato" name="codigoContato" value="0" />
                     <input type="hidden" id="codigoClienteContato" name="codigoClienteContato" value="@Html.ValueFor(x => x.IdCliente)" />
@@ -615,7 +615,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h3 class="smaller lighter blue no-margin">Outras empresas</h3>
             </div>
-            <form method="post" id="formEmpresaCliente" class="form-horizontal" action="@Url.Content("~/Cliente/SalvarEmpresa")">
+            <form method="post" autocomplete="off" id="formEmpresaCliente" class="form-horizontal" action="@Url.Content("~/Cliente/SalvarEmpresa")">
                 <div class="modal-body">
                     <input type="hidden" id="codigoEmpresa" name="codigoEmpresa" value="0" />
                     <input type="hidden" id="codigoClienteEmpresa" name="codigoClienteEmpresa" value="@Html.ValueFor(x => x.IdCliente)" />

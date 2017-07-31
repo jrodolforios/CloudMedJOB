@@ -41,7 +41,7 @@
                 </div>
 
                 <div class="space"></div>
-                <form method="post" class="form-horizontal" action="@Url.Content("~/FechamentoCaixa/DetalhamentoFechamentoCaixa")">
+                <form method="post" autocomplete="off" class="form-horizontal" action="@Url.Content("~/FechamentoCaixa/DetalhamentoFechamentoCaixa")">
                     <input type="hidden" id="codigoFechamentoCaixa" name="codigoFechamentoCaixa" value="@Html.ValueFor(x => x.IdFechamentoCaixa)" />
                     <div class="tabbable">
                         <ul class="nav nav-tabs padding-16">
@@ -262,25 +262,7 @@
 <script src="/assets/js/ace.min.js"></script>
 <script type="text/javascript">
     function fecharCaixa(codigo) {
-        $.ajax({
-            url: '/FechamentoCaixa/FecharCaixa?codigoFechamentoCaixa=' + codigo,
-            type: "post",
-            cache: false,
-            success: function (savingStatus) {
-                var tipoAlert;
-                if (savingStatus.acaoBemSucedida) {
-                    tipoAlert = 'alert-success';
-
-                    location.reload();
-                }
-                else
-                    tipoAlert = 'alert-danger';
-                $('#FaturamentoAlerts').html('<div class="alert ' + tipoAlert + '"><a class="close" data-dismiss="alert">×</a><span>' + savingStatus.mensagem + '</span></div>');
-            },
-            error: function (xhr, ajaxOptions, thrownError) {
-                $('#FaturamentoAlerts').html('<div class="alert alert-danger"><a class="close" data-dismiss="alert">×</a><span>Ops! Não foi possível executar esta ação com o servidor. Contate-nos para que possamos te ajudar melhor.</span></div>')
-            }
-        });
+        window.location.replace('/FechamentoCaixa/FecharCaixa?codigoFechamentoCaixa=' + codigo);
     }
 
     $(".tooltipASO").tooltip({

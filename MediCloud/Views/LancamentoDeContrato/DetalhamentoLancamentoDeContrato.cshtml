@@ -42,7 +42,7 @@
                 </div>
 
                 <div class="space"></div>
-                <form method="post" class="form-horizontal" action="@Url.Content("~/LancamentoDeContrato/DetalhamentoLancamentoDeContrato")">
+                <form method="post" autocomplete="off" class="form-horizontal" action="@Url.Content("~/LancamentoDeContrato/DetalhamentoLancamentoDeContrato")">
 
                     <input type="hidden" id="codigoLancamentoDeContrato" name="codigoLancamentoDeContrato" value="@Html.ValueFor(x => x.IdLancamentoContrato)" />
                     <input type="hidden" id="Total" name="Total" value="@Html.ValueFor(x => x.Total)" />

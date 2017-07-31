@@ -41,7 +41,7 @@
                 </div>
 
                 <div class="space"></div>
-                <form method="post" class="form-horizontal" action="@Url.Content("~/RiscoNatureza/DetalhamentoRiscoNatureza")">
+                <form method="post" autocomplete="off" class="form-horizontal" action="@Url.Content("~/RiscoNatureza/DetalhamentoRiscoNatureza")">
                     <input type="hidden" id="codigoNatureza" name="codigoNatureza" value="@Html.ValueFor(x => x.IdNatureza)" />
                     <div class="tabbable">
                         <ul class="nav nav-tabs padding-16">
@@ -203,7 +203,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h3 class="smaller lighter blue no-margin">Contato de cliente</h3>
             </div>
-            <form method="post" id="formContatoCliente" class="form-horizontal" action="@Url.Content("~/RiscoNatureza/SalvarRisco")">
+            <form method="post" autocomplete="off" id="formContatoCliente" class="form-horizontal" action="@Url.Content("~/RiscoNatureza/SalvarRisco")">
                 <div class="modal-body">
                     <input type="hidden" id="codigoRisco" name="codigoRisco" value="0" />
                     <input type="hidden" id="codigoNaturezaRisco" name="codigoNaturezaRisco" value="@Html.ValueFor(x => x.IdNatureza)" />

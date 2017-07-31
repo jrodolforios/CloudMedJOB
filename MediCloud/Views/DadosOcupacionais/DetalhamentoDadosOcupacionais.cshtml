@@ -42,7 +42,7 @@
                     </div>
 
                     <div class="space"></div>
-                    <form method="post" class="form-horizontal" action="@Url.Content("~/DadosOcupacionais/DetalhamentoDadosOcupacionais")">
+                    <form method="post" autocomplete="off" class="form-horizontal" action="@Url.Content("~/DadosOcupacionais/DetalhamentoDadosOcupacionais")">
                         <input type="hidden" id="codigoDadosOcupacionais" name="codigoDadosOcupacionais" value="@Html.ValueFor(x => x.IdClienteOcupacional)" />
                         <div class="tabbable">
                             <ul class="nav nav-tabs padding-16">

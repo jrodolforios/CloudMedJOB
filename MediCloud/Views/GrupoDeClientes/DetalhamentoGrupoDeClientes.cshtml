@@ -49,7 +49,7 @@
                 </div>
 
                 <div class="space"></div>
-                <form method="post" class="form-horizontal" action="@Url.Content("~/GrupoDeClientes/DetalhamentoGrupoDeClientes")">
+                <form method="post" autocomplete="off" class="form-horizontal" action="@Url.Content("~/GrupoDeClientes/DetalhamentoGrupoDeClientes")">
                     <input type="hidden" id="codigoGrupoDeClientes" name="codigoGrupoDeClientes" value="@Html.ValueFor(x => x.IdGrupoCliente)" />
                     <div class="tabbable">
                         <ul class="nav nav-tabs padding-16">

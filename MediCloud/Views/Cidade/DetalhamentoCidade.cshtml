@@ -41,7 +41,7 @@
                 </div>
 
                 <div class="space"></div>
-                <form method="post" class="form-horizontal" action="@Url.Content("~/Cidade/DetalhamentoCidade")">
+                <form method="post" autocomplete="off" class="form-horizontal" action="@Url.Content("~/Cidade/DetalhamentoCidade")">
                     <input type="hidden" id="codigoCidade" name="codigoCidade" value="@Html.ValueFor(x => x.IdCidade)" />
                     <div class="tabbable">
                         <ul class="nav nav-tabs padding-16">

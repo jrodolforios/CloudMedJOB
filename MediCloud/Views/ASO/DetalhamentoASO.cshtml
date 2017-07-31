@@ -75,7 +75,7 @@
                 </div>
 
                 <div class="space"></div>
-                <form method="post" id="formPrincipalASO" class="form-horizontal" action="@Url.Content("~/ASO/DetalhamentoASO")" enctype="multipart/form-data">
+                <form method="post" autocomplete="off" id="formPrincipalASO" class="form-horizontal" action="@Url.Content("~/ASO/DetalhamentoASO")" enctype="multipart/form-data">
                     <input type="hidden" id="codigoASO" name="codigoASO" value="@Html.ValueFor(x => x.IdASO)" />
                     <input type="hidden" id="usuario" name="usuario" value="@Html.ValueFor(x => x.Usuario)" />
                     <input type="hidden" id="caixaPendente" name="caixaPendente" value="@Html.ValueFor(x => x.CaixaPendente)" />
@@ -551,7 +551,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h3 class="smaller lighter blue no-margin">Procedimento</h3>
             </div>
-            <form method="post" id="formProcedimentoASO" class="form-horizontal" action="@Url.Content("~/ASO/SalvarProcedimentoMovimento")">
+            <form method="post" autocomplete="off" id="formProcedimentoASO" class="form-horizontal" action="@Url.Content("~/ASO/SalvarProcedimentoMovimento")">
                 <div class="modal-body">
                     <input type="hidden" id="codigoProcedimento" name="codigoProcedimento" value="0" />
                     <input type="hidden" id="codigoASOProcedimento" name="codigoASOProcedimento" value="@Html.ValueFor(x => x.IdASO)" />

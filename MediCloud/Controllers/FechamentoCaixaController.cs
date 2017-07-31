@@ -143,10 +143,9 @@ namespace MediCloud.Controllers
             }
         }
 
-        [HttpPost]
-        public JsonResult FecharCaixa(int codigoFechamentoCaixa)
+        public ActionResult FecharCaixa(int codigoFechamentoCaixa)
         {
-            ResultadoAjaxGenericoModel resultado = new ResultadoAjaxGenericoModel();
+             ResultadoAjaxGenericoModel resultado = new ResultadoAjaxGenericoModel();
             try
             {
                 base.EstahLogado();
@@ -156,7 +155,8 @@ namespace MediCloud.Controllers
                 resultado.mensagem = "Ação executada.";
                 resultado.acaoBemSucedida = true;
 
-                return Json(resultado, JsonRequestBehavior.AllowGet);
+                Response.Redirect($"/FechamentoCaixa/DetalhamentoFechamentoCaixa?codigoFechamentoCaixa={codigoFechamentoCaixa}");
+                return null;
             }
             catch (Exception ex)
             {
@@ -164,7 +164,8 @@ namespace MediCloud.Controllers
                 resultado.mensagem = Constantes.MENSAGEM_GENERICA_DE_ERRO;
                 resultado.acaoBemSucedida = false;
 
-                return Json(resultado, JsonRequestBehavior.AllowGet);
+                Response.Redirect($"/FechamentoCaixa/DetalhamentoFechamentoCaixa?codigoFechamentoCaixa={codigoFechamentoCaixa}");
+                return null;
             }
         }
     }
