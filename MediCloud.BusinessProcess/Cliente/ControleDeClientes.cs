@@ -129,6 +129,44 @@ namespace MediCloud.BusinessProcess.Cliente
             }
         }
 
+        public static List<CLIENTE> buscarClienteDoMesAnterior()
+        {
+            CloudMedContext contexto = new CloudMedContext();
+
+            try
+            {
+                return contexto.CLIENTE.Where(x => contexto.MOVIMENTO.Any(y => y.DATA.Month == (DateTime.Now.Month - 1) && y.DATA.Year == DateTime.Now.Year && y.IDCLI == x.IDCLI)).ToList();
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+                return new List<CLIENTE>();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static List<CLIENTE> buscarClienteDoMes()
+        {
+            CloudMedContext contexto = new CloudMedContext();
+
+            try
+            {
+                return contexto.CLIENTE.Where(x => contexto.MOVIMENTO.Any(y => y.DATA.Month == DateTime.Now.Month && y.DATA.Year == DateTime.Now.Year && y.IDCLI == x.IDCLI)).ToList();
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+                return new List<CLIENTE>();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public static CLIENTE_OUTRASEMP SalvarEmpresa(CLIENTE_OUTRASEMP empresaDAO)
         {
             CloudMedContext contexto = new CloudMedContext();

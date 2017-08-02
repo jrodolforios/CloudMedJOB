@@ -54,6 +54,47 @@ namespace MediCloud.Controllers
             }
         }
 
+
+        public ActionResult ClientesAtendidosNoMes()
+        {
+            try
+            {
+                base.EstahLogado();
+                ViewBag.Title = "Clientes";
+
+                List<ClienteModel> model = CadastroDeClientes.buscarClientesDoMes();
+
+                return View("Index",model);
+            }
+            catch (Exception ex)
+            {
+                ExceptionUtil.GerarLogDeExcecao(ex, Request.Url.ToString());
+                base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
+                return View();
+            }
+        }
+
+
+        public ActionResult ClientesAtendidosDoMesAnterior()
+        {
+            try
+            {
+                base.EstahLogado();
+                ViewBag.Title = "Clientes";
+
+                List<ClienteModel> model = CadastroDeClientes.buscarClientesDoMesAnterior();
+
+                return View("Index", model);
+            }
+            catch (Exception ex)
+            {
+                ExceptionUtil.GerarLogDeExcecao(ex, Request.Url.ToString());
+                base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
+                return View();
+            }
+        }
+
+
         [HttpPost]
         public ActionResult SalvarContato(FormCollection form)
         {

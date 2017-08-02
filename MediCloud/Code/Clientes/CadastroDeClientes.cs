@@ -59,6 +59,34 @@ namespace MediCloud.Code.Clientes
             };
         }
 
+        internal static List<ClienteModel> buscarClientesDoMesAnterior()
+        {
+            List<ClienteModel> listaDeModels = new List<ClienteModel>();
+
+            List<CLIENTE> usuarioDoBanco = ControleDeClientes.buscarClienteDoMesAnterior();
+
+            usuarioDoBanco.ForEach(x =>
+            {
+                listaDeModels.Add(injetarEmUsuarioModel(x));
+            });
+
+            return listaDeModels;
+        }
+
+        internal static List<ClienteModel> buscarClientesDoMes()
+        {
+            List<ClienteModel> listaDeModels = new List<ClienteModel>();
+
+            List<CLIENTE> usuarioDoBanco = ControleDeClientes.buscarClienteDoMes();
+
+            usuarioDoBanco.ForEach(x =>
+            {
+                listaDeModels.Add(injetarEmUsuarioModel(x));
+            });
+
+            return listaDeModels;
+        }
+
         internal static EmpresaModel SalvarEmpresa(FormCollection form)
         {
             EmpresaModel empresaModel = InjetarEmUsuarioModel(form);

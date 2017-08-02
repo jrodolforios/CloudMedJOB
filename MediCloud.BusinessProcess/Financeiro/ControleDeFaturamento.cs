@@ -83,6 +83,9 @@ namespace MediCloud.BusinessProcess.Financeiro
 
             try
             {
+                //Garantir que pegue o faturamento do dia inteiro.
+                faturamentoDAO.DATALIMITE = faturamentoDAO.DATALIMITE?.AddDays(1).AddSeconds(-1);
+
                 if (faturamentoDAO.IDFAT > 0)
                 {
                     setorSalvo = contexto.FATURAMENTO.First(x => x.IDFAT == faturamentoDAO.IDFAT);
