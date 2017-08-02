@@ -45,7 +45,8 @@ namespace MediCloud.BusinessProcess.Cliente
                 {
                     return contexto.CLIENTE.Where(x => x.NOMEFANTASIA.Contains(termo)
                         || x.RAZAOSOCIAL.Contains(termo)
-                        || x.CPFCNPJ.Contains(termo)).ToList();
+                        || x.CPFCNPJ.Contains(termo)
+                        || contexto.MOVIMENTO.Any(y => termo.Contains(y.DATA.Year.ToString()) && termo.Contains(y.DATA.Month.ToString()))).ToList();
                 }
             }
             catch (DbEntityValidationException ex)

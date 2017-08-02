@@ -53,6 +53,7 @@ namespace MediCloud.Controllers
         }
 
         [HttpPost]
+        [ValidateInput(false)]
         public ActionResult RelatorioAnalitoDeFaturamento(FormCollection form)
         {
             byte[] arquivo = null;

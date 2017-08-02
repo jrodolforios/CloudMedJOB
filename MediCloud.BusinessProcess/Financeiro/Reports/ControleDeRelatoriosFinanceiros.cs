@@ -68,7 +68,7 @@ namespace MediCloud.BusinessProcess.Financeiro.Reports
             }
         }
 
-        public static byte[] ImprimirRelatorioAnaliticoDeFaturamento(int idCliente, int idGrupoDeClientes, int idProcedimento, int idFaturamento)
+        public static byte[] ImprimirRelatorioAnaliticoDeFaturamento(int idCliente, int idGrupoDeClientes, int idProcedimento, int idFaturamento, string informacoesAdicionais)
         {
             CloudMedContext contexto = new CloudMedContext();
 
@@ -113,7 +113,7 @@ namespace MediCloud.BusinessProcess.Financeiro.Reports
                     });
                 });
 
-                FinanceiroReports Report = new FinanceiroReports(reportResult, informacoesDaClinica, Util.Enum.Financeiro.FinanceiroReportEnum.imprimirRelatorioAnaliticoDeFaturamento);
+                FinanceiroReports Report = new FinanceiroReports(reportResult, informacoesDaClinica, Util.Enum.Financeiro.FinanceiroReportEnum.imprimirRelatorioAnaliticoDeFaturamento, informacoesAdicionais);
 
                 return Report.generate();
             }

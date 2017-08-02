@@ -42,9 +42,10 @@ namespace MediCloud.Code.Financeiro.Reports
             int idGrupoDeClientes = string.IsNullOrEmpty(form["idGrupoDeClientes"]) ? 0 : Convert.ToInt32(form["idGrupoDeClientes"]);
             int idProcedimento = string.IsNullOrEmpty(form["idProcedimento"]) ? 0 : Convert.ToInt32(form["idProcedimento"]);
             int idFaturamento = string.IsNullOrEmpty(form["idFaturamento"]) ? 0 : Convert.ToInt32(form["idFaturamento"]);
+            string informacoesAdicionais = string.IsNullOrEmpty(form["informacoesAdicionaisRel"]) ? string.Empty : form["informacoesAdicionaisRel"];
             #endregion
 
-            return ControleDeRelatoriosFinanceiros.ImprimirRelatorioAnaliticoDeFaturamento(idCliente, idGrupoDeClientes, idProcedimento, idFaturamento);
+            return ControleDeRelatoriosFinanceiros.ImprimirRelatorioAnaliticoDeFaturamento(idCliente, idGrupoDeClientes, idProcedimento, idFaturamento,informacoesAdicionais);
 
         }
     }

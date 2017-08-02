@@ -16,12 +16,18 @@ namespace MediCloud.BusinessProcess.Financeiro.Reports
         private List<MOVIMENTO> _reportResult;
         private FinanceiroReportEnum _tipoRelatorioFinanceiro;
         private INFORMACOES_CLINICA _informacoesDaClinica;
+        private string _informacoesAdicionais;
 
         public FinanceiroReports(List<MOVIMENTO> reportResult, INFORMACOES_CLINICA informacoesDaClinica, FinanceiroReportEnum imprimirRelatorioDeMovimentos)
         {
             this._reportResult = reportResult;
             this._tipoRelatorioFinanceiro = imprimirRelatorioDeMovimentos;
             this._informacoesDaClinica = informacoesDaClinica;
+        }
+        public FinanceiroReports(List<MOVIMENTO> reportResult, INFORMACOES_CLINICA informacoesDaClinica, FinanceiroReportEnum imprimirRelatorioDeMovimentos, string informacoesAdicionais)
+            :this(reportResult,informacoesDaClinica,imprimirRelatorioDeMovimentos)
+        {
+            this._informacoesAdicionais = informacoesAdicionais;
         }
 
         public byte[] generate(params string[] args)
@@ -133,6 +139,9 @@ namespace MediCloud.BusinessProcess.Financeiro.Reports
                                     <br/>
                                     <div style=""text-align:right"">
                                         <b>Total da Empresa: R${_reportResult.Where(x => x.IDCLI == idCli && x.IDFAT == idFat).Sum(x => x.MOVIMENTO_PROCEDIMENTO?.Sum(y => y.VALOR))}</b>
+                                    </div>
+                                    <div class=""cabecalho"">
+                                        {_informacoesAdicionais}
                                     </div>
                                     <div style=""page-break-before: always;""> </div>";
                 });
