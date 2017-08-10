@@ -15,6 +15,7 @@ namespace MediCloud.Code.Financeiro.Reports
             #region Recuperação dos filtros
             int idProcedimento = string.IsNullOrEmpty(form["idProcedimento"]) ? 0 : Convert.ToInt32(form["idProcedimento"]);
             string IdProfissional = string.IsNullOrEmpty(form["idProfissional"]) ? string.Empty : form["idProfissional"];
+            int idFornecedor = string.IsNullOrEmpty(form["idFornecedor"]) ? 0 : Convert.ToInt32(form["idFornecedor"]);
 
             IntervaloDeDatasModel dataDoExame = new IntervaloDeDatasModel()
             {
@@ -32,7 +33,7 @@ namespace MediCloud.Code.Financeiro.Reports
             int idCliente = string.IsNullOrEmpty(form["idCliente"]) ? 0 : Convert.ToInt32(form["idCliente"]);
             #endregion
 
-            return ControleDeRelatoriosFinanceiros.ImprimirRelatorioDeMovimentos(idProcedimento,IdProfissional, dataDoExame.DataInicial, dataDoExame.DataFinal, dataDoMovimento.DataInicial, dataDoMovimento.DataFinal, idFuncionario, idCliente);
+            return ControleDeRelatoriosFinanceiros.ImprimirRelatorioDeMovimentos(idProcedimento,IdProfissional, idFornecedor, dataDoExame.DataInicial, dataDoExame.DataFinal, dataDoMovimento.DataInicial, dataDoMovimento.DataFinal, idFuncionario, idCliente);
         }
 
         internal static byte[] GerarRelatorioAnaliticoDeFaturamento(FormCollection form)

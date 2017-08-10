@@ -12,7 +12,7 @@ namespace MediCloud.BusinessProcess.Financeiro.Reports
 {
     public class ControleDeRelatoriosFinanceiros
     {
-        public static byte[] ImprimirRelatorioDeMovimentos(int idProcedimento, string idProfissional, DateTime? dataInicialExame, DateTime? dataFinalExame, DateTime? dataInicialMovimento, DateTime? dataFinalMovimento, int idFuncionario, int idCliente)
+        public static byte[] ImprimirRelatorioDeMovimentos(int idProcedimento, string idProfissional, int idFornecedor, DateTime? dataInicialExame, DateTime? dataFinalExame, DateTime? dataInicialMovimento, DateTime? dataFinalMovimento, int idFuncionario, int idCliente)
         {
             CloudMedContext contexto = new CloudMedContext();
 
@@ -26,6 +26,7 @@ namespace MediCloud.BusinessProcess.Financeiro.Reports
                     x => x.MOVIMENTO_PROCEDIMENTO.Any(y =>
                     y.IDMOV == x.IDMOV
                     && (idProcedimento <= 0 ? true : y.IDPRO == idProcedimento)
+                    && (idFornecedor <= 0 ? true : y.IDFOR == idFornecedor)
                     && (string.IsNullOrEmpty(idProfissional) ? true : y.IDPRF == idProfissional)
                     && ((dataFinalExame.HasValue && dataFinalExame.HasValue) ? ((y.DATAEXAME.HasValue ? y.DATAEXAME.Value >= (dataInicialExame.HasValue ? dataInicialExame.Value : DateTime.MaxValue) : true) && (y.DATAEXAME.HasValue ? y.DATAEXAME.Value <= (dataFinalExame.HasValue ? dataFinalExame.Value : DateTime.MinValue) : true)) : true)
                     )
@@ -41,6 +42,7 @@ namespace MediCloud.BusinessProcess.Financeiro.Reports
                     tempProc.AddRange(x.MOVIMENTO_PROCEDIMENTO.Where(y =>
                     y.IDMOV == x.IDMOV
                     && (idProcedimento <= 0 ? true : y.IDPRO == idProcedimento)
+                    && (idFornecedor <= 0 ? true : y.IDFOR == idFornecedor)
                     && (string.IsNullOrEmpty(idProfissional) ? true : y.IDPRF == idProfissional)
                     && ((dataFinalExame.HasValue && dataFinalExame.HasValue) ? ((y.DATAEXAME.HasValue ? y.DATAEXAME.Value >= (dataInicialExame.HasValue ? dataInicialExame.Value : DateTime.MaxValue) : true) && (y.DATAEXAME.HasValue ? y.DATAEXAME.Value <= (dataFinalExame.HasValue ? dataFinalExame.Value : DateTime.MinValue) : true)) : true)
                     ).ToList());
@@ -68,7 +70,7 @@ namespace MediCloud.BusinessProcess.Financeiro.Reports
             }
         }
 
-        public static byte[] ImprimirRelatorioAnaliticoDeFaturamento(int idCliente, int idGrupoDeClientes, int idProcedimento, int idFaturamento, string informacoesAdicionais)
+        public static byte[] ImprimirRelatorioAnaliticoDeFaturamento(int idCliente, int idGrupoDeClientes, int idProcedimento, int idFaturamento,string informacoesAdicionais)
         {
             CloudMedContext contexto = new CloudMedContext();
 

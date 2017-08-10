@@ -63,6 +63,20 @@
                             </div>
 
                             <div class="form-group">
+                                <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Fornecedor </label>
+
+                                <div class="col-sm-8">
+                                    <input type="hidden" name="idFornecedor" id="idFornecedor" value="" />
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <i class="ace-icon fa fa-search"></i>
+                                        </span>
+                                        <input class="col-xs-12 col-sm-6" type="text" id="fonecedor" name="fornecedor" placeholder="Digite o nome do fornecedor" value="" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
                                 <label class="col-sm-4 control-label no-padding-right" for="form-field-date">Data do exame</label>
 
                                 <div class="col-sm-8">
@@ -285,6 +299,33 @@
     $('#cliente').on('blur', function () {
         if ($(this).val().length === 0) {  //check for no. of characters entered
             $('#idCliente').attr('value', 0);  // clear the textbox
+        }
+    });
+
+    $("#fonecedor").autocomplete({
+        source: function (request, response) {
+            $.ajax({
+                url: "/Fornecedor/BuscaFornecedorAJAX",
+                type: "POST",
+                dataType: "json",
+                data: { Prefix: request.term },
+                success: function (data) {
+                    response($.map(data, function (item) {
+                        return { label: item.Name, value: item.Name, Id: item.Id };
+                    }))
+
+                }
+            })
+        },
+        select: function (event, ui) {
+            $('#idFornecedor').attr('value', ui.item.Id);
+            $('#fonecedor').val(ui.item.label);
+            return false;
+        }
+    });
+    $('#fonecedor').on('blur', function () {
+        if ($(this).val().length === 0) {  //check for no. of characters entered
+            $('#idFornecedor').attr('value', 0);  // clear the textbox
         }
     });
 </script>

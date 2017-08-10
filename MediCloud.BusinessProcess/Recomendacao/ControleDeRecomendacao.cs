@@ -226,6 +226,10 @@ namespace MediCloud.BusinessProcess.Recomendacao
 
             try
             {
+                if (contexto.RECOMENDACAO.Any(x => x.IDCLI == recomendacaoDAO.IDCLI && x.IDCGO == recomendacaoDAO.IDCGO && x.IDSETOR == recomendacaoDAO.IDSETOR && x.IDREC != recomendacaoDAO.IDREC))
+                {
+                    throw new InvalidOperationException("Já existe uma recomendação cadastrada com o mesmo cargo, setor e cliente");
+                }
 
                 if (recomendacaoDAO.IDREC > 0)
                 {
