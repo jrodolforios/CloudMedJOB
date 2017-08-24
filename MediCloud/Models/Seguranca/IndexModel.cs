@@ -10,5 +10,6 @@ namespace MediCloud.Models.Seguranca
         public int MovimentosNaoFaturados { get; set; }
         public int MovimentosNoMês { get; set; }
         public int ProcedimentosNoMes { get; set; }
+        public int ConvocacoesNoMes { get; set; }
     }
 }

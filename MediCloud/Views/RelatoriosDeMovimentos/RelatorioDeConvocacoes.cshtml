@@ -1,0 +1,360 @@
+﻿@model MediCloud.Models.Cliente.ASOModel
+@{
+    ViewBag.Title = "Relatório Analítico de Faturamento";
+}
+<script src="/assets/js/jquery-2.1.4.min.js"></script>
+<div class="page-header">
+    <h1>
+        Relatórios Financeiros
+        <small>
+            <i class="ace-icon fa fa-angle-double-right"></i>
+            Relatório Analítico de Faturamento
+        </small>
+    </h1>
+</div><!-- /.page-header -->
+<div class="row">
+    <div class="col-xs-12">
+        <div id="user-profile-3" class="user-profile row">
+            <div class="col-sm-offset-1 col-sm-10">
+
+                <div class="space"></div>
+                <form method="post" autocomplete="off" id="relatorioAnaliticoForm" class="form-horizontal" action="@Url.Content("~/RelatoriosFinanceiros/RelatorioAnalitoDeFaturamento")">
+                    <div class="tabbable">
+                        <ul class="nav nav-tabs padding-16">
+                            <li class="active">
+                                <a data-toggle="tab" href="#edit-basic">
+                                    <i class="green ace-icon fa fa-pencil-square-o bigger-125"></i>
+                                    Filtro
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="tab-content profile-edit-tab-content">
+                        <div id="edit-basic" class="tab-pane in active">
+                            <h4 class="header blue bolder smaller">Filtros do relatório</h4>
+                            <div class="vspace-12-sm"></div>
+
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Cliente</label>
+
+                                <div class="col-sm-8">
+                                    <input type="hidden" name="idCliente" id="idCliente" value="" />
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <i class="ace-icon fa fa-search"></i>
+                                        </span>
+                                        <input class="col-xs-12 col-sm-6 componenteFormulario" type="text" id="cliente" name="cliente" placeholder="Digite o nome do cliente" value="" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Grupo de clientes </label>
+
+                                <div class="col-sm-8">
+                                    <input type="hidden" name="idGrupoDeClientes" id="idGrupoDeClientes" value="" />
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <i class="ace-icon fa fa-search"></i>
+                                        </span>
+                                        <input class="col-xs-12 col-sm-6" type="text" id="grupoDeClientes" name="grupoDeClientes" placeholder="Digite o grupo de clientes" value="" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Procedimento </label>
+
+                                <div class="col-sm-8">
+                                    <input type="hidden" name="idProcedimento" id="idProcedimento" value="" />
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <i class="ace-icon fa fa-search"></i>
+                                        </span>
+                                        <input class="col-xs-12 col-sm-6" type="text" id="procedimento" name="procedimento" placeholder="Digite o procedimento" value="" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Faturamento </label>
+
+                                <div class="col-sm-8">
+                                    <input type="hidden" name="idFaturamento" id="idFaturamento" value="" />
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <i class="ace-icon fa fa-search"></i>
+                                        </span>
+                                        <input class="col-xs-12 col-sm-6" type="text" id="Faturamento" name="Faturamento" placeholder="Digite o faturamento" value="" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <h4 class="header blue bolder smaller">Informações adicionais</h4>
+                            <div class="vspace-12-sm"></div>
+
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <div class="wysiwyg-editor" id="informacoesAdicionais"></div>
+                                    <input type="hidden" id="informacoesAdicionaisRel" name="informacoesAdicionaisRel"/>
+                                </div>
+                            </div>
+
+                            <div class="clearfix form-actions">
+                                <div class="col-md-offset-3 col-md-9">
+                                    <button class="btn btn-info" id="GerarRelatorio">
+                                        <i class="ace-icon fa fa-circle-o-notch bigger-110"></i>
+                                        Gerar
+                                    </button>
+                                    <span>&nbsp; &nbsp;</span>
+                                    <button class="btn" type="reset" id="limparForm">
+                                        <i class="ace-icon fa fa-undo bigger-110"></i>
+                                        Limpar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div><!-- /.span -->
+        </div>
+    </div>
+</div>
+<script src="/assets/js/jquery-2.1.4.min.js"></script>
+
+<script src="/assets/js/jquery-ui.custom.min.js"></script>
+<script src="/assets/js/jquery.ui.touch-punch.min.js"></script>
+<script src="/assets/js/markdown.min.js"></script>
+<script src="/assets/js/bootstrap-markdown.min.js"></script>
+<script src="/assets/js/jquery.hotkeys.index.min.js"></script>
+<script src="/assets/js/bootstrap-wysiwyg.min.js"></script>
+<script src="/assets/js/bootbox.js"></script>
+<script src="/assets/js/chosen.jquery.min.js"></script>
+<script src="/assets/js/jquery-ui.min.js"></script>
+
+<script src="/assets/js/ace-elements.min.js"></script>
+<script src="/assets/js/ace.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#GerarRelatorio").on("click", function () {
+            var emailText = $("#informacoesAdicionais").html();
+            $("#informacoesAdicionaisRel").val(emailText);
+
+            $('form#relatorioAnaliticoForm').submit();
+        });
+    });
+
+    $('#informacoesAdicionais').ace_wysiwyg({
+        toolbar:
+        [
+            'font',
+            null,
+            'fontSize',
+            null,
+            { name: 'bold', className: 'btn-info' },
+            { name: 'italic', className: 'btn-info' },
+            { name: 'strikethrough', className: 'btn-info' },
+            { name: 'underline', className: 'btn-info' },
+            null,
+            { name: 'insertunorderedlist', className: 'btn-success' },
+            { name: 'insertorderedlist', className: 'btn-success' },
+            { name: 'outdent', className: 'btn-purple' },
+            { name: 'indent', className: 'btn-purple' },
+            null,
+            { name: 'justifyleft', className: 'btn-primary' },
+            { name: 'justifycenter', className: 'btn-primary' },
+            { name: 'justifyright', className: 'btn-primary' },
+            { name: 'justifyfull', className: 'btn-inverse' },
+            null,
+            { name: 'createLink', className: 'btn-pink' },
+            { name: 'unlink', className: 'btn-pink' },
+            null,
+            null,
+            null,
+            'foreColor',
+            null,
+            { name: 'undo', className: 'btn-grey' },
+            { name: 'redo', className: 'btn-grey' }
+        ],
+        'wysiwyg': {
+            fileUploadError: null
+        }
+
+    }).prev().addClass('wysiwyg-style2');
+
+    $('textarea[data-provide="markdown"]').each(function () {
+        var $this = $(this);
+
+        if ($this.data('markdown')) {
+            $this.data('markdown').showEditor();
+        }
+        else $this.markdown()
+
+        $this.parent().find('.btn').addClass('btn-white');
+    });
+
+    $('[data-toggle="buttons"] .btn').on('click', function (e) {
+        var target = $(this).find('input[type=radio]');
+        var which = parseInt(target.val());
+        var toolbar = $('#informacoesAdicionais').prev().get(0);
+        if (which >= 1 && which <= 4) {
+            toolbar.className = toolbar.className.replace(/wysiwyg\-style(1|2)/g, '');
+            if (which == 1) $(toolbar).addClass('wysiwyg-style1');
+            else if (which == 2) $(toolbar).addClass('wysiwyg-style2');
+            if (which == 4) {
+                $(toolbar).find('.btn-group > .btn').addClass('btn-white btn-round');
+            } else $(toolbar).find('.btn-group > .btn-white').removeClass('btn-white btn-round');
+        }
+    });
+
+    var enableImageResize = function () {
+        $('.wysiwyg-editor')
+            .on('mousedown', function (e) {
+                var target = $(e.target);
+                if (e.target instanceof HTMLImageElement) {
+                    if (!target.data('resizable')) {
+                        target.resizable({
+                            aspectRatio: e.target.width / e.target.height,
+                        });
+                        target.data('resizable', true);
+
+                        if (lastResizableImg != null) {
+                            //disable previous resizable image
+                            lastResizableImg.resizable("destroy");
+                            lastResizableImg.removeData('resizable');
+                        }
+                        lastResizableImg = target;
+                    }
+                }
+            })
+            .on('click', function (e) {
+                if (lastResizableImg != null && !(e.target instanceof HTMLImageElement)) {
+                    destroyResizable();
+                }
+            })
+            .on('keydown', function () {
+                destroyResizable();
+            });
+    }
+
+    enableImageResize();
+
+
+    $("#cliente").autocomplete({
+        source: function (request, response) {
+            $.ajax({
+                url: "/Cliente/BuscaClienteAJAX",
+                type: "POST",
+                dataType: "json",
+                data: { Prefix: request.term },
+                success: function (data) {
+                    response($.map(data, function (item) {
+                        return { label: item.Name, value: item.Name, Id: item.Id };
+                    }))
+
+                }
+            })
+        },
+        select: function (event, ui) {
+            $('#idCliente').attr('value', ui.item.Id);
+            $('#cliente').val(ui.item.label);
+            return false;
+        },
+        messages: {
+            noResults: "Sem resultados", results: ""
+        }
+    });
+    $('#cliente').on('blur', function () {
+        if ($(this).val().length === 0) {  //check for no. of characters entered
+            $('#idCliente').attr('value', 0);  // clear the textbox
+        }
+    });
+
+    $("#procedimento").autocomplete({
+        source: function (request, response) {
+            $.ajax({
+                url: "/Procedimento/BuscarProcedimentoAJAX",
+                type: "POST",
+                dataType: "json",
+                data: { Prefix: request.term },
+                success: function (data) {
+                    response($.map(data, function (item) {
+                        return { label: item.Name, value: item.Name, Id: item.Id, Value: item.Value };
+                    }))
+                }
+            })
+        },
+        select: function (event, ui) {
+            $('#idProcedimento').attr('value', ui.item.Id);
+            $('#procedimento').val(ui.item.label);
+            return false;
+        },
+        messages: {
+            noResults: "Sem resultados", results: ""
+        }
+    });
+    $('#procedimento').on('blur', function () {
+        if ($(this).val().length === 0) {  //check for no. of characters entered
+            $('#idProcedimento').attr('value', 0);  // clear the textbox
+        }
+    });
+
+    $("#grupoDeClientes").autocomplete({
+        source: function (request, response) {
+            $.ajax({
+                url: "/GrupoDeClientes/BuscaGrupoDeClientesAJAX",
+                type: "POST",
+                dataType: "json",
+                data: { Prefix: request.term },
+                success: function (data) {
+                    response($.map(data, function (item) {
+                        return { label: item.Name, value: item.Name, Id: item.Id, Value: item.Value };
+                    }))
+                }
+            })
+        },
+        select: function (event, ui) {
+            $('#idGrupoDeClientes').attr('value', ui.item.Id);
+            $('#grupoDeClientes').val(ui.item.label);
+            return false;
+        },
+        messages: {
+            noResults: "Sem resultados", results: ""
+        }
+    });
+    $('#grupoDeClientes').on('blur', function () {
+        if ($(this).val().length === 0) {  //check for no. of characters entered
+            $('#idGrupoDeClientes').attr('value', 0);  // clear the textbox
+        }
+    });
+
+    $("#Faturamento").autocomplete({
+        source: function (request, response) {
+            $.ajax({
+                url: "/Faturamento/BuscaFaturamentoAJAX",
+                type: "POST",
+                dataType: "json",
+                data: { Prefix: request.term },
+                success: function (data) {
+                    response($.map(data, function (item) {
+                        return { label: item.Name, value: item.Name, Id: item.Id, Value: item.Value };
+                    }))
+                }
+            })
+        },
+        select: function (event, ui) {
+            $('#idFaturamento').attr('value', ui.item.Id);
+            $('#Faturamento').val(ui.item.label);
+            return false;
+        },
+        messages: {
+            noResults: "Sem resultados", results: ""
+        }
+    });
+    $('#Faturamento').on('blur', function () {
+        if ($(this).val().length === 0) {  //check for no. of characters entered
+            $('#idFaturamento').attr('value', 0);  // clear the textbox
+        }
+    });
+</script>

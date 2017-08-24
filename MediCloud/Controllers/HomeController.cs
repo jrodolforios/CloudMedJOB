@@ -21,7 +21,8 @@ namespace MediCloud.View.Controllers
             {
                 MovimentosNaoFaturados = CadastroDeASO.ContagemDeASOsNaoFaturados(),
                 MovimentosNoMês = CadastroDeASO.ContagemASOsNoMes(),
-                ProcedimentosNoMes = CadastroDeProcedimentosMovimento.ContagemProcedimentosNoMes()
+                ProcedimentosNoMes = CadastroDeProcedimentosMovimento.ContagemProcedimentosNoMes(),
+                ConvocacoesNoMes = CadastroDeProcedimentosMovimento.ContagemDeConvocacoesNoMes()
             };
 
             return View(model);

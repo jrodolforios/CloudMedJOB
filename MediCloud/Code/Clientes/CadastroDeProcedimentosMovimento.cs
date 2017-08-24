@@ -31,6 +31,11 @@ namespace MediCloud.Code.Clientes
             return listaDeModels;
         }
 
+        internal static int ContagemDeConvocacoesNoMes()
+        {
+            return ControleDeProcedimentosMovimento.ContagemDeConvocacoesNoMes();
+        }
+
         internal static int ContagemProcedimentosNoMes()
         {
             return ControleDeProcedimentosMovimento.ContagemProcedimentosNoMes();
@@ -54,6 +59,7 @@ namespace MediCloud.Code.Clientes
                     UsuarioRealizado = x.USUARIOREALIZADO,
                     Valor = x.VALOR,
                     observacao = x.OBSMOVTO,
+                    DataProxExame = x.PROXEXAME,
 
                     Faturamento = CadastroDeFaturamento.RecuperarFaturamentoPorID(x.IDFAT, false),
                     Fornecedor = CadastroDeFornecedor.RecuperarFornecedorPorID(x.IDFOR),
@@ -89,7 +95,8 @@ namespace MediCloud.Code.Clientes
                     Profissional = CadastroDeProfissional.GetProfissionalPorID(string.IsNullOrEmpty(form["idProfissional"]) ? null : form["idProfissional"]),
                     Total = string.IsNullOrEmpty(form["total"]) ? 0 : Convert.ToDecimal(form["total"], new CultureInfo("en-US")),
                     Usuario = string.IsNullOrEmpty(form["usuarioProcedimento"]) ? null : form["usuarioProcedimento"],
-                    UsuarioRealizado = string.IsNullOrEmpty(form["usuarioProcedimentoRealizado"]) ? null : form["usuarioProcedimentoRealizado"]
+                    UsuarioRealizado = string.IsNullOrEmpty(form["usuarioProcedimentoRealizado"]) ? null : form["usuarioProcedimentoRealizado"],
+                    DataProxExame = string.IsNullOrEmpty(form["dataProxExame"]) ? null : (DateTime?)Convert.ToDateTime(form["dataProxExame"])
                 };
         }
 
@@ -125,11 +132,11 @@ namespace MediCloud.Code.Clientes
                     IDPRO = x.Procedimento?.IdProcedimento,
                     OBSMOVTO = x.observacao,
                     OBSREALIZADO = x.observacao,
-                    PROXEXAME = null,
+                    PROXEXAME = x.DataProxExame,
                     TOTAL = x.Total,
                     USUARIO = x.Usuario,
                     USUARIOREALIZADO = x.UsuarioRealizado,
-                    VALOR = x.Valor
+                    VALOR = x.Valor,
                 };
         }
 

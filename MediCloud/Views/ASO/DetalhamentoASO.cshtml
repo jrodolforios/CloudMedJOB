@@ -561,7 +561,7 @@
                     <input type="hidden" id="dataRealizado" name="dataRealizado" value="" />
 
                     <div class="form-group">
-                        <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Fornecedor </label>
+                        <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Fornecedor &nbsp;<span class="badge badge-important mail-tag"></span></label>
 
                         <div class="col-sm-8">
                             <input type="hidden" name="idFornecedor" id="idFornecedor" value="" />
@@ -575,7 +575,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Procedimento </label>
+                        <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Procedimento &nbsp;<span class="badge badge-important mail-tag"></span></label>
 
                         <div class="col-sm-8">
                             <input type="hidden" name="idProcedimento" id="idProcedimento" value="" />
@@ -603,12 +603,27 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="col-sm-4 control-label no-padding-right" for="form-field-date">Data do exame</label>
+                        <label class="col-sm-4 control-label no-padding-right" for="form-field-date">Data do exame &nbsp;<span class="badge badge-important mail-tag"></span></label>
 
                         <div class="col-sm-8">
                             <div class="input-medium">
                                 <div class="input-group">
                                     <input class="input-medium date-picker input-mask-date" id="dataExame" name="dataExame" type="text" data-date-format="dd/mm/yyyy" placeholder="dd/mm/aaaa" value="" />
+                                    <span class="input-group-addon">
+                                        <i class="ace-icon fa fa-calendar"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label no-padding-right" for="form-field-date">Data do próximo exame &nbsp;<span class="badge badge-important mail-tag"></span></label>
+
+                        <div class="col-sm-8">
+                            <div class="input-medium">
+                                <div class="input-group">
+                                    <input class="input-medium date-picker input-mask-date" id="dataProxExame" name="dataProxExame" type="text" data-date-format="dd/mm/yyyy" placeholder="dd/mm/aaaa" value="" />
                                     <span class="input-group-addon">
                                         <i class="ace-icon fa fa-calendar"></i>
                                     </span>
@@ -1106,6 +1121,7 @@
                                                                     $("#profissional").attr('value', data.Profissional != null ? data.Profissional.NomeProfissional : '');
                                                                     $("#idProcedimento").attr('value', data.Procedimento != null ? data.Procedimento.IdProcedimento : '');
                                                                     $("#procedimento").attr('value', data.Procedimento != null ? data.Procedimento.Nome : '');
+                                                                    $("#dataProxExame").val(toDateFromJson(data.DataProxExame));
                                                                 },
                                                                 error: function (xhr, ajaxOptions, thrownError) {
                                                                     $('#usuarioAlerts').html('<div class="alert alert-danger"><a class="close" data-dismiss="alert">×</a><span>Ops! Não foi possível detalhar este registro no servidor. Contate-nos para que possamos te ajudar melhor.</span></div>')
@@ -1153,6 +1169,7 @@
                                                         $("#observacoesProcedimento").val('');
                                                         $("#valor").val('');
                                                         $("#desconto").val('');
+                                                        $("#dataProxExame").val('');
                                                         $("#total").val('');
                                                     }
 

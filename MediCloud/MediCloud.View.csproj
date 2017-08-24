@@ -189,6 +189,7 @@
     <Compile Include="Controllers\FaturamentoController.cs" />
     <Compile Include="Controllers\FechamentoCaixaController.cs" />
     <Compile Include="Controllers\NotaFiscalController.cs" />
+    <Compile Include="Controllers\RelatoriosDeMovimentosController.cs" />
     <Compile Include="Controllers\RelatoriosFinanceirosController.cs" />
     <Compile Include="Models\Financeiro\CrediarioClienteModel.cs" />
     <Compile Include="Models\Financeiro\DetalheFechamentoCaixaModel.cs" />
@@ -548,7 +549,6 @@
     <Folder Include="App_Data\" />
     <Folder Include="Providers\" />
     <Folder Include="Views\Contato\" />
-    <Folder Include="Views\RelatorioMovimentos\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -736,6 +736,7 @@
     <None Include="Properties\PublishProfiles\FolderProfile1.pubxml" />
     <Content Include="Views\RelatoriosFinanceiros\RelatorioDeMovimento.cshtml" />
     <Content Include="Views\RelatoriosFinanceiros\RelatorioAnalitoDeFaturamento.cshtml" />
+    <Content Include="Views\RelatoriosDeMovimentos\RelatorioDeConvocacoes.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
