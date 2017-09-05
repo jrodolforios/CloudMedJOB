@@ -49,8 +49,8 @@ namespace MediCloud.Models.Cliente
             if (DataExame == null)
                 erros.Add("O campo \"Data do exame\" é de preenchimento obrigratório");
 
-            if (DataProxExame == null)
-                erros.Add("O campo \"Data do proximo exame\" é de preenchimento obrigratório");
+            //if (DataProxExame == null)
+            //    erros.Add("O campo \"Data do proximo exame\" é de preenchimento obrigratório");
 
             if (Fornecedor == null)
                 erros.Add("O campo \"Fornecedor\" é de preenchimento obrigratório");

@@ -85,8 +85,8 @@ namespace MediCloud.Code.Clientes
                     DataRealizado = string.IsNullOrEmpty(form["dataRealizado"]) ? null : (DateTime?)Convert.ToDateTime(form["dataRealizado"]),
                     Desconto = string.IsNullOrEmpty(form["desconto"]) ? 0 : Convert.ToDecimal(form["desconto"], new CultureInfo("en-US")),
                     Valor = string.IsNullOrEmpty(form["valor"]) ? 0 : Convert.ToDecimal(form["valor"], new CultureInfo("en-US")),
-                    Faturamento = CadastroDeFaturamento.RecuperarFaturamentoPorID(string.IsNullOrEmpty(form["codigoFaturamento"]) ? 0 : Convert.ToInt32(form["codigoFaturamento"])),
-                    Fornecedor = CadastroDeFornecedor.RecuperarFornecedorPorID(string.IsNullOrEmpty(form["idFornecedor"]) ? 0 : Convert.ToInt32(form["idFornecedor"])),
+                    Faturamento = CadastroDeFaturamento.RecuperarFaturamentoPorID(string.IsNullOrEmpty(form["codigoFaturamento"]) ? 0 : Convert.ToInt32(form["codigoFaturamento"]),false),
+                    Fornecedor = CadastroDeFornecedor.RecuperarFornecedorPorID(string.IsNullOrEmpty(form["idFornecedor"]) ? 0 : Convert.ToInt32(form["idFornecedor"]),false),
                     IdFechamentoCaixa = string.IsNullOrEmpty(form["codigoFechamentoCaixa"]) ? 0 : Convert.ToInt32(form["codigoFechamentoCaixa"]),
                     IdMovimentoProcedimento = string.IsNullOrEmpty(form["codigoProcedimento"]) ? 0 : Convert.ToInt32(form["codigoProcedimento"]),
                     Movimento = new ASOModel() { IdASO = string.IsNullOrEmpty(form["codigoASOProcedimento"]) ? 0 : Convert.ToInt32(form["codigoASOProcedimento"]) },
@@ -100,17 +100,26 @@ namespace MediCloud.Code.Clientes
                 };
         }
 
-        internal static ProcedimentoMovimentoModel SalvarProcedimentoMovimento(FormCollection form)
+        internal static List<ProcedimentoMovimentoModel> BuscarProcedimentoDeMovimentoPorIDASO(int idASO)
+        {
+            List<MOVIMENTO_PROCEDIMENTO> contadoresEncontrados = ControleDeProcedimentosMovimento.buscarProcedimentosMovimentoPorIdMovimento(idASO);
+            List<ProcedimentoMovimentoModel> resultados = new List<ProcedimentoMovimentoModel>();
+
+            contadoresEncontrados.ForEach(x =>
+            {
+                resultados.Add(injetarEmUsuarioModelParaAjax(x));
+            });
+
+            return resultados;
+        }
+
+        internal static void SalvarProcedimentoMovimento(FormCollection form)
         {
             ProcedimentoMovimentoModel usuarioModel = injetarEmUsuarioModel(form);
             usuarioModel.validar();
 
             MOVIMENTO_PROCEDIMENTO ProcedimentoMovimentoDAO = injetarEmUsuarioDAO(usuarioModel);
             ProcedimentoMovimentoDAO = ControleDeProcedimentosMovimento.SalvarProcedimentoMovimento(ProcedimentoMovimentoDAO);
-
-            usuarioModel = injetarEmUsuarioModel(ProcedimentoMovimentoDAO);
-
-            return usuarioModel;
         }
 
         private static MOVIMENTO_PROCEDIMENTO injetarEmUsuarioDAO(ProcedimentoMovimentoModel x)
@@ -166,9 +175,11 @@ namespace MediCloud.Code.Clientes
                 return new ProcedimentoMovimentoModel()
                 {
                     IdMovimentoProcedimento = (int)x.IDMOVPRO,
-                    Procedimento = new Models.Parametro.GrupoProcedimento.ProcedimentoModel() {IdProcedimento = x.IDPRO.HasValue ? (int)x.IDPRO : 0, Nome = x.PROCEDIMENTO?.PROCEDIMENTO1 },
+                    Procedimento = new Models.Parametro.GrupoProcedimento.ProcedimentoModel() { IdProcedimento = x.IDPRO.HasValue ? (int)x.IDPRO : 0, Nome = x.PROCEDIMENTO?.PROCEDIMENTO1 },
                     DataExame = x.DATAEXAME,
-                    DataRealizado = x.DATAREALIZADO
+                    DataRealizado = x.DATAREALIZADO,
+                    Profissional = x.PROFISSIONAIS != null ? new Models.Parametro.ProfissionalModel() { IdProfissional = x.PROFISSIONAIS.PROFISSIONAL, NomeProfissional = x.PROFISSIONAIS.PROFISSIONAL } : new Models.Parametro.ProfissionalModel(),
+                    Total = x.TOTAL.HasValue ? x.TOTAL.Value : 0
                 };
         }
     }

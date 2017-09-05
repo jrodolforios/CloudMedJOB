@@ -20,6 +20,8 @@ namespace MediCloud.DatabaseModels
         [Column(TypeName = "numeric")]
         public decimal? IDRECASO { get; set; }
 
+        public int? PERIODICIDADE { get; set; }
+
         public virtual RECOMENDACAOXASO RECOMENDACAOXASO { get; set; }
     }
 }

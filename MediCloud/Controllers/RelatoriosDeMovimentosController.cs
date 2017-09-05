@@ -33,7 +33,7 @@ namespace MediCloud.Controllers
                 arquivo = CadastroDeRelatoriosFinanceiros.GerarRelatorioAnaliticoDeFaturamento(form);
 
                 byte[] fileBytes = arquivo;
-                string fileName = "Relatório Analitico de Faturamento - " + DateTime.Now.ToShortDateString().Replace('/', '-') + ".pdf";
+                string fileName = "Relatório de Convocações - " + DateTime.Now.ToShortDateString().Replace('/', '-') + ".pdf";
                 return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, fileName);
             }
             catch (Exception ex)

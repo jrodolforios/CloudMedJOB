@@ -190,6 +190,35 @@ namespace MediCloud.BusinessProcess.Recomendacao
             }
         }
 
+        public static int? recuperarPeriodicidadeDeProcedimento(int idProcedimento, int idRecomendacao, int idReferencia)
+        {
+            CloudMedContext contexto = new CloudMedContext();
+            RECOMENDACAOXASO recomendacaoReferente = recuperarRcomendacaoReferente(idRecomendacao, idReferencia);
+
+            try
+            {
+
+                if (contexto.RECOMENDACAOXASOXPRO.Any(x => x.IDRECASO == recomendacaoReferente.IDRECASO && x.IDPRO == idProcedimento))
+                {
+                    return contexto.RECOMENDACAOXASOXPRO.First(x => x.IDRECASO == recomendacaoReferente.IDRECASO && x.IDPRO == idProcedimento).PERIODICIDADE;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            return null;
+        }
+
         public static void AdicionarReferencia(int codigoRecomendacao, int codigoReferencia)
         {
             CloudMedContext contexto = new CloudMedContext();

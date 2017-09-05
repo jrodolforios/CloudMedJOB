@@ -196,7 +196,7 @@ namespace MediCloud.BusinessProcess.Cliente.Reports
             movimentoProcedimento.ForEach(x =>
             {
                 strRetorno.AppendLine("<br/>");
-                strRetorno.AppendLine($"{x.DATAEXAME.Value.ToShortDateString()} - {x.PROCEDIMENTO.PROCEDIMENTO1}");
+                strRetorno.AppendLine($"{(x.DATAEXAME.HasValue ? x.DATAEXAME.Value.ToShortDateString() : string.Empty)} - {x.PROCEDIMENTO.PROCEDIMENTO1}");
             });
 
             return strRetorno.ToString();

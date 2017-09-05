@@ -618,7 +618,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="col-sm-4 control-label no-padding-right" for="form-field-date">Data do próximo exame &nbsp;<span class="badge badge-important mail-tag"></span></label>
+                        <label class="col-sm-4 control-label no-padding-right" for="form-field-date">Data do próximo exame </label>
 
                         <div class="col-sm-8">
                             <div class="input-medium">
@@ -692,7 +692,7 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary" id="salvarContato">
+                    <button type="button" class="btn btn-primary" id="salvarContato" onclick="submitProcedimento();">
                         <i class="ace-icon fa fa-check"></i>
                         Salvar
                     </button>
@@ -718,6 +718,12 @@
 
 
 <script type="text/javascript">
+                                                    function submitProcedimento() {
+
+                                                        $('form#formProcedimentoASO').submit();
+                                                        $('#detalhamentoProcedimento').modal('toggle');
+                                                    }
+
                                                     $(".tooltipASO").tooltip({
                                                         show: null,
                                                         position: {

@@ -49,14 +49,23 @@ namespace MediCloud.Controllers
             }
         }
 
-        public ActionResult DetalhamentoASO(int? codigoASO)
+        public ActionResult DetalhamentoASO(int? codigoASO, bool useCache = false)
         {
             try
             {
                 base.EstahLogado();
                 ViewBag.Title = "ASO";
+                ASOModel model = null;
 
-                ASOModel model = CadastroDeASO.RecuperarASOPorID(codigoASO.HasValue ? codigoASO.Value : 0);
+                if (!useCache || Session["ASOModel"] == null)
+                    model = CadastroDeASO.RecuperarASOPorID(codigoASO.HasValue ? codigoASO.Value : 0);
+                else
+                {
+                    model = Session["ASOModel"] as ASOModel;
+                    model = CadastroDeASO.AtualizarProcedimentos(model);
+                }
+
+                Session["ASOModel"] = model;
 
                 ViewData["Referentes"] = CadastroDeReferente.RecuperarTodos() as List<ReferenteModel>;
                 ViewData["FormaPagamento"] = CadastroFormaPagamento.RecuperarTodos() as List<FormaPagamentoModel>;
@@ -178,22 +187,22 @@ namespace MediCloud.Controllers
                 if (!Int32.TryParse(form["codigoProcedimento"], out codigoProcedimento) || codigoProcedimento <= 0)
                     form["usuarioProcedimento"] = base.CurrentUser.login;
 
-                modelProcedimentoMovimento = CadastroDeProcedimentosMovimento.SalvarProcedimentoMovimento(form);
+                CadastroDeProcedimentosMovimento.SalvarProcedimentoMovimento(form);
 
                 base.FlashMessage("Procedimento cadastrado.", MessageType.Success);
-                Response.Redirect($"/ASO/DetalhamentoASO?codigoASO={codigoASO}");
+                Response.Redirect($"/ASO/DetalhamentoASO?codigoASO={codigoASO}&useCache=true");
             }
             catch (InvalidOperationException ex)
             {
                 ExceptionUtil.GerarLogDeExcecao(ex, Request.Url.ToString());
                 base.FlashMessage(ex.Message, MessageType.Error);
-                Response.Redirect($"/ASO/DetalhamentoASO?codigoASO={codigoASO}");
+                Response.Redirect($"/ASO/DetalhamentoASO?codigoASO={codigoASO}&useCache=true");
             }
             catch (Exception ex)
             {
                 ExceptionUtil.GerarLogDeExcecao(ex, Request.Url.ToString());
                 base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
-                Response.Redirect($"/ASO/DetalhamentoASO?codigoASO={codigoASO}");
+                Response.Redirect($"/ASO/DetalhamentoASO?codigoASO={codigoASO}&useCache=true");
             }
 
             return null;
@@ -416,7 +425,7 @@ namespace MediCloud.Controllers
             {
                 base.EstahLogado();
 
-                aso = CadastroDeASO.RecuperarASOPorID(codigoASO,false);
+                aso = CadastroDeASO.RecuperarASOPorID(codigoASO, false);
 
                 arquivo = CadastroDeASO.ImprimirReciboASO(codigoASO);
 

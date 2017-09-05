@@ -72,6 +72,13 @@ namespace MediCloud.Code.Clientes
                 };
         }
 
+        internal static ASOModel AtualizarProcedimentos(ASOModel model)
+        {
+            model.ProcedimentosMovimento = CadastroDeProcedimentosMovimento.BuscarProcedimentoDeMovimentoPorIDASO(model.IdASO);
+
+            return model;
+        }
+
         private static List<ArquivoMovimentoModel> CarregarArquivosDeASOSemBinarios(decimal iDMOV)
         {
             List<ArquivoMovimentoModel> listaDeModels = new List<ArquivoMovimentoModel>();
