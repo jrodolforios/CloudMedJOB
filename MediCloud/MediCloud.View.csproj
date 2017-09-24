@@ -177,6 +177,7 @@
     <Compile Include="Code\Clientes\CadastroDeCargo.cs" />
     <Compile Include="Code\Clientes\CadastroDeClientes.cs" />
     <Compile Include="Code\Clientes\CadastroDeProcedimentosMovimento.cs" />
+    <Compile Include="Code\Clientes\Reports\CadastroDeRelatoriosDeMovimentos.cs" />
     <Compile Include="Code\Enum\EnumParametro.cs" />
     <Compile Include="Code\Financeiro\CadastroDeCrediarioCliente.cs" />
     <Compile Include="Code\Financeiro\CadastroDeFechamentoCaixa.cs" />
@@ -737,6 +738,7 @@
     <Content Include="Views\RelatoriosFinanceiros\RelatorioDeMovimento.cshtml" />
     <Content Include="Views\RelatoriosFinanceiros\RelatorioAnalitoDeFaturamento.cshtml" />
     <Content Include="Views\RelatoriosDeMovimentos\RelatorioDeConvocacoes.cshtml" />
+    <Content Include="Views\RelatoriosDeMovimentos\RelatorioAnual.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

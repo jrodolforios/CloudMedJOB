@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style type="text/css">
+        body {
+            font-family: Arial;
+            font-size: 8pt;
+        }
+
+        .line {
+            display: block;
+            height: 1px;
+            border: 0;
+            border-top: 1px solid black;
+            margin: 1em 0;
+            padding: 0;
+        }
+
+        .lineWrite {
+            display: block;
+            height: 1px;
+            border: 0;
+            border-top: 1px solid black;
+            margin: 1.5em 0;
+            padding: 0;
+        }
+
+        .dotted {
+            display: block;
+            height: 1px;
+            border: 0;
+            border-top: 1px dashed black;
+            margin: 1em 0;
+            padding: 0;
+        }
+
+        .corpo {
+            border: 1px solid black;
+        }
+
+        .dadosEmpresa {
+            width: 70%;
+            float: left;
+            text-align: center;
+        }
+
+        .dadosRelatorio {
+            width: 20%;
+            float: left;
+            text-align: center;
+        }
+
+        .logoEmpresa {
+            width: 30%;
+            float: left;
+            text-align: center;
+        }
+
+            .logoEmpresa img {
+                width: 120pt;
+            }
+
+        .tituloRelatorio {
+            border: 1px solid black;
+            text-align: center;
+            margin: 3px 3px 3px 3px;
+        }
+
+        .conteudoRelatorio {
+            padding-top: 5px;
+            margin: 3px 3px 3px 3px;
+            vertical-align:bottom;
+        }
+
+        .campo {
+            font-weight: bold;
+        }
+
+        .opcoes {
+            word-wrap: normal;
+            display: block;
+        }
+
+        .Assinatura {
+            display: table;
+            width: 100%;
+			border: 1px solid black;
+        }
+
+        .AssinaturaDireita {
+            float: left;
+            width: 50%;
+            border-right: solid 1px black;
+        }
+
+        .AssinaturaEsquerda {
+            margin-left: 50%;
+        }
+
+        .Centralizado {
+            text-align: center;
+        }
+
+        .alignLeft {
+            text-align: left;
+        }
+
+        .alignRight {
+            float: right;
+        }
+		
+		table {
+    border-collapse: collapse;
+}
+
+table, th, td {
+    border: 1px solid black;
+	padding: 5px 5px 5px 5px;
+}
+    </style>
+</head>
+<body>
+    <div class="cabecalho">
+        <div class="cabecalhoSuperior">
+            <div class="logoEmpresa"><img src="[%LogoEmpresa%]" alt="Logo da empresa" /></div>
+            <div class="dadosEmpresa"><h2><b>Programa de Controle Médico da Saúde Ocupacional</b></h2>
+            <div class="">Relatório Anual <br/> Período: [%DataInicio%] até [%DataFim%]</div>
+			</div>
+        </div>
+			<p>&nbsp;</p>
+    </div>
+
+<div class="Assinatura">
+<br/>
+				<div class="AssinaturaDireita">
+                    <p>
+					RESPONSÁVEL: CM0 - CLÍNICA DE MEDICINA OCUPACIONAL
+					<br/>
+					COORDENADOR: DIEGO CAMPOS ALMEIDA
+					</p>
+					<p>DATA: [%DataHoje%]</p>
+                </div>
+				<div class="AssinaturaEsquerda">
+                    <p>&nbsp;&nbsp;ASSINATURA:</p>
+					<p>&nbsp;</p>
+				<br/>
+                </div>
+				<br/>
+            </div>
+			<br/>
+        </div> 
+    <table width="100%" >
+			[%CorpoRelatorio%]
+        <!-- <tr style="font-weight:bold"> -->
+            <!-- <td style="border-bottom:solid 1px" colspan="5">RAZÃO SOCIAL: [%RazaoSocial%]</td> -->
+        <!-- </tr> -->
+		
+		<!-- <tr> -->
+			<!-- <td colspan="5" style="padding-left:0px; padding-right:0px"> -->
+				<!-- <table width="100%" style="border: 1px solid black"> -->
+					<!-- <tr> -->
+						<!-- <td style="width:20%" >Natureza do Exame</td> -->
+						<!-- <td style="width:20%" >Nº Anual Realizado</td> -->
+						<!-- <td style="width:20%" >Nº de Anormais</td> -->
+						<!-- <td style="width:20%" >Nº de resultados anormais X 100 Nº anual de exames</td> -->
+						<!-- <td style="width:20%" >Nº de exames para o ano seguinte</td> -->
+					<!-- </tr> -->
+					<!-- <tr> -->
+						<!-- <td colspan="5"><b>FUNÇÃO: [%Cargo%]</b></td> -->
+					<!-- </tr> -->
+					
+					<!-- <tr style="text-align:center" > -->
+						<!-- <td >[%Procedimento%]</td> -->
+						<!-- <td >[%ProximoAno%]</td> -->
+						<!-- <td >0</td> -->
+						<!-- <td >0.00</td> -->
+						<!-- <td >0</td> -->
+					<!-- </tr> -->
+					
+				<!-- </table> -->
+			<!-- </td> -->
+		<!-- </tr> -->
+			<!-- <tr style="text-align:center; font-weight: bold" > -->
+				<!-- <td style="width:20%"style="text-align: left" >Total: </td> -->
+				<!-- <td style="width:20%">[%ProximoAnoSoma%]</td> -->
+				<!-- <td style="width:20%">0</td> -->
+				<!-- <td style="width:20%">0.00</td> -->
+				<!-- <td style="width:20%">0</td> -->
+			<!-- </tr> -->
+		</table>
+</body>
+</html>

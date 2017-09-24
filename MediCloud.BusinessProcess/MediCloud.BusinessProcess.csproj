@@ -51,6 +51,8 @@
     <Compile Include="Cliente\ControleDeCargo.cs" />
     <Compile Include="Cliente\ControleDeClientes.cs" />
     <Compile Include="Cliente\ControleDeProcedimentosMovimento.cs" />
+    <Compile Include="Cliente\Reports\ControleDeRelatoriosDeMovimentos.cs" />
+    <Compile Include="Cliente\Reports\MovimentoReports.cs" />
     <Compile Include="Financeiro\ControleDeCrediarioCliente.cs" />
     <Compile Include="Financeiro\ControleDeFechamentoCaixa.cs" />
     <Compile Include="Financeiro\ControleDeGrupoDeClientes.cs" />
@@ -143,6 +145,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Templates\Laudo\imprimirLaudoRaioX.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Movimento\imprimirRelatorioAnual.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

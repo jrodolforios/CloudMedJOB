@@ -37,6 +37,19 @@ namespace MediCloud.BusinessProcess.Util
             }
         }
 
+        internal static string GetRelatorioMovimentoTemplate(MovimentoReportEnum tipoMovimentoReport)
+        {
+            string path = ConfigurationManager.AppSettings["TemplatesPath"] + "\\Movimento\\";
+
+            switch (tipoMovimentoReport)
+            {
+                case MovimentoReportEnum.imprimirRelatorioAnual:
+                    return recoverTemplateByFileName(path + tipoMovimentoReport.ToString() + ".html");
+                default:
+                    return string.Empty;
+            }
+        }
+
         internal static string GetRelatorioFinanceiroTemplate(object tipoASOReport)
         {
             string path = ConfigurationManager.AppSettings["TemplatesPath"] + "\\Financeiro\\";

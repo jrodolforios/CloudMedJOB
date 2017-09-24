@@ -18,5 +18,11 @@ namespace MediCloud.BusinessProcess.Util.Enum
             imprimirFichaClinica = 5,
             imprimirOrdemServicoASO = 6
         }
+
+        public enum MovimentoReportEnum
+        {
+            indefinido = 0,
+            imprimirRelatorioAnual = 1
+        }
     }
 }

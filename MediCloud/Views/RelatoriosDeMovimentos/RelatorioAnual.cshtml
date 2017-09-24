@@ -1,0 +1,154 @@
+﻿@model MediCloud.Models.Cliente.ASOModel
+@{
+    ViewBag.Title = "Relatório Analítico de Faturamento";
+}
+<script src="/assets/js/jquery-2.1.4.min.js"></script>
+<div class="page-header">
+    <h1>
+        Relatórios de movimentos
+        <small>
+            <i class="ace-icon fa fa-angle-double-right"></i>
+            Relatório Anual
+        </small>
+    </h1>
+</div><!-- /.page-header -->
+<div class="row">
+    <div class="col-xs-12">
+        <div id="user-profile-3" class="user-profile row">
+            <div class="col-sm-offset-1 col-sm-10">
+
+                <div class="space"></div>
+                <form method="post" autocomplete="off" id="relatorioAnualForm" class="form-horizontal" action="@Url.Content("~/RelatoriosDeMovimentos/RelatorioAnual")">
+                    <div class="tabbable">
+                        <ul class="nav nav-tabs padding-16">
+                            <li class="active">
+                                <a data-toggle="tab" href="#edit-basic">
+                                    <i class="green ace-icon fa fa-pencil-square-o bigger-125"></i>
+                                    Filtro
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="tab-content profile-edit-tab-content">
+                        <div id="edit-basic" class="tab-pane in active">
+                            <h4 class="header blue bolder smaller">Filtros do relatório</h4>
+                            <div class="vspace-12-sm"></div>
+
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Cliente</label>
+
+                                <div class="col-sm-8">
+                                    <input type="hidden" name="idCliente" id="idCliente" value="" />
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <i class="ace-icon fa fa-search"></i>
+                                        </span>
+                                        <input class="col-xs-12 col-sm-6 componenteFormulario" type="text" id="cliente" name="cliente" placeholder="Digite o nome do cliente" value="" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label no-padding-right" for="form-field-date">Período</label>
+
+                                <div class="col-sm-8">
+                                    <div class="input-medium">
+                                        <div class="input-group">
+                                            <input class="input-medium date-picker input-mask-date" id="periodoInicio" name="periodoInicio" type="text" data-date-format="dd/mm/yyyy" placeholder="dd/mm/aaaa" value="" />
+                                            <span class="input-group-addon">
+                                                <i class="ace-icon fa fa-calendar"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="input-medium">
+                                        <div class="input-group">
+                                            <input class="input-medium date-picker input-mask-date" id="periodoFim" name="periodoFim" type="text" data-date-format="dd/mm/yyyy" placeholder="dd/mm/aaaa" value="" />
+                                            <span class="input-group-addon">
+                                                <i class="ace-icon fa fa-calendar"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="clearfix form-actions">
+                                <div class="col-md-offset-3 col-md-9">
+                                    <button class="btn btn-info" id="GerarRelatorio">
+                                        <i class="ace-icon fa fa-circle-o-notch bigger-110"></i>
+                                        Gerar
+                                    </button>
+                                    <span>&nbsp; &nbsp;</span>
+                                    <button class="btn" type="reset" id="limparForm">
+                                        <i class="ace-icon fa fa-undo bigger-110"></i>
+                                        Limpar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div><!-- /.span -->
+        </div>
+    </div>
+</div>
+<script src="/assets/js/jquery-2.1.4.min.js"></script>
+
+<script src="/assets/js/jquery-ui.custom.min.js"></script>
+<script src="/assets/js/jquery.ui.touch-punch.min.js"></script>
+<script src="/assets/js/markdown.min.js"></script>
+<script src="/assets/js/bootstrap-markdown.min.js"></script>
+<script src="/assets/js/jquery.hotkeys.index.min.js"></script>
+<script src="/assets/js/bootstrap-wysiwyg.min.js"></script>
+<script src="/assets/js/bootbox.js"></script>
+<script src="/assets/js/chosen.jquery.min.js"></script>
+<script src="/assets/js/jquery-ui.min.js"></script>
+<script src="/assets/js/jquery.maskedinput.min.js"></script>
+<script src="/assets/js/ace-elements.min.js"></script>
+<script src="/assets/js/ace.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#GerarRelatorio").on("click", function () {
+            var emailText = $("#informacoesAdicionais").html();
+            $("#informacoesAdicionaisRel").val(emailText);
+
+            $('form#relatorioAnualForm').submit();
+        });
+    });
+    $('.date-picker').datepicker({
+        format: 'dd/mm/yyyy',
+        language: 'pt-BR',
+    });
+    $('.input-mask-date').mask('99/99/9999');
+
+
+    $("#cliente").autocomplete({
+        source: function (request, response) {
+            $.ajax({
+                url: "/Cliente/BuscaClienteAJAX",
+                type: "POST",
+                dataType: "json",
+                data: { Prefix: request.term },
+                success: function (data) {
+                    response($.map(data, function (item) {
+                        return { label: item.Name, value: item.Name, Id: item.Id };
+                    }))
+
+                }
+            })
+        },
+        select: function (event, ui) {
+            $('#idCliente').attr('value', ui.item.Id);
+            $('#cliente').val(ui.item.label);
+            return false;
+        },
+        messages: {
+            noResults: "Sem resultados", results: ""
+        }
+    });
+    $('#cliente').on('blur', function () {
+        if ($(this).val().length === 0) {  //check for no. of characters entered
+            $('#idCliente').attr('value', 0);  // clear the textbox
+        }
+    });
+</script>
