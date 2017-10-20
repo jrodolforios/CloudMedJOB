@@ -30,7 +30,7 @@ namespace MediCloud.BusinessProcess.Cliente.Reports
                                     && ((dataInicial.HasValue && dataFinal.HasValue) ? ((x.DATAMOV.HasValue ? x.DATAMOV.Value >= (dataInicial.HasValue ? dataInicial.Value : DateTime.MinValue) : true) && (x.DATAMOV.HasValue ? x.DATAMOV.Value <= (dataFinal.HasValue ? dataFinal.Value : DateTime.MaxValue) : true)) : true)
                                     ).ToList());
 
-                MovimentoReports Report = new MovimentoReports(Resultado, informacoesDaClinica, Util.Enum.Cliente.MovimentoReportEnum.imprimirRelatorioAnual, (dataInicial.HasValue ? dataFinal.Value : DateTime.MaxValue), (dataFinal.HasValue ? dataFinal.Value : DateTime.MinValue));
+                MovimentoReports Report = new MovimentoReports(Resultado, informacoesDaClinica, Util.Enum.Cliente.MovimentoReportEnum.imprimirRelatorioAnual, (dataInicial.HasValue ? dataInicial.Value : DateTime.MaxValue), (dataFinal.HasValue ? dataFinal.Value : DateTime.MinValue));
 
                 return Report.generate();
             }

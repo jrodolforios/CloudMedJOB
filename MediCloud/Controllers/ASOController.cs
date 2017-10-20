@@ -148,7 +148,7 @@ namespace MediCloud.Controllers
                 if (!Int32.TryParse(form["codigoASO"], out codigoASO) || codigoASO <= 0)
                     form["usuario"] = base.CurrentUser.login;
 
-                modelASO = CadastroDeASO.SalvarASO(form);
+                modelASO = CadastroDeASO.SalvarASO(form,true);
 
                 base.FlashMessage("ASO cadastrado.", MessageType.Success);
                 return View(modelASO);

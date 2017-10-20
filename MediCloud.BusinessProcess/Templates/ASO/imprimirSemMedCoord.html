@@ -156,15 +156,16 @@
             <span class="opcoes">(&nbsp;&nbsp;) APTO</span>
             <span class="opcoes">(&nbsp;&nbsp;) INAPTO</span>
             <span class="opcoes">(&nbsp;&nbsp;) APTO COM RESTRIÇÕES</span>
+			<span class="opcoes">(&nbsp;&nbsp;) APTO PARA TRABALHO EM ALTURA</span>
             <p><b>EXAME CLÍNICO REALIZADO EM: [%DataExame%]</b> </p>
             <hr class="line" />
 
             <p><b>ESTARÁ EXPOSTO(A) AOS SEGUINTES RISCOS OCUPACIONAIS ESPECÍFICOS (ACIMA DOS NÍVEIS DE AÇÃO FIXADOS PELO MTE).</b></p>
-
-            <p>
-                [%exposicao%]
-            </p>
-
+			<div style="height:150px">
+				<p>
+					[%exposicao%]
+				</p>
+			</div>
             <hr class="line" />
 
             <p><b>SENDO SUBMETIDO AOS SEGUINTES EXAMES COMPLEMENTARES:</b></p>
@@ -196,9 +197,6 @@
                     <p class="Centralizado">MÉDICO EXAMINADOR</p>
                 </div>
             </div>
-
-            <hr class="dotted" />
-            <hr class="dotted" />
 
             <p><span class="alignLeft">&nbsp;</span><span class="alignRight">[%CidadeEstadoClinica%], ___/___/______</span></p>
             <p>[%EnderecoClinica%]&nbsp;&nbsp;[%TelefoneClinica%]</p>

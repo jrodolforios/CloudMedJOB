@@ -167,6 +167,7 @@ namespace MediCloud.BusinessProcess.Recomendacao
             }
         }
 
+
         public static void DeletarRisco(int codigoDoRecomendacao, int codigoRisco)
         {
             CloudMedContext contexto = new CloudMedContext();
@@ -188,6 +189,34 @@ namespace MediCloud.BusinessProcess.Recomendacao
             {
                 throw ex;
             }
+        }
+
+        public static void AlterarPeriodicidade(int idProcedimento, int idRecomendacao, int idReferencia, int periodicidade)
+        {
+            CloudMedContext contexto = new CloudMedContext();
+            RECOMENDACAOXASO recomendacaoReferente = recuperarRcomendacaoReferente(idRecomendacao, idReferencia);
+
+            try
+            {
+                int recomendacaoreferente = (int)recuperarRcomendacaoReferente(idRecomendacao, idReferencia).IDRECASO;
+
+
+                if (contexto.RECOMENDACAOXASOXPRO.Any(x => x.IDRECASO == recomendacaoreferente && x.IDPRO == idProcedimento))
+                {
+                    RECOMENDACAOXASOXPRO periodicidadeParaAlterar = contexto.RECOMENDACAOXASOXPRO.First(x => x.IDRECASO == recomendacaoreferente && x.IDPRO == idProcedimento);
+                    periodicidadeParaAlterar.PERIODICIDADE = periodicidade;
+                }
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            contexto.SaveChanges();
         }
 
         public static int? recuperarPeriodicidadeDeProcedimento(int idProcedimento, int idRecomendacao, int idReferencia)

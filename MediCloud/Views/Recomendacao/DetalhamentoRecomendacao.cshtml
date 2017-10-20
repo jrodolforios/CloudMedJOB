@@ -383,10 +383,11 @@
                             <input class="col-xs-12 col-sm-6 " type="text" id="periodicidade" name="periodicidade" placeholder="Meses" value="" />
                         </div>
                     </div>
-
+                    <br />
+                    <br/>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" id="salvarEmpresa">
+                    <button type="button" class="btn btn-primary" id="salvarPeriodicidade">
                         <i class="ace-icon fa fa-check"></i>
                         Salvar
                     </button>
@@ -493,6 +494,27 @@
                                                         var cntreq3 = 0;
                                                         var cntvals3 = 0;
                                                         $(".componenteFormulario").each(atualizarProgressBar());
+                                                    });
+
+                                                    $("#salvarPeriodicidade").click(function () {
+                                                        $.ajax({
+                                                            url: '/Recomendacao/SalvarPeriodicidade?IdProcedimento=' + $("#IdProcedimento").attr('value') + "&IdRecomendacao=" + $("#IdRecomendacao").attr('value') + "&IdReferencia=" + $("#IdReferencia").attr('value') + "&Periodicidade=" + $("#periodicidade").val(),
+                                                            type: "post",
+                                                            cache: false,
+                                                            success: function (savingStatus) {
+                                                                var tipoAlert;
+                                                                if (savingStatus.acaoBemSucedida)
+                                                                    tipoAlert = 'alert-success';
+                                                                else
+                                                                    tipoAlert = 'alert-danger';
+                                                                $('#recomendacaoAlerts').html('<div class="alert ' + tipoAlert + '"><a class="close" data-dismiss="alert">×</a><span>' + savingStatus.mensagem + '</span></div>');
+                                                            },
+                                                            error: function (xhr, ajaxOptions, thrownError) {
+                                                                $('#recomendacaoAlerts').html('<div class="alert alert-danger"><a class="close" data-dismiss="alert">×</a><span>Ops! Não foi possível bloquear este usuário no servidor. Contate-nos para que possamos te ajudar melhor.</span></div>')
+                                                            }
+                                                        });
+
+                                                        $("#periodicidadeProcedimento").modal('toggle');
                                                     });
 
                                                     $(document).ready(function () {

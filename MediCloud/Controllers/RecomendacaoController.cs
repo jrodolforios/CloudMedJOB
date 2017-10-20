@@ -218,36 +218,6 @@ namespace MediCloud.Controllers
         }
 
         [HttpPost]
-        public ActionResult SalvarPeriodicidade(FormCollection form)
-        {
-            RecomendacaoModel modelFuncionario = null;
-            try
-            {
-                base.EstahLogado();
-                ViewBag.Title = "Recomendação";
-
-                modelFuncionario = CadastroDeRecomendacao.SalvarRecomendacao(form);
-
-                base.FlashMessage("Recomendação cadastrada.", MessageType.Success);
-                return View(modelFuncionario);
-            }
-            catch (InvalidOperationException ex)
-            {
-                if (!string.IsNullOrEmpty(form["codigoRecomendacao"]))
-                    modelFuncionario = CadastroDeRecomendacao.RecuperarRecomendacaoPorIDMaterializandoClasses(Convert.ToInt32(form["codigoRecomendacao"]));
-
-                base.FlashMessage(ex.Message, MessageType.Error);
-                return View(modelFuncionario);
-            }
-            catch (Exception ex)
-            {
-                ExceptionUtil.GerarLogDeExcecao(ex, Request.Url.ToString());
-                base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
-                return View();
-            }
-        }
-
-        [HttpPost]
         public JsonResult AdicionarRisco(int codigoRecomendacao, int codigoRisco)
         {
             ResultadoAjaxGenericoModel resultado = new ResultadoAjaxGenericoModel();
@@ -338,6 +308,39 @@ namespace MediCloud.Controllers
                 ResultadoAjaxGenericoModel resultado = new ResultadoAjaxGenericoModel();
 
                 resultado.mensagem = Constantes.MENSAGEM_GENERICA_DE_ERRO;
+                resultado.acaoBemSucedida = false;
+
+                return Json(resultado, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpPost]
+        public JsonResult SalvarPeriodicidade(int IdProcedimento, int IdRecomendacao, int IdReferencia, int Periodicidade)
+        {
+            ResultadoAjaxGenericoModel resultado = new ResultadoAjaxGenericoModel();
+            try
+            {
+                base.EstahLogado();
+                ViewBag.Title = "Recomendação";
+
+                CadastroDeRecomendacao.AlterarPeriodicidade(IdProcedimento, IdRecomendacao, IdReferencia, Periodicidade);
+
+                resultado.mensagem = "Periodicidade alterada.";
+                resultado.acaoBemSucedida = true;
+
+                return Json(resultado, JsonRequestBehavior.AllowGet);
+            }
+            catch (InvalidOperationException ex)
+            {
+                resultado.mensagem = "Não foi possível alterar a periodicidade. " + ex.Message;
+                resultado.acaoBemSucedida = false;
+
+                return Json(resultado, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                ExceptionUtil.GerarLogDeExcecao(ex, Request.Url.ToString());
+                resultado.mensagem = "Não foi possível alterar a periodicidade. " + ex.Message;
                 resultado.acaoBemSucedida = false;
 
                 return Json(resultado, JsonRequestBehavior.AllowGet);

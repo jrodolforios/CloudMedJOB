@@ -156,5 +156,10 @@ namespace MediCloud.Code.Recomendacao
         {
             return ControleDeRecomendacao.recuperarPeriodicidadeDeProcedimento(idProcedimento, idRecomendacao, idReferencia);
         }
+
+        internal static void AlterarPeriodicidade(int idProcedimento, int idRecomendacao, int idReferencia, int periodicidade)
+        {
+            ControleDeRecomendacao.AlterarPeriodicidade(idProcedimento, idRecomendacao, idReferencia, periodicidade);
+        }
     }
 }

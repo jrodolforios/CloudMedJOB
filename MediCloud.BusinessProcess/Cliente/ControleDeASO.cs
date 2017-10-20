@@ -8,6 +8,7 @@ using MediCloud.Persistence;
 using System.Data.Entity.Validation;
 using MediCloud.BusinessProcess.Util;
 using MediCloud.BusinessProcess.Cliente.Reports;
+using MediCloud.BusinessProcess.Recomendacao;
 
 namespace MediCloud.BusinessProcess.Cliente
 {
@@ -66,7 +67,7 @@ namespace MediCloud.BusinessProcess.Cliente
 
             try
             {
-                return contexto.MOVIMENTO.Count(x => x.IDFAT == null || x.IDFAT <= 0);
+                return contexto.MOVIMENTO.Count(x => (x.IDFAT == null || x.IDFAT <= 0) && contexto.TABELA.Any(y => y.TIPOPAGTO == "P" && y.IDTAB == x.IDTAB));
             }
             catch (DbEntityValidationException ex)
             {
@@ -174,6 +175,53 @@ namespace MediCloud.BusinessProcess.Cliente
                 }
 
                 contexto.SaveChanges();
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static void CriarProcedimentosAPartirDeRecomendacao(int iDMOV)
+        {
+            List<PROCEDIMENTO> procedimentosParaAdicionar = new List<PROCEDIMENTO>();
+            CloudMedContext contexto = new CloudMedContext();
+            MOVIMENTO_PROCEDIMENTO movimentoProcedientoParaAdicionar;
+
+            MOVIMENTO mov = contexto.MOVIMENTO.Single(x => x.IDMOV == iDMOV);
+            try
+            {
+                List<RECOMENDACAO> recomendacao = contexto.RECOMENDACAO.Where(x => x.IDCLI == mov.IDCLI && x.IDCGO == mov.IDCGO && x.IDSETOR == mov.IDSETOR).ToList();
+
+                List<RECOMENDACAOXASO> recomendacaoReferenteProcedimentos = new List<RECOMENDACAOXASO>();
+                List<RECOMENDACAOXASOXPRO> recomendacaoProcedimentos = new List<RECOMENDACAOXASOXPRO>();
+                recomendacao.ForEach(x =>
+                {
+                    recomendacaoReferenteProcedimentos.AddRange(contexto.RECOMENDACAOXASO.Where(y => y.IDREC == x.IDREC && mov.IDREF == y.IDREF));
+                });
+
+                recomendacaoReferenteProcedimentos.ForEach(x => 
+                {
+                    recomendacaoProcedimentos.AddRange(contexto.RECOMENDACAOXASOXPRO.Where(y => y.IDRECASO == x.IDRECASO));
+                });
+
+                recomendacaoProcedimentos.ForEach(x => 
+                {
+                    movimentoProcedientoParaAdicionar = new MOVIMENTO_PROCEDIMENTO()
+                    {
+                        DATAEXAME = mov.DATA,
+                        IDMOV = mov.IDMOV,
+                        IDPRO = x.IDPRO,
+                        PROXEXAME = x.PERIODICIDADE.HasValue ? (DateTime?)mov.DATA.AddMonths(x.PERIODICIDADE.Value) : null,
+                        USUARIO = mov.USUARIO
+                    };
+
+                    ControleDeProcedimentosMovimento.SalvarProcedimentoMovimento(movimentoProcedientoParaAdicionar);
+                });
             }
             catch (DbEntityValidationException ex)
             {

@@ -136,13 +136,18 @@ namespace MediCloud.Code.Clientes
             return injetarEmUsuarioModel(ASOEncontrada, materializarClassesDoMovimento);
         }
 
-        internal static ASOModel SalvarASO(FormCollection form)
+        internal static ASOModel SalvarASO(FormCollection form, bool gerarProcedimentosAutomaticamente = false)
         {
             ASOModel usuarioModel = injetarEmUsuarioModel(form);
             usuarioModel.validar();
 
             MOVIMENTO ASODAO = injetarEmUsuarioDAO(usuarioModel);
             ASODAO = ControleDeASO.SalvarASO(ASODAO);
+
+            if(gerarProcedimentosAutomaticamente)
+            {
+                ControleDeASO.CriarProcedimentosAPartirDeRecomendacao((int)ASODAO.IDMOV);
+            }
 
             usuarioModel = injetarEmUsuarioModel(ASODAO);
 
