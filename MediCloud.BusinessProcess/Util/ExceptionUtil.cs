@@ -14,7 +14,7 @@ namespace MediCloud.BusinessProcess.Util
     {
         public static void TratarErrosDeValidacaoDoBanco(DbEntityValidationException ex)
         {
-            string rs = "";
+            string rs = string.Empty;
             foreach (var eve in ex.EntityValidationErrors)
             {
                 rs = string.Format("O cadastro de \"{0}\" apresentou o seguinte problema de validação:", eve.Entry.Entity.GetType().Name);
@@ -25,6 +25,10 @@ namespace MediCloud.BusinessProcess.Util
                     rs += "" + string.Format("\r\n- {0}", ve.ErrorMessage);
                 }
             }
+
+            if (string.IsNullOrEmpty(rs))
+                rs = ex.Message;
+
             throw new InvalidOperationException(rs);
         }
 

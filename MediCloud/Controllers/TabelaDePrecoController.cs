@@ -232,7 +232,7 @@ namespace MediCloud.Controllers
             }
             catch (InvalidOperationException ex)
             {
-                ExceptionUtil.GerarLogDeExcecao(ex, Request.Url.ToString());
+                    ExceptionUtil.GerarLogDeExcecao(ex, Request.Url.ToString());
                 base.FlashMessage(ex.Message, MessageType.Error);
                 Response.Redirect($"/TabelaDePreco/DetalhamentoTabelaDePreco?codigoTabelaDePreco={codigoTabela}");
             }

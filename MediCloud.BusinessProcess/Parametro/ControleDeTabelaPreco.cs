@@ -239,6 +239,8 @@ namespace MediCloud.BusinessProcess.Parametro
 
             try
             {
+                if (!contexto.FORNECEDORXPROCEDIMENTO.Any(x => x.IDPRO == tabelaDePrecoDAO.IDPRO && x.IDFOR == tabelaDePrecoDAO.IDFOR))
+                    throw new DbEntityValidationException("Não existe este procedimento no cadastro de fornecedor. Vá até o cadastro do fornecedor e cadastre-o.");
 
                 if (contexto.TABELAXFORNECEDORXPROCEDIMENTO.Any(x => x.IDTAB == tabelaDePrecoDAO.IDTAB && x.IDPRO == tabelaDePrecoDAO.IDPRO && x.IDFOR == tabelaDePrecoDAO.IDFOR))
                 {
