@@ -255,6 +255,12 @@ namespace MediCloud.BusinessProcess.Util
             }
         }
 
+        internal static string InserirMascaraCPF(string CPF)
+        {
+            ulong CPFTratado = Convert.ToUInt64(ApenasNumeros(CPF));
+            return CPFTratado.ToString(@"000\.000\.000\-00");
+        }
+
         internal static string InserirMascaraCNPJ(string CNPJ)
         {
             ulong CNPJTratado = Convert.ToUInt64(ApenasNumeros(CNPJ));

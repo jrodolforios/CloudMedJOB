@@ -107,7 +107,8 @@ namespace MediCloud.BusinessProcess.Cliente.Reports
         private string substituirParametrosSemMedCoord(string template)
         {
             template = template.Replace("[%Cliente%]", _movimento.CLIENTE.NOMEFANTASIA);
-            template = template.Replace("[%CNPJCliente%]", Util.Util.InserirMascaraCNPJ(_movimento.CLIENTE.CPFCNPJ));
+            template = template.Replace("[%CNPJCliente%]", _movimento.CLIENTE.CPFCNPJ.Length == 14 ? Util.Util.InserirMascaraCNPJ(_movimento.CLIENTE.CPFCNPJ) : Util.Util.InserirMascaraCPF(_movimento.CLIENTE.CPFCNPJ));
+            template = template.Replace("[%CPFCNPJ%]", _movimento.CLIENTE.CPFCNPJ.Length == 14 ? "CNPJ" : "CPF");
             template = template.Replace("[%Funcionario%]", _movimento.FUNCIONARIO.FUNCIONARIO1);
             template = template.Replace("[%Setor%]", _movimento.SETOR.SETOR1);
             template = template.Replace("[%Cargo%]", _movimento.CARGO.CARGO1);
@@ -167,7 +168,8 @@ namespace MediCloud.BusinessProcess.Cliente.Reports
         {
 
             template = template.Replace("[%Cliente%]", _movimento.CLIENTE.NOMEFANTASIA);
-            template = template.Replace("[%CNPJCliente%]", Util.Util.InserirMascaraCNPJ(_movimento.CLIENTE.CPFCNPJ));
+            template = template.Replace("[%CNPJCliente%]", _movimento.CLIENTE.CPFCNPJ.Length == 14 ? Util.Util.InserirMascaraCNPJ(_movimento.CLIENTE.CPFCNPJ) : Util.Util.InserirMascaraCPF(_movimento.CLIENTE.CPFCNPJ));
+            template = template.Replace("[%CPFCNPJ%]", _movimento.CLIENTE.CPFCNPJ.Length == 14 ? "CNPJ" : "CPF");
             template = template.Replace("[%Funcionario%]", _movimento.FUNCIONARIO.FUNCIONARIO1);
             template = template.Replace("[%Setor%]", _movimento.SETOR.SETOR1);
             template = template.Replace("[%Cargo%]", _movimento.CARGO.CARGO1);

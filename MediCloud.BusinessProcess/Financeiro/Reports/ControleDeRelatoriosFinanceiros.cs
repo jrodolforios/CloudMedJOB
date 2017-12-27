@@ -94,7 +94,6 @@ namespace MediCloud.BusinessProcess.Financeiro.Reports
                     && (idProcedimento <= 0 ? true : y.IDPRO == idProcedimento)
                     && (idFaturamento <= 0 ? true : y.IDFAT == idFaturamento)
                     )
-                    && (idFaturamento <= 0 ? true : x.IDFAT == idFaturamento)
                     && (idCliente <= 0 ? true : idClientes.Contains((int)x.IDCLI))
                     ).ToList();
 

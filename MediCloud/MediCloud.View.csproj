@@ -298,6 +298,7 @@
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Models\Cliente\ArquivoMovimentoModel.cs" />
     <Compile Include="Models\Cliente\ASOModel.cs" />
@@ -490,7 +491,9 @@
     <Content Include="assets\js\wizard.min.js" />
     <Content Include="assets\swf\flashExport.swf" />
     <Content Include="favicon.ico" />
-    <Content Include="Global.asax" />
+    <Content Include="Global.asax">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Areas\HelpPage\Views\Web.config" />
     <Content Include="Areas\HelpPage\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\ResourceModel.cshtml" />
