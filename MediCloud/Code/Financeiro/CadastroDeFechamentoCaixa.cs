@@ -68,7 +68,7 @@ namespace MediCloud.Code.Financeiro
 
         internal static void FecharCaixa(int codigoFechamentoDeCaixa)
         {
-            ControleDeFechamentoCaixa.FecharCaixa(codigoFechamentoDeCaixa);
+            ControleDeFechamentoCaixa.FecharCaixa(codigoFechamentoDeCaixa); 
         }
 
         private static EnumFinanceiro.TipoPagamento getEnumPorString(string TIpoPagamento)

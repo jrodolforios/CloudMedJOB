@@ -62,7 +62,7 @@ namespace MediCloud.Code.Clientes
                     DataProxExame = x.PROXEXAME,
 
                     Faturamento = CadastroDeFaturamento.RecuperarFaturamentoPorID(x.IDFAT, false),
-                    Fornecedor = CadastroDeFornecedor.RecuperarFornecedorPorID(x.IDFOR),
+                    Fornecedor = CadastroDeFornecedor.RecuperarFornecedorPorID(x.IDFOR, materializarClassesDoMovimento),
                     Procedimento = CadastroDeProcedimentos.RecuperarProcedimentoPorID((int)(x.IDPRO.HasValue ? x.IDPRO.Value : 0)),
                     Profissional = CadastroDeProfissional.GetProfissionalPorID(x.IDPRF)
 
@@ -157,6 +157,19 @@ namespace MediCloud.Code.Clientes
         internal static List<ProcedimentoMovimentoModel> RecuperarProcedimentoMovimentoPorTermo(string prefix, bool materializarObjetos = true)
         {
             List<MOVIMENTO_PROCEDIMENTO> contadoresEncontrados = ControleDeProcedimentosMovimento.buscarProcedimentoMovimento(prefix);
+            List<ProcedimentoMovimentoModel> resultados = new List<ProcedimentoMovimentoModel>();
+
+            contadoresEncontrados.ForEach(x =>
+            {
+                resultados.Add(injetarEmUsuarioModelParaAjax(x));
+            });
+
+            return resultados;
+        }
+
+        internal static List<ProcedimentoMovimentoModel> RecuperarProcedimentoMovimentoPorTermoELaudoAudio(string prefix, int IdFuncionario, bool materializarObjetos = true)
+        {
+            List<MOVIMENTO_PROCEDIMENTO> contadoresEncontrados = ControleDeProcedimentosMovimento.buscarProcedimentoMovimentoLaudoAudio(prefix, IdFuncionario);
             List<ProcedimentoMovimentoModel> resultados = new List<ProcedimentoMovimentoModel>();
 
             contadoresEncontrados.ForEach(x =>

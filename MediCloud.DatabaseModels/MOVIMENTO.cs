@@ -21,7 +21,7 @@ namespace MediCloud.DatabaseModels
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public decimal IDMOV { get; set; }
 
-        [StringLength(50)]
+        [StringLength(500)]
         public string OBSERVACAO { get; set; }
 
         [Column(TypeName = "numeric")]

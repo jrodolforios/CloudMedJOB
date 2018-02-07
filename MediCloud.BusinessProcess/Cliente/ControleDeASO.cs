@@ -28,7 +28,7 @@ namespace MediCloud.BusinessProcess.Cliente
                 {
                     return contexto.MOVIMENTO.Where(x => x.CLIENTE.NOMEFANTASIA.Contains(termo)
                         || x.FUNCIONARIO.FUNCIONARIO1.Contains(termo)
-                        || ((int)x.IDMOV).ToString() == termo).ToList();
+                        || ((int)x.IDMOV).ToString() == termo).OrderByDescending(x => x.DATA).ToList();
                 }
             }
             catch (DbEntityValidationException ex)
@@ -40,6 +40,52 @@ namespace MediCloud.BusinessProcess.Cliente
             {
                 throw ex;
             }
+        }
+
+        public static List<MOVIMENTO> UltimosASOS()
+        {
+            CloudMedContext contexto = new CloudMedContext();
+
+            try
+            {
+                return contexto.MOVIMENTO.OrderByDescending(x => x.DATAMOV).Take(5).ToList();
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+                return new List<MOVIMENTO>();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static Dictionary<decimal, int> GraficoASOs()
+        {
+           CloudMedContext contexto = new CloudMedContext();
+            Dictionary<decimal, int> tipo = new Dictionary<decimal, int>();
+            try
+            {
+                var resultado = contexto.MOVIMENTO.GroupBy(x => x.DATA.Year).Select(g => new { g.Key, Count = g.Count() }).OrderByDescending(x => x.Key).Take(7).OrderBy(x => x.Key).ToList();
+
+                foreach (dynamic item in resultado)
+                {
+                    tipo.Add(item.Key, item.Count);
+                }
+
+                return tipo;
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+                return new Dictionary<decimal, int>();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return new Dictionary<decimal, int>();
         }
 
         public static int ContagemASOsNoMes()

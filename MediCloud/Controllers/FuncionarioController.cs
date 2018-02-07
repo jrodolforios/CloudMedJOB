@@ -200,7 +200,7 @@ namespace MediCloud.Controllers
         [HttpPost]
         public JsonResult BuscaFuncionarioAJAX(string Prefix)
         {
-            List<FuncionarioModel> contadoresEncontrados = CadastroDeFuncionario.RecuperarFuncionarioPorTermo(Prefix);
+            List<FuncionarioModel> contadoresEncontrados = CadastroDeFuncionario.RecuperarFuncionarioPorTermoAJAX(Prefix);
             List<AutoCompleteDefaultModel> ObjList = new List<AutoCompleteDefaultModel>();
 
             try

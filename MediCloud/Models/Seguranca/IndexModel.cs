@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MediCloud.Models.Cliente;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -11,5 +12,7 @@ namespace MediCloud.Models.Seguranca
         public int MovimentosNoMês { get; set; }
         public int ProcedimentosNoMes { get; set; }
         public int ConvocacoesNoMes { get; set; }
+        public List<ASOModel> ASOS { get; set; }
+        public Dictionary<decimal, int> GraficoASOs { get; set; }
     }
 }

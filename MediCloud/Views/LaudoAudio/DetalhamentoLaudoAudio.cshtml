@@ -74,6 +74,20 @@
                             <div class="vspace-12-sm"></div>
 
                             <div class="form-group">
+                                <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Funcionário &nbsp;<span class="badge badge-important mail-tag"></span></label>
+
+                                <div class="col-sm-8">
+                                    <input type="hidden" name="idFuncionario" id="idFuncionario" value="@Html.ValueFor(x => x.ProcedimentoMovimento.Movimento.Funcionario.IdFuncionario)" />
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <i class="ace-icon fa fa-search"></i>
+                                        </span>
+                                        <input class="col-xs-12 col-sm-6 componenteFormulario" type="text" id="funcionario" name="funcionario" placeholder="Nome do funcionário" value="@Html.ValueFor(x => x.ProcedimentoMovimento.Movimento.Funcionario.NomeCompleto)" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
                                 <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Procedimento de movimento &nbsp;<span class="badge badge-important mail-tag"></span></label>
 
                                 <div class="col-sm-8">
@@ -384,7 +398,7 @@
     $("#ProcedimentoMovimento").autocomplete({
         source: function (request, response) {
             $.ajax({
-                url: "/ASO/BuscaProcedimentosParaLaudoAJAX",
+                url: "/ASO/BuscaProcedimentosParaLaudoAJAX?IdFuncionario=" + $('#idFuncionario').attr('value'),
                 type: "POST",
                 dataType: "json",
                 data: { Prefix: request.term },
@@ -417,4 +431,34 @@
     function imprimirAudiometria(codigo) {
         window.location.replace("/LaudoAudio/ImprimirAudiometria?codigoAudiometria=" + codigo);
     }
+
+    $("#funcionario").autocomplete({
+        source: function (request, response) {
+            $.ajax({
+                url: "/Funcionario/BuscaFuncionarioAJAX",
+                type: "POST",
+                dataType: "json",
+                data: { Prefix: request.term},
+                success: function (data) {
+                    response($.map(data, function (item) {
+                        return { label: item.Name, value: item.Name, Id: item.Id };
+                    }))
+
+                }
+            })
+        },
+        select: function (event, ui) {
+            $('#idFuncionario').attr('value', ui.item.Id);
+            $('#funcionario').val(ui.item.label);
+            return false;
+        },
+        messages: {
+            noResults: "Sem resultados", results: ""
+        }
+    });
+    $('#funcionario').on('blur', function () {
+        if ($(this).val().length === 0) {  //check for no. of characters entered
+            $('#idFuncionario').attr('value', 0);  // clear the textbox
+        }
+    });
 </script>

@@ -35,8 +35,22 @@ namespace MediCloud.Code.Funcionario
             return listaDeModels;
         }
 
+        internal static List<FuncionarioModel> RecuperarFuncionarioPorTermoAJAX(string prefix)
+        {
+            List<FuncionarioModel> listaDeModels = new List<FuncionarioModel>();
 
-        public static FuncionarioModel injetarEmUsuarioModel(FUNCIONARIO x)
+            List<FUNCIONARIO> usuarioDoBanco = ControleDeFuncionario.buscarFuncionario(prefix);
+
+            usuarioDoBanco.ForEach(x =>
+            {
+                listaDeModels.Add(injetarEmUsuarioModel(x,false));
+            });
+
+            return listaDeModels;
+        }
+
+
+        public static FuncionarioModel injetarEmUsuarioModel(FUNCIONARIO x, bool materializarClasses = true)
         {
             if (x == null)
                 return null;
@@ -46,7 +60,7 @@ namespace MediCloud.Code.Funcionario
                     CodigoNexo = x.CODNEXO,
                     CTPS = x.CTPS,
                     DataNascimento = x.NASCIMENTO,
-                    Empresa = CadastroDeClientes.RecuperarClientePorID((int)x.IDCLI),
+                    Empresa = CadastroDeClientes.RecuperarClientePorID((int)x.IDCLI, materializarClasses),
                     Endereco = x.ENDERECO,
                     IdFuncionario = (int)x.IDFUN,
                     Inativo = x.INATIVO,

@@ -107,7 +107,7 @@ namespace MediCloud.Code.Clientes
             else
                 return new EmpresaModel()
                 {
-                    Cliente = new ClienteModel() { IdCliente = (int)x.IDCLI},
+                    Cliente = new ClienteModel() { IdCliente = (int)x.IDCLI },
                     Email = x.EMAIL,
                     IdEmpresa = (int)x.IDEMP,
                     NomeResponsavel = x.NOMERESP,
@@ -230,6 +230,41 @@ namespace MediCloud.Code.Clientes
             };
         }
 
+        internal static List<ClienteModel> RecuperarClientePorTermoAJAX(string prefix)
+        {
+            List<CLIENTE> contadoresEncontrados = ControleDeClientes.buscarCliente(prefix);
+            List<ClienteModel> resultados = new List<ClienteModel>();
+
+            contadoresEncontrados.ForEach(x =>
+            {
+                resultados.Add(injetarEmUsuarioModelAJAX(x));
+            });
+
+            return resultados;
+        }
+
+        private static ClienteModel injetarEmUsuarioModelAJAX(CLIENTE x)
+        {
+            return new ClienteModel()
+            {
+                IdCliente = (int)x.IDCLI,
+                Bairro = x.BAIRRO,
+                CEP = x.CEP,
+                Cidade = x.CIDADE,
+                CNPJ = x.CPFCNPJ,
+
+                ElaboradorDoPCMSO = CadastroDeElaboradorPCMSO.InjetarEmUsuarioModel(x.EPCMSO),
+                ElaboradorDoPPRA = CadastroDeElaboradorPPRA.InjetarEmUsuarioModel(x.EPPRA),
+                EnderecoCompleto = x.ENDERECO,
+                NomeFantasia = x.NOMEFANTASIA,
+                NumeroDeFuncionarios = x.NFUN,
+                RazaoSocial = x.RAZAOSOCIAL,
+                TipoEmpresa = getTipoCliente(x.TIPOCLIENTE),
+                UF = x.UF,
+                Observacoes = x.OBSERVACOES
+            };
+        }
+
         internal static EmpresaModel RecuperarEmpresaPorID(int codigoDaEmpresa)
         {
             if (codigoDaEmpresa != 0)
@@ -241,7 +276,7 @@ namespace MediCloud.Code.Clientes
                 return null;
         }
 
-        internal static List<ClienteModel> RecuperarContadorPorTermo(string prefix)
+        internal static List<ClienteModel> RecuperarClientePorTermo(string prefix)
         {
             List<CLIENTE> contadoresEncontrados = ControleDeClientes.buscarCliente(prefix);
             List<ClienteModel> resultados = new List<ClienteModel>();
@@ -281,7 +316,7 @@ namespace MediCloud.Code.Clientes
 
         internal static void DeletarCliente(ClienteController clienteController, int codigoDoUsuario)
         {
-                ControleDeClientes.ExcluirCliente(codigoDoUsuario);
+            ControleDeClientes.ExcluirCliente(codigoDoUsuario);
         }
 
         private static EnumCliente.tipoEmpresa getTipoCliente(string tIPOCLIENTE)
@@ -299,12 +334,15 @@ namespace MediCloud.Code.Clientes
             }
         }
 
-        internal static ClienteModel RecuperarClientePorID(int? codigoCliente)
+        internal static ClienteModel RecuperarClientePorID(int? codigoCliente, bool carregarClasses = true)
         {
             if (codigoCliente.HasValue && codigoCliente != 0)
             {
                 CLIENTE usuarioencontrado = ControleDeClientes.buscarCliente(codigoCliente.Value);
-                return injetarEmUsuarioModel(usuarioencontrado);
+                if (carregarClasses)
+                    return injetarEmUsuarioModel(usuarioencontrado);
+                else
+                    return injetarEmUsuarioModelAJAX(usuarioencontrado);
             }
             else
                 return null;

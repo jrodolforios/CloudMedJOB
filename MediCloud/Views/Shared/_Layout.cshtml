@@ -372,21 +372,21 @@
             </script>
 
             <div class="sidebar-shortcuts" id="sidebar-shortcuts">
-                <div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
-                    <a class="btn btn-success" href="/ASO">
+                <div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large" >
+                    <a class="  btn btn-success" href="/ASO" title="Criar um ASO">
                         <i class="ace-icon fa fa-file-text-o"></i>
                     </a>
 
-                    <a class="btn btn-info" href="/Funcionario">
-                        <i class="ace-icon fa fa-male"></i>
+                    <a class="tooltipCloudMed  btn btn-info" href="/Funcionario" title="Cadastrar funcionário">
+                        <i class=" ace-icon fa fa-male"></i>
                     </a>
 
-                    <a class="btn btn-warning" href="/Cliente">
-                        <i class="ace-icon fa fa-building"></i>
+                    <a class="tooltipCloudMed  btn btn-warning" href="/LaudoAudio" title="Cadastrar audiometria">
+                        <i class="ace-icon fa fa-volume-up"></i>
                     </a>
 
-                    <a class="btn btn-danger" href="/Recomendacao">
-                        <i class="ace-icon fa fa-university"></i>
+                    <a class="tooltipCloudMed  btn btn-danger" href="/Recomendacao" title="Configurar recomendação">
+                        <i class=" ace-icon fa fa-university"></i>
                     </a>
                 </div>
 
@@ -1061,7 +1061,19 @@
                     <i class="ace-icon fa fa-times"></i>
                     Fechar
                 </button>
+
                 <script type="text/javascript">
+                    $(".tooltipCloudMed").tooltip({
+                        show: null,
+                        position: {
+                            my: "left top",
+                            at: "left bottom"
+                        },
+                        open: function (event, ui) {
+                            ui.tooltip.animate({ top: ui.tooltip.position().top + 10 }, "fast");
+                        }
+                    });
+
                     $('#SalvarSenha').click(function () {
                         var senhaAtual = $('#SenhaAtual').val();
                         var NovaSenha = $('#NovaSenha').val();
@@ -1088,6 +1100,5 @@
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
-    </div>
 </body>
 </html>

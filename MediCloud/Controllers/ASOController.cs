@@ -518,9 +518,9 @@ namespace MediCloud.Controllers
         }
 
         [HttpPost]
-        public JsonResult BuscaProcedimentosParaLaudoAJAX(string Prefix)
+        public JsonResult BuscaProcedimentosParaLaudoAJAX(string Prefix, int IdFuncionario)
         {
-            List<ProcedimentoMovimentoModel> contadoresEncontrados = CadastroDeProcedimentosMovimento.RecuperarProcedimentoMovimentoPorTermo(Prefix);
+            List<ProcedimentoMovimentoModel> contadoresEncontrados = CadastroDeProcedimentosMovimento.RecuperarProcedimentoMovimentoPorTermoELaudoAudio(Prefix, IdFuncionario);
             List<AutoCompleteDefaultModel> ObjList = new List<AutoCompleteDefaultModel>();
 
             try

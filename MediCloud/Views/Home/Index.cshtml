@@ -1,4 +1,5 @@
 ﻿@model  MediCloud.Models.Seguranca.IndexModel
+@using MediCloud.Models.Cliente
 <style type="text/css">
     div.container4 {
         height: 40em;
@@ -15,10 +16,10 @@
             width: 200px;
         }
 
-        div.container4 p i {
-            font-size: 20em;
-            color:#e5e5e5
-        }
+            div.container4 p i {
+                font-size: 20em;
+                color: #e5e5e5
+            }
 </style>
 <div class=container4>
     <div class="col-sm-12 infobox-container">
@@ -76,7 +77,177 @@
                 <div class="infobox-content">Proc. no mês</div>
             </div>
         </div>
-
     </div>
-   <p><i class="fa fa-stethoscope"></i></p>
+
+    <h4 class="header blue bolder smaller">&nbsp;</h4>
+    <div class="vspace-12-sm"></div>
+
+    <div class="row">
+        <div class="col-sm-3">
+            <a href="/ASO" class="btn btn-success btn-block">
+                <div>
+                    <h1><i class="ace-icon fa fa-file-text-o"></i></h1>
+                    Crie um ASO
+                </div>
+            </a>
+        </div>
+        <div class="col-sm-3">
+            <A href="/Funcionario" class="btn btn-primary btn-block">
+                <div>
+                    <h1><i class="ace-icon fa fa-male"></i></h1>
+                    Adicione um funcionário
+                </div>
+            </A>
+        </div>
+        @*<div class="col-sm-2">
+            <a href="/Cliente" class="btn btn-warning btn-block">
+                <div>
+                    <h1><i class="ace-icon fa fa-building"></i></h1>
+                    Cadastre um cliente
+                </div>
+            </a>
+        </div>*@
+        <div class="col-sm-3">
+            <a href="/LaudoAudio" class="btn btn-warning btn-block">
+                <div>
+                    <h1><i class="ace-icon fa fa-volume-up"></i></h1>
+                    Cadastre uma audiometria
+                </div>
+            </a>
+        </div>
+
+        <div class="col-sm-3">
+            <a href="/Recomendacao" class="btn btn-danger btn-block">
+                <div >
+                    <h1><i class="ace-icon fa fa-university"></i></h1>
+                    Configure uma recomendação
+                </div>
+            </a>
+        </div>
+    </div>
+    <div class="row col-sm-12">
+        <p>&nbsp;</p>
+    </div>
+    <div class="col-sm-6">
+        <div class="widget-box">
+            <div class="widget-header">
+                <h4 class="widget-title lighter smaller">
+                    <i class="ace-icon fa fa-file-alt blue"></i>
+                    Últimos ASOs
+                </h4>
+            </div>
+
+            <div class="widget-body">
+                <div class="widget-main no-padding">
+                    <div class="dialogs">
+                        <div class="itemdiv dialogdiv">
+                            @if (Model.ASOS.Any())
+                            {
+                                foreach (ASOModel item in Model.ASOS)
+                                {
+                                    <div class="user">
+                                        <i class="ace-icon fa fa-file-alt blue"></i>
+                                    </div>
+                                    <div class="body">
+                                        <div class="time">
+                                            <i class="ace-icon fa fa-clock-o"></i>  
+                                            <span class="green">@(item.Data.HasValue ? item.Data.Value.ToShortDateString() : string.Empty)</span>
+                                        </div>
+
+                                        <div class="name">
+                                            <a href="/ASO/DetalhamentoASO?codigoASO=@item.IdASO">@item.Funcionario.NomeCompleto</a>
+                                        </div>
+                                        <div class="text"><b>Cliente: </b> @item.Cliente.RazaoSocial &nbsp;&nbsp; <b>Cargo: </b> @item.Cargo.NomeCargo
+                                        <br/> <b>Referente a: </b> @item.Referente.NomeReferencia </div>
+
+                                        <div class="tools">
+                                            <a href="javascript:imprimirASO(@item.IdASO);" class="tooltipCloudMed btn btn-minier btn-info" title="Imprimir com Médico Coord">
+                                                <i class="icon-only ace-icon fa fa-file-text-o"></i>
+                                            </a>
+                                            &nbsp;&nbsp;
+                                            <a href="javascript:GerarRecibo(@item.IdASO);" class="tooltipCloudMed btn btn-minier btn-info" title="Gerar recibo">
+                                                <i class="icon-only ace-icon fa fa-file-excel-o"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                        </div>
+                    </div>
+
+                </div><!-- /.widget-main -->
+            </div><!-- /.widget-body -->
+        </div><!-- /.widget-box -->
+    </div><!-- /.col -->
+    <div class="col-sm-6">
+        <div class="widget-box transparent">
+            <div class="widget-header widget-header-flat">
+                <h4 class="widget-title lighter">
+                    <i class="ace-icon fa fa-signal"></i>
+                    ASOs por ano
+                </h4>
+            </div>
+
+            <div class="widget-body">
+                <div class="widget-main padding-4">
+                    <div id="sales-charts"></div>
+                </div><!-- /.widget-main -->
+            </div><!-- /.widget-body -->
+        </div><!-- /.widget-box -->
+    </div><!-- /.col -->
 </div>
+        
+<script src="/assets/js/jquery-2.1.4.min.js"></script>
+
+<script src="/assets/js/jquery-ui.custom.min.js"></script>
+<script src="/assets/js/jquery.ui.touch-punch.min.js"></script>
+<script src="/assets/js/jquery.easypiechart.min.js"></script>
+<script src="/assets/js/jquery.sparkline.index.min.js"></script>
+<script src="/assets/js/jquery.flot.min.js"></script>
+<script src="/assets/js/jquery.flot.pie.min.js"></script>
+<script src="/assets/js/jquery.flot.resize.min.js"></script>
+
+<script src="assets/js/ace-elements.min.js"></script>
+<script src="assets/js/ace.min.js"></script>
+
+<script src="assets/js/bootstrap.min.js"></script>
+
+<script type="text/javascript">
+    var d1 = [];
+</script>
+
+@foreach (var item in Model.GraficoASOs)
+{
+    <script type="text/javascript">
+        d1.push([@item.Key,   @item.Value]);
+    </script>
+}
+
+<script type="text/javascript">
+        var sales_charts = $('#sales-charts').css({ 'width': '100%', 'height': '280px' });
+        $.plot("#sales-charts", [
+            { label: "ASOs", data: d1 }
+        ], {
+                hoverable: true,
+                shadowSize: 0,
+                series: {
+                    lines: { show: true },
+                    points: { show: true }
+                },
+            
+                grid: {
+                    backgroundColor: { colors: ["#fff", "#fff"] },
+                    borderWidth: 1,
+                    borderColor: '#555'
+                }
+            });
+
+        function imprimirASO(codigo) {
+            window.location.replace("/ASO/ImprimirASOComMedCoord?codigoASO=" + codigo);
+        }
+
+        function GerarRecibo(codigo) {
+            window.location.replace("/ASO/ImprimirReciboASO?codigoASO=" + codigo);
+        }
+
+</script>

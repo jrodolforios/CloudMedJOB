@@ -95,6 +95,9 @@ namespace MediCloud.BusinessProcess.Cliente
             CloudMedContext contexto = new CloudMedContext();
             MOVIMENTO_PROCEDIMENTO usuarioSalvo = new MOVIMENTO_PROCEDIMENTO();
 
+            if (!procedimentoMovimentoDAO.PROXEXAME.HasValue)
+                procedimentoMovimentoDAO.PROXEXAME = procedimentoMovimentoDAO.DATAEXAME.HasValue ? (DateTime?)procedimentoMovimentoDAO.DATAEXAME.Value.AddYears(1) : null;
+
             procedimentoMovimentoDAO = CacularValorTotal(procedimentoMovimentoDAO);
 
             try
@@ -184,6 +187,27 @@ namespace MediCloud.BusinessProcess.Cliente
             try
             {
                 List<MOVIMENTO_PROCEDIMENTO> funcionario = contexto.MOVIMENTO_PROCEDIMENTO.Where(x => x.MOVIMENTO.CLIENTE.NOMEFANTASIA.Contains(prefix) || x.MOVIMENTO.FUNCIONARIO.FUNCIONARIO1.Contains(prefix)).ToList();
+
+                return funcionario;
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            return null;
+        }
+
+        public static List<MOVIMENTO_PROCEDIMENTO> buscarProcedimentoMovimentoLaudoAudio(string prefix, int IdFuncionario)
+        {
+            CloudMedContext contexto = new CloudMedContext();
+            try
+            {
+                List<MOVIMENTO_PROCEDIMENTO> funcionario = contexto.MOVIMENTO_PROCEDIMENTO.Where(x => (x.PROCEDIMENTO.PROCEDIMENTO1.Contains(prefix)) && x.PROCEDIMENTO.PROCEDIMENTO1.ToLower().Contains("AUDIO") && (int)x.MOVIMENTO.IDFUN == IdFuncionario).ToList();
 
                 return funcionario;
             }

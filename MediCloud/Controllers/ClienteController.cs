@@ -285,7 +285,7 @@ namespace MediCloud.Controllers
         [HttpPost]
         public JsonResult BuscaClienteAJAX(string Prefix)
         {
-            List<ClienteModel> contadoresEncontrados = CadastroDeClientes.RecuperarContadorPorTermo(Prefix);
+            List<ClienteModel> contadoresEncontrados = CadastroDeClientes.RecuperarClientePorTermoAJAX(Prefix);
             List<AutoCompleteDefaultModel> ObjList = new List<AutoCompleteDefaultModel>();
 
             try

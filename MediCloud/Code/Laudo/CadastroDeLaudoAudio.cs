@@ -127,7 +127,7 @@ namespace MediCloud.Code.Laudo
                 OEO6K = string.IsNullOrEmpty(form["OEO6K"]) ? null : (int?)Convert.ToInt32(form["OEO6K"]),
                 OEO8K = string.IsNullOrEmpty(form["OEO8K"]) ? null : (int?)Convert.ToInt32(form["OEO8K"]),
 
-                ProcedimentoMovimento = CadastroDeProcedimentosMovimento.BuscarProcedimentoDeMovimentoPorID(string.IsNullOrEmpty(form["idProcedimentoMovimento"]) ? 0 : Convert.ToInt32(form["idProcedimentoMovimento"]))
+                ProcedimentoMovimento = CadastroDeProcedimentosMovimento.BuscarProcedimentoDeMovimentoPorID(string.IsNullOrEmpty(form["idProcedimentoMovimento"]) ? 0 : Convert.ToInt32(form["idProcedimentoMovimento"]), false)
             };
         }
 
@@ -202,7 +202,7 @@ namespace MediCloud.Code.Laudo
             LAUDOAUD laudoDAO = InjetarEmCargoModelDAO(usuarioModel);
             laudoDAO = ControleDeLaudoAudio.SalvarLaudoAudio(laudoDAO);
 
-            usuarioModel = InjetarEmUsuarioModel(laudoDAO);
+            usuarioModel = InjetarEmUsuarioModel(laudoDAO, false);
 
             return usuarioModel;
         }

@@ -48,7 +48,7 @@
                             </span>
                         </h4>
                     </div>
-                    <p><b>Referente a:</b> @item.Referente.NomeReferencia <br /> <b>Cargo:</b> @item.Cargo.NomeCargo</p>
+                    <p><b>Referente a:</b> @item.Referente.NomeReferencia &nbsp;&nbsp; <b>Data:</b> @(item.Data.HasValue ? item.Data.Value.ToShortDateString() : string.Empty) <br /> <b>Cargo:</b> @item.Cargo.NomeCargo</p>
 
                     <div class="search-actions text-center">
                         <span class="blue bolder bigger-110">Ações</span>

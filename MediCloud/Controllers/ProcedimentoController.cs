@@ -143,7 +143,7 @@ namespace MediCloud.Controllers
         [HttpPost]
         public JsonResult BuscarProcedimentoByFornecedorAJAX(string Prefix, int Fornecedor, int Tabela)
         {
-            List<ProcedimentoModel> contadoresEncontrados = CadastroDeProcedimentos.RecuperarContadorPorTermoEFornecedor(Prefix, Fornecedor, Tabela);
+            List<ProcedimentoModel> contadoresEncontrados = CadastroDeProcedimentos.RecuperarContadorPorTermoEFornecedor(Prefix.Trim(), Fornecedor, Tabela);
             List<AutoCompleteProcendimentoMovimentoModel> ObjList = new List<AutoCompleteProcendimentoMovimentoModel>();
 
             try

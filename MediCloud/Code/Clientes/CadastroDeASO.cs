@@ -32,6 +32,25 @@ namespace MediCloud.Code.Clientes
             return listaDeModels;
         }
 
+        internal static List<ASOModel> UltimosASOS()
+        {
+            List<ASOModel> listaDeModels = new List<ASOModel>();
+
+            List<MOVIMENTO> usuarioDoBanco = ControleDeASO.UltimosASOS();
+
+            usuarioDoBanco.ForEach(x =>
+            {
+                listaDeModels.Add(injetarEmUsuarioModel(x, false));
+            });
+
+            return listaDeModels;
+        }
+
+        internal static Dictionary<decimal, int> GraficoASOs()
+        {
+            return ControleDeASO.GraficoASOs();
+        }
+
         internal static int ContagemASOsNoMes()
         {
             return ControleDeASO.ContagemASOsNoMes();
@@ -50,7 +69,7 @@ namespace MediCloud.Code.Clientes
                 return new ASOModel()
                 {
                     Cargo = CadastroDeCargo.RecuperarCargoPorID((int)x.IDCGO),
-                    Cliente = CadastroDeClientes.RecuperarClientePorID((int)x.IDCLI),
+                    Cliente = CadastroDeClientes.RecuperarClientePorID((int)x.IDCLI, carregarClasses),
                     Data = x.DATA,
                     FormaPagamento = carregarClasses ? CadastroFormaPagamento.RecuperarFormaPagamentoPorID((int)x.IDFORPAG) : new Models.Financeiro.FormaPagamentoModel() {IdFormaPagamento = (int)x.IDFORPAG },
                     Funcionario = CadastroDeFuncionario.RecuperarFuncionarioPorID((int)x.IDFUN),
