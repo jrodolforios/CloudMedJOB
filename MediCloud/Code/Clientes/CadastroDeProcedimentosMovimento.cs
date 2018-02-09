@@ -167,9 +167,9 @@ namespace MediCloud.Code.Clientes
             return resultados;
         }
 
-        internal static List<ProcedimentoMovimentoModel> RecuperarProcedimentoMovimentoPorTermoELaudoAudio(string prefix, int IdFuncionario, bool materializarObjetos = true)
+        internal static List<ProcedimentoMovimentoModel> RecuperarProcedimentoMovimentoPorTermoELaudo(string prefix, int IdFuncionario, bool materializarObjetos = true)
         {
-            List<MOVIMENTO_PROCEDIMENTO> contadoresEncontrados = ControleDeProcedimentosMovimento.buscarProcedimentoMovimentoLaudoAudio(prefix, IdFuncionario);
+            List<MOVIMENTO_PROCEDIMENTO> contadoresEncontrados = ControleDeProcedimentosMovimento.buscarProcedimentoMovimentoLaudo(prefix, IdFuncionario);
             List<ProcedimentoMovimentoModel> resultados = new List<ProcedimentoMovimentoModel>();
 
             contadoresEncontrados.ForEach(x =>

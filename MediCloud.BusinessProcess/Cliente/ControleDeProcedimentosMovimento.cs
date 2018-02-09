@@ -202,12 +202,12 @@ namespace MediCloud.BusinessProcess.Cliente
             return null;
         }
 
-        public static List<MOVIMENTO_PROCEDIMENTO> buscarProcedimentoMovimentoLaudoAudio(string prefix, int IdFuncionario)
+        public static List<MOVIMENTO_PROCEDIMENTO> buscarProcedimentoMovimentoLaudo(string prefix, int IdFuncionario)
         {
             CloudMedContext contexto = new CloudMedContext();
             try
             {
-                List<MOVIMENTO_PROCEDIMENTO> funcionario = contexto.MOVIMENTO_PROCEDIMENTO.Where(x => (x.PROCEDIMENTO.PROCEDIMENTO1.Contains(prefix)) && x.PROCEDIMENTO.PROCEDIMENTO1.ToLower().Contains("AUDIO") && (int)x.MOVIMENTO.IDFUN == IdFuncionario).ToList();
+                List<MOVIMENTO_PROCEDIMENTO> funcionario = contexto.MOVIMENTO_PROCEDIMENTO.Where(x => (x.PROCEDIMENTO.PROCEDIMENTO1.Contains(prefix)) && (int)x.MOVIMENTO.IDFUN == IdFuncionario).ToList();
 
                 return funcionario;
             }
