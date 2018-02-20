@@ -99,7 +99,7 @@ namespace MediCloud.BusinessProcess.Cliente
                 }
                 else
                 {
-                    ValidarCargo();
+                    ValidarCargo(contexto, cargoDAO);
                     cargoSalvo = contexto.CARGO.Add(cargoDAO);
                 }
 
@@ -118,7 +118,7 @@ namespace MediCloud.BusinessProcess.Cliente
             }
         }
 
-        private static void ValidarCargo()
+        private static void ValidarCargo(CloudMedContext contexto, CARGO cargoDAO)
         {
             if (contexto.CARGO.Any(x => x.CARGO1 == cargoDAO.CARGO1))
                 throw new InvalidOperationException("Já existe um cargo no sistema com este mesmo nome.");
