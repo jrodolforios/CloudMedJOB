@@ -86,8 +86,6 @@ namespace MediCloud.BusinessProcess.Cliente
 
             try
             {
-                if (contexto.CARGO.Any(x => x.CARGO1 == cargoDAO.CARGO1))
-                    throw new InvalidOperationException("Já existe um cargo no sistema com este mesmo nome.");
 
                 if (cargoDAO.IDCGO > 0)
                 {
@@ -101,6 +99,7 @@ namespace MediCloud.BusinessProcess.Cliente
                 }
                 else
                 {
+                    ValidarCargo();
                     cargoSalvo = contexto.CARGO.Add(cargoDAO);
                 }
 
@@ -117,6 +116,12 @@ namespace MediCloud.BusinessProcess.Cliente
             {
                 throw ex;
             }
+        }
+
+        private static void ValidarCargo()
+        {
+            if (contexto.CARGO.Any(x => x.CARGO1 == cargoDAO.CARGO1))
+                throw new InvalidOperationException("Já existe um cargo no sistema com este mesmo nome.");
         }
 
         public static List<CARGO> buscarCargosPorTermo(string prefix)
