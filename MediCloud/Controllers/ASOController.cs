@@ -172,7 +172,6 @@ namespace MediCloud.Controllers
         [HttpPost]
         public ActionResult SalvarProcedimentoMovimento(FormCollection form)
         {
-            ProcedimentoMovimentoModel modelProcedimentoMovimento = null;
             int codigoASO = Convert.ToInt32(form["codigoASOProcedimento"]);
             try
             {

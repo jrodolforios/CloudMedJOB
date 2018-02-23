@@ -84,7 +84,7 @@ namespace MediCloud.Code.Clientes
                     IdFechamentoCaixa = x.IDFCX,
                     Faturamento = carregarClasses ? CadastroDeFaturamento.RecuperarFaturamentoPorID(x.IDFAT, false) : (x.IDFAT.HasValue ? new Models.Financeiro.FaturamentoModel() { IdFaturamento = (int)x.IDFAT} : new Models.Financeiro.FaturamentoModel()),
 
-                    ProcedimentosMovimento = carregarClasses ? CadastroDeProcedimentosMovimento.BuscarProcedimentosDeMovimentoPorIDMovimento(x.IDMOV) : new List<ProcedimentoMovimentoModel>(),
+                    ProcedimentosMovimento = carregarClasses ? CadastroDeProcedimentosMovimento.BuscarProcedimentoDeMovimentoPorIDASO((int)x.IDMOV) : new List<ProcedimentoMovimentoModel>(),
 
                     AnexosMovimento = CarregarArquivosDeASOSemBinarios(x.IDMOV)
 

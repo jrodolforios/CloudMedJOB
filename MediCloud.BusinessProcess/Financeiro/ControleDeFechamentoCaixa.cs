@@ -21,7 +21,7 @@ namespace MediCloud.BusinessProcess.Financeiro
                 return contexto.FECHAMENTO_CAIXA.Where(x => prefix.Contains(x.USUARIO.ToString())
                                                     || prefix.Contains(x.DATA.Month.ToString())
                                                     || prefix.Contains(x.DATA.Year.ToString())
-                                                    || prefix.Contains(x.DATA.Day.ToString())).ToList();
+                                                    || prefix.Contains(x.DATA.Day.ToString())).OrderByDescending(x => x.DATA).ToList();
             }
             catch (DbEntityValidationException ex)
             {

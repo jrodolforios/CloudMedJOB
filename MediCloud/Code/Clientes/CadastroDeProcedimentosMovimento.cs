@@ -62,7 +62,7 @@ namespace MediCloud.Code.Clientes
                     DataProxExame = x.PROXEXAME,
 
                     Faturamento = CadastroDeFaturamento.RecuperarFaturamentoPorID(x.IDFAT, false),
-                    Fornecedor = CadastroDeFornecedor.RecuperarFornecedorPorID(x.IDFOR, materializarClassesDoMovimento),
+                    Fornecedor = CadastroDeFornecedor.RecuperarFornecedorPorID(x.IDFOR, false),
                     Procedimento = CadastroDeProcedimentos.RecuperarProcedimentoPorID((int)(x.IDPRO.HasValue ? x.IDPRO.Value : 0)),
                     Profissional = CadastroDeProfissional.GetProfissionalPorID(x.IDPRF)
 

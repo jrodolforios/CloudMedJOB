@@ -16,23 +16,23 @@ namespace MediCloud.Code.Financeiro
         {
             string prefix = form["keywords"];
 
-            return RecuperarFechamentoCaixaPorTermo(prefix);
+            return RecuperarFechamentoCaixaPorTermo(prefix, false);
         }
 
-        internal static List<FechamentoCaixaModel> RecuperarFechamentoCaixaPorTermo(string prefix)
+        internal static List<FechamentoCaixaModel> RecuperarFechamentoCaixaPorTermo(string prefix, bool recuperarClasses = true)
         {
             List<FECHAMENTO_CAIXA> contadoresEncontrados = ControleDeFechamentoCaixa.RecuperarFechamentoCaixaPorTermo(prefix);
             List<FechamentoCaixaModel> resultados = new List<FechamentoCaixaModel>();
 
             contadoresEncontrados.ForEach(x =>
             {
-                resultados.Add(InjetarEmUsuarioModel(x));
+                resultados.Add(InjetarEmUsuarioModel(x, recuperarClasses));
             });
 
             return resultados;
         }
 
-        private static FechamentoCaixaModel InjetarEmUsuarioModel(FECHAMENTO_CAIXA x)
+        private static FechamentoCaixaModel InjetarEmUsuarioModel(FECHAMENTO_CAIXA x, bool recuperarClasses = true)
         {
             if (x == null)
                 return null;
@@ -48,7 +48,7 @@ namespace MediCloud.Code.Financeiro
                     Usuario = x.USUARIO,
                     Valor = x.TOTAL,
 
-                    detalhesFechamentoCaixa = RecuperarDetalhesFechamento((int)x.IDFCX)
+                    detalhesFechamentoCaixa = recuperarClasses ? RecuperarDetalhesFechamento((int)x.IDFCX) : new List<DetalheFechamentoCaixaModel>()
 
                 };
         }
