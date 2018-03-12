@@ -25,6 +25,12 @@ namespace MediCloud.Models.Parametro
             if (string.IsNullOrEmpty(NomeProfissional))
                 erros.Add("O campo \"Nome\" é de preenchimento obrigratório");
 
+            if (string.IsNullOrEmpty(IdProfissional))
+                erros.Add("O campo \"Código\" é de preenchimento obrigratório");
+
+            if (!string.IsNullOrEmpty(IdProfissional) && IdProfissional.Length > 4)
+                erros.Add("O campo \"Código\" não pode conter mais que 4 caracteres");
+
 
             if (erros.Any())
             {
