@@ -58,17 +58,7 @@
     <div class="col-xs-12">
         <div id="user-profile-3" class="user-profile row">
             <div class="col-sm-offset-1 col-sm-10">
-                <div class="well well-sm">
-                    <!-- -
-                    <button type="button" class="close" data-dismiss="alert">&times;</button>
-                    &nbsp; -->
-                    <div class="inline middle blue bigger-110"> <span class="formPercent">0%</span> do cadastro concluído </div>
-
-                    &nbsp; &nbsp; &nbsp;
-                    <div style="width:200px;" data-percent="70%" class="inline middle no-margin progress progress-striped active pos-rel">
-                        <div class="progress-bar progress-bar-success" style="width:70%"></div>
-                    </div>
-
+               
                 </div><!-- /.well -->
                 <div class="row">
                     <label class="col-sm-4 control-label no-padding-right" for="form-field-username"><span class="badge badge-important mail-tag"></span>Obrigatório</label>
@@ -300,22 +290,18 @@
                                             <div class="widget-main">
                                                 <ul class="list-unstyled spaced2">
                                                     <li>
-                                                        <i class="ace-icon fa fa-check green"></i>
                                                         Total desta ASO: <b>R$ @valorTotalDaASO</b>
                                                     </li>
 
                                                     <li>
-                                                        <i class="ace-icon fa fa-check green"></i>
                                                         Código de fechamento do caixa: <b>@Html.ValueFor(x => x.IdFechamentoCaixa)</b>
                                                     </li>
 
                                                     <li>
-                                                        <i class="ace-icon fa fa-check green"></i>
                                                         Data do faturamento: <b>@Html.ValueFor(x => x.Faturamento.Data)</b>
                                                     </li>
 
                                                     <li>
-                                                        <i class="ace-icon fa fa-check green"></i>
                                                         Usuário: <b>@Html.ValueFor(x => x.Usuario)</b>
                                                     </li>
                                                 </ul>
@@ -1034,36 +1020,6 @@
                                                             $('#idSetor').attr('value', 0);  // clear the textbox
                                                         }
                                                     });
-
-
-                                                    $(document).ready(function () {
-                                                        $('input').on('change', function () {
-                                                            var cntreq = 0;
-                                                            var cntvals = 0;
-                                                            $(".componenteFormulario").each(atualizarProgressBar());
-                                                        });
-
-                                                        var cntreq3 = 0;
-                                                        var cntvals3 = 0;
-                                                        $(".componenteFormulario").each(atualizarProgressBar());
-
-                                                    });
-                                                    function atualizarProgressBar() {
-                                                        var cntreq = 0;
-                                                        var cntvals = 0;
-                                                        $(".componenteFormulario").each(function (val) {
-                                                            cntreq++;
-                                                            if ($(this).val() != '') {
-                                                                cntvals++;
-                                                            }
-                                                        });
-                                                        var count = (cntvals / cntreq) * 100;
-                                                        count = parseInt(count);
-                                                        $('.formPercent').empty();
-                                                        $('.progress-striped').attr("data-percent", count + '%');
-                                                        $('div.progress-bar-success').attr("style", "width: " + count + '%');
-                                                        $('.formPercent').append(count + '% ');
-                                                    }
 
 
                                                     if (!ace.vars['touch']) {
