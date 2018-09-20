@@ -1,13 +1,13 @@
 namespace MediCloud.DatabaseModels
 {
     using System;
-    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
-    using System.Data.Entity.Spatial;
 
     public partial class SYS_USRON
     {
+        #region Public Properties
+
         [Key]
         [Column(Order = 0, TypeName = "numeric")]
         public decimal CODUSU { get; set; }
@@ -19,10 +19,12 @@ namespace MediCloud.DatabaseModels
         [StringLength(100)]
         public string IP { get; set; }
 
+        public virtual SYS_USUARIO SYS_USUARIO { get; set; }
+
         [Required]
         [StringLength(16)]
         public string VERSAO { get; set; }
 
-        public virtual SYS_USUARIO SYS_USUARIO { get; set; }
+        #endregion Public Properties
     }
 }

@@ -7,37 +7,65 @@ using MediCloud.Models.Seguranca;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace MediCloud.Controllers
 {
     public class CidadeController : BaseController
     {
-        // GET: Cidade
-        public ActionResult Index()
-        {
-            EstahLogado();
-            return View();
-        }
+        #region Public Methods
 
         [HttpPost]
-        public ActionResult Index(FormCollection form)
+        public JsonResult BuscaCidadeAJAX(string Prefix)
         {
+            List<CidadeModel> contadoresEncontrados = CadastroDeCidade.buscarCidade(Prefix);
+            List<AutoCompleteDefaultModel> ObjList = new List<AutoCompleteDefaultModel>();
+
             try
             {
-                base.EstahLogado();
-                ViewBag.Title = "Cidades";
+                contadoresEncontrados.ForEach(x =>
+                {
+                    ObjList.Add(new AutoCompleteDefaultModel() { Id = x.IdCidade, Name = x.NomeCidade });
+                });
 
-                List<CidadeModel> model = CadastroDeCidade.buscarCidade(form);
-
-                return View(model);
+                //Searching records from list using LINQ query
+                var results = (from N in ObjList
+                               select new { N.Id, N.Name }).ToArray();
+                return Json(results, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
                 ExceptionUtil.GerarLogDeExcecao(ex, Request.Url.ToString());
-                base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
-                return View();
+                ObjList = new List<AutoCompleteDefaultModel>()
+                {
+                new AutoCompleteDefaultModel {Id=-1,Name=Constantes.MENSAGEM_GENERICA_DE_ERRO },
+                };
+                return Json(ObjList.ToArray(), JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpPost]
+        public JsonResult DeletarCidade(int codigoDoCidade)
+        {
+            ResultadoAjaxGenericoModel resultado = new ResultadoAjaxGenericoModel();
+            try
+            {
+                base.EstahLogado();
+
+                CadastroDeCidade.DeletarCidade(this, codigoDoCidade);
+
+                resultado.mensagem = "Cidade excluída.";
+                resultado.acaoBemSucedida = true;
+
+                return Json(resultado, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                ExceptionUtil.GerarLogDeExcecao(ex, Request.Url.ToString());
+                resultado.mensagem = Constantes.MENSAGEM_GENERICA_DE_ERRO;
+                resultado.acaoBemSucedida = false;
+
+                return Json(resultado, JsonRequestBehavior.AllowGet);
             }
         }
 
@@ -90,31 +118,6 @@ namespace MediCloud.Controllers
             }
         }
 
-        [HttpPost]
-        public JsonResult DeletarCidade(int codigoDoCidade)
-        {
-            ResultadoAjaxGenericoModel resultado = new ResultadoAjaxGenericoModel();
-            try
-            {
-                base.EstahLogado();
-
-                CadastroDeCidade.DeletarCidade(this, codigoDoCidade);
-
-                resultado.mensagem = "Cidade excluída.";
-                resultado.acaoBemSucedida = true;
-
-                return Json(resultado, JsonRequestBehavior.AllowGet);
-            }
-            catch (Exception ex)
-            {
-                ExceptionUtil.GerarLogDeExcecao(ex, Request.Url.ToString());
-                resultado.mensagem = Constantes.MENSAGEM_GENERICA_DE_ERRO;
-                resultado.acaoBemSucedida = false;
-
-                return Json(resultado, JsonRequestBehavior.AllowGet);
-            }
-        }
-
         public ActionResult ExcluirCidade(int codigoCidade)
         {
             CidadeModel modelCidade = null;
@@ -140,34 +143,33 @@ namespace MediCloud.Controllers
             }
         }
 
-        [HttpPost]
-        public JsonResult BuscaCidadeAJAX(string Prefix)
+        // GET: Cidade
+        public ActionResult Index()
         {
-            List<CidadeModel> contadoresEncontrados = CadastroDeCidade.buscarCidade(Prefix);
-            List<AutoCompleteDefaultModel> ObjList = new List<AutoCompleteDefaultModel>();
+            EstahLogado();
+            return View();
+        }
 
+        [HttpPost]
+        public ActionResult Index(FormCollection form)
+        {
             try
             {
-                contadoresEncontrados.ForEach(x =>
-                {
-                    ObjList.Add(new AutoCompleteDefaultModel() { Id = x.IdCidade, Name = x.NomeCidade });
-                });
+                base.EstahLogado();
+                ViewBag.Title = "Cidades";
 
-                //Searching records from list using LINQ query  
-                var results = (from N in ObjList
-                               select new { N.Id, N.Name }).ToArray();
-                return Json(results, JsonRequestBehavior.AllowGet);
+                List<CidadeModel> model = CadastroDeCidade.buscarCidade(form);
+
+                return View(model);
             }
             catch (Exception ex)
             {
                 ExceptionUtil.GerarLogDeExcecao(ex, Request.Url.ToString());
-                ObjList = new List<AutoCompleteDefaultModel>()
-                {
-                new AutoCompleteDefaultModel {Id=-1,Name=Constantes.MENSAGEM_GENERICA_DE_ERRO },
-                };
-                return Json(ObjList.ToArray(), JsonRequestBehavior.AllowGet);
+                base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
+                return View();
             }
         }
 
+        #endregion Public Methods
     }
 }

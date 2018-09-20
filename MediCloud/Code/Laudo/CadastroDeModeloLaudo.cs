@@ -1,30 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using MediCloud.BusinessProcess.Laudo;
+using MediCloud.Controllers;
 using MediCloud.DatabaseModels;
 using MediCloud.Models.Laudo;
-using MediCloud.BusinessProcess.Laudo;
+using System;
+using System.Collections.Generic;
 using System.Web.Mvc;
-using MediCloud.Controllers;
 
 namespace MediCloud.Code.Laudo
 {
     public class CadastroDeModeloLaudo
     {
-        internal static ModeloLaudoModel InjetarEmUsuarioModel(MODELOLAUDO x)
+        #region Internal Methods
+
+        internal static List<ModeloLaudoModel> buscarModeloLaudo(FormCollection form)
         {
-            if (x == null)
-                return null;
-            else
-                return new ModeloLaudoModel()
-                {
-                    Conclusao = x.CONCLUSAO,
-                    CorpoModelo = x.LAUDO,
-                    IdModeloLaudo = (int)x.IDMODELO,
-                    NomeModelo = x.MODELO,
-                    Rodape = x.RODAPE
-                };
+            string termo = form["keywords"];
+            List<ModeloLaudoModel> listaDeModels = new List<ModeloLaudoModel>();
+
+            List<MODELOLAUDO> usuarioDoBanco = ControleDeModeloLaudo.buscarModeloLaudo(termo);
+
+            usuarioDoBanco.ForEach(x =>
+            {
+                listaDeModels.Add(injetarEmUsuarioModel(x));
+            });
+
+            return listaDeModels;
+        }
+
+        internal static void DeletarModeloLaudo(ModeloLaudoController modeloLaudoController, int codigoModeloLaudo)
+        {
+            ControleDeModeloLaudo.ExcluirModeloLaudo(codigoModeloLaudo);
         }
 
         internal static MODELOLAUDO injetarEmUsuarioModel(ModeloLaudoModel x)
@@ -57,9 +62,39 @@ namespace MediCloud.Code.Laudo
                 };
         }
 
-        internal static void DeletarModeloLaudo(ModeloLaudoController modeloLaudoController, int codigoModeloLaudo)
+        internal static ModeloLaudoModel InjetarEmUsuarioModel(MODELOLAUDO x)
         {
-            ControleDeModeloLaudo.ExcluirModeloLaudo(codigoModeloLaudo);
+            if (x == null)
+                return null;
+            else
+                return new ModeloLaudoModel()
+                {
+                    Conclusao = x.CONCLUSAO,
+                    CorpoModelo = x.LAUDO,
+                    IdModeloLaudo = (int)x.IDMODELO,
+                    NomeModelo = x.MODELO,
+                    Rodape = x.RODAPE
+                };
+        }
+
+        internal static List<ModeloLaudoModel> RecuperarModeloLaudoPorTermo(string prefix)
+        {
+            List<MODELOLAUDO> contadoresEncontrados = ControleDeModeloLaudo.buscarModeloLaudo(prefix);
+            List<ModeloLaudoModel> resultados = new List<ModeloLaudoModel>();
+
+            contadoresEncontrados.ForEach(x =>
+            {
+                resultados.Add(InjetarEmUsuarioModel(x));
+            });
+
+            return resultados;
+        }
+
+        internal static ModeloLaudoModel RecuperarModeloPorID(int v)
+        {
+            MODELOLAUDO LaudoRXEncontrado = ControleDeModeloLaudo.buscarModeloLaudoPorId(v);
+
+            return InjetarEmUsuarioModel(LaudoRXEncontrado);
         }
 
         internal static ModeloLaudoModel SalvarModeloLaudo(FormCollection form)
@@ -74,6 +109,12 @@ namespace MediCloud.Code.Laudo
 
             return usuarioModel;
         }
+
+        #endregion Internal Methods
+
+
+
+        #region Private Methods
 
         private static MODELOLAUDO injetarEmCargoModelDAO(ModeloLaudoModel x)
         {
@@ -102,39 +143,6 @@ namespace MediCloud.Code.Laudo
             };
         }
 
-        internal static List<ModeloLaudoModel> buscarModeloLaudo(FormCollection form)
-        {
-            string termo = form["keywords"];
-            List<ModeloLaudoModel> listaDeModels = new List<ModeloLaudoModel>();
-
-            List<MODELOLAUDO> usuarioDoBanco = ControleDeModeloLaudo.buscarModeloLaudo(termo);
-
-            usuarioDoBanco.ForEach(x =>
-            {
-                listaDeModels.Add(injetarEmUsuarioModel(x));
-            });
-
-            return listaDeModels;
-        }
-
-        internal static List<ModeloLaudoModel> RecuperarModeloLaudoPorTermo(string prefix)
-        {
-            List<MODELOLAUDO> contadoresEncontrados = ControleDeModeloLaudo.buscarModeloLaudo(prefix);
-            List<ModeloLaudoModel> resultados = new List<ModeloLaudoModel>();
-
-            contadoresEncontrados.ForEach(x =>
-            {
-                resultados.Add(InjetarEmUsuarioModel(x));
-            });
-
-            return resultados;
-        }
-
-        internal static ModeloLaudoModel RecuperarModeloPorID(int v)
-        {
-            MODELOLAUDO LaudoRXEncontrado = ControleDeModeloLaudo.buscarModeloLaudoPorId(v);
-
-            return InjetarEmUsuarioModel(LaudoRXEncontrado);
-        }
+        #endregion Private Methods
     }
 }

@@ -1,17 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MediCloud.BusinessProcess.Util;
 using MediCloud.DatabaseModels;
 using MediCloud.Persistence;
+using System;
+using System.Collections.Generic;
 using System.Data.Entity.Validation;
-using MediCloud.BusinessProcess.Util;
+using System.Linq;
 
 namespace MediCloud.BusinessProcess.Parametro
 {
     public class ControleDeFechamento
     {
+        #region Public Methods
+
         public static List<MOVIMENTO_FECHAMENTO> buscarCidadePorTermo(string termo)
         {
             CloudMedContext contexto = new CloudMedContext();
@@ -31,6 +31,26 @@ namespace MediCloud.BusinessProcess.Parametro
                 throw ex;
             }
             return null;
+        }
+
+        public static void DeletarFechamento(int codigoDoFechamento)
+        {
+            CloudMedContext contexto = new CloudMedContext();
+            try
+            {
+                if (contexto.MOVIMENTO_FECHAMENTO.Any(x => x.IDFEC == codigoDoFechamento))
+                    contexto.MOVIMENTO_FECHAMENTO.Remove(contexto.MOVIMENTO_FECHAMENTO.First(x => x.IDFEC == codigoDoFechamento));
+
+                contexto.SaveChanges();
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         public static MOVIMENTO_FECHAMENTO RecuperarFechamentoPorID(int v)
@@ -54,26 +74,6 @@ namespace MediCloud.BusinessProcess.Parametro
             }
         }
 
-        public static void DeletarFechamento(int codigoDoFechamento)
-        {
-            CloudMedContext contexto = new CloudMedContext();
-            try
-            {
-                if (contexto.MOVIMENTO_FECHAMENTO.Any(x => x.IDFEC == codigoDoFechamento))
-                    contexto.MOVIMENTO_FECHAMENTO.Remove(contexto.MOVIMENTO_FECHAMENTO.First(x => x.IDFEC == codigoDoFechamento));
-
-                contexto.SaveChanges();
-            }
-            catch (DbEntityValidationException ex)
-            {
-                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
         public static MOVIMENTO_FECHAMENTO SalvarFechamento(MOVIMENTO_FECHAMENTO fechamentoDAO)
         {
             CloudMedContext contexto = new CloudMedContext();
@@ -81,7 +81,6 @@ namespace MediCloud.BusinessProcess.Parametro
 
             try
             {
-
                 if (fechamentoDAO.IDFEC > 0)
                 {
                     setorSalvo = contexto.MOVIMENTO_FECHAMENTO.First(x => x.IDFEC == fechamentoDAO.IDFEC);
@@ -97,7 +96,6 @@ namespace MediCloud.BusinessProcess.Parametro
 
                 contexto.SaveChanges();
                 return setorSalvo;
-
             }
             catch (DbEntityValidationException ex)
             {
@@ -109,5 +107,7 @@ namespace MediCloud.BusinessProcess.Parametro
                 throw ex;
             }
         }
+
+        #endregion Public Methods
     }
 }

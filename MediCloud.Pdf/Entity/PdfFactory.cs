@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace MediCLoud.Pdf.Entity
 {
     public abstract class PdfFactory
     {
+        #region Public Methods
+
         public static IPdfWriter create(EnumPdfType pdfType)
         {
             IPdfWriter pdfWriter;
@@ -21,7 +20,6 @@ namespace MediCLoud.Pdf.Entity
             return pdfWriter;
         }
 
-
+        #endregion Public Methods
     }
-
 }

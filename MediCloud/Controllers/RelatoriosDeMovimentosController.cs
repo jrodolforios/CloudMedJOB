@@ -32,7 +32,7 @@ namespace MediCloud.Controllers
             {
                 base.EstahLogado();
 
-                arquivo = CadastroDeRelatoriosFinanceiros.GerarRelatorioAnaliticoDeFaturamento(form);
+                arquivo = CadastroDeRelatoriosDeMovimentos.GerarRelatorioDeConvocacoes(form);
 
                 byte[] fileBytes = arquivo;
                 string fileName = "Relatório de Convocações - " + DateTime.Now.ToShortDateString().Replace('/', '-') + ".pdf";
@@ -48,7 +48,7 @@ namespace MediCloud.Controllers
         }
         #endregion
 
-        #region Relatório Anual
+        #region Relatório Anual 
         public ActionResult RelatorioAnual()
         {
             base.EstahLogado();

@@ -1,17 +1,50 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MediCloud.BusinessProcess.Util;
 using MediCloud.DatabaseModels;
 using MediCloud.Persistence;
+using System;
+using System.Collections.Generic;
 using System.Data.Entity.Validation;
-using MediCloud.BusinessProcess.Util;
+using System.Linq;
 
 namespace MediCloud.BusinessProcess.Financeiro
 {
     public class ControleDeGrupoDeClientes
     {
+        #region Public Methods
+
+        public static void BloquearCrediarioDeGrupo(int codigoDoGrupo)
+        {
+            CloudMedContext contexto = new CloudMedContext();
+
+            try
+            {
+                if (contexto.CLIENTE_CREDIARIO.Any(x => x.IDCLIGRU == codigoDoGrupo && x.STATUS == "S"))
+                {
+                    foreach (CLIENTE_CREDIARIO item in contexto.CLIENTE_CREDIARIO.Where(x => x.IDCLIGRU == codigoDoGrupo))
+                    {
+                        item.STATUS = "N";
+                    }
+                }
+                else if (contexto.CLIENTE_CREDIARIO.Any(x => x.IDCLIGRU == codigoDoGrupo && x.STATUS == "N"))
+                {
+                    foreach (CLIENTE_CREDIARIO item in contexto.CLIENTE_CREDIARIO.Where(x => x.IDCLIGRU == codigoDoGrupo))
+                    {
+                        item.STATUS = "S";
+                    }
+                }
+
+                contexto.SaveChanges();
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public static List<CLIENTE_GRUPO> BuscarContadoresPorTermo(string prefix)
         {
             CloudMedContext contexto = new CloudMedContext();
@@ -26,6 +59,26 @@ namespace MediCloud.BusinessProcess.Financeiro
             {
                 ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
                 return new List<CLIENTE_GRUPO>();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static void ExcluirGrupoDeCLientes(int codigoGrupoDeClientes)
+        {
+            CloudMedContext contexto = new CloudMedContext();
+            try
+            {
+                if (contexto.CLIENTE_GRUPO.Any(x => x.IDCLIGRU == codigoGrupoDeClientes))
+                    contexto.CLIENTE_GRUPO.Remove(contexto.CLIENTE_GRUPO.First(x => x.IDCLIGRU == codigoGrupoDeClientes));
+
+                contexto.SaveChanges();
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
             }
             catch (Exception ex)
             {
@@ -54,26 +107,6 @@ namespace MediCloud.BusinessProcess.Financeiro
             }
         }
 
-        public static void ExcluirGrupoDeCLientes(int codigoGrupoDeClientes)
-        {
-            CloudMedContext contexto = new CloudMedContext();
-            try
-            {
-                if (contexto.CLIENTE_GRUPO.Any(x => x.IDCLIGRU == codigoGrupoDeClientes))
-                    contexto.CLIENTE_GRUPO.Remove(contexto.CLIENTE_GRUPO.First(x => x.IDCLIGRU == codigoGrupoDeClientes));
-
-                contexto.SaveChanges();
-            }
-            catch (DbEntityValidationException ex)
-            {
-                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
         public static CLIENTE_GRUPO SalvarGrupoDeClientes(CLIENTE_GRUPO clienteGrupoDAO)
         {
             CloudMedContext contexto = new CloudMedContext();
@@ -81,7 +114,6 @@ namespace MediCloud.BusinessProcess.Financeiro
 
             try
             {
-
                 if (clienteGrupoDAO.IDCLIGRU > 0)
                 {
                     clienteGrupoSalvo = contexto.CLIENTE_GRUPO.First(x => x.IDCLIGRU == clienteGrupoDAO.IDCLIGRU);
@@ -108,8 +140,7 @@ namespace MediCloud.BusinessProcess.Financeiro
                     clienteGrupoSalvo.OBSNF = clienteGrupoDAO.OBSNF;
                     clienteGrupoSalvo.TIPOCLIENTE = clienteGrupoDAO.TIPOCLIENTE;
                     clienteGrupoSalvo.TIPOEMPRESA = clienteGrupoDAO.TIPOEMPRESA;
-                    clienteGrupoSalvo.UF = clienteGrupoDAO.UF;            
-
+                    clienteGrupoSalvo.UF = clienteGrupoDAO.UF;
                 }
                 else
                 {
@@ -118,7 +149,6 @@ namespace MediCloud.BusinessProcess.Financeiro
 
                 contexto.SaveChanges();
                 return clienteGrupoSalvo;
-
             }
             catch (DbEntityValidationException ex)
             {
@@ -131,37 +161,6 @@ namespace MediCloud.BusinessProcess.Financeiro
             }
         }
 
-        public static void BloquearCrediarioDeGrupo(int codigoDoGrupo)
-        {
-            CloudMedContext contexto = new CloudMedContext();
-
-            try
-            {
-                if (contexto.CLIENTE_CREDIARIO.Any(x => x.IDCLIGRU == codigoDoGrupo && x.STATUS == "S"))
-                { 
-                   foreach(CLIENTE_CREDIARIO item in contexto.CLIENTE_CREDIARIO.Where(x => x.IDCLIGRU == codigoDoGrupo))
-                    {
-                        item.STATUS = "N";
-                    }
-                }
-                else if(contexto.CLIENTE_CREDIARIO.Any(x => x.IDCLIGRU == codigoDoGrupo && x.STATUS == "N"))
-                {
-                    foreach (CLIENTE_CREDIARIO item in contexto.CLIENTE_CREDIARIO.Where(x => x.IDCLIGRU == codigoDoGrupo))
-                    {
-                        item.STATUS = "S";
-                    }
-                }
-
-                contexto.SaveChanges();
-            }
-            catch (DbEntityValidationException ex)
-            {
-                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
+        #endregion Public Methods
     }
 }

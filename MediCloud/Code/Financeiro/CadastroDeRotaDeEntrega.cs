@@ -1,17 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿using MediCloud.BusinessProcess.Financeiro;
 using MediCloud.Controllers;
 using MediCloud.DatabaseModels;
 using MediCloud.Models.Financeiro;
-using MediCloud.BusinessProcess.Financeiro;
+using System;
+using System.Collections.Generic;
+using System.Web.Mvc;
 
 namespace MediCloud.Code.Financeiro
 {
     public class CadastroDeRotaDeEntrega
     {
+        #region Internal Methods
+
+        internal static void DeletarRotaDeEntrega(RotaDeEntregaController rotaDeEntregaController, int codigoRotaDeEntrega)
+        {
+            ControleDeRotaDeEntrega.DeletarRotaDeEntrega(codigoRotaDeEntrega);
+        }
+
+        internal static RotaDeEntregaModel RecuperarRotaDeEntregaPorID(int v)
+        {
+            if (v != 0)
+            {
+                ROTA referenteEncontrado = ControleDeRotaDeEntrega.buscarRotaDeEntregaPorID(v);
+                return InjetarEmUsuarioModel(referenteEncontrado);
+            }
+            else
+                return null;
+        }
+
         internal static List<RotaDeEntregaModel> RecuperarRotaDeEntregaPorTermo(FormCollection form)
         {
             string prefix = form["keywords"];
@@ -32,30 +48,6 @@ namespace MediCloud.Code.Financeiro
             return resultados;
         }
 
-        private static RotaDeEntregaModel InjetarEmUsuarioModel(ROTA x)
-        {
-            if (x == null)
-                return null;
-            else
-                return new RotaDeEntregaModel()
-                {
-                    IdRotaDeEntrega = (int)x.IDROTA,
-                    NomeRotaDeEntrega = x.NOMEROTA,
-                    Observacao = x.OBSERVACAO
-                };
-        }
-
-        internal static RotaDeEntregaModel RecuperarRotaDeEntregaPorID(int v)
-        {
-            if (v != 0)
-            {
-                ROTA referenteEncontrado = ControleDeRotaDeEntrega.buscarRotaDeEntregaPorID(v);
-                return InjetarEmUsuarioModel(referenteEncontrado);
-            }
-            else
-                return null;
-        }
-
         internal static RotaDeEntregaModel SalvarRotaDeEntrega(FormCollection form)
         {
             RotaDeEntregaModel usuarioModel = InjetarEmUsuarioModel(form);
@@ -68,6 +60,12 @@ namespace MediCloud.Code.Financeiro
 
             return usuarioModel;
         }
+
+        #endregion Internal Methods
+
+
+
+        #region Private Methods
 
         private static ROTA InjetarEmUsuarioDAO(RotaDeEntregaModel x)
         {
@@ -82,6 +80,19 @@ namespace MediCloud.Code.Financeiro
                 };
         }
 
+        private static RotaDeEntregaModel InjetarEmUsuarioModel(ROTA x)
+        {
+            if (x == null)
+                return null;
+            else
+                return new RotaDeEntregaModel()
+                {
+                    IdRotaDeEntrega = (int)x.IDROTA,
+                    NomeRotaDeEntrega = x.NOMEROTA,
+                    Observacao = x.OBSERVACAO
+                };
+        }
+
         private static RotaDeEntregaModel InjetarEmUsuarioModel(FormCollection form)
         {
             return new RotaDeEntregaModel()
@@ -92,9 +103,6 @@ namespace MediCloud.Code.Financeiro
             };
         }
 
-        internal static void DeletarRotaDeEntrega(RotaDeEntregaController rotaDeEntregaController, int codigoRotaDeEntrega)
-        {
-            ControleDeRotaDeEntrega.DeletarRotaDeEntrega(codigoRotaDeEntrega);
-        }
+        #endregion Private Methods
     }
 }

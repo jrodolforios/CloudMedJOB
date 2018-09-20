@@ -7,6 +7,8 @@ namespace MediCloud.View.Areas.HelpPage
     /// </summary>
     public class TextSample
     {
+        #region Public Constructors
+
         public TextSample(string text)
         {
             if (text == null)
@@ -16,7 +18,19 @@ namespace MediCloud.View.Areas.HelpPage
             Text = text;
         }
 
+        #endregion Public Constructors
+
+
+
+        #region Public Properties
+
         public string Text { get; private set; }
+
+        #endregion Public Properties
+
+
+
+        #region Public Methods
 
         public override bool Equals(object obj)
         {
@@ -33,5 +47,7 @@ namespace MediCloud.View.Areas.HelpPage
         {
             return Text;
         }
+
+        #endregion Public Methods
     }
 }

@@ -1,17 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MediCloud.BusinessProcess.Util;
 using MediCloud.DatabaseModels;
-using System.Data.Entity.Validation;
-using MediCloud.BusinessProcess.Util;
 using MediCloud.Persistence;
+using System;
+using System.Collections.Generic;
+using System.Data.Entity.Validation;
+using System.Linq;
 
 namespace MediCloud.BusinessProcess.Financeiro
 {
     public class ControleDeNotaFiscal
     {
+        #region Public Methods
+
         public static List<NOTAFISCAL> BuscarNotaFiscalPorTermo(string prefix)
         {
             CloudMedContext contexto = new CloudMedContext();
@@ -25,6 +25,46 @@ namespace MediCloud.BusinessProcess.Financeiro
             {
                 ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
                 return new List<NOTAFISCAL>();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static void ExcluirNotaFiscal(int codigoDaNotaFiscal)
+        {
+            CloudMedContext contexto = new CloudMedContext();
+
+            try
+            {
+                if (contexto.NOTAFISCAL.Any(x => x.IDNF == codigoDaNotaFiscal))
+                    contexto.NOTAFISCAL.Remove(contexto.NOTAFISCAL.First(x => x.IDNF == codigoDaNotaFiscal));
+
+                contexto.SaveChanges();
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static List<SLNOTAFISCAL> RecuperarDetalheDeNotaFiscal(int idNF)
+        {
+            CloudMedContext contexto = new CloudMedContext();
+
+            try
+            {
+                return contexto.SLNOTAFISCAL.Where(x => x.IDNF == idNF).Distinct().ToList();
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+                return new List<SLNOTAFISCAL>();
             }
             catch (Exception ex)
             {
@@ -53,25 +93,6 @@ namespace MediCloud.BusinessProcess.Financeiro
             }
         }
 
-        public static List<SLNOTAFISCAL> RecuperarDetalheDeNotaFiscal(int idNF)
-        {
-            CloudMedContext contexto = new CloudMedContext();
-
-            try
-            {
-                return contexto.SLNOTAFISCAL.Where(x => x.IDNF == idNF).Distinct().ToList();
-            }
-            catch (DbEntityValidationException ex)
-            {
-                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
-                return new List<SLNOTAFISCAL>();
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
         public static List<NOTAFISCAL> RecuperarNotasFiscaisDeFaturamento(decimal idFaturamento)
         {
             CloudMedContext contexto = new CloudMedContext();
@@ -84,28 +105,6 @@ namespace MediCloud.BusinessProcess.Financeiro
             {
                 ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
                 return new List<NOTAFISCAL>();
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-                
-            }
-        }
-
-        public static void ExcluirNotaFiscal(int codigoDaNotaFiscal)
-        {
-            CloudMedContext contexto = new CloudMedContext();
-
-            try
-            {
-                if (contexto.NOTAFISCAL.Any(x => x.IDNF == codigoDaNotaFiscal))
-                    contexto.NOTAFISCAL.Remove(contexto.NOTAFISCAL.First(x => x.IDNF == codigoDaNotaFiscal));
-
-                contexto.SaveChanges();
-            }
-            catch (DbEntityValidationException ex)
-            {
-                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
             }
             catch (Exception ex)
             {
@@ -151,7 +150,6 @@ namespace MediCloud.BusinessProcess.Financeiro
                     setorSalvo.RAZAOSOCIAL = z.RAZAOSOCIAL;
                     setorSalvo.TOTALNOTA = z.TOTALNOTA;
                     setorSalvo.UF = z.UF;
-                    
                 }
                 else
                 {
@@ -160,7 +158,6 @@ namespace MediCloud.BusinessProcess.Financeiro
 
                 contexto.SaveChanges();
                 return setorSalvo;
-
             }
             catch (DbEntityValidationException ex)
             {
@@ -172,5 +169,7 @@ namespace MediCloud.BusinessProcess.Financeiro
                 throw ex;
             }
         }
+
+        #endregion Public Methods
     }
 }

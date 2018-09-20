@@ -1,14 +1,13 @@
 namespace MediCloud.DatabaseModels
 {
-    using System;
-    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
-    using System.Data.Entity.Spatial;
 
     [Table("NATUREZA")]
     public partial class NATUREZA
     {
+        #region Public Properties
+
         [Key]
         [Column(TypeName = "numeric")]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -18,5 +17,7 @@ namespace MediCloud.DatabaseModels
         [Required]
         [StringLength(50)]
         public string NATUREZA1 { get; set; }
+
+        #endregion Public Properties
     }
 }

@@ -10,6 +10,8 @@ namespace MediCloud.View.Areas.HelpPage
     /// </summary>
     public class HelpPageSampleKey
     {
+        #region Public Constructors
+
         /// <summary>
         /// Creates a new <see cref="HelpPageSampleKey"/> based on media type.
         /// </summary>
@@ -94,13 +96,11 @@ namespace MediCloud.View.Areas.HelpPage
             MediaType = mediaType;
         }
 
-        /// <summary>
-        /// Gets the name of the controller.
-        /// </summary>
-        /// <value>
-        /// The name of the controller.
-        /// </value>
-        public string ControllerName { get; private set; }
+        #endregion Public Constructors
+
+
+
+        #region Public Properties
 
         /// <summary>
         /// Gets the name of the action.
@@ -109,6 +109,14 @@ namespace MediCloud.View.Areas.HelpPage
         /// The name of the action.
         /// </value>
         public string ActionName { get; private set; }
+
+        /// <summary>
+        /// Gets the name of the controller.
+        /// </summary>
+        /// <value>
+        /// The name of the controller.
+        /// </value>
+        public string ControllerName { get; private set; }
 
         /// <summary>
         /// Gets the media type.
@@ -129,6 +137,12 @@ namespace MediCloud.View.Areas.HelpPage
         /// Gets the <see cref="SampleDirection"/>.
         /// </summary>
         public SampleDirection? SampleDirection { get; private set; }
+
+        #endregion Public Properties
+
+
+
+        #region Public Methods
 
         public override bool Equals(object obj)
         {
@@ -168,5 +182,7 @@ namespace MediCloud.View.Areas.HelpPage
 
             return hashCode;
         }
+
+        #endregion Public Methods
     }
 }

@@ -1,27 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using MediCloud.Models.Parametro.GrupoProcedimento;
-using MediCloud.DatabaseModels;
-using MediCloud.BusinessProcess.Parametro.GrupoProcedimento;
-using System.Web.Mvc;
+﻿using MediCloud.BusinessProcess.Parametro.GrupoProcedimento;
 using MediCloud.Controllers;
+using MediCloud.DatabaseModels;
+using MediCloud.Models.Parametro.GrupoProcedimento;
+using System;
+using System.Collections.Generic;
+using System.Web.Mvc;
 
 namespace MediCloud.Code.Parametro.GrupoProcedimento
 {
     public class CadastroDeSubGrupo
     {
-        internal static SubGrupoModel GetSubGrupoPorID(int IdSubGrupo)
-        {
-            if (IdSubGrupo > 0)
-            {
-                PROCEDIMENTO_GRUPO_SUBGRUP usuarioencontrado = ControleDeSubGrupo.recuperarSubGrupoPorID(IdSubGrupo);
-                return injetarEmUsuarioModel(usuarioencontrado);
-            }
-            else
-                return null;
-        }
+        #region Public Methods
 
         public static SubGrupoModel injetarEmUsuarioModel(PROCEDIMENTO_GRUPO_SUBGRUP x)
         {
@@ -44,6 +33,26 @@ namespace MediCloud.Code.Parametro.GrupoProcedimento
                 Nome = string.IsNullOrEmpty(x["nomeSubGrupo"]) ? null : x["nomeSubGrupo"],
                 Grupo = CadastroDeGrupo.getGrupoPorID(string.IsNullOrEmpty(x["idGrupo"]) ? 0 : Convert.ToInt32(x["idGrupo"]))
             };
+        }
+
+        #endregion Public Methods
+
+        #region Internal Methods
+
+        internal static void DeletarSubGrupo(SubGrupoController subGrupoController, int codigoDoSubGrupo)
+        {
+            ControleDeSubGrupo.DeletarSubGrupo(codigoDoSubGrupo);
+        }
+
+        internal static SubGrupoModel GetSubGrupoPorID(int IdSubGrupo)
+        {
+            if (IdSubGrupo > 0)
+            {
+                PROCEDIMENTO_GRUPO_SUBGRUP usuarioencontrado = ControleDeSubGrupo.recuperarSubGrupoPorID(IdSubGrupo);
+                return injetarEmUsuarioModel(usuarioencontrado);
+            }
+            else
+                return null;
         }
 
         internal static List<SubGrupoModel> RecuperarSubGrupoPorTermo(FormCollection form)
@@ -88,6 +97,12 @@ namespace MediCloud.Code.Parametro.GrupoProcedimento
             return usuarioModel;
         }
 
+        #endregion Internal Methods
+
+
+
+        #region Private Methods
+
         private static PROCEDIMENTO_GRUPO_SUBGRUP injetarEmUsuarioDAO(SubGrupoModel x)
         {
             if (x == null)
@@ -101,9 +116,6 @@ namespace MediCloud.Code.Parametro.GrupoProcedimento
                 };
         }
 
-        internal static void DeletarSubGrupo(SubGrupoController subGrupoController, int codigoDoSubGrupo)
-        {
-            ControleDeSubGrupo.DeletarSubGrupo(codigoDoSubGrupo);
-        }
+        #endregion Private Methods
     }
 }

@@ -1,21 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using MediCloud.DatabaseModels;
+﻿using MediCloud.DatabaseModels;
 using MediCloud.Persistence;
+using System;
+using System.Collections.Generic;
+using System.Configuration;
 using System.Data.Entity.Validation;
 using System.Globalization;
-using System.Net.Mail;
-using System.Configuration;
+using System.Linq;
 using System.Net;
+using System.Net.Mail;
+using System.Text;
 using System.Web.Script.Serialization;
 
 namespace MediCloud.BusinessProcess.Util
 {
     public class Util
     {
+        #region Public Methods
+
         public static string ApenasNumeros(string valor)
         {
             if (!string.IsNullOrEmpty(valor))
@@ -41,28 +42,6 @@ namespace MediCloud.BusinessProcess.Util
                 return -1;
         }
 
-        internal static INFORMACOES_CLINICA RecuperarInformacoesDaClinica()
-        {
-            CloudMedContext contexto = new CloudMedContext();
-
-            try
-            {
-                if (contexto.INFORMACOES_CLINICA.Any())
-                    return contexto.INFORMACOES_CLINICA.First();
-                else
-                    return null;
-            }
-            catch (DbEntityValidationException ex)
-            {
-                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
-                return null;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
         public static string dataToExtenso(DateTime dateTime)
         {
             CultureInfo culture = new CultureInfo("pt-BR");
@@ -77,22 +56,7 @@ namespace MediCloud.BusinessProcess.Util
             return data;
         }
 
-        internal static void EnviarEmailDeErro(LOG_ERRO logPersistido)
-        {
-            StringBuilder str = new StringBuilder();
-            string informacaoDaClinica = RecuperarInformacoesDaClinica().DADOSCABECALHOREL;
-            string json = new JavaScriptSerializer().Serialize(logPersistido);
-            string destinatario = ConfigurationManager.AppSettings["RemetenteEmail"].ToString();
-
-            str.Append(informacaoDaClinica);
-            str.Append("<br/><br/>");
-
-            str.Append(json);
-
-            EnviarEmail(destinatario, "[Log_Erro] Exceção lançada no CloudMed", str.ToString());
-        }
-
-        public static void EnviarEmail (string destinatarios, string assunto, string corpo)
+        public static void EnviarEmail(string destinatarios, string assunto, string corpo)
         {
             string remetente = ConfigurationManager.AppSettings["RemetenteEmail"].ToString();
             int porta = Convert.ToInt32(ConfigurationManager.AppSettings["PortaEmail"].ToString());
@@ -101,7 +65,6 @@ namespace MediCloud.BusinessProcess.Util
             string nomeUsuario = ConfigurationManager.AppSettings["NomeUsuarioEmail"].ToString();
             string senhaUsuario = ConfigurationManager.AppSettings["SenhaUsuarioEmail"].ToString();
             bool habilitarSSL = Convert.ToBoolean(ConfigurationManager.AppSettings["HabilitarSSLEmail"].ToString());
-
 
             MailMessage mail = new MailMessage(remetente, destinatarios);
 
@@ -190,7 +153,78 @@ namespace MediCloud.BusinessProcess.Util
             }
         }
 
-        static string escreva_parte(decimal valor)
+        public static List<string> TrocarVirgulaPorPonto(List<decimal?> list)
+        {
+            List<string> listaDeNumerosEmString = new List<string>();
+
+            list.ForEach(x =>
+            {
+                listaDeNumerosEmString.Add(x.ToString().Replace(',', '.'));
+            });
+
+            return listaDeNumerosEmString;
+        }
+
+        #endregion Public Methods
+
+        #region Internal Methods
+
+        internal static void EnviarEmailDeErro(LOG_ERRO logPersistido)
+        {
+            StringBuilder str = new StringBuilder();
+            string informacaoDaClinica = RecuperarInformacoesDaClinica().DADOSCABECALHOREL;
+            string json = new JavaScriptSerializer().Serialize(logPersistido);
+            string destinatario = ConfigurationManager.AppSettings["RemetenteEmail"].ToString();
+
+            str.Append(informacaoDaClinica);
+            str.Append("<br/><br/>");
+
+            str.Append(json);
+
+            EnviarEmail(destinatario, "[Log_Erro] Exceção lançada no CloudMed", str.ToString());
+        }
+
+        internal static string InserirMascaraCNPJ(string CNPJ)
+        {
+            ulong CNPJTratado = Convert.ToUInt64(ApenasNumeros(CNPJ));
+            return CNPJTratado.ToString(@"00\.000\.000\/0000\-00");
+        }
+
+        internal static string InserirMascaraCPF(string CPF)
+        {
+            ulong CPFTratado = Convert.ToUInt64(ApenasNumeros(CPF));
+            return CPFTratado.ToString(@"000\.000\.000\-00");
+        }
+
+        internal static INFORMACOES_CLINICA RecuperarInformacoesDaClinica()
+        {
+            CloudMedContext contexto = new CloudMedContext();
+
+            try
+            {
+                if (contexto.INFORMACOES_CLINICA.Any())
+                    return contexto.INFORMACOES_CLINICA.First();
+                else
+                    return null;
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+                return null;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        #endregion Internal Methods
+
+
+
+        #region Private Methods
+
+        private static string escreva_parte(decimal valor)
         {
             if (valor <= 0)
                 return string.Empty;
@@ -255,16 +289,6 @@ namespace MediCloud.BusinessProcess.Util
             }
         }
 
-        internal static string InserirMascaraCPF(string CPF)
-        {
-            ulong CPFTratado = Convert.ToUInt64(ApenasNumeros(CPF));
-            return CPFTratado.ToString(@"000\.000\.000\-00");
-        }
-
-        internal static string InserirMascaraCNPJ(string CNPJ)
-        {
-            ulong CNPJTratado = Convert.ToUInt64(ApenasNumeros(CNPJ));
-            return CNPJTratado.ToString(@"00\.000\.000\/0000\-00");
-        }
+        #endregion Private Methods
     }
 }

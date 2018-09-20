@@ -1,17 +1,79 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using MediCloud.Models.Parametro.GrupoProcedimento;
-using MediCloud.DatabaseModels;
-using MediCloud.BusinessProcess.Parametro.GrupoProcedimento;
-using System.Web.Mvc;
+﻿using MediCloud.BusinessProcess.Parametro.GrupoProcedimento;
 using MediCloud.Controllers;
+using MediCloud.DatabaseModels;
+using MediCloud.Models.Parametro.GrupoProcedimento;
+using System;
+using System.Collections.Generic;
+using System.Web.Mvc;
 
 namespace MediCloud.Code.Parametro.GrupoProcedimento
 {
     public class CadastroDeProcedimentos
     {
+        #region Public Methods
+
+        public static ProcedimentoModel injetarEmUsuarioModel(PROCEDIMENTO x)
+        {
+            if (x == null)
+                return null;
+            else
+                return new ProcedimentoModel()
+                {
+                    CODNEXO = x.CODNEXO,
+                    Complemento = x.COMPLEMENTO,
+                    confirmaAutomaticamente = x.CONFIRMARAUTOMATICO,
+                    IdProcedimento = (int)x.IDPRO,
+                    Nome = x.PROCEDIMENTO1,
+                    Sigla = x.ABREVIADO,
+                    ZeraAutomaticamente = x.ZERAAUTOMATICO,
+
+                    Profissional = CadastroDeProfissional.GetProfissionalPorID(x.IDPRF),
+                    SubGrupo = CadastroDeSubGrupo.GetSubGrupoPorID((int)x.IDSUBGRUPRO)
+                };
+        }
+
+        #endregion Public Methods
+
+        #region Internal Methods
+
+        internal static List<ProcedimentoModel> buscarProcedimento(FormCollection form)
+        {
+            string prefix = form["keywords"];
+
+            List<PROCEDIMENTO> contadoresEncontrados = ControleDeProcedimentos.buscarProcedimentoPorTermo(prefix);
+            List<ProcedimentoModel> resultados = new List<ProcedimentoModel>();
+
+            contadoresEncontrados.ForEach(x =>
+            {
+                resultados.Add(injetarEmUsuarioModel(x));
+            });
+
+            return resultados;
+        }
+
+        internal static decimal BuscarValorProcedimentoPorIDFornecedor(int procedimento, int fornecedor, int tabela)
+        {
+            return ControleDeProcedimentos.BuscarValorProcedimentoPorIDFornecedor(procedimento, fornecedor, tabela);
+        }
+
+        internal static void DeletarProcedimento(ProcedimentoController procedimentoController, int codigoProcedimento)
+        {
+            ControleDeProcedimentos.DeletarProcedimento(codigoProcedimento);
+        }
+
+        internal static List<ProcedimentoModel> RecuperarContadorPorTermoEFornecedor(string prefix, int fornecedor, int tabela)
+        {
+            List<PROCEDIMENTO> contadoresEncontrados = ControleDeProcedimentos.buscarCargosPorTermoEFornecedor(prefix, fornecedor, tabela);
+            List<ProcedimentoModel> resultados = new List<ProcedimentoModel>();
+
+            contadoresEncontrados.ForEach(x =>
+            {
+                resultados.Add(injetarEmUsuarioModel(x));
+            });
+
+            return resultados;
+        }
+
         internal static ProcedimentoModel RecuperarProcedimentoPorID(int IdPro)
         {
             if (IdPro != 0)
@@ -36,39 +98,6 @@ namespace MediCloud.Code.Parametro.GrupoProcedimento
             return resultados;
         }
 
-        internal static List<ProcedimentoModel> buscarProcedimento(FormCollection form)
-        {
-            string prefix = form["keywords"];
-
-            List<PROCEDIMENTO> contadoresEncontrados = ControleDeProcedimentos.buscarProcedimentoPorTermo(prefix);
-            List<ProcedimentoModel> resultados = new List<ProcedimentoModel>();
-
-            contadoresEncontrados.ForEach(x =>
-            {
-                resultados.Add(injetarEmUsuarioModel(x));
-            });
-
-            return resultados;
-        }
-
-        internal static decimal BuscarValorProcedimentoPorIDFornecedor(int procedimento, int fornecedor, int tabela)
-        {
-            return ControleDeProcedimentos.BuscarValorProcedimentoPorIDFornecedor(procedimento, fornecedor, tabela);
-        }
-
-        internal static List<ProcedimentoModel> RecuperarContadorPorTermoEFornecedor(string prefix, int fornecedor, int tabela)
-        {
-            List<PROCEDIMENTO> contadoresEncontrados = ControleDeProcedimentos.buscarCargosPorTermoEFornecedor(prefix, fornecedor, tabela);
-            List<ProcedimentoModel> resultados = new List<ProcedimentoModel>();
-
-            contadoresEncontrados.ForEach(x =>
-            {
-                resultados.Add(injetarEmUsuarioModel(x));
-            });
-
-            return resultados;
-        }
-
         internal static ProcedimentoModel SalvarProcedimento(FormCollection form)
         {
             ProcedimentoModel procedimentoModel = injetarEmUsuarioModel(form);
@@ -81,6 +110,12 @@ namespace MediCloud.Code.Parametro.GrupoProcedimento
 
             return procedimentoModel;
         }
+
+        #endregion Internal Methods
+
+
+
+        #region Private Methods
 
         private static PROCEDIMENTO injetarEmUsuarioDAO(ProcedimentoModel x)
         {
@@ -117,29 +152,6 @@ namespace MediCloud.Code.Parametro.GrupoProcedimento
             };
         }
 
-        internal static void DeletarProcedimento(ProcedimentoController procedimentoController, int codigoProcedimento)
-        {
-            ControleDeProcedimentos.DeletarProcedimento(codigoProcedimento);
-        }
-
-        public static ProcedimentoModel injetarEmUsuarioModel(PROCEDIMENTO x)
-        {
-            if (x == null)
-                return null;
-            else
-                return new ProcedimentoModel()
-                {
-                    CODNEXO = x.CODNEXO,
-                    Complemento = x.COMPLEMENTO,
-                    confirmaAutomaticamente = x.CONFIRMARAUTOMATICO, 
-                    IdProcedimento = (int)x.IDPRO,
-                    Nome = x.PROCEDIMENTO1,
-                    Sigla = x.ABREVIADO,
-                    ZeraAutomaticamente = x.ZERAAUTOMATICO,
-
-                    Profissional = CadastroDeProfissional.GetProfissionalPorID(x.IDPRF),
-                    SubGrupo = CadastroDeSubGrupo.GetSubGrupoPorID((int)x.IDSUBGRUPRO)
-                };
-        }
+        #endregion Private Methods
     }
 }

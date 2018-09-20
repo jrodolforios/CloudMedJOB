@@ -1,23 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MediCloud.BusinessProcess.Util.Enum;
+﻿using MediCloud.BusinessProcess.Util;
 using MediCloud.DatabaseModels;
 using MediCLoud.Pdf.Entity;
-using MediCloud.BusinessProcess.Util;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace MediCloud.BusinessProcess.Cliente.Reports
 {
     public class MovimentoReports
     {
-        private List<SELECTANUAL> _reportResult;
+        #region Private Fields
+
+        private DateTime _dataFim;
+        private DateTime _dataInicio;
         private INFORMACOES_CLINICA _informacoesDaClinica;
+        private List<SELECTANUAL> _reportResult;
         private Util.Enum.Cliente.MovimentoReportEnum _tipoRelatorioMovimento;
 
-        private DateTime _dataInicio;
-        private DateTime _dataFim;
+        #endregion Private Fields
+
+        #region Public Constructors
 
         public MovimentoReports(List<SELECTANUAL> resultado, INFORMACOES_CLINICA informacoesDaClinica, Util.Enum.Cliente.MovimentoReportEnum tipoRelatorioMovimento, DateTime dataInicio, DateTime dataFim)
         {
@@ -27,6 +29,12 @@ namespace MediCloud.BusinessProcess.Cliente.Reports
             this._dataInicio = dataInicio;
             this._dataFim = dataFim;
         }
+
+        #endregion Public Constructors
+
+
+
+        #region Public Methods
 
         public byte[] generate(params string[] args)
         {
@@ -39,6 +47,7 @@ namespace MediCloud.BusinessProcess.Cliente.Reports
                 case Util.Enum.Cliente.MovimentoReportEnum.imprimirRelatorioAnual:
                     retorno = PdfFactory.create(EnumPdfType.TuesPechkin).ParseOrientacao(substituirParametrosRelatorioAnual(template), TipoOrientacaoPdf.Retrato);
                     break;
+
                 default:
                     retorno = null;
                     break;
@@ -46,6 +55,12 @@ namespace MediCloud.BusinessProcess.Cliente.Reports
 
             return retorno;
         }
+
+        #endregion Public Methods
+
+
+
+        #region Private Methods
 
         private string substituirParametrosRelatorioAnual(string template)
         {
@@ -55,7 +70,7 @@ namespace MediCloud.BusinessProcess.Cliente.Reports
             {
                 corpoRelatorio += @"
                     <tr style=""font - weight:bold"">
-                        <td style = ""border-bottom:solid 1px"" colspan = ""5"" ><b> RAZÃO SOCIAL: "+ _reportResult.Where(y => (y.RAZAOSOCIAL + y.NOMEFANTASIA) == x).First().RAZAOSOCIAL + @" </b></ td >
+                        <td style = ""border-bottom:solid 1px"" colspan = ""5"" ><b> RAZÃO SOCIAL: " + _reportResult.Where(y => (y.RAZAOSOCIAL + y.NOMEFANTASIA) == x).First().RAZAOSOCIAL + @" </b></ td >
                      </tr >";
 
                 corpoRelatorio += @"
@@ -79,7 +94,7 @@ namespace MediCloud.BusinessProcess.Cliente.Reports
 
                     _reportResult.Where(z => (z.RAZAOSOCIAL + z.NOMEFANTASIA) == x && z.CARGO == y).Select(z => z.PROCEDIMENTO).Distinct().ToList().ForEach(a =>
                     {
-                        corpoRelatorio += @"					
+                        corpoRelatorio += @"
                             <tr style=""text-align:center"" >
 						        <td style=""text-align:left"" >" + a + @"</td>
 						        <td >" + _reportResult.Where(b => (b.RAZAOSOCIAL + b.NOMEFANTASIA) == x && b.CARGO == y && b.PROCEDIMENTO == a).Count() + @"</td>
@@ -88,10 +103,9 @@ namespace MediCloud.BusinessProcess.Cliente.Reports
 						        <td >" + _reportResult.Where(b => (b.RAZAOSOCIAL + b.NOMEFANTASIA) == x && b.CARGO == y && b.PROCEDIMENTO == a).Select(b => b.PROXIMOANO).ToList().Sum(b => Convert.ToInt32(b)) + @"</td>
 					        </tr>";
                     });
-
                 });
 
-                    corpoRelatorio += @"
+                corpoRelatorio += @"
                                 </table>
 			                </td>
 		                </tr>";
@@ -114,5 +128,7 @@ namespace MediCloud.BusinessProcess.Cliente.Reports
 
             return template;
         }
+
+        #endregion Private Methods
     }
 }

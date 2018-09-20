@@ -1,17 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MediCloud.BusinessProcess.Util;
 using MediCloud.DatabaseModels;
 using MediCloud.Persistence;
+using System;
+using System.Collections.Generic;
 using System.Data.Entity.Validation;
-using MediCloud.BusinessProcess.Util;
+using System.Linq;
 
 namespace MediCloud.BusinessProcess.Recomendacao
 {
     public class ControleDeSetor
     {
+        #region Public Methods
+
         public static SETOR buscarSetorPorID(int idRef)
         {
             CloudMedContext contexto = new CloudMedContext();
@@ -76,14 +76,12 @@ namespace MediCloud.BusinessProcess.Recomendacao
 
             try
             {
-
                 if (setorDAO.IDSETOR > 0)
                 {
                     setorSalvo = contexto.SETOR.First(x => x.IDSETOR == setorDAO.IDSETOR);
 
                     setorSalvo.IDSETOR = setorDAO.IDSETOR;
                     setorSalvo.SETOR1 = setorDAO.SETOR1;
-
                 }
                 else
                 {
@@ -92,7 +90,6 @@ namespace MediCloud.BusinessProcess.Recomendacao
 
                 contexto.SaveChanges();
                 return setorSalvo;
-
             }
             catch (DbEntityValidationException ex)
             {
@@ -104,5 +101,7 @@ namespace MediCloud.BusinessProcess.Recomendacao
                 throw ex;
             }
         }
+
+        #endregion Public Methods
     }
 }

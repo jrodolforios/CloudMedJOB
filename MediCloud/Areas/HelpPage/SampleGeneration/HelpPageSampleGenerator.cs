@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -11,7 +12,6 @@ using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
 using System.Web.Http.Description;
 using System.Xml.Linq;
-using Newtonsoft.Json;
 
 namespace MediCloud.View.Areas.HelpPage
 {
@@ -20,6 +20,8 @@ namespace MediCloud.View.Areas.HelpPage
     /// </summary>
     public class HelpPageSampleGenerator
     {
+        #region Public Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="HelpPageSampleGenerator"/> class.
         /// </summary>
@@ -34,10 +36,11 @@ namespace MediCloud.View.Areas.HelpPage
             };
         }
 
-        /// <summary>
-        /// Gets CLR types that are used as the content of <see cref="HttpRequestMessage"/> or <see cref="HttpResponseMessage"/>.
-        /// </summary>
-        public IDictionary<HelpPageSampleKey, Type> ActualHttpMessageTypes { get; internal set; }
+        #endregion Public Constructors
+
+
+
+        #region Public Properties
 
         /// <summary>
         /// Gets the objects that are used directly as samples for certain actions.
@@ -45,9 +48,9 @@ namespace MediCloud.View.Areas.HelpPage
         public IDictionary<HelpPageSampleKey, object> ActionSamples { get; internal set; }
 
         /// <summary>
-        /// Gets the objects that are serialized as samples by the supported formatters.
+        /// Gets CLR types that are used as the content of <see cref="HttpRequestMessage"/> or <see cref="HttpResponseMessage"/>.
         /// </summary>
-        public IDictionary<Type, object> SampleObjects { get; internal set; }
+        public IDictionary<HelpPageSampleKey, Type> ActualHttpMessageTypes { get; internal set; }
 
         /// <summary>
         /// Gets factories for the objects that the supported formatters will serialize as samples. Processed in order,
@@ -62,23 +65,44 @@ namespace MediCloud.View.Areas.HelpPage
         public IList<Func<HelpPageSampleGenerator, Type, object>> SampleObjectFactories { get; private set; }
 
         /// <summary>
-        /// Gets the request body samples for a given <see cref="ApiDescription"/>.
+        /// Gets the objects that are serialized as samples by the supported formatters.
         /// </summary>
-        /// <param name="api">The <see cref="ApiDescription"/>.</param>
-        /// <returns>The samples keyed by media type.</returns>
-        public IDictionary<MediaTypeHeaderValue, object> GetSampleRequests(ApiDescription api)
-        {
-            return GetSample(api, SampleDirection.Request);
-        }
+        public IDictionary<Type, object> SampleObjects { get; internal set; }
+
+        #endregion Public Properties
+
+
+
+        #region Public Methods
 
         /// <summary>
-        /// Gets the response body samples for a given <see cref="ApiDescription"/>.
+        /// Search for samples that are provided directly through <see cref="ActionSamples"/>.
         /// </summary>
-        /// <param name="api">The <see cref="ApiDescription"/>.</param>
-        /// <returns>The samples keyed by media type.</returns>
-        public IDictionary<MediaTypeHeaderValue, object> GetSampleResponses(ApiDescription api)
+        /// <param name="controllerName">Name of the controller.</param>
+        /// <param name="actionName">Name of the action.</param>
+        /// <param name="parameterNames">The parameter names.</param>
+        /// <param name="type">The CLR type.</param>
+        /// <param name="formatter">The formatter.</param>
+        /// <param name="mediaType">The media type.</param>
+        /// <param name="sampleDirection">The value indicating whether the sample is for a request or for a response.</param>
+        /// <returns>The sample that matches the parameters.</returns>
+        public virtual object GetActionSample(string controllerName, string actionName, IEnumerable<string> parameterNames, Type type, MediaTypeFormatter formatter, MediaTypeHeaderValue mediaType, SampleDirection sampleDirection)
         {
-            return GetSample(api, SampleDirection.Response);
+            object sample;
+
+            // First, try to get the sample provided for the specified mediaType, sampleDirection, controllerName, actionName and parameterNames.
+            // If not found, try to get the sample provided for the specified mediaType, sampleDirection, controllerName and actionName regardless of the parameterNames.
+            // If still not found, try to get the sample provided for the specified mediaType and type.
+            // Finally, try to get the sample provided for the specified mediaType.
+            if (ActionSamples.TryGetValue(new HelpPageSampleKey(mediaType, sampleDirection, controllerName, actionName, parameterNames), out sample) ||
+                ActionSamples.TryGetValue(new HelpPageSampleKey(mediaType, sampleDirection, controllerName, actionName, new[] { "*" }), out sample) ||
+                ActionSamples.TryGetValue(new HelpPageSampleKey(mediaType, type), out sample) ||
+                ActionSamples.TryGetValue(new HelpPageSampleKey(mediaType), out sample))
+            {
+                return sample;
+            }
+
+            return null;
         }
 
         /// <summary>
@@ -136,37 +160,7 @@ namespace MediCloud.View.Areas.HelpPage
         }
 
         /// <summary>
-        /// Search for samples that are provided directly through <see cref="ActionSamples"/>.
-        /// </summary>
-        /// <param name="controllerName">Name of the controller.</param>
-        /// <param name="actionName">Name of the action.</param>
-        /// <param name="parameterNames">The parameter names.</param>
-        /// <param name="type">The CLR type.</param>
-        /// <param name="formatter">The formatter.</param>
-        /// <param name="mediaType">The media type.</param>
-        /// <param name="sampleDirection">The value indicating whether the sample is for a request or for a response.</param>
-        /// <returns>The sample that matches the parameters.</returns>
-        public virtual object GetActionSample(string controllerName, string actionName, IEnumerable<string> parameterNames, Type type, MediaTypeFormatter formatter, MediaTypeHeaderValue mediaType, SampleDirection sampleDirection)
-        {
-            object sample;
-
-            // First, try to get the sample provided for the specified mediaType, sampleDirection, controllerName, actionName and parameterNames.
-            // If not found, try to get the sample provided for the specified mediaType, sampleDirection, controllerName and actionName regardless of the parameterNames.
-            // If still not found, try to get the sample provided for the specified mediaType and type.
-            // Finally, try to get the sample provided for the specified mediaType.
-            if (ActionSamples.TryGetValue(new HelpPageSampleKey(mediaType, sampleDirection, controllerName, actionName, parameterNames), out sample) ||
-                ActionSamples.TryGetValue(new HelpPageSampleKey(mediaType, sampleDirection, controllerName, actionName, new[] { "*" }), out sample) ||
-                ActionSamples.TryGetValue(new HelpPageSampleKey(mediaType, type), out sample) ||
-                ActionSamples.TryGetValue(new HelpPageSampleKey(mediaType), out sample))
-            {
-                return sample;
-            }
-
-            return null;
-        }
-
-        /// <summary>
-        /// Gets the sample object that will be serialized by the formatters. 
+        /// Gets the sample object that will be serialized by the formatters.
         /// First, it will look at the <see cref="SampleObjects"/>. If no sample object is found, it will try to create
         /// one using <see cref="DefaultSampleObjectFactory"/> (which wraps an <see cref="ObjectGenerator"/>) and other
         /// factories in <see cref="SampleObjectFactories"/>.
@@ -205,6 +199,26 @@ namespace MediCloud.View.Areas.HelpPage
             }
 
             return sampleObject;
+        }
+
+        /// <summary>
+        /// Gets the request body samples for a given <see cref="ApiDescription"/>.
+        /// </summary>
+        /// <param name="api">The <see cref="ApiDescription"/>.</param>
+        /// <returns>The samples keyed by media type.</returns>
+        public IDictionary<MediaTypeHeaderValue, object> GetSampleRequests(ApiDescription api)
+        {
+            return GetSample(api, SampleDirection.Request);
+        }
+
+        /// <summary>
+        /// Gets the response body samples for a given <see cref="ApiDescription"/>.
+        /// </summary>
+        /// <param name="api">The <see cref="ApiDescription"/>.</param>
+        /// <returns>The samples keyed by media type.</returns>
+        public IDictionary<MediaTypeHeaderValue, object> GetSampleResponses(ApiDescription api)
+        {
+            return GetSample(api, SampleDirection.Response);
         }
 
         /// <summary>
@@ -265,6 +279,7 @@ namespace MediCloud.View.Areas.HelpPage
                         type = requestBodyParameter == null ? null : requestBodyParameter.ParameterDescriptor.ParameterType;
                         formatters = api.SupportedRequestBodyFormatters;
                         break;
+
                     case SampleDirection.Response:
                     default:
                         type = api.ResponseDescription.ResponseType ?? api.ResponseDescription.DeclaredType;
@@ -354,6 +369,10 @@ namespace MediCloud.View.Areas.HelpPage
             return sample;
         }
 
+        #endregion Public Methods
+
+        #region Internal Methods
+
         internal static Exception UnwrapException(Exception exception)
         {
             AggregateException aggregateException = exception as AggregateException;
@@ -364,12 +383,31 @@ namespace MediCloud.View.Areas.HelpPage
             return exception;
         }
 
+        #endregion Internal Methods
+
+
+
+        #region Private Methods
+
         // Default factory for sample objects
         private static object DefaultSampleObjectFactory(HelpPageSampleGenerator sampleGenerator, Type type)
         {
             // Try to create a default sample object
             ObjectGenerator objectGenerator = new ObjectGenerator();
             return objectGenerator.GenerateObject(type);
+        }
+
+        private static bool IsFormatSupported(SampleDirection sampleDirection, MediaTypeFormatter formatter, Type type)
+        {
+            switch (sampleDirection)
+            {
+                case SampleDirection.Request:
+                    return formatter.CanReadType(type);
+
+                case SampleDirection.Response:
+                    return formatter.CanWriteType(type);
+            }
+            return false;
         }
 
         [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Handling the failure by returning the original string.")]
@@ -402,16 +440,15 @@ namespace MediCloud.View.Areas.HelpPage
             }
         }
 
-        private static bool IsFormatSupported(SampleDirection sampleDirection, MediaTypeFormatter formatter, Type type)
+        private static object WrapSampleIfString(object sample)
         {
-            switch (sampleDirection)
+            string stringSample = sample as string;
+            if (stringSample != null)
             {
-                case SampleDirection.Request:
-                    return formatter.CanReadType(type);
-                case SampleDirection.Response:
-                    return formatter.CanWriteType(type);
+                return new TextSample(stringSample);
             }
-            return false;
+
+            return sample;
         }
 
         private IEnumerable<KeyValuePair<HelpPageSampleKey, object>> GetAllActionSamples(string controllerName, string actionName, IEnumerable<string> parameterNames, SampleDirection sampleDirection)
@@ -430,15 +467,6 @@ namespace MediCloud.View.Areas.HelpPage
             }
         }
 
-        private static object WrapSampleIfString(object sample)
-        {
-            string stringSample = sample as string;
-            if (stringSample != null)
-            {
-                return new TextSample(stringSample);
-            }
-
-            return sample;
-        }
+        #endregion Private Methods
     }
 }

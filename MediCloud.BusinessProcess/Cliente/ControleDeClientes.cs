@@ -1,18 +1,44 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
+﻿using MediCloud.BusinessProcess.Util;
 using MediCloud.DatabaseModels;
-using MediCloud.BusinessProcess.Util;
 using MediCloud.Persistence;
-using System.Data.Entity.Validation;
 using Phidelis.Criptografia.Criptors;
+using System;
+using System.Collections.Generic;
+using System.Data.Entity.Validation;
+using System.Linq;
 
 namespace MediCloud.BusinessProcess.Cliente
 {
     public class ControleDeClientes
     {
+        #region Public Methods
+
+        public static void AdicionarTabela(int codigoCliente, int codigoTabela)
+        {
+            CloudMedContext contexto = new CloudMedContext();
+            CLIENTE cliente;
+            try
+            {
+                if (contexto.CLIENTE.Any(x => x.IDCLI == codigoCliente))
+                {
+                    cliente = contexto.CLIENTE.First(x => x.IDCLI == codigoCliente);
+
+                    if (!cliente.TABELA.Any(x => x.IDTAB == codigoTabela))
+                        cliente.TABELA.Add(contexto.TABELA.First(x => x.IDTAB == codigoTabela));
+                }
+
+                contexto.SaveChanges();
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public static CLIENTE buscarCliente(int codigo)
         {
             CloudMedContext contexto = new CloudMedContext();
@@ -60,95 +86,6 @@ namespace MediCloud.BusinessProcess.Cliente
             }
         }
 
-        public static void ExcluirCliente(int codigoDoCliente)
-        {
-            CloudMedContext contexto = new CloudMedContext();
-            try
-            {
-                contexto.CLIENTE.Remove(contexto.CLIENTE.First(x => x.IDCLI == codigoDoCliente));
-
-                contexto.SaveChanges();
-            }
-            catch (DbEntityValidationException ex)
-            {
-                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        public static CLIENTE SalvarCliente(CLIENTE clienteDAO)
-        {
-            CloudMedContext contexto = new CloudMedContext();
-            CLIENTE usuarioSalvo = new CLIENTE();
-            MD5Criptor criptor = new MD5Criptor();
-
-            try
-            {
-
-                if (clienteDAO.IDCLI > 0)
-                {
-                    usuarioSalvo = contexto.CLIENTE.First(x => x.IDCLI == clienteDAO.IDCLI);
-
-                    usuarioSalvo.BAIRRO = clienteDAO.BAIRRO;
-                    usuarioSalvo.CEP = clienteDAO.CEP;
-                    usuarioSalvo.CIDADE = clienteDAO.CIDADE;
-                    usuarioSalvo.CPFCNPJ = clienteDAO.CPFCNPJ;
-                    usuarioSalvo.DATAATUALIZACAO = DateTime.Now;
-                    usuarioSalvo.ENDERECO = clienteDAO.ENDERECO;
-                    usuarioSalvo.IDCONT = clienteDAO.IDCONT;
-                    usuarioSalvo.IDEPCMSO = clienteDAO.IDEPCMSO;
-                    usuarioSalvo.IDEPPRA = clienteDAO.IDEPPRA;
-                    usuarioSalvo.IDSEG = clienteDAO.IDSEG;
-                    usuarioSalvo.NFUN = clienteDAO.NFUN;
-                    usuarioSalvo.NOMEFANTASIA = clienteDAO.NOMEFANTASIA;
-                    usuarioSalvo.OBSERVACOES = clienteDAO.OBSERVACOES;
-                    usuarioSalvo.RAZAOSOCIAL = clienteDAO.RAZAOSOCIAL;
-                    usuarioSalvo.TIPOCLIENTE = clienteDAO.TIPOCLIENTE;
-                    usuarioSalvo.UF = clienteDAO.UF;
-
-                }
-                else
-                {
-                    usuarioSalvo = contexto.CLIENTE.Add(clienteDAO);
-                }
-
-                contexto.SaveChanges();
-                return usuarioSalvo;
-
-            }
-            catch (DbEntityValidationException ex)
-            {
-                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
-                return null;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        public static List<CLIENTE> buscarClienteDoMesAnterior()
-        {
-            CloudMedContext contexto = new CloudMedContext();
-
-            try
-            {
-                return contexto.CLIENTE.Where(x => contexto.MOVIMENTO.Any(y => y.DATA.Month == (DateTime.Now.Month - 1) && y.DATA.Year == DateTime.Now.Year && y.IDCLI == x.IDCLI)).ToList();
-            }
-            catch (DbEntityValidationException ex)
-            {
-                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
-                return new List<CLIENTE>();
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
         public static List<CLIENTE> buscarClienteDoMes()
         {
             CloudMedContext contexto = new CloudMedContext();
@@ -168,58 +105,18 @@ namespace MediCloud.BusinessProcess.Cliente
             }
         }
 
-        public static CLIENTE_OUTRASEMP SalvarEmpresa(CLIENTE_OUTRASEMP empresaDAO)
+        public static List<CLIENTE> buscarClienteDoMesAnterior()
         {
             CloudMedContext contexto = new CloudMedContext();
-            CLIENTE_OUTRASEMP usuarioSalvo = new CLIENTE_OUTRASEMP();
 
             try
             {
-
-                if (empresaDAO.IDEMP > 0)
-                {
-                    usuarioSalvo = contexto.CLIENTE_OUTRASEMP.First(x => x.IDEMP == empresaDAO.IDEMP);
-
-                    usuarioSalvo.EMAIL = empresaDAO.EMAIL;
-                    usuarioSalvo.EMPRESA = empresaDAO.EMPRESA;
-                    usuarioSalvo.IDCLI = empresaDAO.IDCLI;
-                    usuarioSalvo.NOMERESP = empresaDAO.NOMERESP;
-                    usuarioSalvo.TELEFONE = empresaDAO.TELEFONE;
-
-                }
-                else
-                {
-                    usuarioSalvo = contexto.CLIENTE_OUTRASEMP.Add(empresaDAO);
-                }
-
-                contexto.SaveChanges();
-                return usuarioSalvo;
-
+                return contexto.CLIENTE.Where(x => contexto.MOVIMENTO.Any(y => y.DATA.Month == (DateTime.Now.Month - 1) && y.DATA.Year == DateTime.Now.Year && y.IDCLI == x.IDCLI)).ToList();
             }
             catch (DbEntityValidationException ex)
             {
                 ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
-                return null;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        public static void ExcluirEmpresa(int codigoDaEmpresa)
-        {
-            CloudMedContext contexto = new CloudMedContext();
-            try
-            {
-                if (contexto.CLIENTE_OUTRASEMP.Any(x => x.IDEMP == codigoDaEmpresa))
-                    contexto.CLIENTE_OUTRASEMP.Remove(contexto.CLIENTE_OUTRASEMP.First(x => x.IDEMP == codigoDaEmpresa));
-
-                contexto.SaveChanges();
-            }
-            catch (DbEntityValidationException ex)
-            {
-                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+                return new List<CLIENTE>();
             }
             catch (Exception ex)
             {
@@ -270,19 +167,32 @@ namespace MediCloud.BusinessProcess.Cliente
             }
         }
 
-        public static void AdicionarTabela(int codigoCliente, int codigoTabela)
+        public static void ExcluirCliente(int codigoDoCliente)
         {
             CloudMedContext contexto = new CloudMedContext();
-            CLIENTE cliente;
             try
             {
-                if (contexto.CLIENTE.Any(x => x.IDCLI == codigoCliente))
-                {
-                    cliente = contexto.CLIENTE.First(x => x.IDCLI == codigoCliente);
+                contexto.CLIENTE.Remove(contexto.CLIENTE.First(x => x.IDCLI == codigoDoCliente));
 
-                    if (!cliente.TABELA.Any(x => x.IDTAB == codigoTabela))
-                        cliente.TABELA.Add(contexto.TABELA.First(x => x.IDTAB == codigoTabela));
-                }
+                contexto.SaveChanges();
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static void ExcluirEmpresa(int codigoDaEmpresa)
+        {
+            CloudMedContext contexto = new CloudMedContext();
+            try
+            {
+                if (contexto.CLIENTE_OUTRASEMP.Any(x => x.IDEMP == codigoDaEmpresa))
+                    contexto.CLIENTE_OUTRASEMP.Remove(contexto.CLIENTE_OUTRASEMP.First(x => x.IDEMP == codigoDaEmpresa));
 
                 contexto.SaveChanges();
             }
@@ -321,5 +231,91 @@ namespace MediCloud.BusinessProcess.Cliente
                 throw ex;
             }
         }
+
+        public static CLIENTE SalvarCliente(CLIENTE clienteDAO)
+        {
+            CloudMedContext contexto = new CloudMedContext();
+            CLIENTE usuarioSalvo = new CLIENTE();
+            MD5Criptor criptor = new MD5Criptor();
+
+            try
+            {
+                if (clienteDAO.IDCLI > 0)
+                {
+                    usuarioSalvo = contexto.CLIENTE.First(x => x.IDCLI == clienteDAO.IDCLI);
+
+                    usuarioSalvo.BAIRRO = clienteDAO.BAIRRO;
+                    usuarioSalvo.CEP = clienteDAO.CEP;
+                    usuarioSalvo.CIDADE = clienteDAO.CIDADE;
+                    usuarioSalvo.CPFCNPJ = clienteDAO.CPFCNPJ;
+                    usuarioSalvo.DATAATUALIZACAO = DateTime.Now;
+                    usuarioSalvo.ENDERECO = clienteDAO.ENDERECO;
+                    usuarioSalvo.IDCONT = clienteDAO.IDCONT;
+                    usuarioSalvo.IDEPCMSO = clienteDAO.IDEPCMSO;
+                    usuarioSalvo.IDEPPRA = clienteDAO.IDEPPRA;
+                    usuarioSalvo.IDSEG = clienteDAO.IDSEG;
+                    usuarioSalvo.NFUN = clienteDAO.NFUN;
+                    usuarioSalvo.NOMEFANTASIA = clienteDAO.NOMEFANTASIA;
+                    usuarioSalvo.OBSERVACOES = clienteDAO.OBSERVACOES;
+                    usuarioSalvo.RAZAOSOCIAL = clienteDAO.RAZAOSOCIAL;
+                    usuarioSalvo.TIPOCLIENTE = clienteDAO.TIPOCLIENTE;
+                    usuarioSalvo.UF = clienteDAO.UF;
+                }
+                else
+                {
+                    usuarioSalvo = contexto.CLIENTE.Add(clienteDAO);
+                }
+
+                contexto.SaveChanges();
+                return usuarioSalvo;
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+                return null;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static CLIENTE_OUTRASEMP SalvarEmpresa(CLIENTE_OUTRASEMP empresaDAO)
+        {
+            CloudMedContext contexto = new CloudMedContext();
+            CLIENTE_OUTRASEMP usuarioSalvo = new CLIENTE_OUTRASEMP();
+
+            try
+            {
+                if (empresaDAO.IDEMP > 0)
+                {
+                    usuarioSalvo = contexto.CLIENTE_OUTRASEMP.First(x => x.IDEMP == empresaDAO.IDEMP);
+
+                    usuarioSalvo.EMAIL = empresaDAO.EMAIL;
+                    usuarioSalvo.EMPRESA = empresaDAO.EMPRESA;
+                    usuarioSalvo.IDCLI = empresaDAO.IDCLI;
+                    usuarioSalvo.NOMERESP = empresaDAO.NOMERESP;
+                    usuarioSalvo.TELEFONE = empresaDAO.TELEFONE;
+                }
+                else
+                {
+                    usuarioSalvo = contexto.CLIENTE_OUTRASEMP.Add(empresaDAO);
+                }
+
+                contexto.SaveChanges();
+                return usuarioSalvo;
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+                return null;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        #endregion Public Methods
     }
 }

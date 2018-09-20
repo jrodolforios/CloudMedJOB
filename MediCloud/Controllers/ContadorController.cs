@@ -7,19 +7,13 @@ using MediCloud.Models.Seguranca;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace MediCloud.Controllers
 {
     public class ContadorController : BaseController
     {
-        // GET: Contador
-        public ActionResult Index()
-        {
-            this.EstahLogado();
-            return View();
-        }
+        #region Public Methods
 
         [HttpPost]
         public JsonResult BuscaContadorAJAX(string Prefix)
@@ -31,12 +25,12 @@ namespace MediCloud.Controllers
             {
                 contadoresEncontrados.ForEach(x =>
                 {
-                    ObjList.Add(new AutoCompleteDefaultModel() {Id = x.IdContador, Name = x.NomeContador });
+                    ObjList.Add(new AutoCompleteDefaultModel() { Id = x.IdContador, Name = x.NomeContador });
                 });
 
-                //Searching records from list using LINQ query  
+                //Searching records from list using LINQ query
                 var results = (from N in ObjList
-                                select new { N.Id, N.Name }).ToArray();
+                               select new { N.Id, N.Name }).ToArray();
                 return Json(results, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
@@ -51,22 +45,27 @@ namespace MediCloud.Controllers
         }
 
         [HttpPost]
-        public ActionResult Index(FormCollection form)
+        public JsonResult DeletarContador(int codigoDoContador)
         {
+            ResultadoAjaxGenericoModel resultado = new ResultadoAjaxGenericoModel();
             try
             {
                 base.EstahLogado();
-                ViewBag.Title = "Contadores";
 
-                List<ContadorModel> model = CadastroDeContador.RecuperarContadorPorTermo(form);
+                CadastroDeContador.DeletarContador(this, codigoDoContador);
 
-                return View(model);
+                resultado.mensagem = "Contador excluído.";
+                resultado.acaoBemSucedida = true;
+
+                return Json(resultado, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
                 ExceptionUtil.GerarLogDeExcecao(ex, Request.Url.ToString());
-                base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
-                return View();
+                resultado.mensagem = Constantes.MENSAGEM_GENERICA_DE_ERRO;
+                resultado.acaoBemSucedida = false;
+
+                return Json(resultado, JsonRequestBehavior.AllowGet);
             }
         }
 
@@ -119,31 +118,6 @@ namespace MediCloud.Controllers
             }
         }
 
-        [HttpPost]
-        public JsonResult DeletarContador(int codigoDoContador)
-        {
-            ResultadoAjaxGenericoModel resultado = new ResultadoAjaxGenericoModel();
-            try
-            {
-                base.EstahLogado();
-
-                CadastroDeContador.DeletarContador(this, codigoDoContador);
-
-                resultado.mensagem = "Contador excluído.";
-                resultado.acaoBemSucedida = true;
-
-                return Json(resultado, JsonRequestBehavior.AllowGet);
-            }
-            catch (Exception ex)
-            {
-                ExceptionUtil.GerarLogDeExcecao(ex, Request.Url.ToString());
-                resultado.mensagem = Constantes.MENSAGEM_GENERICA_DE_ERRO;
-                resultado.acaoBemSucedida = false;
-
-                return Json(resultado, JsonRequestBehavior.AllowGet);
-            }
-        }
-
         public ActionResult ExcluirContador(int codigoContador)
         {
             ContadorModel modelContador = null;
@@ -168,5 +142,34 @@ namespace MediCloud.Controllers
                 return View(modelContador);
             }
         }
+
+        // GET: Contador
+        public ActionResult Index()
+        {
+            this.EstahLogado();
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult Index(FormCollection form)
+        {
+            try
+            {
+                base.EstahLogado();
+                ViewBag.Title = "Contadores";
+
+                List<ContadorModel> model = CadastroDeContador.RecuperarContadorPorTermo(form);
+
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                ExceptionUtil.GerarLogDeExcecao(ex, Request.Url.ToString());
+                base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
+                return View();
+            }
+        }
+
+        #endregion Public Methods
     }
 }

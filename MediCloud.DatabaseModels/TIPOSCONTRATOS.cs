@@ -1,13 +1,13 @@
 namespace MediCloud.DatabaseModels
 {
     using System;
-    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
-    using System.Data.Entity.Spatial;
 
     public partial class TIPOSCONTRATOS
     {
+        #region Public Properties
+
         public DateTime? DATACAD { get; set; }
 
         [StringLength(255)]
@@ -22,5 +22,7 @@ namespace MediCloud.DatabaseModels
 
         [Column(TypeName = "numeric")]
         public decimal? VALORPADRAO { get; set; }
+
+        #endregion Public Properties
     }
 }

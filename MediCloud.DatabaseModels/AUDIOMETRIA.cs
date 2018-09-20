@@ -1,14 +1,14 @@
 namespace MediCloud.DatabaseModels
 {
     using System;
-    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
-    using System.Data.Entity.Spatial;
 
     [Table("AUDIOMETRIA")]
     public partial class AUDIOMETRIA
     {
+        #region Public Properties
+
         [Key]
         [Column(Order = 0)]
         [StringLength(500)]
@@ -17,5 +17,7 @@ namespace MediCloud.DatabaseModels
         [Key]
         [Column(Order = 1, TypeName = "date")]
         public DateTime DATAULTIMACALIBRACAO { get; set; }
+
+        #endregion Public Properties
     }
 }

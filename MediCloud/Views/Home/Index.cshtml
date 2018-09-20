@@ -174,7 +174,6 @@
                             }
                         </div>
                     </div>
-
                 </div><!-- /.widget-main -->
             </div><!-- /.widget-body -->
         </div><!-- /.widget-box -->
@@ -191,6 +190,18 @@
             <div class="widget-body">
                 <div class="widget-main padding-4">
                     <div id="sales-charts"></div>
+
+                    <div class="infobox infobox-blue infobox-small infobox-dark">
+                        <div class="infobox-chart">
+                            <span class="sparkline" data-values="@String.Join(",", Model.FaturamentoUltimos8Meses.Reverse<string>())"></span>
+                        </div>
+
+                        <div class="infobox-data">
+                            <div class="infobox-content">Este mês</div>
+                            <div class="infobox-content">R$@Model.FaturamentoMesAtual</div>
+                        </div>
+                    </div>
+
                 </div><!-- /.widget-main -->
             </div><!-- /.widget-body -->
         </div><!-- /.widget-box -->
@@ -206,9 +217,8 @@
 <script src="/assets/js/jquery.flot.min.js"></script>
 <script src="/assets/js/jquery.flot.pie.min.js"></script>
 <script src="/assets/js/jquery.flot.resize.min.js"></script>
-
-<script src="assets/js/ace-elements.min.js"></script>
-<script src="assets/js/ace.min.js"></script>
+<script src="/assets/js/ace-elements.min.js"></script>
+<script src="/assets/js/ace.min.js"></script>
 
 <script src="assets/js/bootstrap.min.js"></script>
 
@@ -249,5 +259,17 @@
         function GerarRecibo(codigo) {
             window.location.replace("/ASO/ImprimirReciboASO?codigoASO=" + codigo);
         }
+
+        $('.sparkline').each(function () {
+            var $box = $(this).closest('.infobox');
+            var barColor = !$box.hasClass('infobox-dark') ? $box.css('color') : '#FFF';
+            $(this).sparkline('html',
+                {
+                    tagValuesAttribute: 'data-values',
+                    type: 'bar',
+                    barColor: barColor,
+                    chartRangeMin: $(this).data('min') || 0
+                });
+        });
 
 </script>

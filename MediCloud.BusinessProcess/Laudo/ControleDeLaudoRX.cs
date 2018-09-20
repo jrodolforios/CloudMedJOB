@@ -1,18 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MediCloud.DatabaseModels;
-using System.Data.Entity.Validation;
+﻿using MediCloud.BusinessProcess.Laudo.Reports;
 using MediCloud.BusinessProcess.Util;
+using MediCloud.DatabaseModels;
 using MediCloud.Persistence;
-using MediCloud.BusinessProcess.Laudo.Reports;
+using System;
+using System.Collections.Generic;
+using System.Data.Entity.Validation;
+using System.Linq;
 
 namespace MediCloud.BusinessProcess.Laudo
 {
     public class ControleDeLaudoRX
     {
+        #region Public Methods
+
         public static List<LAUDORX> buscarLaudoRX(string termo)
         {
             CloudMedContext contexto = new CloudMedContext();
@@ -40,6 +40,32 @@ namespace MediCloud.BusinessProcess.Laudo
             }
         }
 
+        public static LAUDORX buscarLaudoRXPorId(int v)
+        {
+            CloudMedContext contexto = new CloudMedContext();
+
+            try
+            {
+                if (v <= 0)
+                {
+                    return null;
+                }
+                else
+                {
+                    return contexto.LAUDORX.First(x => x.IDMOVPRO == v);
+                }
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+                return new LAUDORX();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public static void DeletarLaudoRX(int codigoRaioX)
         {
             CloudMedContext contexto = new CloudMedContext();
@@ -58,6 +84,16 @@ namespace MediCloud.BusinessProcess.Laudo
             {
                 throw ex;
             }
+        }
+
+        public static byte[] ImprimirLaudo(int codigoLaudo)
+        {
+            LAUDORX laudoRX = ControleDeLaudoRX.buscarLaudoRXPorId(codigoLaudo);
+            INFORMACOES_CLINICA infoClinica = Util.Util.RecuperarInformacoesDaClinica();
+
+            LaudoReports Report = new LaudoReports(laudoRX, Util.Enum.Laudo.LaudoReportEnum.imprimirLaudoRaioX, infoClinica);
+
+            return Report.generate();
         }
 
         public static void LiberarLaudoRX(int codigoRaioX)
@@ -89,7 +125,6 @@ namespace MediCloud.BusinessProcess.Laudo
 
             try
             {
-
                 if (laudoDAO.IDMOVPRO > 0)
                 {
                     usuarioSalvo = contexto.LAUDORX.First(x => x.IDMOVPRO == laudoDAO.IDMOVPRO);
@@ -105,17 +140,14 @@ namespace MediCloud.BusinessProcess.Laudo
                     usuarioSalvo.PACIENTE = laudoDAO.PACIENTE;
                     usuarioSalvo.RODAPE = laudoDAO.RODAPE;
                     usuarioSalvo.STATUS = laudoDAO.STATUS;
-
                 }
                 else
                 {
-
                     usuarioSalvo = contexto.LAUDORX.Add(laudoDAO);
                 }
 
                 contexto.SaveChanges();
                 return usuarioSalvo;
-
             }
             catch (DbEntityValidationException ex)
             {
@@ -128,41 +160,6 @@ namespace MediCloud.BusinessProcess.Laudo
             }
         }
 
-        public static LAUDORX buscarLaudoRXPorId(int v)
-        {
-
-            CloudMedContext contexto = new CloudMedContext();
-
-            try
-            {
-                if (v <= 0)
-                {
-                    return null;
-                }
-                else
-                {
-                    return contexto.LAUDORX.First(x => x.IDMOVPRO == v);
-                }
-            }
-            catch (DbEntityValidationException ex)
-            {
-                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
-                return new LAUDORX();
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        public static byte[] ImprimirLaudo(int codigoLaudo)
-        {
-            LAUDORX laudoRX = ControleDeLaudoRX.buscarLaudoRXPorId(codigoLaudo);
-            INFORMACOES_CLINICA infoClinica = Util.Util.RecuperarInformacoesDaClinica();
-
-            LaudoReports Report = new LaudoReports(laudoRX, Util.Enum.Laudo.LaudoReportEnum.imprimirLaudoRaioX, infoClinica);
-
-            return Report.generate();
-        }
+        #endregion Public Methods
     }
 }

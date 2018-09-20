@@ -1,17 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
+﻿using MediCloud.BusinessProcess.Util;
 using MediCloud.DatabaseModels;
 using MediCloud.Persistence;
+using System;
+using System.Collections.Generic;
 using System.Data.Entity.Validation;
-using MediCloud.BusinessProcess.Util;
+using System.Linq;
 
 namespace MediCloud.BusinessProcess.Financeiro
 {
     public class ControleDeContador
     {
+        #region Public Methods
+
         public static List<CONTADOR> BuscarContadoresPorTermo(string prefix)
         {
             CloudMedContext contexto = new CloudMedContext();
@@ -79,13 +79,11 @@ namespace MediCloud.BusinessProcess.Financeiro
 
             try
             {
-
                 if (contadorDAO.IDCONT > 0)
                 {
                     setorSalvo = contexto.CONTADOR.First(x => x.IDCONT == contadorDAO.IDCONT);
 
                     setorSalvo.CONTADOR1 = contadorDAO.CONTADOR1;
-
                 }
                 else
                 {
@@ -94,7 +92,6 @@ namespace MediCloud.BusinessProcess.Financeiro
 
                 contexto.SaveChanges();
                 return setorSalvo;
-
             }
             catch (DbEntityValidationException ex)
             {
@@ -106,5 +103,7 @@ namespace MediCloud.BusinessProcess.Financeiro
                 throw ex;
             }
         }
+
+        #endregion Public Methods
     }
 }

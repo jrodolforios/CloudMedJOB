@@ -1,18 +1,12 @@
 namespace MediCloud.DatabaseModels
 {
-    using System;
-    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
-    using System.Data.Entity.Spatial;
 
     [Table("RECOMENDACAOXASOXPRO")]
     public partial class RECOMENDACAOXASOXPRO
     {
-        [Key]
-        [Column(TypeName = "numeric")]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public decimal IDRECPRO { get; set; }
+        #region Public Properties
 
         [Column(TypeName = "numeric")]
         public decimal IDPRO { get; set; }
@@ -20,8 +14,15 @@ namespace MediCloud.DatabaseModels
         [Column(TypeName = "numeric")]
         public decimal? IDRECASO { get; set; }
 
+        [Key]
+        [Column(TypeName = "numeric")]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public decimal IDRECPRO { get; set; }
+
         public int? PERIODICIDADE { get; set; }
 
         public virtual RECOMENDACAOXASO RECOMENDACAOXASO { get; set; }
+
+        #endregion Public Properties
     }
 }

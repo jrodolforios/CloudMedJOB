@@ -1,13 +1,13 @@
 namespace MediCloud.DatabaseModels
 {
     using System;
-    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
-    using System.Data.Entity.Spatial;
 
     public partial class SYS_HELPBODY
     {
+        #region Public Properties
+
         [Key]
         [Column(TypeName = "numeric")]
         public decimal CODHELP { get; set; }
@@ -33,5 +33,7 @@ namespace MediCloud.DatabaseModels
         public DateTime? DATALT { get; set; }
 
         public virtual SYS_HELP SYS_HELP { get; set; }
+
+        #endregion Public Properties
     }
 }

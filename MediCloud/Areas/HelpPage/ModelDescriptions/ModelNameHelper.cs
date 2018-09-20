@@ -7,6 +7,8 @@ namespace MediCloud.View.Areas.HelpPage.ModelDescriptions
 {
     internal static class ModelNameHelper
     {
+        #region Public Methods
+
         // Modify this to provide custom model name mapping.
         public static string GetModelName(Type type)
         {
@@ -32,5 +34,7 @@ namespace MediCloud.View.Areas.HelpPage.ModelDescriptions
 
             return modelName;
         }
+
+        #endregion Public Methods
     }
 }

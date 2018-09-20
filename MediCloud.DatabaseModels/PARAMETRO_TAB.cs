@@ -1,15 +1,16 @@
 namespace MediCloud.DatabaseModels
 {
-    using System;
-    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
-    using System.Data.Entity.Spatial;
 
     public partial class PARAMETRO_TAB
     {
+        #region Public Properties
+
         [Key]
         [Column(TypeName = "numeric")]
         public decimal IDTAB { get; set; }
+
+        #endregion Public Properties
     }
 }

@@ -7,6 +7,8 @@ namespace MediCloud.View.Areas.HelpPage
     /// </summary>
     public class InvalidSample
     {
+        #region Public Constructors
+
         public InvalidSample(string errorMessage)
         {
             if (errorMessage == null)
@@ -16,7 +18,19 @@ namespace MediCloud.View.Areas.HelpPage
             ErrorMessage = errorMessage;
         }
 
+        #endregion Public Constructors
+
+
+
+        #region Public Properties
+
         public string ErrorMessage { get; private set; }
+
+        #endregion Public Properties
+
+
+
+        #region Public Methods
 
         public override bool Equals(object obj)
         {
@@ -33,5 +47,7 @@ namespace MediCloud.View.Areas.HelpPage
         {
             return ErrorMessage;
         }
+
+        #endregion Public Methods
     }
 }

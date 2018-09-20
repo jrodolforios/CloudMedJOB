@@ -1,6 +1,7 @@
 ﻿using MediCloud.App_Code;
 using MediCloud.BusinessProcess.Util;
 using MediCloud.Code.Clientes;
+using MediCloud.Code.Financeiro;
 using MediCloud.Models.Seguranca;
 using System;
 using System.Collections.Generic;
@@ -24,7 +25,9 @@ namespace MediCloud.View.Controllers
                 ProcedimentosNoMes = CadastroDeProcedimentosMovimento.ContagemProcedimentosNoMes(),
                 ConvocacoesNoMes = CadastroDeProcedimentosMovimento.ContagemDeConvocacoesNoMes(),
                 ASOS = CadastroDeASO.UltimosASOS(),
-                GraficoASOs = CadastroDeASO.GraficoASOs()
+                GraficoASOs = CadastroDeASO.GraficoASOs(),
+                FaturamentoMesAtual = CadastroDeFaturamento.RecuperarFaturaPrevistaMesAtual(),
+                FaturamentoUltimos8Meses = Util.TrocarVirgulaPorPonto(CadastroDeFaturamento.RecuperarUltimosOitoMesesDeFaturamento()),                
             };
 
             return View(model);

@@ -1,18 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using MediCloud.Models.Laudo;
-using MediCloud.DatabaseModels;
-using MediCloud.BusinessProcess.Laudo;
+﻿using MediCloud.BusinessProcess.Laudo;
 using MediCloud.Code.Clientes;
 using MediCloud.Controllers;
+using MediCloud.DatabaseModels;
+using MediCloud.Models.Laudo;
+using System;
+using System.Collections.Generic;
+using System.Web.Mvc;
 
 namespace MediCloud.Code.Laudo
 {
     public class CadastroDeLaudoAudio
     {
+        #region Internal Methods
+
         internal static List<LaudoAudioModel> buscarLaudoAudio(FormCollection form)
         {
             string termo = form["keywords"];
@@ -28,11 +28,92 @@ namespace MediCloud.Code.Laudo
             return listaDeModels;
         }
 
+        internal static void DeletarLaudoAudio(LaudoAudioController laudoAudioController, int codigoLaudoAudio)
+        {
+            ControleDeLaudoAudio.ExcluirLaudoAudio(codigoLaudoAudio);
+        }
+
+        internal static byte[] ImprimirAudiometria(int codigoAudiometria)
+        {
+            return ControleDeLaudoAudio.ImprimirAudiometria(codigoAudiometria);
+        }
+
         internal static LaudoAudioModel RecuperarLaudoAudioPorID(int v)
         {
             LAUDOAUD LaudoRXEncontrado = ControleDeLaudoAudio.BuscarLaudoAudioPorId(v);
 
-            return InjetarEmUsuarioModel(LaudoRXEncontrado,false);
+            return InjetarEmUsuarioModel(LaudoRXEncontrado, false);
+        }
+
+        internal static LaudoAudioModel SalvarAudiometria(FormCollection form)
+        {
+            LaudoAudioModel usuarioModel = InjetarEmUsuarioModel(form);
+            usuarioModel.validar();
+
+            LAUDOAUD laudoDAO = InjetarEmCargoModelDAO(usuarioModel);
+            laudoDAO = ControleDeLaudoAudio.SalvarLaudoAudio(laudoDAO);
+
+            usuarioModel = InjetarEmUsuarioModel(laudoDAO, false);
+
+            return usuarioModel;
+        }
+
+        #endregion Internal Methods
+
+
+
+        #region Private Methods
+
+        private static LAUDOAUD InjetarEmCargoModelDAO(LaudoAudioModel x)
+        {
+            if (x == null)
+                return null;
+            else
+                return new LAUDOAUD()
+                {
+                    IDLAUDO = x.IdLaudoAudio,
+                    IDMOVPRO = x.ProcedimentoMovimento.IdMovimentoProcedimento,
+
+                    DATAPROX = x.DataProxAvaliacao,
+
+                    OBSERVACAO = x.Observavao,
+
+                    OD250 = x.OD250,
+                    OD500 = x.OD500,
+                    OD1K = x.OD1K,
+                    OD2K = x.OD2K,
+                    OD3K = x.OD3K,
+                    OD4K = x.OD4K,
+                    OD6K = x.OD6K,
+                    OD8K = x.OD8K,
+
+                    ODO250 = x.ODO250,
+                    ODO500 = x.ODO500,
+                    ODO1K = x.ODO1K,
+                    ODO2K = x.ODO2K,
+                    ODO3K = x.ODO3K,
+                    ODO4K = x.ODO4K,
+                    ODO6K = x.ODO6K,
+                    ODO8K = x.ODO8K,
+
+                    OE250 = x.OE250,
+                    OE500 = x.OE500,
+                    OE1K = x.OE1K,
+                    OE2K = x.OE2K,
+                    OE3K = x.OE3K,
+                    OE4K = x.OE4K,
+                    OE6K = x.OE6K,
+                    OE8K = x.OE8K,
+
+                    OEO250 = x.OEO250,
+                    OEO500 = x.OEO500,
+                    OEO1K = x.OEO1K,
+                    OEO2K = x.OEO2K,
+                    OEO3K = x.OEO3K,
+                    OEO4K = x.OEO4K,
+                    OEO6K = x.OEO6K,
+                    OEO8K = x.OEO8K
+                };
         }
 
         private static LaudoAudioModel InjetarEmUsuarioModel(LAUDOAUD x, bool materializarClassesDoMovimento = true)
@@ -47,7 +128,7 @@ namespace MediCloud.Code.Laudo
                     Observavao = x.OBSERVACAO,
                     OD1K = x.OD1K,
                     OD250 = x.OD250,
-                    OD2K = x.OD2K, 
+                    OD2K = x.OD2K,
                     OD3K = x.OD3K,
                     OD4K = x.OD4K,
                     OD500 = x.OD500,
@@ -69,7 +150,7 @@ namespace MediCloud.Code.Laudo
                     OE3K = x.OE3K,
                     OE4K = x.OE4K,
                     OE500 = x.OE500,
-                    OE6K = x.OE6K, 
+                    OE6K = x.OE6K,
                     OE8K = x.OE8K,
 
                     OEO1K = x.OEO1K,
@@ -80,7 +161,7 @@ namespace MediCloud.Code.Laudo
                     OEO500 = x.OEO500,
                     OEO6K = x.OEO6K,
                     OEO8K = x.OEO8K,
-                    
+
                     ProcedimentoMovimento = CadastroDeProcedimentosMovimento.BuscarProcedimentoDeMovimentoPorID((int)x.IDMOVPRO, true, materializarClassesDoMovimento)
                 };
         }
@@ -131,80 +212,6 @@ namespace MediCloud.Code.Laudo
             };
         }
 
-        internal static byte[] ImprimirAudiometria(int codigoAudiometria)
-        {
-            return ControleDeLaudoAudio.ImprimirAudiometria(codigoAudiometria);
-        }
-
-        private static LAUDOAUD InjetarEmCargoModelDAO(LaudoAudioModel x)
-        {
-            if (x == null)
-                return null;
-            else
-                return new LAUDOAUD()
-                {
-                    IDLAUDO = x.IdLaudoAudio,
-                    IDMOVPRO = x.ProcedimentoMovimento.IdMovimentoProcedimento,
-
-                    DATAPROX = x.DataProxAvaliacao,
-
-                    OBSERVACAO = x.Observavao,
-                    
-                    OD250 = x.OD250,
-                    OD500 = x.OD500,
-                    OD1K = x.OD1K,
-                    OD2K = x.OD2K,
-                    OD3K = x.OD3K,
-                    OD4K = x.OD4K,
-                    OD6K = x.OD6K,
-                    OD8K = x.OD8K,
-
-                    ODO250 = x.ODO250,
-                    ODO500 = x.ODO500,
-                    ODO1K = x.ODO1K,
-                    ODO2K = x.ODO2K,
-                    ODO3K = x.ODO3K,
-                    ODO4K = x.ODO4K,
-                    ODO6K = x.ODO6K,
-                    ODO8K = x.ODO8K,
-
-                    OE250 = x.OE250,
-                    OE500 = x.OE500,
-                    OE1K = x.OE1K,
-                    OE2K = x.OE2K,
-                    OE3K = x.OE3K,
-                    OE4K = x.OE4K,
-                    OE6K = x.OE6K,
-                    OE8K = x.OE8K,
-
-                    OEO250 = x.OEO250,
-                    OEO500 = x.OEO500,
-                    OEO1K = x.OEO1K,
-                    OEO2K = x.OEO2K,
-                    OEO3K = x.OEO3K,
-                    OEO4K = x.OEO4K,
-                    OEO6K = x.OEO6K,
-                    OEO8K = x.OEO8K
-                };
-
-        }
-
-        internal static void DeletarLaudoAudio(LaudoAudioController laudoAudioController, int codigoLaudoAudio)
-        {
-            ControleDeLaudoAudio.ExcluirLaudoAudio(codigoLaudoAudio);
-        }
-
-        internal static LaudoAudioModel SalvarAudiometria(FormCollection form)
-        {
-            LaudoAudioModel usuarioModel = InjetarEmUsuarioModel(form);
-            usuarioModel.validar();
-
-            LAUDOAUD laudoDAO = InjetarEmCargoModelDAO(usuarioModel);
-            laudoDAO = ControleDeLaudoAudio.SalvarLaudoAudio(laudoDAO);
-
-            usuarioModel = InjetarEmUsuarioModel(laudoDAO, false);
-
-            return usuarioModel;
-        }
+        #endregion Private Methods
     }
 }

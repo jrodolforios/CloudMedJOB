@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace MediCloud.Code.Enum
+﻿namespace MediCloud.Code.Enum
 {
     public class EnumContato
     {
+        #region Public Enums
+
         public enum tipoDepartamento
         {
             Vazio = 0,
@@ -19,5 +16,7 @@ namespace MediCloud.Code.Enum
             DIR = 7,
             CON = 8
         }
+
+        #endregion Public Enums
     }
 }

@@ -42,6 +42,16 @@ namespace MediCloud.Code.Financeiro
                 };
         }
 
+        internal static List<decimal?> RecuperarUltimosOitoMesesDeFaturamento()
+        {
+            return ControleDeFaturamento.RecuperarUltimosOitoMesesDeFaturamento();
+        }
+
+        internal static decimal RecuperarFaturaPrevistaMesAtual()
+        {
+            return ControleDeFaturamento.RecuperarFaturaPrevistaMesAtual();
+        }
+
         internal static List<FaturamentoModel> RecuperarFaturamentoPorTermo(FormCollection form)
         {
             string prefix = form["keywords"];

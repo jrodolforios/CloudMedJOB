@@ -1,22 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MediCloud.BusinessProcess.Util.Enum;
+﻿using MediCloud.BusinessProcess.Util;
 using MediCloud.DatabaseModels;
 using MediCLoud.Pdf.Entity;
-using MediCloud.BusinessProcess.Util;
+using System.Collections.Generic;
+using System.Linq;
 using static MediCloud.BusinessProcess.Util.Enum.Financeiro;
 
 namespace MediCloud.BusinessProcess.Financeiro.Reports
 {
     public class FinanceiroReports
     {
+        #region Private Fields
+
+        private string _informacoesAdicionais;
+        private INFORMACOES_CLINICA _informacoesDaClinica;
         private List<MOVIMENTO> _reportResult;
         private FinanceiroReportEnum _tipoRelatorioFinanceiro;
-        private INFORMACOES_CLINICA _informacoesDaClinica;
-        private string _informacoesAdicionais;
+
+        #endregion Private Fields
+
+        #region Public Constructors
 
         public FinanceiroReports(List<MOVIMENTO> reportResult, INFORMACOES_CLINICA informacoesDaClinica, FinanceiroReportEnum imprimirRelatorioDeMovimentos)
         {
@@ -24,11 +26,18 @@ namespace MediCloud.BusinessProcess.Financeiro.Reports
             this._tipoRelatorioFinanceiro = imprimirRelatorioDeMovimentos;
             this._informacoesDaClinica = informacoesDaClinica;
         }
+
         public FinanceiroReports(List<MOVIMENTO> reportResult, INFORMACOES_CLINICA informacoesDaClinica, FinanceiroReportEnum imprimirRelatorioDeMovimentos, string informacoesAdicionais)
-            :this(reportResult,informacoesDaClinica,imprimirRelatorioDeMovimentos)
+            : this(reportResult, informacoesDaClinica, imprimirRelatorioDeMovimentos)
         {
             this._informacoesAdicionais = informacoesAdicionais;
         }
+
+        #endregion Public Constructors
+
+
+
+        #region Public Methods
 
         public byte[] generate(params string[] args)
         {
@@ -41,9 +50,11 @@ namespace MediCloud.BusinessProcess.Financeiro.Reports
                 case FinanceiroReportEnum.imprimirRelatorioDeMovimentos:
                     retorno = PdfFactory.create(EnumPdfType.TuesPechkin).ParseOrientacao(substituirParametrosRelatorioDeMovimentos(template), TipoOrientacaoPdf.Paisagem);
                     break;
+
                 case FinanceiroReportEnum.imprimirRelatorioAnaliticoDeFaturamento:
                     retorno = PdfFactory.create(EnumPdfType.TuesPechkin).ParseOrientacao(substituirParametrosRelatorioAnaliticoDeFaturamento(template), TipoOrientacaoPdf.Retrato);
                     break;
+
                 default:
                     retorno = null;
                     break;
@@ -51,6 +62,12 @@ namespace MediCloud.BusinessProcess.Financeiro.Reports
 
             return retorno;
         }
+
+        #endregion Public Methods
+
+
+
+        #region Private Methods
 
         private string substituirParametrosRelatorioAnaliticoDeFaturamento(string template)
         {
@@ -60,7 +77,6 @@ namespace MediCloud.BusinessProcess.Financeiro.Reports
 
             _reportResult.Where(idFat => idFat.IDFAT != null).Select(idFat => idFat.IDFAT).Distinct().ToList().ForEach(idFat =>
             {
-
                 _reportResult.Where(idCli => idCli.IDFAT == idFat).Select(idCli => idCli.IDCLI).Distinct().ToList().ForEach(idCli =>
                 {
                     faturamento = _reportResult.Where(x => x.IDCLI == idCli && x.IDFAT == idFat).First().FATURAMENTO;
@@ -149,7 +165,6 @@ namespace MediCloud.BusinessProcess.Financeiro.Reports
 
             template = template.Replace("[%CorpoRelatorio%]", relatorioFinal);
 
-
             return template;
         }
 
@@ -191,7 +206,7 @@ namespace MediCloud.BusinessProcess.Financeiro.Reports
                                                         <td>{8}</td>
                                                         <td>{9}</td>
                                                         <td>R$ {10}</td>
-                                                    </tr>   
+                                                    </tr>
                                                        ",
                                                        y.PROCEDIMENTO?.PROCEDIMENTO1,
                                                        y.PROFISSIONAIS?.PROFISSIONAL,
@@ -218,8 +233,9 @@ namespace MediCloud.BusinessProcess.Financeiro.Reports
             template = template.Replace("[%Contagem%]", contagem.ToString());
             template = template.Replace("[%ValorTotal%]", valorTotal.ToString("0.00"));
 
-
             return template;
         }
+
+        #endregion Private Methods
     }
 }

@@ -1,8 +1,8 @@
+using MediCloud.View.Areas.HelpPage.ModelDescriptions;
+using MediCloud.View.Areas.HelpPage.Models;
 using System;
 using System.Web.Http;
 using System.Web.Mvc;
-using MediCloud.View.Areas.HelpPage.ModelDescriptions;
-using MediCloud.View.Areas.HelpPage.Models;
 
 namespace MediCloud.View.Areas.HelpPage.Controllers
 {
@@ -11,7 +11,13 @@ namespace MediCloud.View.Areas.HelpPage.Controllers
     /// </summary>
     public class HelpController : Controller
     {
+        #region Private Fields
+
         private const string ErrorViewName = "Error";
+
+        #endregion Private Fields
+
+        #region Public Constructors
 
         public HelpController()
             : this(GlobalConfiguration.Configuration)
@@ -23,13 +29,19 @@ namespace MediCloud.View.Areas.HelpPage.Controllers
             Configuration = config;
         }
 
+        #endregion Public Constructors
+
+
+
+        #region Public Properties
+
         public HttpConfiguration Configuration { get; private set; }
 
-        public ActionResult Index()
-        {
-            ViewBag.DocumentationProvider = Configuration.Services.GetDocumentationProvider();
-            return View(Configuration.Services.GetApiExplorer().ApiDescriptions);
-        }
+        #endregion Public Properties
+
+
+
+        #region Public Methods
 
         public ActionResult Api(string apiId)
         {
@@ -43,6 +55,12 @@ namespace MediCloud.View.Areas.HelpPage.Controllers
             }
 
             return View(ErrorViewName);
+        }
+
+        public ActionResult Index()
+        {
+            ViewBag.DocumentationProvider = Configuration.Services.GetDocumentationProvider();
+            return View(Configuration.Services.GetApiExplorer().ApiDescriptions);
         }
 
         public ActionResult ResourceModel(string modelName)
@@ -59,5 +77,7 @@ namespace MediCloud.View.Areas.HelpPage.Controllers
 
             return View(ErrorViewName);
         }
+
+        #endregion Public Methods
     }
 }

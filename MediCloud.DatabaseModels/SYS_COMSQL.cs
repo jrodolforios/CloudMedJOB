@@ -1,13 +1,13 @@
 namespace MediCloud.DatabaseModels
 {
     using System;
-    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
-    using System.Data.Entity.Spatial;
 
     public partial class SYS_COMSQL
     {
+        #region Public Properties
+
         [Key]
         [Column(TypeName = "numeric")]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -21,5 +21,7 @@ namespace MediCloud.DatabaseModels
         [Required]
         [StringLength(100)]
         public string DESCRICAO { get; set; }
+
+        #endregion Public Properties
     }
 }

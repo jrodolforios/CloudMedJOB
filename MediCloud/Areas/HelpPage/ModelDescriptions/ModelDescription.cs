@@ -7,10 +7,14 @@ namespace MediCloud.View.Areas.HelpPage.ModelDescriptions
     /// </summary>
     public abstract class ModelDescription
     {
+        #region Public Properties
+
         public string Documentation { get; set; }
 
         public Type ModelType { get; set; }
 
         public string Name { get; set; }
+
+        #endregion Public Properties
     }
 }

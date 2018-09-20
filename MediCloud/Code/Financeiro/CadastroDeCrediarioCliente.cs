@@ -1,32 +1,40 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using MediCloud.Models.Financeiro;
-using MediCloud.DatabaseModels;
-using MediCloud.BusinessProcess.Financeiro;
-using MediCloud.Code.Parametro;
+﻿using MediCloud.BusinessProcess.Financeiro;
+using MediCloud.BusinessProcess.Util;
 using MediCloud.Code.Clientes;
 using MediCloud.Code.Enum;
+using MediCloud.Code.Parametro;
 using MediCloud.Controllers;
+using MediCloud.DatabaseModels;
+using MediCloud.Models.Financeiro;
+using System;
+using System.Collections.Generic;
 using System.Web.Mvc;
-using MediCloud.BusinessProcess.Util;
 
 namespace MediCloud.Code.Financeiro
 {
     public class CadastroDeCrediarioCliente
     {
-        internal static List<CrediarioClienteModel> RecuperarCrediariosDeGrupoDeClientes(int IdGrupoDeClientes)
+        #region Internal Methods
+
+        internal static void BloquearCrediario(CrediarioClienteController crediarioClienteController, int codigoDoCrediario, bool bloquear)
         {
-            List<CLIENTE_CREDIARIO> crediariosDeGrupo = ControleDeCrediarioCliente.RecuperarCrediariosDeGrupoDeClientes(IdGrupoDeClientes);
-            List<CrediarioClienteModel> crediariosEncontrados = new List<CrediarioClienteModel>();
+            ControleDeCrediarioCliente.BloquearCrediario(codigoDoCrediario, bloquear);
+        }
 
-            crediariosDeGrupo.ForEach(x => 
+        internal static void DeletarCrediarioCliente(int codigoCrediarioCliente)
+        {
+            ControleDeCrediarioCliente.ExcluirCrediarioCliente(codigoCrediarioCliente);
+        }
+
+        internal static CrediarioClienteModel RecuperarCrediarioClientePorID(int v)
+        {
+            if (v != 0)
             {
-                crediariosEncontrados.Add(InjetarEmUsuarioModel(x));
-            });
-
-            return crediariosEncontrados;
+                CLIENTE_CREDIARIO referenteEncontrado = ControleDeCrediarioCliente.RecuperarCrediarioClientePorID(v);
+                return InjetarEmUsuarioModel(referenteEncontrado);
+            }
+            else
+                return null;
         }
 
         internal static List<CrediarioClienteModel> RecuperarCrediarioClientePorTermo(FormCollection form)
@@ -44,9 +52,184 @@ namespace MediCloud.Code.Financeiro
             return resultados;
         }
 
-        internal static void BloquearCrediario(CrediarioClienteController crediarioClienteController, int codigoDoCrediario, bool bloquear)
+        internal static List<CrediarioClienteModel> RecuperarCrediariosDeGrupoDeClientes(int IdGrupoDeClientes)
         {
-            ControleDeCrediarioCliente.BloquearCrediario(codigoDoCrediario, bloquear);
+            List<CLIENTE_CREDIARIO> crediariosDeGrupo = ControleDeCrediarioCliente.RecuperarCrediariosDeGrupoDeClientes(IdGrupoDeClientes);
+            List<CrediarioClienteModel> crediariosEncontrados = new List<CrediarioClienteModel>();
+
+            crediariosDeGrupo.ForEach(x =>
+            {
+                crediariosEncontrados.Add(InjetarEmUsuarioModel(x));
+            });
+
+            return crediariosEncontrados;
+        }
+
+        internal static CrediarioClienteModel SalvarCrediarioCliente(FormCollection form)
+        {
+            CrediarioClienteModel usuarioModel = InjetarEmUsuarioModel(form);
+            usuarioModel.validar();
+
+            CLIENTE_CREDIARIO cargoDAO = InjetarEmUsuarioDAO(usuarioModel);
+            cargoDAO = ControleDeCrediarioCliente.SalvarCrediarioCliente(cargoDAO);
+
+            usuarioModel = InjetarEmUsuarioModel(cargoDAO);
+
+            return usuarioModel;
+        }
+
+        #endregion Internal Methods
+
+
+
+        #region Private Methods
+
+        private static EnumFinanceiro.ImprimeNotaFiscal ConverterImprimeNotaFiscalDeStringParaEnum(string x)
+        {
+            switch (x)
+            {
+                case "S":
+                    return EnumFinanceiro.ImprimeNotaFiscal.Imprime;
+
+                case "N":
+                    return EnumFinanceiro.ImprimeNotaFiscal.NaoImprime;
+
+                case "E":
+                    return EnumFinanceiro.ImprimeNotaFiscal.Exporta;
+
+                default:
+                    return EnumFinanceiro.ImprimeNotaFiscal.vazio;
+            }
+        }
+
+        private static string ConverterImprimeNotaFiscalDeStringParaEnum(EnumFinanceiro.ImprimeNotaFiscal x)
+        {
+            switch (x)
+            {
+                case EnumFinanceiro.ImprimeNotaFiscal.Imprime:
+                    return "S";
+
+                case EnumFinanceiro.ImprimeNotaFiscal.NaoImprime:
+                    return "N";
+
+                case EnumFinanceiro.ImprimeNotaFiscal.Exporta:
+                    return "E";
+
+                default:
+                    return null;
+            }
+        }
+
+        private static EnumFinanceiro.ModoDeEntrega ConverterModoDeEntregaDeStringParaEnum(string x)
+        {
+            switch (x)
+            {
+                case "E-MAIL":
+                    return EnumFinanceiro.ModoDeEntrega.Email;
+
+                case "CORREIO":
+                    return EnumFinanceiro.ModoDeEntrega.Correio;
+
+                case "MOTOBOY":
+                    return EnumFinanceiro.ModoDeEntrega.Motoboy;
+
+                case "LOCAL":
+                    return EnumFinanceiro.ModoDeEntrega.BuscaNoLocal;
+
+                default:
+                    return EnumFinanceiro.ModoDeEntrega.vazio;
+            }
+        }
+
+        private static string ConverterModoDeEntregaDeStringParaEnum(EnumFinanceiro.ModoDeEntrega x)
+        {
+            switch (x)
+            {
+                case EnumFinanceiro.ModoDeEntrega.Email:
+                    return "E-MAIL";
+
+                case EnumFinanceiro.ModoDeEntrega.Correio:
+                    return "CORREIO";
+
+                case EnumFinanceiro.ModoDeEntrega.Motoboy:
+                    return "MOTOBOY";
+
+                case EnumFinanceiro.ModoDeEntrega.BuscaNoLocal:
+                    return "LOCAL";
+
+                default:
+                    return null;
+            }
+        }
+
+        private static EnumCliente.tipoEmpresa ConverterTipoEmpresaDeStringParaEnum(string x)
+        {
+            switch (x)
+            {
+                case "F":
+                    return EnumCliente.tipoEmpresa.PessoaFisica;
+
+                case "J":
+                    return EnumCliente.tipoEmpresa.PessoaJuridica;
+
+                case "E":
+                    return EnumCliente.tipoEmpresa.CEI;
+
+                default:
+                    return EnumCliente.tipoEmpresa.Vazio;
+            }
+        }
+
+        private static string ConverterTipoEmpresaDeStringParaEnum(EnumCliente.tipoEmpresa x)
+        {
+            switch (x)
+            {
+                case EnumCliente.tipoEmpresa.PessoaFisica:
+                    return "F";
+
+                case EnumCliente.tipoEmpresa.PessoaJuridica:
+                    return "J";
+
+                case EnumCliente.tipoEmpresa.CEI:
+                    return "E";
+
+                default:
+                    return null;
+            }
+        }
+
+        private static CLIENTE_CREDIARIO InjetarEmUsuarioDAO(CrediarioClienteModel x)
+        {
+            if (x == null)
+                return null;
+            else
+                return new CLIENTE_CREDIARIO()
+                {
+                    BAIRRO = x.Bairro,
+                    CEP = x.CEP,
+                    CIDADE = x.Cidade,
+                    CPFCNPJ = x.CNPJ,
+                    ENDERECO = x.Endereco,
+                    ENTREGA = ConverterModoDeEntregaDeStringParaEnum(x.ModoDeDeEntrega),
+                    IDBBCOBRANCA = x.IdBB,
+                    IDCID = x.CidadeEntrega?.IdCidade,
+                    IDCLI = x.Cliente.IdCliente,
+                    IDCLIGRU = x.GrupoDeClientes?.IdGrupoCliente,
+                    IDCRE = x.IdCrediarioCliente,
+                    IDFEC = x.Fechamento.IdFechamento,
+                    IDFORPAG = x.FormaPagamento?.IdFormaPagamento,
+                    IDTAB = x.Tabela.IdTabela,
+                    IMPRIME = x.Imprime.HasValue ? (x.Imprime.Value == true ? "S" : "N") : "N",
+                    INSCESTADUAL = x.InscricaoEstadual,
+                    INSCMUNICIPAL = x.InscricaoMunicipal,
+                    NF = ConverterImprimeNotaFiscalDeStringParaEnum(x.ImprimeNotaFiscal),
+                    OBSNF = x.Observacao,
+                    SACADO = x.EmpresaSacado,
+                    STATUS = x.Bloqueado.HasValue ? (x.Bloqueado.Value == true ? "S" : "N") : "N",
+                    TIPOEMPRESA = ConverterTipoEmpresaDeStringParaEnum(x.TipoEmpresa),
+                    UF = x.Estado,
+                    USUARIO = x.Usuario
+                };
         }
 
         private static CrediarioClienteModel InjetarEmUsuarioModel(CLIENTE_CREDIARIO x)
@@ -83,84 +266,6 @@ namespace MediCloud.Code.Financeiro
                 };
         }
 
-        internal static void DeletarCrediarioCliente(int codigoCrediarioCliente)
-        {
-            ControleDeCrediarioCliente.ExcluirCrediarioCliente(codigoCrediarioCliente);
-        }
-
-        internal static CrediarioClienteModel RecuperarCrediarioClientePorID(int v)
-        {
-            if (v != 0)
-            {
-                CLIENTE_CREDIARIO referenteEncontrado = ControleDeCrediarioCliente.RecuperarCrediarioClientePorID(v);
-                return InjetarEmUsuarioModel(referenteEncontrado);
-            }
-            else
-                return null;
-        }
-
-        private static EnumCliente.tipoEmpresa ConverterTipoEmpresaDeStringParaEnum(string x)
-        {
-            switch (x)
-            {
-                case "F":
-                    return EnumCliente.tipoEmpresa.PessoaFisica;
-                case "J":
-                    return EnumCliente.tipoEmpresa.PessoaJuridica;
-                case "E":
-                    return EnumCliente.tipoEmpresa.CEI;
-                default:
-                    return EnumCliente.tipoEmpresa.Vazio;
-            }
-        }
-
-        internal static CrediarioClienteModel SalvarCrediarioCliente(FormCollection form)
-        {
-            CrediarioClienteModel usuarioModel = InjetarEmUsuarioModel(form);
-            usuarioModel.validar();
-
-            CLIENTE_CREDIARIO cargoDAO = InjetarEmUsuarioDAO(usuarioModel);
-            cargoDAO = ControleDeCrediarioCliente.SalvarCrediarioCliente(cargoDAO);
-
-            usuarioModel = InjetarEmUsuarioModel(cargoDAO);
-
-            return usuarioModel;
-        }
-
-        private static CLIENTE_CREDIARIO InjetarEmUsuarioDAO(CrediarioClienteModel x)
-        {
-            if (x == null)
-                return null;
-            else
-                return new CLIENTE_CREDIARIO()
-                {
-                    BAIRRO = x.Bairro,
-                    CEP = x.CEP,
-                    CIDADE = x.Cidade,
-                    CPFCNPJ = x.CNPJ,
-                    ENDERECO = x.Endereco,
-                    ENTREGA = ConverterModoDeEntregaDeStringParaEnum(x.ModoDeDeEntrega),
-                    IDBBCOBRANCA = x.IdBB,
-                    IDCID = x.CidadeEntrega?.IdCidade, 
-                    IDCLI = x.Cliente.IdCliente,
-                    IDCLIGRU = x.GrupoDeClientes?.IdGrupoCliente,
-                    IDCRE = x.IdCrediarioCliente,
-                    IDFEC = x.Fechamento.IdFechamento,
-                    IDFORPAG = x.FormaPagamento?.IdFormaPagamento,
-                    IDTAB = x.Tabela.IdTabela,
-                    IMPRIME = x.Imprime.HasValue ? (x.Imprime.Value == true ? "S" : "N") : "N",
-                    INSCESTADUAL = x.InscricaoEstadual,
-                    INSCMUNICIPAL = x.InscricaoMunicipal,
-                    NF = ConverterImprimeNotaFiscalDeStringParaEnum(x.ImprimeNotaFiscal),
-                    OBSNF = x.Observacao,
-                    SACADO = x.EmpresaSacado,
-                    STATUS = x.Bloqueado.HasValue ? (x.Bloqueado.Value == true ? "S" : "N") : "N",
-                    TIPOEMPRESA = ConverterTipoEmpresaDeStringParaEnum(x.TipoEmpresa),
-                    UF = x.Estado,
-                    USUARIO = x.Usuario
-                };
-        }
-
         private static CrediarioClienteModel InjetarEmUsuarioModel(FormCollection form)
         {
             return new CrediarioClienteModel()
@@ -192,83 +297,6 @@ namespace MediCloud.Code.Financeiro
             };
         }
 
-        private static string ConverterTipoEmpresaDeStringParaEnum(EnumCliente.tipoEmpresa x)
-        {
-            switch (x)
-            {
-                case EnumCliente.tipoEmpresa.PessoaFisica:
-                    return "F";
-                case EnumCliente.tipoEmpresa.PessoaJuridica:
-                    return "J";
-                case EnumCliente.tipoEmpresa.CEI:
-                    return "E";
-                default:
-                    return null;
-            }
-        }
-
-        private static EnumFinanceiro.ModoDeEntrega ConverterModoDeEntregaDeStringParaEnum(string x)
-        {
-            switch (x)
-            {
-                case "E-MAIL":
-                    return EnumFinanceiro.ModoDeEntrega.Email;
-                case "CORREIO":
-                    return EnumFinanceiro.ModoDeEntrega.Correio;
-                case "MOTOBOY":
-                    return EnumFinanceiro.ModoDeEntrega.Motoboy;
-                case "LOCAL":
-                    return EnumFinanceiro.ModoDeEntrega.BuscaNoLocal;
-                default:
-                    return EnumFinanceiro.ModoDeEntrega.vazio;
-            }
-        }
-
-        private static string ConverterModoDeEntregaDeStringParaEnum(EnumFinanceiro.ModoDeEntrega x)
-        {
-            switch (x)
-            {
-                case EnumFinanceiro.ModoDeEntrega.Email:
-                    return "E-MAIL";
-                case EnumFinanceiro.ModoDeEntrega.Correio:
-                    return "CORREIO";
-                case EnumFinanceiro.ModoDeEntrega.Motoboy:
-                    return "MOTOBOY";
-                case EnumFinanceiro.ModoDeEntrega.BuscaNoLocal:
-                    return "LOCAL";
-                default:
-                    return null;
-            }
-        }
-
-        private static EnumFinanceiro.ImprimeNotaFiscal ConverterImprimeNotaFiscalDeStringParaEnum(string x)
-        {
-            switch (x)
-            {
-                case "S":
-                    return EnumFinanceiro.ImprimeNotaFiscal.Imprime;
-                case "N":
-                    return EnumFinanceiro.ImprimeNotaFiscal.NaoImprime;
-                case "E":
-                    return EnumFinanceiro.ImprimeNotaFiscal.Exporta;
-                default:
-                    return EnumFinanceiro.ImprimeNotaFiscal.vazio;
-            }
-        }
-
-        private static string ConverterImprimeNotaFiscalDeStringParaEnum(EnumFinanceiro.ImprimeNotaFiscal x)
-        {
-            switch (x)
-            {
-                case EnumFinanceiro.ImprimeNotaFiscal.Imprime:
-                    return "S";
-                case EnumFinanceiro.ImprimeNotaFiscal.NaoImprime:
-                    return "N";
-                case EnumFinanceiro.ImprimeNotaFiscal.Exporta:
-                    return "E";
-                default:
-                    return null;
-            }
-        }
+        #endregion Private Methods
     }
 }

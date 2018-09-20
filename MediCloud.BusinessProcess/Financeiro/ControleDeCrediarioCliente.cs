@@ -1,35 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MediCloud.BusinessProcess.Util;
 using MediCloud.DatabaseModels;
 using MediCloud.Persistence;
+using System;
+using System.Collections.Generic;
 using System.Data.Entity.Validation;
-using MediCloud.BusinessProcess.Util;
+using System.Linq;
 
 namespace MediCloud.BusinessProcess.Financeiro
 {
     public class ControleDeCrediarioCliente
     {
-        public static List<CLIENTE_CREDIARIO> RecuperarCrediariosDeGrupoDeClientes(int idGrupoDeClientes)
-        {
-            CloudMedContext contexto = new CloudMedContext();
-
-            try
-            {
-                return contexto.CLIENTE_CREDIARIO.Where(x => x.IDCLIGRU == idGrupoDeClientes).ToList();
-            }
-            catch (DbEntityValidationException ex)
-            {
-                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
-                return new List<CLIENTE_CREDIARIO>();
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
+        #region Public Methods
 
         public static void BloquearCrediario(int codigoDoCrediario, bool bloquear)
         {
@@ -45,6 +26,47 @@ namespace MediCloud.BusinessProcess.Financeiro
             catch (DbEntityValidationException ex)
             {
                 ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static void ExcluirCrediarioCliente(int codigoCrediarioCliente)
+        {
+            CloudMedContext contexto = new CloudMedContext();
+            try
+            {
+                if (contexto.CLIENTE_CREDIARIO.Any(x => x.IDCRE == codigoCrediarioCliente))
+                    contexto.CLIENTE_CREDIARIO.Remove(contexto.CLIENTE_CREDIARIO.First(x => x.IDCRE == codigoCrediarioCliente));
+
+                contexto.SaveChanges();
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static CLIENTE_CREDIARIO RecuperarCrediarioClientePorID(int v)
+        {
+            CloudMedContext contexto = new CloudMedContext();
+            try
+            {
+                if (contexto.CLIENTE_CREDIARIO.Any(x => x.IDCRE == v))
+                    return contexto.CLIENTE_CREDIARIO.Where(x => x.IDCRE == v).First();
+                else
+                    return null;
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+                return null;
             }
             catch (Exception ex)
             {
@@ -74,40 +96,18 @@ namespace MediCloud.BusinessProcess.Financeiro
             }
         }
 
-        public static CLIENTE_CREDIARIO RecuperarCrediarioClientePorID(int v)
+        public static List<CLIENTE_CREDIARIO> RecuperarCrediariosDeGrupoDeClientes(int idGrupoDeClientes)
         {
             CloudMedContext contexto = new CloudMedContext();
+
             try
             {
-                if (contexto.CLIENTE_CREDIARIO.Any(x => x.IDCRE == v))
-                    return contexto.CLIENTE_CREDIARIO.Where(x => x.IDCRE == v).First();
-                else
-                    return null;
+                return contexto.CLIENTE_CREDIARIO.Where(x => x.IDCLIGRU == idGrupoDeClientes).ToList();
             }
             catch (DbEntityValidationException ex)
             {
                 ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
-                return null;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        public static void ExcluirCrediarioCliente(int codigoCrediarioCliente)
-        {
-            CloudMedContext contexto = new CloudMedContext();
-            try
-            {
-                if (contexto.CLIENTE_CREDIARIO.Any(x => x.IDCRE == codigoCrediarioCliente))
-                    contexto.CLIENTE_CREDIARIO.Remove(contexto.CLIENTE_CREDIARIO.First(x => x.IDCRE == codigoCrediarioCliente));
-
-                contexto.SaveChanges();
-            }
-            catch (DbEntityValidationException ex)
-            {
-                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+                return new List<CLIENTE_CREDIARIO>();
             }
             catch (Exception ex)
             {
@@ -150,7 +150,6 @@ namespace MediCloud.BusinessProcess.Financeiro
                     setorSalvo.TIPOEMPRESA = crediarioDAO.TIPOEMPRESA;
                     setorSalvo.UF = crediarioDAO.UF;
                     setorSalvo.USUARIO = crediarioDAO.USUARIO;
-
                 }
                 else
                 {
@@ -159,7 +158,6 @@ namespace MediCloud.BusinessProcess.Financeiro
 
                 contexto.SaveChanges();
                 return setorSalvo;
-
             }
             catch (DbEntityValidationException ex)
             {
@@ -171,5 +169,7 @@ namespace MediCloud.BusinessProcess.Financeiro
                 throw ex;
             }
         }
+
+        #endregion Public Methods
     }
 }

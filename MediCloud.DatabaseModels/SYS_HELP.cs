@@ -1,21 +1,20 @@
 namespace MediCloud.DatabaseModels
 {
-    using System;
-    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
-    using System.Data.Entity.Spatial;
 
     public partial class SYS_HELP
     {
-        [Key]
-        [Column(TypeName = "numeric")]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public decimal CODHELP { get; set; }
+        #region Public Properties
 
         [Required]
         [StringLength(1)]
         public string ALTERADO { get; set; }
+
+        [Key]
+        [Column(TypeName = "numeric")]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public decimal CODHELP { get; set; }
 
         [Required]
         [StringLength(50)]
@@ -28,12 +27,14 @@ namespace MediCloud.DatabaseModels
         [StringLength(500)]
         public string PALAVRAS_CHAVE { get; set; }
 
+        public virtual SYS_HELPBODY SYS_HELPBODY { get; set; }
+
         [Column(TypeName = "numeric")]
         public decimal TOPICO_IDX { get; set; }
 
         [StringLength(50)]
         public string TOPICO_PAI { get; set; }
 
-        public virtual SYS_HELPBODY SYS_HELPBODY { get; set; }
+        #endregion Public Properties
     }
 }

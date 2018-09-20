@@ -155,10 +155,6 @@
                                             <option value="@item.IdReferencia">@item.NomeReferencia</option>
                                         }
                                     </select>
-                                    <script type="text/javascript">
-                                        $('#referente').val('@Html.ValueFor(x => x.Referente.IdReferencia)');
-                                    </script>
-
                                 </div>
                             </div>
 
@@ -168,7 +164,7 @@
                                 <div class="col-sm-8">
                                     <div class="input-medium">
                                         <div class="input-group">
-                                            <input class="input-medium date-picker input-mask-date" id="data" name="data" type="text" data-date-format="dd/mm/yyyy" placeholder="dd/mm/aaaa" value="@Html.ValueFor(x => x.Data)" />
+                                            <input class="input-medium date-picker input-mask-date" id="data" name="data" type="text" data-date-format="dd/mm/yyyy" placeholder="dd/mm/aaaa" value="@(Model == null ? DateTime.Now.ToShortDateString() : (Model.Data.HasValue ? Model.Data.Value.ToShortDateString() : string.Empty)))" />
                                             <span class="input-group-addon">
                                                 <i class="ace-icon fa fa-calendar"></i>
                                             </span>
@@ -1170,7 +1166,7 @@
                                                         $("#procedimento").attr('value', '');
                                                         $("#idProfissional").attr('value', '');
                                                         $("#profissional").attr('value', '');
-                                                        $("#dataExame").attr('value', '');
+                                                        $("#dataExame").attr('value', new Date().toLocaleDateString());
                                                         $("#usuarioProcedimento").attr('value', '');
                                                         $("#observacoesProcedimento").val('');
                                                         $("#valor").val('');
@@ -1232,7 +1228,7 @@
                                                             formData.append("arquivo", file);
                                                         }
 
-                                                        if (data) {
+                                                        //if (data) {
                                                             $.ajax({
                                                                 url: "/ASO/UploadArquivo?CodigoASO=" + $("#codigoASO").val(),
                                                                 type: 'POST',
@@ -1259,7 +1255,7 @@
                                                                     return myXhr;
                                                                 }
                                                             });
-                                                        }
+                                                        //}
                                                     }
 
                                                     function atualizarProgressBarArquivo(count) {

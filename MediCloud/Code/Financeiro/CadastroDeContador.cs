@@ -1,17 +1,17 @@
 ﻿using MediCloud.BusinessProcess.Financeiro;
+using MediCloud.Controllers;
 using MediCloud.DatabaseModels;
 using MediCloud.Models.Financeiro;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using MediCloud.Controllers;
 
 namespace MediCloud.Code.Financeiro
 {
     public class CadastroDeContador
     {
+        #region Public Methods
+
         public static ContadorModel InjetarEmUsuarioModel(CONTADOR usuarioDoBanco)
         {
             if (usuarioDoBanco == null)
@@ -22,6 +22,26 @@ namespace MediCloud.Code.Financeiro
                     IdContador = (int)usuarioDoBanco.IDCONT,
                     NomeContador = usuarioDoBanco.CONTADOR1
                 };
+        }
+
+        #endregion Public Methods
+
+        #region Internal Methods
+
+        internal static void DeletarContador(ContadorController contadorController, int codigoContador)
+        {
+            ControleDeContador.DeletarContador(codigoContador);
+        }
+
+        internal static ContadorModel RecuperarContadorPorID(int v)
+        {
+            if (v != 0)
+            {
+                CONTADOR referenteEncontrado = ControleDeContador.buscarContadorPorID(v);
+                return InjetarEmUsuarioModel(referenteEncontrado);
+            }
+            else
+                return null;
         }
 
         internal static List<ContadorModel> RecuperarContadorPorTermo(string prefix)
@@ -44,22 +64,6 @@ namespace MediCloud.Code.Financeiro
             return RecuperarContadorPorTermo(prefix);
         }
 
-        internal static ContadorModel RecuperarContadorPorID(int v)
-        {
-            if (v != 0)
-            {
-                CONTADOR referenteEncontrado = ControleDeContador.buscarContadorPorID(v);
-                return InjetarEmUsuarioModel(referenteEncontrado);
-            }
-            else
-                return null;
-        }
-
-        internal static void DeletarContador(ContadorController contadorController, int codigoContador)
-        {
-            ControleDeContador.DeletarContador(codigoContador);
-        }
-
         internal static ContadorModel SalvarContador(FormCollection form)
         {
             ContadorModel usuarioModel = InjetarEmUsuarioModel(form);
@@ -73,6 +77,12 @@ namespace MediCloud.Code.Financeiro
             return usuarioModel;
         }
 
+        #endregion Internal Methods
+
+
+
+        #region Private Methods
+
         private static CONTADOR InjetarEmUsuarioDAO(ContadorModel x)
         {
             if (x == null)
@@ -81,7 +91,7 @@ namespace MediCloud.Code.Financeiro
                 return new CONTADOR()
                 {
                     CONTADOR1 = x.NomeContador,
-                    IDCONT= x.IdContador
+                    IDCONT = x.IdContador
                 };
         }
 
@@ -93,5 +103,7 @@ namespace MediCloud.Code.Financeiro
                 NomeContador = string.IsNullOrEmpty(form["nomeContador"]) ? null : form["nomeContador"]
             };
         }
+
+        #endregion Private Methods
     }
 }

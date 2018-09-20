@@ -1,9 +1,5 @@
 ﻿using MediCloud.Code;
 using MediCloud.Models.Seguranca;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace MediCloud.App_Code
@@ -15,11 +11,7 @@ namespace MediCloud.App_Code
 
     public abstract class BaseController : Controller
     {
-        public void EstahLogado()
-        {
-            if (Session[Constantes.NOME_SESSAO_USUARIO] == null)
-                Response.Redirect("/Account");
-        }
+        #region Public Properties
 
         public SessaoUsuarioModel CurrentUser
         {
@@ -33,6 +25,24 @@ namespace MediCloud.App_Code
             }
         }
 
+        #endregion Public Properties
+
+
+
+        #region Public Methods
+
+        public void EstahLogado()
+        {
+            if (Session[Constantes.NOME_SESSAO_USUARIO] == null)
+                Response.Redirect("/Account");
+        }
+
+        #endregion Public Methods
+
+
+
+        #region Protected Methods
+
         protected void FlashMessage(string message, MessageType type)
         {
             TempData["FlashMessage"] = message;
@@ -41,16 +51,21 @@ namespace MediCloud.App_Code
                 case MessageType.Success:
                     TempData["FlashMessageType"] = "success";
                     break;
+
                 case MessageType.Info:
                     TempData["FlashMessageType"] = "info";
                     break;
+
                 case MessageType.Error:
                     TempData["FlashMessageType"] = "danger";
                     break;
+
                 case MessageType.Warning:
                     TempData["FlashMessageType"] = "warning";
                     break;
             }
         }
+
+        #endregion Protected Methods
     }
 }

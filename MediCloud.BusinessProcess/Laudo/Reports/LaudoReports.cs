@@ -1,24 +1,23 @@
 ﻿using MediCloud.BusinessProcess.Util;
 using MediCloud.DatabaseModels;
 using MediCLoud.Pdf.Entity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static MediCloud.BusinessProcess.Util.Enum.Cliente;
-using MediCloud.BusinessProcess.Util.Enum;
 using static MediCloud.BusinessProcess.Util.Enum.Laudo;
 
 namespace MediCloud.BusinessProcess.Laudo.Reports
 {
     public class LaudoReports
     {
-        LAUDORX _laudoRX = null;
-        LAUDOAUD _laudoAud = null;
-        LAUDOAV _laudoVisao = null;
-        LaudoReportEnum _tipoLaudoReport = LaudoReportEnum.indefinido;
-        INFORMACOES_CLINICA _infoClinica = null;
+        #region Private Fields
+
+        private INFORMACOES_CLINICA _infoClinica = null;
+        private LAUDOAUD _laudoAud = null;
+        private LAUDORX _laudoRX = null;
+        private LAUDOAV _laudoVisao = null;
+        private LaudoReportEnum _tipoLaudoReport = LaudoReportEnum.indefinido;
+
+        #endregion Private Fields
+
+        #region Public Constructors
 
         public LaudoReports(LAUDOAV laudoVisao, LaudoReportEnum tipoLaudoReport, INFORMACOES_CLINICA infoClinica)
         {
@@ -41,6 +40,12 @@ namespace MediCloud.BusinessProcess.Laudo.Reports
             _infoClinica = infoClinica;
         }
 
+        #endregion Public Constructors
+
+
+
+        #region Public Methods
+
         public byte[] generate(params string[] args)
         {
             byte[] retorno = null;
@@ -52,12 +57,15 @@ namespace MediCloud.BusinessProcess.Laudo.Reports
                 case LaudoReportEnum.imprimirLaudoRaioX:
                     retorno = PdfFactory.create(EnumPdfType.TuesPechkin).Parse(substituirParametrosLaudoRaioX(template));
                     break;
+
                 case LaudoReportEnum.imprimirLaudoVisao:
                     retorno = PdfFactory.create(EnumPdfType.TuesPechkin).Parse(substituirParametrosLaudoVisao(template));
                     break;
+
                 case LaudoReportEnum.imprimirAudiometria:
                     retorno = PdfFactory.create(EnumPdfType.TuesPechkin).Parse(substituirParametrosLaudoAud(template));
                     break;
+
                 default:
                     retorno = null;
                     break;
@@ -65,6 +73,12 @@ namespace MediCloud.BusinessProcess.Laudo.Reports
 
             return retorno;
         }
+
+        #endregion Public Methods
+
+
+
+        #region Private Methods
 
         private string substituirParametrosLaudoAud(string template)
         {
@@ -81,7 +95,10 @@ namespace MediCloud.BusinessProcess.Laudo.Reports
             return template;
         }
 
+        #endregion Private Methods
+
         #region imprimirLaudoVisao
+
         private string substituirParametrosLaudoVisao(string template)
         {
             template = template.Replace("[%InformacoesClinica%]", _infoClinica.DADOSCABECALHOREL);
@@ -104,9 +121,11 @@ namespace MediCloud.BusinessProcess.Laudo.Reports
 
             return template;
         }
-        #endregion
+
+        #endregion imprimirLaudoVisao
 
         #region imprimirLaudoRaioX
+
         private string substituirParametrosLaudoRaioX(string template)
         {
             template = template.Replace("[%InformacoesClinica%]", _infoClinica.DADOSCABECALHOREL);
@@ -125,7 +144,7 @@ namespace MediCloud.BusinessProcess.Laudo.Reports
 
             return template;
         }
-        #endregion
 
+        #endregion imprimirLaudoRaioX
     }
 }

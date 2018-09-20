@@ -1,13 +1,13 @@
 namespace MediCloud.DatabaseModels
 {
     using System;
-    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
-    using System.Data.Entity.Spatial;
 
     public partial class SYS_REGRAS
     {
+        #region Public Properties
+
         [Required]
         [StringLength(250)]
         public string ASSINATURA { get; set; }
@@ -51,5 +51,7 @@ namespace MediCloud.DatabaseModels
         [Required]
         [StringLength(250)]
         public string TIPOBJETO { get; set; }
+
+        #endregion Public Properties
     }
 }

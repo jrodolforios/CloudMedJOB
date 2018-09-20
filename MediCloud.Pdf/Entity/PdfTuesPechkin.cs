@@ -1,26 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing.Printing;
-using System.Linq;
-using System.Text;
-using System.Web;
+﻿using System.Drawing.Printing;
 using TuesPechkin;
 
 namespace MediCLoud.Pdf.Entity
 {
     public class PdfTuesPechkin : IPdfWriter
     {
+        #region Public Methods
+
         public static GlobalSettings.PaperOrientation CreateOrientacao(TipoOrientacaoPdf orientecao)
         {
             GlobalSettings.PaperOrientation orientation;
 
             switch (orientecao)
             {
-                case TipoOrientacaoPdf.Retrato: orientation = GlobalSettings.PaperOrientation.Portrait;
+                case TipoOrientacaoPdf.Retrato:
+                    orientation = GlobalSettings.PaperOrientation.Portrait;
                     break;
-                case TipoOrientacaoPdf.Paisagem: orientation = GlobalSettings.PaperOrientation.Landscape;
+
+                case TipoOrientacaoPdf.Paisagem:
+                    orientation = GlobalSettings.PaperOrientation.Landscape;
                     break;
-                default: orientation = GlobalSettings.PaperOrientation.Portrait;
+
+                default:
+                    orientation = GlobalSettings.PaperOrientation.Portrait;
                     break;
             }
 
@@ -50,8 +52,7 @@ namespace MediCLoud.Pdf.Entity
                     new ObjectSettings {
                         HtmlText = html,
                         ProduceExternalLinks = true,
-                        HeaderSettings = { 
-                            
+                        HeaderSettings = {
                         },
                         FooterSettings = {
                         },
@@ -63,12 +64,12 @@ namespace MediCLoud.Pdf.Entity
                              PrintBackground= true,
                              PrintMediaType = true,
                         }
-                        
                     }
                 }
             };
             return TuesPechkin.Factory.Create().Convert(document);
         }
+
         public byte[] Parse(string html, double marginTop, double marginRight, double marginBottom, double marginLeft, Unit unit)
         {
             HtmlToPdfDocument document = new HtmlToPdfDocument
@@ -89,7 +90,7 @@ namespace MediCLoud.Pdf.Entity
                     new ObjectSettings {
                         HtmlText = html,
                         ProduceExternalLinks = true,
-                        HeaderSettings = { 
+                        HeaderSettings = {
                         },
                         FooterSettings = {
                         },
@@ -101,7 +102,38 @@ namespace MediCLoud.Pdf.Entity
                              PrintBackground= true,
                              PrintMediaType = true,
                         }
-                        
+                    }
+                }
+            };
+
+            return TuesPechkin.Factory.Create().Convert(document);
+        }
+
+        public byte[] ParseCupomFiscal(string html)
+        {
+            HtmlToPdfDocument document = new HtmlToPdfDocument
+            {
+                GlobalSettings =
+                {
+                    ProduceOutline = true,
+                    DocumentTitle = "Cupom Fiscal"
+                },
+                Objects = {
+                    new ObjectSettings {
+                        HtmlText = html,
+                        ProduceExternalLinks = true,
+                        HeaderSettings = {
+                        },
+                        FooterSettings = {
+                        },
+                        LoadSettings = {
+                            ZoomFactor = 1.5,
+                        },
+                        WebSettings={
+                             LoadImages = true,
+                             PrintBackground= true,
+                             PrintMediaType = true,
+                        }
                     }
                 }
             };
@@ -129,7 +161,7 @@ namespace MediCLoud.Pdf.Entity
                     new ObjectSettings {
                         HtmlText = html,
                         ProduceExternalLinks = true,
-                        HeaderSettings = { 
+                        HeaderSettings = {
                         },
                         FooterSettings = {
                         },
@@ -141,12 +173,52 @@ namespace MediCLoud.Pdf.Entity
                              PrintBackground= true,
                              PrintMediaType = true,
                         }
-                        
                     }
                 }
             };
             return TuesPechkin.Factory.Create().Convert(document);
         }
+
+        public byte[] ParseOrientacaoFooterFixo(string html, TipoOrientacaoPdf orientacao, string footer)
+        {
+            HtmlToPdfDocument document = new HtmlToPdfDocument
+            {
+                GlobalSettings =
+                {
+                    ProduceOutline = true,
+                    //DocumentTitle = "Pretty Websites",/
+                    PaperSize = PaperKind.A4, // Implicit conversion to PechkinPaperSize
+                    Margins =
+                    {
+                        All = 0.5,
+                        Bottom = 3.5,
+                        Unit = Unit.Centimeters
+                    },
+                    Orientation = PdfTuesPechkin.CreateOrientacao(orientacao)
+                },
+                Objects = {
+                    new ObjectSettings {
+                        HtmlText = html,
+                        ProduceExternalLinks = true,
+                        HeaderSettings = {
+                        },
+                        FooterSettings = {
+                            HtmlUrl = footer,
+                        },
+                        LoadSettings = {
+                            ZoomFactor = 1.5,
+                        },
+                        WebSettings={
+                             LoadImages = true,
+                             PrintBackground= true,
+                             PrintMediaType = true,
+                        }
+                    }
+                }
+            };
+            return TuesPechkin.Factory.Create().Convert(document);
+        }
+
         public byte[] ParseTipoPapel(string html, string largura, string altura, double marginTop, double marginRight, double marginBottom, double marginLeft, Unit unit)
         {
             HtmlToPdfDocument document = new HtmlToPdfDocument
@@ -169,7 +241,7 @@ namespace MediCLoud.Pdf.Entity
                     new ObjectSettings {
                         HtmlText = html,
                         ProduceExternalLinks = true,
-                        HeaderSettings = { 
+                        HeaderSettings = {
                         },
                         FooterSettings = {
                         },
@@ -181,39 +253,6 @@ namespace MediCLoud.Pdf.Entity
                              PrintBackground= true,
                              PrintMediaType = true,
                         }
-                        
-                    }
-                }
-            };
-
-            return TuesPechkin.Factory.Create().Convert(document);
-        }
-        public byte[] ParseCupomFiscal(string html)
-        {
-            HtmlToPdfDocument document = new HtmlToPdfDocument
-            {
-                GlobalSettings =
-                {
-                    ProduceOutline = true,
-                    DocumentTitle = "Cupom Fiscal"
-                },
-                Objects = {
-                    new ObjectSettings {
-                        HtmlText = html,
-                        ProduceExternalLinks = true,
-                        HeaderSettings = { 
-                        },
-                        FooterSettings = {
-                        },
-                        LoadSettings = {
-                            ZoomFactor = 1.5,
-                        },
-                        WebSettings={
-                             LoadImages = true,
-                             PrintBackground= true,
-                             PrintMediaType = true,
-                        }
-                        
                     }
                 }
             };
@@ -256,7 +295,6 @@ namespace MediCLoud.Pdf.Entity
                              PrintBackground= true,
                              PrintMediaType = true,
                         }
-
                     }
                 }
             };
@@ -264,45 +302,6 @@ namespace MediCLoud.Pdf.Entity
             return TuesPechkin.Factory.Create().Convert(document);
         }
 
-        public byte[] ParseOrientacaoFooterFixo(string html, TipoOrientacaoPdf orientacao, string footer)
-        {
-            HtmlToPdfDocument document = new HtmlToPdfDocument
-            {
-                GlobalSettings =
-                {
-                    ProduceOutline = true,
-                    //DocumentTitle = "Pretty Websites",/
-                    PaperSize = PaperKind.A4, // Implicit conversion to PechkinPaperSize
-                    Margins =
-                    {
-                        All = 0.5,
-                        Bottom = 3.5,
-                        Unit = Unit.Centimeters
-                    },
-                    Orientation = PdfTuesPechkin.CreateOrientacao(orientacao)
-                },
-                Objects = {
-                    new ObjectSettings {
-                        HtmlText = html,                        
-                        ProduceExternalLinks = true,
-                        HeaderSettings = { 
-                        },
-                        FooterSettings = {   
-                            HtmlUrl = footer,
-                        },
-                        LoadSettings = {
-                            ZoomFactor = 1.5,
-                        },
-                        WebSettings={
-                             LoadImages = true,
-                             PrintBackground= true,
-                             PrintMediaType = true,
-                        }
-                        
-                    }
-                }
-            };
-            return TuesPechkin.Factory.Create().Convert(document);
-        }
-    }    
+        #endregion Public Methods
+    }
 }

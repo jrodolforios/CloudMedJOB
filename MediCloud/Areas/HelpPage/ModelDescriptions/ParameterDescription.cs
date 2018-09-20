@@ -1,14 +1,21 @@
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 namespace MediCloud.View.Areas.HelpPage.ModelDescriptions
 {
     public class ParameterDescription
     {
+        #region Public Constructors
+
         public ParameterDescription()
         {
             Annotations = new Collection<ParameterAnnotation>();
         }
+
+        #endregion Public Constructors
+
+
+
+        #region Public Properties
 
         public Collection<ParameterAnnotation> Annotations { get; private set; }
 
@@ -17,5 +24,7 @@ namespace MediCloud.View.Areas.HelpPage.ModelDescriptions
         public string Name { get; set; }
 
         public ModelDescription TypeDescription { get; set; }
+
+        #endregion Public Properties
     }
 }

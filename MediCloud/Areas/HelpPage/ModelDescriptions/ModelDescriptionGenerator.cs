@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,7 +10,6 @@ using System.Runtime.Serialization;
 using System.Web.Http;
 using System.Web.Http.Description;
 using System.Xml.Serialization;
-using Newtonsoft.Json;
 
 namespace MediCloud.View.Areas.HelpPage.ModelDescriptions
 {
@@ -18,6 +18,8 @@ namespace MediCloud.View.Areas.HelpPage.ModelDescriptions
     /// </summary>
     public class ModelDescriptionGenerator
     {
+        #region Private Fields
+
         // Modify this to support more data annotation attributes.
         private readonly IDictionary<Type, Func<object, string>> AnnotationTextGenerator = new Dictionary<Type, Func<object, string>>
         {
@@ -86,6 +88,10 @@ namespace MediCloud.View.Areas.HelpPage.ModelDescriptions
 
         private Lazy<IModelDocumentationProvider> _documentationProvider;
 
+        #endregion Private Fields
+
+        #region Public Constructors
+
         public ModelDescriptionGenerator(HttpConfiguration config)
         {
             if (config == null)
@@ -97,7 +103,19 @@ namespace MediCloud.View.Areas.HelpPage.ModelDescriptions
             GeneratedModels = new Dictionary<string, ModelDescription>(StringComparer.OrdinalIgnoreCase);
         }
 
+        #endregion Public Constructors
+
+
+
+        #region Public Properties
+
         public Dictionary<string, ModelDescription> GeneratedModels { get; private set; }
+
+        #endregion Public Properties
+
+
+
+        #region Private Properties
 
         private IModelDocumentationProvider DocumentationProvider
         {
@@ -106,6 +124,12 @@ namespace MediCloud.View.Areas.HelpPage.ModelDescriptions
                 return _documentationProvider.Value;
             }
         }
+
+        #endregion Private Properties
+
+
+
+        #region Public Methods
 
         public ModelDescription GetOrCreateModelDescription(Type modelType)
         {
@@ -200,6 +224,12 @@ namespace MediCloud.View.Areas.HelpPage.ModelDescriptions
 
             return GenerateComplexTypeModelDescription(modelType);
         }
+
+        #endregion Public Methods
+
+
+
+        #region Private Methods
 
         // Change this to provide different name for the member.
         private static string GetMemberName(MemberInfo member, bool hasDataContractAttribute)
@@ -447,5 +477,7 @@ namespace MediCloud.View.Areas.HelpPage.ModelDescriptions
 
             return simpleModelDescription;
         }
+
+        #endregion Private Methods
     }
 }

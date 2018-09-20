@@ -1,13 +1,13 @@
 namespace MediCloud.DatabaseModels
 {
     using System;
-    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
-    using System.Data.Entity.Spatial;
 
     public partial class SYS_CONSULTA
     {
+        #region Public Properties
+
         [Key]
         [Column(TypeName = "numeric")]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -28,5 +28,7 @@ namespace MediCloud.DatabaseModels
         [Required]
         [StringLength(1)]
         public string TIPODIAGR { get; set; }
+
+        #endregion Public Properties
     }
 }

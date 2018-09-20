@@ -14,5 +14,7 @@ namespace MediCloud.Models.Seguranca
         public int ConvocacoesNoMes { get; set; }
         public List<ASOModel> ASOS { get; set; }
         public Dictionary<decimal, int> GraficoASOs { get; set; }
+        public List<string> FaturamentoUltimos8Meses { get; set; }
+        public decimal FaturamentoMesAtual { get; set; }
     }
 }

@@ -1,3 +1,4 @@
+using MediCloud.View.Areas.HelpPage.ModelDescriptions;
 using System;
 using System.Globalization;
 using System.Linq;
@@ -5,7 +6,6 @@ using System.Reflection;
 using System.Web.Http.Controllers;
 using System.Web.Http.Description;
 using System.Xml.XPath;
-using MediCloud.View.Areas.HelpPage.ModelDescriptions;
 
 namespace MediCloud.View.Areas.HelpPage
 {
@@ -14,12 +14,18 @@ namespace MediCloud.View.Areas.HelpPage
     /// </summary>
     public class XmlDocumentationProvider : IDocumentationProvider, IModelDocumentationProvider
     {
-        private XPathNavigator _documentNavigator;
-        private const string TypeExpression = "/doc/members/member[@name='T:{0}']";
-        private const string MethodExpression = "/doc/members/member[@name='M:{0}']";
-        private const string PropertyExpression = "/doc/members/member[@name='P:{0}']";
+        #region Private Fields
+
         private const string FieldExpression = "/doc/members/member[@name='F:{0}']";
+        private const string MethodExpression = "/doc/members/member[@name='M:{0}']";
         private const string ParameterExpression = "param[@name='{0}']";
+        private const string PropertyExpression = "/doc/members/member[@name='P:{0}']";
+        private const string TypeExpression = "/doc/members/member[@name='T:{0}']";
+        private XPathNavigator _documentNavigator;
+
+        #endregion Private Fields
+
+        #region Public Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="XmlDocumentationProvider"/> class.
@@ -34,6 +40,12 @@ namespace MediCloud.View.Areas.HelpPage
             XPathDocument xpath = new XPathDocument(documentPath);
             _documentNavigator = xpath.CreateNavigator();
         }
+
+        #endregion Public Constructors
+
+
+
+        #region Public Methods
 
         public string GetDocumentation(HttpControllerDescriptor controllerDescriptor)
         {
@@ -67,12 +79,6 @@ namespace MediCloud.View.Areas.HelpPage
             return null;
         }
 
-        public string GetResponseDocumentation(HttpActionDescriptor actionDescriptor)
-        {
-            XPathNavigator methodNode = GetMethodNode(actionDescriptor);
-            return GetTagValue(methodNode, "returns");
-        }
-
         public string GetDocumentation(MemberInfo member)
         {
             string memberName = String.Format(CultureInfo.InvariantCulture, "{0}.{1}", GetTypeName(member.DeclaringType), member.Name);
@@ -88,17 +94,17 @@ namespace MediCloud.View.Areas.HelpPage
             return GetTagValue(typeNode, "summary");
         }
 
-        private XPathNavigator GetMethodNode(HttpActionDescriptor actionDescriptor)
+        public string GetResponseDocumentation(HttpActionDescriptor actionDescriptor)
         {
-            ReflectedHttpActionDescriptor reflectedActionDescriptor = actionDescriptor as ReflectedHttpActionDescriptor;
-            if (reflectedActionDescriptor != null)
-            {
-                string selectExpression = String.Format(CultureInfo.InvariantCulture, MethodExpression, GetMemberName(reflectedActionDescriptor.MethodInfo));
-                return _documentNavigator.SelectSingleNode(selectExpression);
-            }
-
-            return null;
+            XPathNavigator methodNode = GetMethodNode(actionDescriptor);
+            return GetTagValue(methodNode, "returns");
         }
+
+        #endregion Public Methods
+
+
+
+        #region Private Methods
 
         private static string GetMemberName(MethodInfo method)
         {
@@ -127,13 +133,6 @@ namespace MediCloud.View.Areas.HelpPage
             return null;
         }
 
-        private XPathNavigator GetTypeNode(Type type)
-        {
-            string controllerTypeName = GetTypeName(type);
-            string selectExpression = String.Format(CultureInfo.InvariantCulture, TypeExpression, controllerTypeName);
-            return _documentNavigator.SelectSingleNode(selectExpression);
-        }
-
         private static string GetTypeName(Type type)
         {
             string name = type.FullName;
@@ -157,5 +156,26 @@ namespace MediCloud.View.Areas.HelpPage
 
             return name;
         }
+
+        private XPathNavigator GetMethodNode(HttpActionDescriptor actionDescriptor)
+        {
+            ReflectedHttpActionDescriptor reflectedActionDescriptor = actionDescriptor as ReflectedHttpActionDescriptor;
+            if (reflectedActionDescriptor != null)
+            {
+                string selectExpression = String.Format(CultureInfo.InvariantCulture, MethodExpression, GetMemberName(reflectedActionDescriptor.MethodInfo));
+                return _documentNavigator.SelectSingleNode(selectExpression);
+            }
+
+            return null;
+        }
+
+        private XPathNavigator GetTypeNode(Type type)
+        {
+            string controllerTypeName = GetTypeName(type);
+            string selectExpression = String.Format(CultureInfo.InvariantCulture, TypeExpression, controllerTypeName);
+            return _documentNavigator.SelectSingleNode(selectExpression);
+        }
+
+        #endregion Private Methods
     }
 }

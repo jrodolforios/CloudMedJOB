@@ -8,11 +8,21 @@ namespace MediCloud.View.Areas.HelpPage.ModelDescriptions
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct | AttributeTargets.Enum, AllowMultiple = false, Inherited = false)]
     public sealed class ModelNameAttribute : Attribute
     {
+        #region Public Constructors
+
         public ModelNameAttribute(string name)
         {
             Name = name;
         }
 
+        #endregion Public Constructors
+
+
+
+        #region Public Properties
+
         public string Name { get; private set; }
+
+        #endregion Public Properties
     }
 }

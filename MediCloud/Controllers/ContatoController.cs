@@ -5,21 +5,13 @@ using MediCloud.Code.Fornecedor;
 using MediCloud.Models.Fornecedor;
 using MediCloud.Models.Seguranca;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace MediCloud.Controllers
 {
     public class ContatoController : BaseController
     {
-        // GET: Contato
-        public ActionResult Index()
-        {
-            return View();
-        }
-
+        #region Public Methods
 
         [HttpPost]
         public JsonResult DeletarContato(int codigoDoContato)
@@ -78,7 +70,6 @@ namespace MediCloud.Controllers
             {
                 ContatoModel contadoresEncontrados = CadastroDeContato.RecuperarContatoPorID(codigoDoContato);
 
-
                 return Json(contadoresEncontrados, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
@@ -100,7 +91,6 @@ namespace MediCloud.Controllers
             {
                 ContatoFornecedorModel contadoresEncontrados = CadastroDeContato.RecuperarContatoFornecedorPorID(codigoDoContatoFornecedor);
 
-
                 return Json(contadoresEncontrados, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
@@ -115,5 +105,12 @@ namespace MediCloud.Controllers
             }
         }
 
+        // GET: Contato
+        public ActionResult Index()
+        {
+            return View();
+        }
+
+        #endregion Public Methods
     }
 }

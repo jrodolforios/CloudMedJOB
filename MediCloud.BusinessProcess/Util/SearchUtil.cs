@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 
 namespace MediCloud.BusinessProcess.Util
 {
     public class SearchUtil
     {
-        public static bool CheckAllFields<T>(T x,string termo)
+        #region Public Methods
+
+        public static bool CheckAllFields<T>(T x, string termo)
         {
             var result = searchAllFields(x.GetType()).ToList();
             bool encontrou = false;
@@ -31,6 +31,12 @@ namespace MediCloud.BusinessProcess.Util
             InternalVisit(t, visitedTypes, result);
             return result;
         }
+
+        #endregion Public Methods
+
+
+
+        #region Private Methods
 
         private static void InternalVisit(Type t, HashSet<Type> visitedTypes, IList<PropertyInfo> result)
         {
@@ -74,5 +80,7 @@ namespace MediCloud.BusinessProcess.Util
             typeof(DateTime),
         }.Contains(t);
         }
+
+        #endregion Private Methods
     }
 }

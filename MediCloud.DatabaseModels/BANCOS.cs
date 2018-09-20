@@ -1,13 +1,13 @@
 namespace MediCloud.DatabaseModels
 {
     using System;
-    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
-    using System.Data.Entity.Spatial;
 
     public partial class BANCOS
     {
+        #region Public Properties
+
         [StringLength(6)]
         public string AGENCIA { get; set; }
 
@@ -54,5 +54,7 @@ namespace MediCloud.DatabaseModels
         public string URL { get; set; }
 
         public decimal? VL_TARIFA { get; set; }
+
+        #endregion Public Properties
     }
 }

@@ -1,17 +1,38 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MediCloud.BusinessProcess.Util;
 using MediCloud.DatabaseModels;
-using System.Data.Entity.Validation;
-using MediCloud.BusinessProcess.Util;
 using MediCloud.Persistence;
+using System;
+using System.Collections.Generic;
+using System.Data.Entity.Validation;
+using System.Linq;
 
 namespace MediCloud.BusinessProcess.Parametro
 {
     public class ControleDeDadosOcupacionais
     {
+        #region Public Methods
+
+        public static CLIENTE_OCUPACIONAL BuscarDadosOcupacionaisPorID(int codigoDoDadosOcupacionais)
+        {
+            CloudMedContext contexto = new CloudMedContext();
+            try
+            {
+                if (contexto.CLIENTE_OCUPACIONAL.Any(x => x.IDCLIOC == codigoDoDadosOcupacionais))
+                    return contexto.CLIENTE_OCUPACIONAL.First(x => x.IDCLIOC == codigoDoDadosOcupacionais);
+                else
+                    return null;
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return null;
+        }
+
         public static List<CLIENTE_OCUPACIONAL> BuscarDadosOcupacionaisPorTermo(string termo)
         {
             CloudMedContext contexto = new CloudMedContext();
@@ -54,27 +75,6 @@ namespace MediCloud.BusinessProcess.Parametro
             }
         }
 
-        public static CLIENTE_OCUPACIONAL BuscarDadosOcupacionaisPorID(int codigoDoDadosOcupacionais)
-        {
-            CloudMedContext contexto = new CloudMedContext();
-            try
-            {
-                if (contexto.CLIENTE_OCUPACIONAL.Any(x => x.IDCLIOC == codigoDoDadosOcupacionais))
-                    return contexto.CLIENTE_OCUPACIONAL.First(x => x.IDCLIOC == codigoDoDadosOcupacionais);
-                else
-                    return null;
-            }
-            catch (DbEntityValidationException ex)
-            {
-                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-            return null;
-        }
-
         public static CLIENTE_OCUPACIONAL SalvarDadosOcupacionais(CLIENTE_OCUPACIONAL dadosOcupacionaisDAO)
         {
             CloudMedContext contexto = new CloudMedContext();
@@ -82,7 +82,6 @@ namespace MediCloud.BusinessProcess.Parametro
 
             try
             {
-
                 if (dadosOcupacionaisDAO.IDCLIOC > 0)
                 {
                     dadosOcupacionaisSalvo = contexto.CLIENTE_OCUPACIONAL.First(x => x.IDCLIOC == dadosOcupacionaisDAO.IDCLIOC);
@@ -96,18 +95,14 @@ namespace MediCloud.BusinessProcess.Parametro
                     dadosOcupacionaisSalvo.PCMSO = dadosOcupacionaisDAO.PCMSO;
                     dadosOcupacionaisSalvo.VENCIMENTO = dadosOcupacionaisDAO.VENCIMENTO;
                     dadosOcupacionaisSalvo.IDCLI = dadosOcupacionaisDAO.IDCLI;
-                    
-                    
                 }
                 else
                 {
-
                     dadosOcupacionaisSalvo = contexto.CLIENTE_OCUPACIONAL.Add(dadosOcupacionaisDAO);
                 }
 
                 contexto.SaveChanges();
                 return dadosOcupacionaisSalvo;
-
             }
             catch (DbEntityValidationException ex)
             {
@@ -119,5 +114,7 @@ namespace MediCloud.BusinessProcess.Parametro
                 throw ex;
             }
         }
+
+        #endregion Public Methods
     }
 }

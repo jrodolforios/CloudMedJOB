@@ -1,17 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MediCloud.BusinessProcess.Util;
 using MediCloud.DatabaseModels;
 using MediCloud.Persistence;
+using System;
+using System.Collections.Generic;
 using System.Data.Entity.Validation;
-using MediCloud.BusinessProcess.Util;
+using System.Linq;
 
 namespace MediCloud.BusinessProcess.Financeiro
 {
     public class ControleDeFormaDePagamento
     {
+        #region Public Methods
+
         public static FORMADEPAGAMENTO buscarFormaDePagamento(int idFormPag)
         {
             CloudMedContext contexto = new CloudMedContext();
@@ -23,43 +23,6 @@ namespace MediCloud.BusinessProcess.Financeiro
             {
                 ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
                 return null;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        public static List<FORMADEPAGAMENTO> RecuperarTodos()
-        {
-            CloudMedContext contexto = new CloudMedContext();
-            try
-            {
-                return contexto.FORMADEPAGAMENTO.ToList();
-            }
-            catch (DbEntityValidationException ex)
-            {
-                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
-                return null;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        public static List<FORMADEPAGAMENTO> RecuperarFormaDePagamentoPorTermo(string prefix)
-        {
-            CloudMedContext contexto = new CloudMedContext();
-
-            try
-            {
-                return contexto.FORMADEPAGAMENTO.Where(x => x.FORMADEPAGAMENTO1.Contains(prefix)).ToList();
-            }
-            catch (DbEntityValidationException ex)
-            {
-                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
-                return new List<FORMADEPAGAMENTO>();
             }
             catch (Exception ex)
             {
@@ -88,6 +51,43 @@ namespace MediCloud.BusinessProcess.Financeiro
             }
         }
 
+        public static List<FORMADEPAGAMENTO> RecuperarFormaDePagamentoPorTermo(string prefix)
+        {
+            CloudMedContext contexto = new CloudMedContext();
+
+            try
+            {
+                return contexto.FORMADEPAGAMENTO.Where(x => x.FORMADEPAGAMENTO1.Contains(prefix)).ToList();
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+                return new List<FORMADEPAGAMENTO>();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static List<FORMADEPAGAMENTO> RecuperarTodos()
+        {
+            CloudMedContext contexto = new CloudMedContext();
+            try
+            {
+                return contexto.FORMADEPAGAMENTO.ToList();
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+                return null;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public static FORMADEPAGAMENTO SalvarFormaPagamento(FORMADEPAGAMENTO formaPagamentoDAO)
         {
             CloudMedContext contexto = new CloudMedContext();
@@ -95,7 +95,6 @@ namespace MediCloud.BusinessProcess.Financeiro
 
             try
             {
-
                 if (formaPagamentoDAO.IDFORPAG > 0)
                 {
                     setorSalvo = contexto.FORMADEPAGAMENTO.First(x => x.IDFORPAG == formaPagamentoDAO.IDFORPAG);
@@ -110,7 +109,6 @@ namespace MediCloud.BusinessProcess.Financeiro
 
                 contexto.SaveChanges();
                 return setorSalvo;
-
             }
             catch (DbEntityValidationException ex)
             {
@@ -122,5 +120,7 @@ namespace MediCloud.BusinessProcess.Financeiro
                 throw ex;
             }
         }
+
+        #endregion Public Methods
     }
 }

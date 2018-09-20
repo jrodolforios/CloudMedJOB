@@ -4,17 +4,24 @@ namespace MediCloud.DatabaseModels
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
-    using System.Data.Entity.Spatial;
 
     [Table("PASTASMOV")]
     public partial class PASTASMOV
     {
+        #region Public Constructors
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public PASTASMOV()
         {
             LCTOSCAIXA = new HashSet<LCTOSCAIXA>();
             LCTOSCAIXA1 = new HashSet<LCTOSCAIXA>();
         }
+
+        #endregion Public Constructors
+
+
+
+        #region Public Properties
 
         [StringLength(25)]
         public string BAIRRO { get; set; }
@@ -66,6 +73,12 @@ namespace MediCloud.DatabaseModels
         [StringLength(255)]
         public string INSTRUCOES { get; set; }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<LCTOSCAIXA> LCTOSCAIXA { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<LCTOSCAIXA> LCTOSCAIXA1 { get; set; }
+
         [StringLength(45)]
         public string NOME { get; set; }
 
@@ -78,10 +91,6 @@ namespace MediCloud.DatabaseModels
         [StringLength(1)]
         public string TIPOPESSOA { get; set; }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<LCTOSCAIXA> LCTOSCAIXA { get; set; }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<LCTOSCAIXA> LCTOSCAIXA1 { get; set; }
+        #endregion Public Properties
     }
 }

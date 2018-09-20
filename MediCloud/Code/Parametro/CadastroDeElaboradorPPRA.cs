@@ -1,26 +1,42 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using MediCloud.BusinessProcess.Parametro;
 using MediCloud.DatabaseModels;
 using MediCloud.Models.Parametro;
-using MediCloud.BusinessProcess.Parametro;
+using System;
+using System.Collections.Generic;
 using System.Web.Mvc;
 
 namespace MediCloud.Code.Parametro
 {
     public class CadastroDeElaboradorPPRA
     {
+        #region Internal Methods
+
+        internal static ElaboradorPPRAModel BuscarElaboradorPorID(decimal? idEPPRA)
+        {
+            if (idEPPRA != 0)
+            {
+                EPPRA elaboradorEncontrado = ControleDeElaboradorPPRA.BuscarElaboradorPorID(idEPPRA.HasValue ? (int)idEPPRA.Value : 0);
+                return InjetarEmUsuarioModel(elaboradorEncontrado);
+            }
+            else
+                return null;
+        }
+
+        internal static void DeletarElaboradorPPRA(int codigoElaboradorPPRA)
+        {
+            ControleDeElaboradorPPRA.DeletarElaboradorPPRA(codigoElaboradorPPRA);
+        }
+
         internal static ElaboradorPPRAModel InjetarEmUsuarioModel(EPPRA ePPRA)
         {
             if (ePPRA == null)
                 return null;
             else
                 return new ElaboradorPPRAModel()
-            {
-                IdElaboradorPPRA = (int)ePPRA.IDEPPRA,
-                NomeElaboradorDoPPRA = ePPRA.ELABORADORPPRA
-            };
+                {
+                    IdElaboradorPPRA = (int)ePPRA.IDEPPRA,
+                    NomeElaboradorDoPPRA = ePPRA.ELABORADORPPRA
+                };
         }
 
         internal static List<ElaboradorPPRAModel> RecuperarElaboradorPorTermo(string prefix)
@@ -41,23 +57,6 @@ namespace MediCloud.Code.Parametro
             string prefix = form["keywords"];
 
             return RecuperarElaboradorPorTermo(prefix);
-
-        }
-
-        internal static ElaboradorPPRAModel BuscarElaboradorPorID(decimal? idEPPRA)
-        {
-            if (idEPPRA != 0)
-            {
-                EPPRA elaboradorEncontrado = ControleDeElaboradorPPRA.BuscarElaboradorPorID(idEPPRA.HasValue ? (int)idEPPRA.Value : 0);
-                return InjetarEmUsuarioModel(elaboradorEncontrado);
-            }
-            else
-                return null;
-        }
-
-        internal static void DeletarElaboradorPPRA(int codigoElaboradorPPRA)
-        {
-            ControleDeElaboradorPPRA.DeletarElaboradorPPRA(codigoElaboradorPPRA);
         }
 
         internal static ElaboradorPPRAModel SalvarElaboradorPPRA(FormCollection form)
@@ -72,6 +71,12 @@ namespace MediCloud.Code.Parametro
 
             return usuarioModel;
         }
+
+        #endregion Internal Methods
+
+
+
+        #region Private Methods
 
         private static EPPRA InjetarEmUsuarioDAO(ElaboradorPPRAModel usuarioModel)
         {
@@ -93,5 +98,7 @@ namespace MediCloud.Code.Parametro
                 NomeElaboradorDoPPRA = string.IsNullOrEmpty(form["nomeElaboradorPPRA"]) ? null : form["nomeElaboradorPPRA"]
             };
         }
+
+        #endregion Private Methods
     }
 }

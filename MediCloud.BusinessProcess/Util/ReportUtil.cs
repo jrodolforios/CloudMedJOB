@@ -1,19 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MediCloud.BusinessProcess.Util.Enum;
-using static MediCloud.BusinessProcess.Util.Enum.Cliente;
-using System.IO;
 using System.Configuration;
-using static MediCloud.BusinessProcess.Util.Enum.Laudo;
+using System.IO;
+using static MediCloud.BusinessProcess.Util.Enum.Cliente;
 using static MediCloud.BusinessProcess.Util.Enum.Financeiro;
+using static MediCloud.BusinessProcess.Util.Enum.Laudo;
 
 namespace MediCloud.BusinessProcess.Util
 {
     public class ReportUtil
     {
+        #region Internal Methods
+
         internal static string GetASOTemplate(ASOReportEnum tipoASOReport)
         {
             string path = ConfigurationManager.AppSettings["TemplatesPath"] + "\\ASO\\";
@@ -22,43 +19,20 @@ namespace MediCloud.BusinessProcess.Util
             {
                 case ASOReportEnum.imprimirComMedCoord:
                     return recoverTemplateByFileName(path + tipoASOReport.ToString() + ".html");
+
                 case ASOReportEnum.imprimirSemMedCoord:
                     return recoverTemplateByFileName(path + tipoASOReport.ToString() + ".html");
+
                 case ASOReportEnum.imprimirReciboASO:
                     return recoverTemplateByFileName(path + tipoASOReport.ToString() + ".html");
+
                 case ASOReportEnum.imprimirListaDeProcedimentos:
                     return recoverTemplateByFileName(path + tipoASOReport.ToString() + ".html");
+
                 case ASOReportEnum.imprimirFichaClinica:
                     return recoverTemplateByFileName(path + tipoASOReport.ToString() + ".html");
+
                 case ASOReportEnum.imprimirOrdemServicoASO:
-                    return recoverTemplateByFileName(path + tipoASOReport.ToString() + ".html");
-                default:
-                    return string.Empty;
-            }
-        }
-
-        internal static string GetRelatorioMovimentoTemplate(MovimentoReportEnum tipoMovimentoReport)
-        {
-            string path = ConfigurationManager.AppSettings["TemplatesPath"] + "\\Movimento\\";
-
-            switch (tipoMovimentoReport)
-            {
-                case MovimentoReportEnum.imprimirRelatorioAnual:
-                    return recoverTemplateByFileName(path + tipoMovimentoReport.ToString() + ".html");
-                default:
-                    return string.Empty;
-            }
-        }
-
-        internal static string GetRelatorioFinanceiroTemplate(object tipoASOReport)
-        {
-            string path = ConfigurationManager.AppSettings["TemplatesPath"] + "\\Financeiro\\";
-
-            switch (tipoASOReport)
-            {
-                case FinanceiroReportEnum.imprimirRelatorioDeMovimentos:
-                    return recoverTemplateByFileName(path + tipoASOReport.ToString() + ".html");
-                case FinanceiroReportEnum.imprimirRelatorioAnaliticoDeFaturamento:
                     return recoverTemplateByFileName(path + tipoASOReport.ToString() + ".html");
 
                 default:
@@ -74,14 +48,54 @@ namespace MediCloud.BusinessProcess.Util
             {
                 case LaudoReportEnum.imprimirLaudoRaioX:
                     return recoverTemplateByFileName(path + tipoLaudoReport.ToString() + ".html");
+
                 case LaudoReportEnum.imprimirLaudoVisao:
                     return recoverTemplateByFileName(path + tipoLaudoReport.ToString() + ".html");
+
                 case LaudoReportEnum.imprimirAudiometria:
                     return recoverTemplateByFileName(path + tipoLaudoReport.ToString() + ".html");
+
                 default:
                     return string.Empty;
             }
         }
+
+        internal static string GetRelatorioFinanceiroTemplate(object tipoASOReport)
+        {
+            string path = ConfigurationManager.AppSettings["TemplatesPath"] + "\\Financeiro\\";
+
+            switch (tipoASOReport)
+            {
+                case FinanceiroReportEnum.imprimirRelatorioDeMovimentos:
+                    return recoverTemplateByFileName(path + tipoASOReport.ToString() + ".html");
+
+                case FinanceiroReportEnum.imprimirRelatorioAnaliticoDeFaturamento:
+                    return recoverTemplateByFileName(path + tipoASOReport.ToString() + ".html");
+
+                default:
+                    return string.Empty;
+            }
+        }
+
+        internal static string GetRelatorioMovimentoTemplate(MovimentoReportEnum tipoMovimentoReport)
+        {
+            string path = ConfigurationManager.AppSettings["TemplatesPath"] + "\\Movimento\\";
+
+            switch (tipoMovimentoReport)
+            {
+                case MovimentoReportEnum.imprimirRelatorioAnual:
+                    return recoverTemplateByFileName(path + tipoMovimentoReport.ToString() + ".html");
+
+                default:
+                    return string.Empty;
+            }
+        }
+
+        #endregion Internal Methods
+
+
+
+        #region Private Methods
 
         private static string recoverTemplateByFileName(string fileName)
         {
@@ -103,5 +117,7 @@ namespace MediCloud.BusinessProcess.Util
 
             return template;
         }
+
+        #endregion Private Methods
     }
 }

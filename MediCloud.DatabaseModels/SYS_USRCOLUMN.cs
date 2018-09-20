@@ -4,10 +4,11 @@ namespace MediCloud.DatabaseModels
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
-    using System.Data.Entity.Spatial;
 
     public partial class SYS_USRCOLUMN
     {
+        #region Public Constructors
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public SYS_USRCOLUMN()
         {
@@ -15,14 +16,20 @@ namespace MediCloud.DatabaseModels
             SYS_USUARIO = new HashSet<SYS_USUARIO>();
         }
 
-        [Key]
-        [Column(TypeName = "numeric")]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public decimal CODUSRCOLUMN { get; set; }
+        #endregion Public Constructors
+
+
+
+        #region Public Properties
 
         [Required]
         [StringLength(1)]
         public string CHAVE_PK { get; set; }
+
+        [Key]
+        [Column(TypeName = "numeric")]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public decimal CODUSRCOLUMN { get; set; }
 
         [Column(TypeName = "numeric")]
         public decimal CODUSRTABLE { get; set; }
@@ -44,6 +51,14 @@ namespace MediCloud.DatabaseModels
 
         public int? POSICAO_PK { get; set; }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SYS_USRCOMPONENT> SYS_USRCOMPONENT { get; set; }
+
+        public virtual SYS_USRTABLE SYS_USRTABLE { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SYS_USUARIO> SYS_USUARIO { get; set; }
+
         public int? TAMANHO { get; set; }
 
         [Required]
@@ -53,12 +68,6 @@ namespace MediCloud.DatabaseModels
         [Column(TypeName = "text")]
         public string VALOR_PADRAO { get; set; }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SYS_USRCOMPONENT> SYS_USRCOMPONENT { get; set; }
-
-        public virtual SYS_USRTABLE SYS_USRTABLE { get; set; }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SYS_USUARIO> SYS_USUARIO { get; set; }
+        #endregion Public Properties
     }
 }

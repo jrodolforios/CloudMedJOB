@@ -1,14 +1,14 @@
 namespace MediCloud.DatabaseModels
 {
     using System;
-    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
-    using System.Data.Entity.Spatial;
 
     [Table("TEXTOPADRAO")]
     public partial class TEXTOPADRAO
     {
+        #region Public Properties
+
         public DateTime? DATACAD { get; set; }
 
         [StringLength(45)]
@@ -23,5 +23,7 @@ namespace MediCloud.DatabaseModels
 
         [StringLength(1)]
         public string TIPO { get; set; }
+
+        #endregion Public Properties
     }
 }
