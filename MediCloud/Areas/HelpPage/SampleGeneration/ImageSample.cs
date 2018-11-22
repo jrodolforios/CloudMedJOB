@@ -7,6 +7,8 @@ namespace MediCloud.View.Areas.HelpPage
     /// </summary>
     public class ImageSample
     {
+        #region Public Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ImageSample"/> class.
         /// </summary>
@@ -20,7 +22,19 @@ namespace MediCloud.View.Areas.HelpPage
             Src = src;
         }
 
+        #endregion Public Constructors
+
+
+
+        #region Public Properties
+
         public string Src { get; private set; }
+
+        #endregion Public Properties
+
+
+
+        #region Public Methods
 
         public override bool Equals(object obj)
         {
@@ -37,5 +51,7 @@ namespace MediCloud.View.Areas.HelpPage
         {
             return Src;
         }
+
+        #endregion Public Methods
     }
 }

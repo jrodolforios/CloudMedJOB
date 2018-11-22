@@ -7,36 +7,40 @@ using MediCloud.Models.Seguranca;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace MediCloud.Controllers
 {
     public class CargoController : BaseController
     {
-        // GET: Cargo
-        public ActionResult Index()
-        {
-            return View();
-        }
+        #region Public Methods
 
         [HttpPost]
-        public ActionResult Index(FormCollection form)
+        public JsonResult BuscaCargoAJAX(string Prefix)
         {
+            List<CargoModel> contadoresEncontrados = CadastroDeCargo.RecuperarCargoPorTermo(Prefix);
+            List<AutoCompleteDefaultModel> ObjList = new List<AutoCompleteDefaultModel>();
+
             try
             {
-                base.EstahLogado();
-                ViewBag.Title = "Usuários";
+                contadoresEncontrados.ForEach(x =>
+                {
+                    ObjList.Add(new AutoCompleteDefaultModel() { Id = x.IdCargo, Name = x.NomeCargo });
+                });
 
-                List<CargoModel> model = CadastroDeCargo.buscarCargo(form);
-
-                return View(model);
+                //Searching records from list using LINQ query
+                var results = (from N in ObjList
+                               select new { N.Id, N.Name }).ToArray();
+                return Json(results, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
                 ExceptionUtil.GerarLogDeExcecao(ex, Request.Url.ToString());
-                base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
-                return View();
+                ObjList = new List<AutoCompleteDefaultModel>()
+                {
+                new AutoCompleteDefaultModel {Id=-1,Name=Constantes.MENSAGEM_GENERICA_DE_ERRO },
+                };
+                return Json(ObjList.ToArray(), JsonRequestBehavior.AllowGet);
             }
         }
 
@@ -139,34 +143,32 @@ namespace MediCloud.Controllers
             }
         }
 
-        [HttpPost]
-        public JsonResult BuscaCargoAJAX(string Prefix)
+        // GET: Cargo
+        public ActionResult Index()
         {
-            List<CargoModel> contadoresEncontrados = CadastroDeCargo.RecuperarCargoPorTermo(Prefix);
-            List<AutoCompleteDefaultModel> ObjList = new List<AutoCompleteDefaultModel>();
+            return View();
+        }
 
+        [HttpPost]
+        public ActionResult Index(FormCollection form)
+        {
             try
             {
-                contadoresEncontrados.ForEach(x =>
-                {
-                    ObjList.Add(new AutoCompleteDefaultModel() { Id = x.IdCargo, Name = x.NomeCargo });
-                });
+                base.EstahLogado();
+                ViewBag.Title = "Usuários";
 
-                //Searching records from list using LINQ query  
-                var results = (from N in ObjList
-                               select new { N.Id, N.Name }).ToArray();
-                return Json(results, JsonRequestBehavior.AllowGet);
+                List<CargoModel> model = CadastroDeCargo.buscarCargo(form);
+
+                return View(model);
             }
             catch (Exception ex)
             {
                 ExceptionUtil.GerarLogDeExcecao(ex, Request.Url.ToString());
-                ObjList = new List<AutoCompleteDefaultModel>()
-                {
-                new AutoCompleteDefaultModel {Id=-1,Name=Constantes.MENSAGEM_GENERICA_DE_ERRO },
-                };
-                return Json(ObjList.ToArray(), JsonRequestBehavior.AllowGet);
+                base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
+                return View();
             }
         }
 
+        #endregion Public Methods
     }
 }

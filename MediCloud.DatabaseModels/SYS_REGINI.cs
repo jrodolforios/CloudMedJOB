@@ -1,13 +1,13 @@
 namespace MediCloud.DatabaseModels
 {
     using System;
-    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
-    using System.Data.Entity.Spatial;
 
     public partial class SYS_REGINI
     {
+        #region Public Properties
+
         [Key]
         [Column(Order = 0, TypeName = "numeric")]
         public decimal CODUSU { get; set; }
@@ -40,5 +40,7 @@ namespace MediCloud.DatabaseModels
         [Column(Order = 2)]
         [StringLength(100)]
         public string VARIAVEL { get; set; }
+
+        #endregion Public Properties
     }
 }

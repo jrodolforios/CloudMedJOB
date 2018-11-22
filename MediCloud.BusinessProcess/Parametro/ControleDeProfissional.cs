@@ -1,38 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MediCloud.BusinessProcess.Util;
 using MediCloud.DatabaseModels;
 using MediCloud.Persistence;
+using System;
+using System.Collections.Generic;
 using System.Data.Entity.Validation;
-using MediCloud.BusinessProcess.Util;
+using System.Linq;
 
 namespace MediCloud.BusinessProcess.Parametro
 {
     public class ControleDeProfissional
     {
-        public static PROFISSIONAIS recuperarProfissionalPorID(string idPro)
-        {
-            CloudMedContext contexto = new CloudMedContext();
-
-            try
-            {
-                if (contexto.PROFISSIONAIS.Any(x => x.IDPRF == idPro))
-                    return contexto.PROFISSIONAIS.First(x => x.IDPRF == idPro);
-                else
-                    return null;
-            }
-            catch (DbEntityValidationException ex)
-            {
-                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
-                return new PROFISSIONAIS();
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
+        #region Public Methods
 
         public static List<PROFISSIONAIS> buscarCargosPorTermo(string prefix)
         {
@@ -74,6 +52,28 @@ namespace MediCloud.BusinessProcess.Parametro
             }
         }
 
+        public static PROFISSIONAIS recuperarProfissionalPorID(string idPro)
+        {
+            CloudMedContext contexto = new CloudMedContext();
+
+            try
+            {
+                if (contexto.PROFISSIONAIS.Any(x => x.IDPRF == idPro))
+                    return contexto.PROFISSIONAIS.First(x => x.IDPRF == idPro);
+                else
+                    return null;
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+                return new PROFISSIONAIS();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public static PROFISSIONAIS SalvarProfissional(PROFISSIONAIS profissionalDAO)
         {
             CloudMedContext contexto = new CloudMedContext();
@@ -81,7 +81,6 @@ namespace MediCloud.BusinessProcess.Parametro
 
             try
             {
-
                 if (contexto.PROFISSIONAIS.Any(x => x.IDPRF == profissionalDAO.IDPRF))
                 {
                     profissionalSalvo = contexto.PROFISSIONAIS.First(x => x.IDPRF == profissionalDAO.IDPRF);
@@ -96,7 +95,6 @@ namespace MediCloud.BusinessProcess.Parametro
 
                 contexto.SaveChanges();
                 return profissionalSalvo;
-
             }
             catch (DbEntityValidationException ex)
             {
@@ -108,5 +106,7 @@ namespace MediCloud.BusinessProcess.Parametro
                 throw ex;
             }
         }
+
+        #endregion Public Methods
     }
 }

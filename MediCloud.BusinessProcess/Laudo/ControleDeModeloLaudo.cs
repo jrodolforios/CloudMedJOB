@@ -1,17 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MediCloud.BusinessProcess.Util;
 using MediCloud.DatabaseModels;
 using MediCloud.Persistence;
+using System;
+using System.Collections.Generic;
 using System.Data.Entity.Validation;
-using MediCloud.BusinessProcess.Util;
+using System.Linq;
 
 namespace MediCloud.BusinessProcess.Laudo
 {
     public class ControleDeModeloLaudo
     {
+        #region Public Methods
+
         public static List<MODELOLAUDO> buscarModeloLaudo(string prefix)
         {
             CloudMedContext contexto = new CloudMedContext();
@@ -90,7 +90,6 @@ namespace MediCloud.BusinessProcess.Laudo
 
             try
             {
-
                 if (modeloLaudoDAO.IDMODELO > 0)
                 {
                     modeloSalvo = contexto.MODELOLAUDO.First(x => x.IDMODELO == modeloLaudoDAO.IDMODELO);
@@ -99,7 +98,6 @@ namespace MediCloud.BusinessProcess.Laudo
                     modeloSalvo.LAUDO = modeloLaudoDAO.LAUDO;
                     modeloSalvo.MODELO = modeloLaudoDAO.MODELO;
                     modeloSalvo.RODAPE = modeloLaudoDAO.RODAPE;
-
                 }
                 else
                 {
@@ -108,7 +106,6 @@ namespace MediCloud.BusinessProcess.Laudo
 
                 contexto.SaveChanges();
                 return modeloSalvo;
-
             }
             catch (DbEntityValidationException ex)
             {
@@ -120,5 +117,7 @@ namespace MediCloud.BusinessProcess.Laudo
                 throw ex;
             }
         }
+
+        #endregion Public Methods
     }
 }

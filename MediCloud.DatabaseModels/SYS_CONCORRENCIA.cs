@@ -1,13 +1,15 @@
 namespace MediCloud.DatabaseModels
 {
-    using System;
-    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
-    using System.Data.Entity.Spatial;
 
     public partial class SYS_CONCORRENCIA
     {
+        #region Public Properties
+
+        [StringLength(1000)]
+        public string CHAVEREG { get; set; }
+
         [Key]
         [Column(TypeName = "numeric")]
         public decimal CODCONC { get; set; }
@@ -15,9 +17,8 @@ namespace MediCloud.DatabaseModels
         [Column(TypeName = "numeric")]
         public decimal CODUSU { get; set; }
 
-        [StringLength(1000)]
-        public string CHAVEREG { get; set; }
-
         public virtual SYS_USUARIO SYS_USUARIO { get; set; }
+
+        #endregion Public Properties
     }
 }

@@ -2,31 +2,51 @@
 {
     using DatabaseModels;
     using System.Data.Entity;
+    using System.Data.Entity.Infrastructure;
+
     public partial class CloudMedContext : DbContext
     {
+        #region Public Constructors
+
         public CloudMedContext()
             : base("name=MediCloudConnection")
         {
+            ((IObjectContextAdapter)this).ObjectContext.CommandTimeout = 300;  
         }
 
+        #endregion Public Constructors
+
+
+
+        #region Public Properties
+
+        public virtual DbSet<AUDIOMETRIA> AUDIOMETRIA { get; set; }
+        public virtual DbSet<BANCOS> BANCOS { get; set; }
         public virtual DbSet<CARGO> CARGO { get; set; }
-        public virtual DbSet<INFORMACOES_CLINICA> INFORMACOES_CLINICA { get; set; }
         public virtual DbSet<CENTROCUSTO> CENTROCUSTO { get; set; }
         public virtual DbSet<CIDADE> CIDADE { get; set; }
         public virtual DbSet<CLIENTE> CLIENTE { get; set; }
         public virtual DbSet<CLIENTE_CONTATO> CLIENTE_CONTATO { get; set; }
+        public virtual DbSet<CLIENTE_CONTRATOFIXO> CLIENTE_CONTRATOFIXO { get; set; }
         public virtual DbSet<CLIENTE_CREDIARIO> CLIENTE_CREDIARIO { get; set; }
         public virtual DbSet<CLIENTE_GRUPO> CLIENTE_GRUPO { get; set; }
+        public virtual DbSet<CLIENTE_OCUPACIONAL> CLIENTE_OCUPACIONAL { get; set; }
         public virtual DbSet<CLIENTE_OUTRASEMP> CLIENTE_OUTRASEMP { get; set; }
         public virtual DbSet<COMPOSICOESCAIXA> COMPOSICOESCAIXA { get; set; }
+        public virtual DbSet<CONT_MOV_CLI> CONT_MOV_CLI { get; set; }
         public virtual DbSet<CONTA_ORC> CONTA_ORC { get; set; }
         public virtual DbSet<CONTA_ORC_GRU> CONTA_ORC_GRU { get; set; }
         public virtual DbSet<CONTADOR> CONTADOR { get; set; }
+        public virtual DbSet<CONTASBANCARIAS> CONTASBANCARIAS { get; set; }
         public virtual DbSet<CONTASORC> CONTASORC { get; set; }
+        public virtual DbSet<CONTASPAGAR> CONTASPAGAR { get; set; }
+        public virtual DbSet<CONTASRECEBER> CONTASRECEBER { get; set; }
         public virtual DbSet<CONTRATO_FIXO> CONTRATO_FIXO { get; set; }
         public virtual DbSet<CONTRATO_FIXO_DET> CONTRATO_FIXO_DET { get; set; }
+        public virtual DbSet<CONTRATOSFORNEC> CONTRATOSFORNEC { get; set; }
         public virtual DbSet<EPCMSO> EPCMSO { get; set; }
         public virtual DbSet<EPPRA> EPPRA { get; set; }
+        public virtual DbSet<EXPORTACAO_NF> EXPORTACAO_NF { get; set; }
         public virtual DbSet<FATURAMENTO> FATURAMENTO { get; set; }
         public virtual DbSet<FECHAMENTO_CAIXA> FECHAMENTO_CAIXA { get; set; }
         public virtual DbSet<FORMADEPAGAMENTO> FORMADEPAGAMENTO { get; set; }
@@ -35,12 +55,16 @@
         public virtual DbSet<FORNECEDORXPROCEDIMENTO> FORNECEDORXPROCEDIMENTO { get; set; }
         public virtual DbSet<FUNCIONARIO> FUNCIONARIO { get; set; }
         public virtual DbSet<HISCONFIRMACAO> HISCONFIRMACAO { get; set; }
+        public virtual DbSet<INFORMACOES_CLINICA> INFORMACOES_CLINICA { get; set; }
         public virtual DbSet<LAUDOAUD> LAUDOAUD { get; set; }
         public virtual DbSet<LAUDOAV> LAUDOAV { get; set; }
         public virtual DbSet<LAUDORX> LAUDORX { get; set; }
-        public virtual DbSet<LOGS> LOGS { get; set; }
+        public virtual DbSet<LCTOSCAIXA> LCTOSCAIXA { get; set; }
+        public virtual DbSet<LCTOSCONTAS> LCTOSCONTAS { get; set; }
         public virtual DbSet<LOG_ERRO> LOG_ERRO { get; set; }
+        public virtual DbSet<LOGS> LOGS { get; set; }
         public virtual DbSet<MODELOLAUDO> MODELOLAUDO { get; set; }
+        public virtual DbSet<MOV_PROC_COMPLETO> MOV_PROC_COMPLETO { get; set; }
         public virtual DbSet<MOVIMENTO> MOVIMENTO { get; set; }
         public virtual DbSet<MOVIMENTO_ARQUIVOS> MOVIMENTO_ARQUIVOS { get; set; }
         public virtual DbSet<MOVIMENTO_FECHAMENTO> MOVIMENTO_FECHAMENTO { get; set; }
@@ -55,6 +79,7 @@
         public virtual DbSet<PROCEDIMENTO_GRUPO> PROCEDIMENTO_GRUPO { get; set; }
         public virtual DbSet<PROCEDIMENTO_GRUPO_SUBGRUP> PROCEDIMENTO_GRUPO_SUBGRUP { get; set; }
         public virtual DbSet<PROFISSIONAIS> PROFISSIONAIS { get; set; }
+        public virtual DbSet<QUANTIDADE_NOTAFISCAL> QUANTIDADE_NOTAFISCAL { get; set; }
         public virtual DbSet<RECOMENDACAO> RECOMENDACAO { get; set; }
         public virtual DbSet<RECOMENDACAOXASO> RECOMENDACAOXASO { get; set; }
         public virtual DbSet<RECOMENDACAOXASOXPRO> RECOMENDACAOXASOXPRO { get; set; }
@@ -62,45 +87,9 @@
         public virtual DbSet<RISCO> RISCO { get; set; }
         public virtual DbSet<ROTA> ROTA { get; set; }
         public virtual DbSet<SEGMENTO> SEGMENTO { get; set; }
-        public virtual DbSet<SETOR> SETOR { get; set; }
-        public virtual DbSet<SYS_CAIXA> SYS_CAIXA { get; set; }
-        public virtual DbSet<SYS_CATEND> SYS_CATEND { get; set; }
-        public virtual DbSet<SYS_CLASSES> SYS_CLASSES { get; set; }
-        public virtual DbSet<SYS_COMSQL> SYS_COMSQL { get; set; }
-        public virtual DbSet<SYS_CONCORRENCIA> SYS_CONCORRENCIA { get; set; }
-        public virtual DbSet<SYS_CONSULTA> SYS_CONSULTA { get; set; }
-        public virtual DbSet<SYS_FICHATECNICA> SYS_FICHATECNICA { get; set; }
-        public virtual DbSet<SYS_HELP> SYS_HELP { get; set; }
-        public virtual DbSet<SYS_HELPBODY> SYS_HELPBODY { get; set; }
-        public virtual DbSet<SYS_KPI> SYS_KPI { get; set; }
-        public virtual DbSet<SYS_LAYOUT> SYS_LAYOUT { get; set; }
-        public virtual DbSet<SYS_LOGMSG> SYS_LOGMSG { get; set; }
-        public virtual DbSet<SYS_LTELA> SYS_LTELA { get; set; }
-        public virtual DbSet<SYS_MAIL> SYS_MAIL { get; set; }
-        public virtual DbSet<SYS_REFRULES> SYS_REFRULES { get; set; }
-        public virtual DbSet<SYS_REGINI> SYS_REGINI { get; set; }
-        public virtual DbSet<SYS_REGRAS> SYS_REGRAS { get; set; }
-        public virtual DbSet<SYS_REPORTS> SYS_REPORTS { get; set; }
-        public virtual DbSet<SYS_USRCOLUMN> SYS_USRCOLUMN { get; set; }
-        public virtual DbSet<SYS_USRCOMPONENT> SYS_USRCOMPONENT { get; set; }
-        public virtual DbSet<SYS_USRFORM> SYS_USRFORM { get; set; }
-        public virtual DbSet<SYS_USRFORMXTABLE> SYS_USRFORMXTABLE { get; set; }
-        public virtual DbSet<SYS_USRON> SYS_USRON { get; set; }
-        public virtual DbSet<SYS_USRTABLE> SYS_USRTABLE { get; set; }
-        public virtual DbSet<SYS_USUARIO> SYS_USUARIO { get; set; }
-        public virtual DbSet<TAB> TAB { get; set; }
-        public virtual DbSet<TABELA> TABELA { get; set; }
-        public virtual DbSet<TABELAXFORNECEDORXPROCEDIMENTO> TABELAXFORNECEDORXPROCEDIMENTO { get; set; }
-        public virtual DbSet<AUDIOMETRIA> AUDIOMETRIA { get; set; }
-        public virtual DbSet<BANCOS> BANCOS { get; set; }
-        public virtual DbSet<CLIENTE_CONTRATOFIXO> CLIENTE_CONTRATOFIXO { get; set; }
-        public virtual DbSet<CLIENTE_OCUPACIONAL> CLIENTE_OCUPACIONAL { get; set; }
-        public virtual DbSet<CONTASBANCARIAS> CONTASBANCARIAS { get; set; }
-        public virtual DbSet<CONTASPAGAR> CONTASPAGAR { get; set; }
-        public virtual DbSet<CONTASRECEBER> CONTASRECEBER { get; set; }
-        public virtual DbSet<CONTRATOSFORNEC> CONTRATOSFORNEC { get; set; }
-        public virtual DbSet<LCTOSCAIXA> LCTOSCAIXA { get; set; }
-        public virtual DbSet<LCTOSCONTAS> LCTOSCONTAS { get; set; }
+        public virtual DbSet<SELECTANUAL> SELECTANUAL { get; set; }
+        public virtual DbSet<selectultimomovcli> selectultimomovcli { get; set; }
+        public virtual DbSet<SELECTULTIMOMOVCLIENTE> SELECTULTIMOMOVCLIENTE { get; set; }
         public virtual DbSet<SEQBANCOS> SEQBANCOS { get; set; }
         public virtual DbSet<SEQCARGO> SEQCARGO { get; set; }
         public virtual DbSet<SEQCENTROCUSTO> SEQCENTROCUSTO { get; set; }
@@ -175,25 +164,53 @@
         public virtual DbSet<SEQTEXTOPADRAO> SEQTEXTOPADRAO { get; set; }
         public virtual DbSet<SEQTIPOSCONTRATOS> SEQTIPOSCONTRATOS { get; set; }
         public virtual DbSet<SEQTIPOSDOCTOS> SEQTIPOSDOCTOS { get; set; }
-        public virtual DbSet<SYS_CFGGER> SYS_CFGGER { get; set; }
-        public virtual DbSet<SYS_USRLOG> SYS_USRLOG { get; set; }
-        public virtual DbSet<SYS_USRXREL> SYS_USRXREL { get; set; }
-        public virtual DbSet<TEXTOPADRAO> TEXTOPADRAO { get; set; }
-        public virtual DbSet<TIPOSCONTRATOS> TIPOSCONTRATOS { get; set; }
-        public virtual DbSet<TIPOSDOCTOS> TIPOSDOCTOS { get; set; }
-        public virtual DbSet<CONT_MOV_CLI> CONT_MOV_CLI { get; set; }
-        public virtual DbSet<EXPORTACAO_NF> EXPORTACAO_NF { get; set; }
-        public virtual DbSet<MOV_PROC_COMPLETO> MOV_PROC_COMPLETO { get; set; }
-        public virtual DbSet<QUANTIDADE_NOTAFISCAL> QUANTIDADE_NOTAFISCAL { get; set; }
-        public virtual DbSet<SELECTANUAL> SELECTANUAL { get; set; }
-        public virtual DbSet<selectultimomovcli> selectultimomovcli { get; set; }
-        public virtual DbSet<SELECTULTIMOMOVCLIENTE> SELECTULTIMOMOVCLIENTE { get; set; }
+        public virtual DbSet<SETOR> SETOR { get; set; }
         public virtual DbSet<SL_ACOMPANHAMENTO> SL_ACOMPANHAMENTO { get; set; }
         public virtual DbSet<SL_RECOMENDACAO> SL_RECOMENDACAO { get; set; }
         public virtual DbSet<SLCONSULTAMOVIMENTO> SLCONSULTAMOVIMENTO { get; set; }
         public virtual DbSet<slmovxrec> slmovxrec { get; set; }
         public virtual DbSet<SLNFCL> SLNFCL { get; set; }
         public virtual DbSet<SLNOTAFISCAL> SLNOTAFISCAL { get; set; }
+        public virtual DbSet<SYS_CAIXA> SYS_CAIXA { get; set; }
+        public virtual DbSet<SYS_CATEND> SYS_CATEND { get; set; }
+        public virtual DbSet<SYS_CFGGER> SYS_CFGGER { get; set; }
+        public virtual DbSet<SYS_CLASSES> SYS_CLASSES { get; set; }
+        public virtual DbSet<SYS_COMSQL> SYS_COMSQL { get; set; }
+        public virtual DbSet<SYS_CONCORRENCIA> SYS_CONCORRENCIA { get; set; }
+        public virtual DbSet<SYS_CONSULTA> SYS_CONSULTA { get; set; }
+        public virtual DbSet<SYS_FICHATECNICA> SYS_FICHATECNICA { get; set; }
+        public virtual DbSet<SYS_HELP> SYS_HELP { get; set; }
+        public virtual DbSet<SYS_HELPBODY> SYS_HELPBODY { get; set; }
+        public virtual DbSet<SYS_KPI> SYS_KPI { get; set; }
+        public virtual DbSet<SYS_LAYOUT> SYS_LAYOUT { get; set; }
+        public virtual DbSet<SYS_LOGMSG> SYS_LOGMSG { get; set; }
+        public virtual DbSet<SYS_LTELA> SYS_LTELA { get; set; }
+        public virtual DbSet<SYS_MAIL> SYS_MAIL { get; set; }
+        public virtual DbSet<SYS_REFRULES> SYS_REFRULES { get; set; }
+        public virtual DbSet<SYS_REGINI> SYS_REGINI { get; set; }
+        public virtual DbSet<SYS_REGRAS> SYS_REGRAS { get; set; }
+        public virtual DbSet<SYS_REPORTS> SYS_REPORTS { get; set; }
+        public virtual DbSet<SYS_USRCOLUMN> SYS_USRCOLUMN { get; set; }
+        public virtual DbSet<SYS_USRCOMPONENT> SYS_USRCOMPONENT { get; set; }
+        public virtual DbSet<SYS_USRFORM> SYS_USRFORM { get; set; }
+        public virtual DbSet<SYS_USRFORMXTABLE> SYS_USRFORMXTABLE { get; set; }
+        public virtual DbSet<SYS_USRLOG> SYS_USRLOG { get; set; }
+        public virtual DbSet<SYS_USRON> SYS_USRON { get; set; }
+        public virtual DbSet<SYS_USRTABLE> SYS_USRTABLE { get; set; }
+        public virtual DbSet<SYS_USRXREL> SYS_USRXREL { get; set; }
+        public virtual DbSet<SYS_USUARIO> SYS_USUARIO { get; set; }
+        public virtual DbSet<TAB> TAB { get; set; }
+        public virtual DbSet<TABELA> TABELA { get; set; }
+        public virtual DbSet<TABELAXFORNECEDORXPROCEDIMENTO> TABELAXFORNECEDORXPROCEDIMENTO { get; set; }
+        public virtual DbSet<TEXTOPADRAO> TEXTOPADRAO { get; set; }
+        public virtual DbSet<TIPOSCONTRATOS> TIPOSCONTRATOS { get; set; }
+        public virtual DbSet<TIPOSDOCTOS> TIPOSDOCTOS { get; set; }
+
+        #endregion Public Properties
+
+
+
+        #region Protected Methods
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -3526,5 +3543,7 @@
                 .IsFixedLength()
                 .IsUnicode(false);
         }
+
+        #endregion Protected Methods
     }
 }

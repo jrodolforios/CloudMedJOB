@@ -82,7 +82,7 @@
     <h4 class="header blue bolder smaller">&nbsp;</h4>
     <div class="vspace-12-sm"></div>
 
-    <div class="row">
+        <div class="row">
         <div class="col-sm-3">
             <a href="/ASO" class="btn btn-success btn-block">
                 <div>
@@ -174,7 +174,6 @@
                             }
                         </div>
                     </div>
-
                 </div><!-- /.widget-main -->
             </div><!-- /.widget-body -->
         </div><!-- /.widget-box -->
@@ -191,6 +190,18 @@
             <div class="widget-body">
                 <div class="widget-main padding-4">
                     <div id="sales-charts"></div>
+
+                    <div class="infobox infobox-blue infobox-small infobox-dark">
+                        <div class="infobox-chart">
+                            <span class="sparkline" data-values="@String.Join(",", Model.FaturamentoUltimos8Meses.Reverse<string>())"></span>
+                        </div>
+
+                        <div class="infobox-data">
+                            <div class="infobox-content">Este mês</div>
+                            <div class="infobox-content">R$@Model.FaturamentoMesAtual</div>
+                        </div>
+                    </div>
+
                 </div><!-- /.widget-main -->
             </div><!-- /.widget-body -->
         </div><!-- /.widget-box -->
@@ -206,9 +217,8 @@
 <script src="/assets/js/jquery.flot.min.js"></script>
 <script src="/assets/js/jquery.flot.pie.min.js"></script>
 <script src="/assets/js/jquery.flot.resize.min.js"></script>
-
-<script src="assets/js/ace-elements.min.js"></script>
-<script src="assets/js/ace.min.js"></script>
+<script src="/assets/js/ace-elements.min.js"></script>
+<script src="/assets/js/ace.min.js"></script>
 
 <script src="assets/js/bootstrap.min.js"></script>
 
@@ -224,23 +234,23 @@
 }
 
 <script type="text/javascript">
-        var sales_charts = $('#sales-charts').css({ 'width': '100%', 'height': '280px' });
-        $.plot("#sales-charts", [
-            { label: "ASOs", data: d1 }
-        ], {
-                hoverable: true,
-                shadowSize: 0,
-                series: {
-                    lines: { show: true },
-                    points: { show: true }
-                },
+            var sales_charts = $('#sales-charts').css({ 'width': '100%', 'height': '280px' });
+            $.plot("#sales-charts", [
+                { label: "ASOs", data: d1 }
+            ], {
+                    hoverable: true,
+                    shadowSize: 0,
+                    series: {
+                        lines: { show: true },
+                        points: { show: true }
+                    },
             
-                grid: {
-                    backgroundColor: { colors: ["#fff", "#fff"] },
-                    borderWidth: 1,
-                    borderColor: '#555'
-                }
-            });
+                    grid: {
+                        backgroundColor: { colors: ["#fff", "#fff"] },
+                        borderWidth: 1,
+                        borderColor: '#555'
+                    }
+                });
 
         function imprimirASO(codigo) {
             window.location.replace("/ASO/ImprimirASOComMedCoord?codigoASO=" + codigo);
@@ -249,5 +259,17 @@
         function GerarRecibo(codigo) {
             window.location.replace("/ASO/ImprimirReciboASO?codigoASO=" + codigo);
         }
+
+        $('.sparkline').each(function () {
+            var $box = $(this).closest('.infobox');
+            var barColor = !$box.hasClass('infobox-dark') ? $box.css('color') : '#FFF';
+            $(this).sparkline('html',
+                {
+                    tagValuesAttribute: 'data-values',
+                    type: 'bar',
+                    barColor: barColor,
+                    chartRangeMin: $(this).data('min') || 0
+                });
+        });
 
 </script>

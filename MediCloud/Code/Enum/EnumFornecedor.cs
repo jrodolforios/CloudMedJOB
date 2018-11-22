@@ -1,17 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace MediCloud.Code.Enum
+﻿namespace MediCloud.Code.Enum
 {
     public class EnumFornecedor
     {
+        #region Public Enums
+
         public enum TipoContaFornecedor
         {
             vazio = 0,
             Corrente = 1,
             Poupanca = 2
         }
+
+        #endregion Public Enums
     }
 }

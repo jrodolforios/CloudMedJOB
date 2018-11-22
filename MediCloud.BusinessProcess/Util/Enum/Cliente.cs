@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MediCloud.BusinessProcess.Util.Enum
+﻿namespace MediCloud.BusinessProcess.Util.Enum
 {
     public class Cliente
     {
+        #region Public Enums
+
         public enum ASOReportEnum
         {
             indefinido = 0,
@@ -24,5 +20,7 @@ namespace MediCloud.BusinessProcess.Util.Enum
             indefinido = 0,
             imprimirRelatorioAnual = 1
         }
+
+        #endregion Public Enums
     }
 }

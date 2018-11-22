@@ -5,6 +5,8 @@ namespace MediCloud.View.Areas.HelpPage
 {
     public class HelpPageAreaRegistration : AreaRegistration
     {
+        #region Public Properties
+
         public override string AreaName
         {
             get
@@ -12,6 +14,12 @@ namespace MediCloud.View.Areas.HelpPage
                 return "HelpPage";
             }
         }
+
+        #endregion Public Properties
+
+
+
+        #region Public Methods
 
         public override void RegisterArea(AreaRegistrationContext context)
         {
@@ -22,5 +30,7 @@ namespace MediCloud.View.Areas.HelpPage
 
             HelpPageConfig.Register(GlobalConfiguration.Configuration);
         }
+
+        #endregion Public Methods
     }
 }

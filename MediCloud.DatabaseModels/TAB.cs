@@ -1,14 +1,13 @@
 namespace MediCloud.DatabaseModels
 {
-    using System;
-    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
-    using System.Data.Entity.Spatial;
 
     [Table("TAB")]
     public partial class TAB
     {
+        #region Public Properties
+
         [Key]
         [Column(Order = 0, TypeName = "numeric")]
         public decimal IDFOR { get; set; }
@@ -22,5 +21,7 @@ namespace MediCloud.DatabaseModels
         public decimal IDTAB { get; set; }
 
         public virtual TABELAXFORNECEDORXPROCEDIMENTO TABELAXFORNECEDORXPROCEDIMENTO { get; set; }
+
+        #endregion Public Properties
     }
 }

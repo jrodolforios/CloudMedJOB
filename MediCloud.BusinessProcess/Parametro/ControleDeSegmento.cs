@@ -1,35 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
+﻿using MediCloud.BusinessProcess.Util;
 using MediCloud.DatabaseModels;
 using MediCloud.Persistence;
+using System;
+using System.Collections.Generic;
 using System.Data.Entity.Validation;
-using MediCloud.BusinessProcess.Util;
+using System.Linq;
 
 namespace MediCloud.BusinessProcess.Parametro
 {
     public class ControleDeSegmento
     {
-        public static List<SEGMENTO> BuscarSegmentosPorTermo(string prefix)
-        {
-            CloudMedContext contexto = new CloudMedContext();
-
-            try
-            {
-                return contexto.SEGMENTO.Where(x => x.SEGMENTO1.Contains(prefix)).ToList();
-            }
-            catch (DbEntityValidationException ex)
-            {
-                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
-                return new List<SEGMENTO>();
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
+        #region Public Methods
 
         public static SEGMENTO BuscarSegmentoPorID(int v)
         {
@@ -46,6 +27,25 @@ namespace MediCloud.BusinessProcess.Parametro
             {
                 ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
                 return new SEGMENTO();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static List<SEGMENTO> BuscarSegmentosPorTermo(string prefix)
+        {
+            CloudMedContext contexto = new CloudMedContext();
+
+            try
+            {
+                return contexto.SEGMENTO.Where(x => x.SEGMENTO1.Contains(prefix)).ToList();
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+                return new List<SEGMENTO>();
             }
             catch (Exception ex)
             {
@@ -81,14 +81,12 @@ namespace MediCloud.BusinessProcess.Parametro
 
             try
             {
-
                 if (segmentoDAO.IDSEG > 0)
                 {
                     setorSalvo = contexto.SEGMENTO.First(x => x.IDSEG == segmentoDAO.IDSEG);
 
                     setorSalvo.IDSEG = segmentoDAO.IDSEG;
                     setorSalvo.SEGMENTO1 = segmentoDAO.SEGMENTO1;
-
                 }
                 else
                 {
@@ -97,7 +95,6 @@ namespace MediCloud.BusinessProcess.Parametro
 
                 contexto.SaveChanges();
                 return setorSalvo;
-
             }
             catch (DbEntityValidationException ex)
             {
@@ -109,5 +106,7 @@ namespace MediCloud.BusinessProcess.Parametro
                 throw ex;
             }
         }
+
+        #endregion Public Methods
     }
 }

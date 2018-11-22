@@ -1,18 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MediCloud.BusinessProcess.Laudo.Reports;
+using MediCloud.BusinessProcess.Util;
 using MediCloud.DatabaseModels;
 using MediCloud.Persistence;
+using System;
+using System.Collections.Generic;
 using System.Data.Entity.Validation;
-using MediCloud.BusinessProcess.Util;
-using MediCloud.BusinessProcess.Laudo.Reports;
+using System.Linq;
 
 namespace MediCloud.BusinessProcess.Laudo
 {
     public class ControleDeLaudoAudio
     {
+        #region Public Methods
+
         public static List<LAUDOAUD> buscarLaudoAudio(string prefix)
         {
             CloudMedContext contexto = new CloudMedContext();
@@ -83,6 +83,16 @@ namespace MediCloud.BusinessProcess.Laudo
             }
         }
 
+        public static byte[] ImprimirAudiometria(int codigoAudiometria)
+        {
+            LAUDOAUD audiometria = ControleDeLaudoAudio.BuscarLaudoAudioPorId(codigoAudiometria);
+            INFORMACOES_CLINICA infoClinica = Util.Util.RecuperarInformacoesDaClinica();
+
+            LaudoReports Report = new LaudoReports(audiometria, Util.Enum.Laudo.LaudoReportEnum.imprimirAudiometria, infoClinica);
+
+            return Report.generate();
+        }
+
         public static LAUDOAUD SalvarLaudoAudio(LAUDOAUD LaudoAudioDAO)
         {
             CloudMedContext contexto = new CloudMedContext();
@@ -90,11 +100,10 @@ namespace MediCloud.BusinessProcess.Laudo
 
             try
             {
-                if(contexto.LAUDOAUD.Any(x => LaudoAudioDAO.IDLAUDO == x.IDLAUDO && LaudoAudioDAO.IDMOVPRO == x.IDMOVPRO))
+                if (contexto.LAUDOAUD.Any(x => LaudoAudioDAO.IDLAUDO == x.IDLAUDO && LaudoAudioDAO.IDMOVPRO == x.IDMOVPRO))
                 {
                     throw new InvalidOperationException("Já foi cadastrada uma audiometría para este Movimento.");
                 }
-
 
                 if (LaudoAudioDAO.IDLAUDO > 0)
                 {
@@ -140,18 +149,14 @@ namespace MediCloud.BusinessProcess.Laudo
                     laudoAudioSalvo.OEO4K = LaudoAudioDAO.OEO4K;
                     laudoAudioSalvo.OEO6K = LaudoAudioDAO.OEO6K;
                     laudoAudioSalvo.OEO8K = LaudoAudioDAO.OEO8K;
-
-
                 }
                 else
                 {
-
                     laudoAudioSalvo = contexto.LAUDOAUD.Add(LaudoAudioDAO);
                 }
 
                 contexto.SaveChanges();
                 return laudoAudioSalvo;
-
             }
             catch (DbEntityValidationException ex)
             {
@@ -164,14 +169,6 @@ namespace MediCloud.BusinessProcess.Laudo
             }
         }
 
-        public static byte[] ImprimirAudiometria(int codigoAudiometria)
-        {
-            LAUDOAUD audiometria = ControleDeLaudoAudio.BuscarLaudoAudioPorId(codigoAudiometria);
-            INFORMACOES_CLINICA infoClinica = Util.Util.RecuperarInformacoesDaClinica();
-
-            LaudoReports Report = new LaudoReports(audiometria, Util.Enum.Laudo.LaudoReportEnum.imprimirAudiometria, infoClinica);
-
-            return Report.generate();
-        }
+        #endregion Public Methods
     }
 }

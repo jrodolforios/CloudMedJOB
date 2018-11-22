@@ -1,17 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MediCloud.BusinessProcess.Util;
 using MediCloud.DatabaseModels;
 using MediCloud.Persistence;
+using System;
+using System.Collections.Generic;
 using System.Data.Entity.Validation;
-using MediCloud.BusinessProcess.Util;
+using System.Linq;
 
 namespace MediCloud.BusinessProcess.Financeiro
 {
     public class ControleDeRotaDeEntrega
     {
+        #region Public Methods
+
         public static List<ROTA> BuscarContadoresPorTermo(string prefix)
         {
             CloudMedContext contexto = new CloudMedContext();
@@ -53,6 +53,28 @@ namespace MediCloud.BusinessProcess.Financeiro
             }
         }
 
+        public static void DeletarRotaDeEntrega(int codigoRotaDeEntrega)
+        {
+            CloudMedContext contexto = new CloudMedContext();
+            ROTA setorSalvo = new ROTA();
+
+            try
+            {
+                if (contexto.ROTA.Any(x => x.IDROTA == codigoRotaDeEntrega))
+                    contexto.ROTA.Remove(contexto.ROTA.First(x => x.IDROTA == codigoRotaDeEntrega));
+
+                contexto.SaveChanges();
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public static ROTA SalvarRotaDeEntrega(ROTA rotaDAO)
         {
             CloudMedContext contexto = new CloudMedContext();
@@ -60,14 +82,12 @@ namespace MediCloud.BusinessProcess.Financeiro
 
             try
             {
-
                 if (rotaDAO.IDROTA > 0)
                 {
                     setorSalvo = contexto.ROTA.First(x => x.IDROTA == rotaDAO.IDROTA);
 
                     setorSalvo.NOMEROTA = rotaDAO.NOMEROTA;
                     setorSalvo.OBSERVACAO = rotaDAO.OBSERVACAO;
-
                 }
                 else
                 {
@@ -76,7 +96,6 @@ namespace MediCloud.BusinessProcess.Financeiro
 
                 contexto.SaveChanges();
                 return setorSalvo;
-
             }
             catch (DbEntityValidationException ex)
             {
@@ -89,27 +108,6 @@ namespace MediCloud.BusinessProcess.Financeiro
             }
         }
 
-        public static void DeletarRotaDeEntrega(int codigoRotaDeEntrega)
-        {
-            CloudMedContext contexto = new CloudMedContext();
-            ROTA setorSalvo = new ROTA();
-
-            try
-            {
-                if (contexto.ROTA.Any(x => x.IDROTA == codigoRotaDeEntrega))
-                    contexto.ROTA.Remove(contexto.ROTA.First(x => x.IDROTA == codigoRotaDeEntrega));
-
-                contexto.SaveChanges();
-
-            }
-            catch (DbEntityValidationException ex)
-            {
-                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
+        #endregion Public Methods
     }
 }

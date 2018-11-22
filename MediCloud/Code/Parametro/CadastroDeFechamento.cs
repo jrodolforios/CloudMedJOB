@@ -1,17 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using MediCloud.Models.Parametro;
-using MediCloud.DatabaseModels;
-using MediCloud.BusinessProcess.Parametro;
+﻿using MediCloud.BusinessProcess.Parametro;
 using MediCloud.Controllers;
+using MediCloud.DatabaseModels;
+using MediCloud.Models.Parametro;
+using System;
+using System.Collections.Generic;
+using System.Web.Mvc;
 
 namespace MediCloud.Code.Parametro
 {
     public class CadastroDeFechamento
     {
+        #region Internal Methods
+
         internal static List<FechamentoModel> BuscarFechamentoPorTermo(FormCollection form)
         {
             string termo = form["keywords"];
@@ -32,18 +32,9 @@ namespace MediCloud.Code.Parametro
             return listaDeModels;
         }
 
-        private static FechamentoModel InjetarEmUsuarioModel(MOVIMENTO_FECHAMENTO x)
+        internal static void DeletarFechamento(FechamentoController fechamentoController, int codigoDoFechamento)
         {
-            if (x == null)
-                return null;
-            else
-                return new FechamentoModel()
-                {
-                    DiaFechamento = Convert.ToInt32(x.DIA),
-                    DiasPrazoBoleto = x.PRAZOBOLETO,
-                    IdFechamento = (int)x.IDFEC,
-                    PeriodoApuracao = x.PERIODO
-                };
+            ControleDeFechamento.DeletarFechamento(codigoDoFechamento);
         }
 
         internal static FechamentoModel RecuperarFechamentoPorID(int v)
@@ -55,11 +46,6 @@ namespace MediCloud.Code.Parametro
             }
             else
                 return null;
-        }
-
-        internal static void DeletarFechamento(FechamentoController fechamentoController, int codigoDoFechamento)
-        {
-            ControleDeFechamento.DeletarFechamento(codigoDoFechamento);
         }
 
         internal static FechamentoModel SalvarFechamento(FormCollection form)
@@ -75,6 +61,12 @@ namespace MediCloud.Code.Parametro
             return usuarioModel;
         }
 
+        #endregion Internal Methods
+
+
+
+        #region Private Methods
+
         private static MOVIMENTO_FECHAMENTO InjetarEmUsuarioDAO(FechamentoModel x)
         {
             if (x == null)
@@ -89,6 +81,20 @@ namespace MediCloud.Code.Parametro
                 };
         }
 
+        private static FechamentoModel InjetarEmUsuarioModel(MOVIMENTO_FECHAMENTO x)
+        {
+            if (x == null)
+                return null;
+            else
+                return new FechamentoModel()
+                {
+                    DiaFechamento = Convert.ToInt32(x.DIA),
+                    DiasPrazoBoleto = x.PRAZOBOLETO,
+                    IdFechamento = (int)x.IDFEC,
+                    PeriodoApuracao = x.PERIODO
+                };
+        }
+
         private static FechamentoModel InjetarEmUsuarioModel(FormCollection form)
         {
             return new FechamentoModel()
@@ -99,5 +105,7 @@ namespace MediCloud.Code.Parametro
                 PeriodoApuracao = string.IsNullOrEmpty(form["nomePeriodo"]) ? null : form["nomePeriodo"]
             };
         }
+
+        #endregion Private Methods
     }
 }

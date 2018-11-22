@@ -4,10 +4,11 @@ namespace MediCloud.DatabaseModels
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
-    using System.Data.Entity.Spatial;
 
     public partial class SYS_USRTABLE
     {
+        #region Public Constructors
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public SYS_USRTABLE()
         {
@@ -15,6 +16,12 @@ namespace MediCloud.DatabaseModels
             SYS_USRFORM = new HashSet<SYS_USRFORM>();
             SYS_USRFORMXTABLE = new HashSet<SYS_USRFORMXTABLE>();
         }
+
+        #endregion Public Constructors
+
+
+
+        #region Public Properties
 
         [Key]
         [Column(TypeName = "numeric")]
@@ -39,5 +46,7 @@ namespace MediCloud.DatabaseModels
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SYS_USRFORMXTABLE> SYS_USRFORMXTABLE { get; set; }
+
+        #endregion Public Properties
     }
 }

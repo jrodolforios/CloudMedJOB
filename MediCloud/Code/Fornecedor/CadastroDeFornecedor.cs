@@ -1,46 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using MediCloud.Models.Fornecedor;
-using MediCloud.DatabaseModels;
-using MediCloud.BusinessProcess.Fornecedor;
-using MediCloud.Code.Enum;
-using MediCloud.Models.Financeiro;
-using MediCloud.BusinessProcess.Funcionario;
-using System.Web.Mvc;
-using MediCloud.Controllers;
+﻿using MediCloud.BusinessProcess.Fornecedor;
 using MediCloud.BusinessProcess.Util;
+using MediCloud.Code.Enum;
 using MediCloud.Code.Parametro.GrupoProcedimento;
+using MediCloud.Controllers;
+using MediCloud.DatabaseModels;
+using MediCloud.Models.Fornecedor;
+using System;
+using System.Collections.Generic;
+using System.Web.Mvc;
 
 namespace MediCloud.Code.Fornecedor
 {
     public class CadastroDeFornecedor
     {
-        internal static FornecedorModel RecuperarFornecedorPorID(decimal? IdFor, bool materializarListas = true)
-        {
-            if (IdFor.HasValue)
-            {
-                FORNECEDOR usuarioDoBanco = ControleDeFornecedor.buscarProcedimentosMovimentoPorIdMovimento((int)IdFor);
-
-                return InjetarEmUsuarioModel(usuarioDoBanco, materializarListas);
-            }
-            else
-                return null;
-        }
-
-        internal static List<FornecedorModel> RecuperarContadorPorTermo(string prefix)
-        {
-            List<FORNECEDOR> contadoresEncontrados = ControleDeFornecedor.buscarFornecedorPorTermo(prefix);
-            List<FornecedorModel> resultados = new List<FornecedorModel>();
-
-            contadoresEncontrados.ForEach(x =>
-            {
-                resultados.Add(InjetarEmUsuarioModel(x, false));
-            });
-
-            return resultados;
-        }
+        #region Public Methods
 
         public static FornecedorModel InjetarEmUsuarioModel(FORNECEDOR x, bool materializarListas = true)
         {
@@ -64,41 +37,9 @@ namespace MediCloud.Code.Fornecedor
                 };
         }
 
-        private static List<FornecedorProcedimento> RecuperarProcedimentosDeFornecedor(int IdFor)
-        {
-            if (IdFor != 0)
-            {
-                List<FORNECEDORXPROCEDIMENTO> usuarioencontrado = ControleDeFornecedor.recuperarProcedimentosDeFornecedor(IdFor);
-                return injetarEmFornecedorProcedimentoModel(usuarioencontrado);
-            }
-            else
-                return null;
-        }
+        #endregion Public Methods
 
-        private static List<FornecedorProcedimento> injetarEmFornecedorProcedimentoModel(List<FORNECEDORXPROCEDIMENTO> usuarioencontrado)
-        { 
-            List<FornecedorProcedimento> listaTratada = new List<FornecedorProcedimento>();
-
-            usuarioencontrado.ForEach(x => 
-            {
-                listaTratada.Add(injetarEmFornecedorProcedimento(x));
-            });
-
-            return listaTratada;
-        }
-
-        private static FornecedorProcedimento injetarEmFornecedorProcedimento(FORNECEDORXPROCEDIMENTO x)
-        {
-            if (x == null)
-                return null;
-            else
-                return new FornecedorProcedimento()
-                {
-                    Fornecedor = RecuperarFornecedorPorID(x.IDFOR, false),
-                    Procedimento = CadastroDeProcedimentos.RecuperarProcedimentoPorID((int)x.IDPRO),
-                    Valor = x.CUSTO
-                };
-        }
+        #region Internal Methods
 
         internal static List<FornecedorModel> BuscarFornecedor(FormCollection form)
         {
@@ -115,35 +56,51 @@ namespace MediCloud.Code.Fornecedor
             return listaDeModels;
         }
 
-        private static string tipoContaEnumParaString(EnumFornecedor.TipoContaFornecedor X)
-        {
-            switch (X)
-            {
-                case EnumFornecedor.TipoContaFornecedor.Poupanca:
-                    return "P";
-                case EnumFornecedor.TipoContaFornecedor.Corrente:
-                    return "C";
-                default:
-                    return null;
-            }
-        }
-
-        private static EnumFornecedor.TipoContaFornecedor tipoContaStringParaEnum(string X)
-        {
-            switch (X)
-            {
-                case "P":
-                    return EnumFornecedor.TipoContaFornecedor.Poupanca;
-                case "C":
-                    return EnumFornecedor.TipoContaFornecedor.Corrente;
-                default:
-                    return EnumFornecedor.TipoContaFornecedor.vazio;
-            }
-        }
-
         internal static void DeletarFornecedor(FornecedorController fornecedorController, int codigoFornecedor)
         {
             ControleDeFornecedor.DeletarFornecedor(codigoFornecedor);
+        }
+
+        internal static void DeletarProcedimentoFornecedor(int codigoDoProcedimentoFornecedor, int codigoFornecedor)
+        {
+            ControleDeFornecedor.DeletarProcedimentoFornecedor(codigoDoProcedimentoFornecedor, codigoFornecedor);
+        }
+
+        internal static List<FornecedorModel> RecuperarContadorPorTermo(string prefix)
+        {
+            List<FORNECEDOR> contadoresEncontrados = ControleDeFornecedor.buscarFornecedorPorTermo(prefix);
+            List<FornecedorModel> resultados = new List<FornecedorModel>();
+
+            contadoresEncontrados.ForEach(x =>
+            {
+                resultados.Add(InjetarEmUsuarioModel(x, false));
+            });
+
+            return resultados;
+        }
+
+        internal static FornecedorModel RecuperarFornecedorPorID(decimal? IdFor, bool materializarListas = true)
+        {
+            if (IdFor.HasValue)
+            {
+                FORNECEDOR usuarioDoBanco = ControleDeFornecedor.buscarProcedimentosMovimentoPorIdMovimento((int)IdFor);
+
+                return InjetarEmUsuarioModel(usuarioDoBanco, materializarListas);
+            }
+            else
+                return null;
+        }
+
+        internal static FornecedorProcedimento recuperarFornecedorProcedimentoPorID(int codigoDoProcedimentoFornecedor, int codigoFornecedor)
+        {
+            if (codigoDoProcedimentoFornecedor > 0)
+            {
+                FORNECEDORXPROCEDIMENTO procedimentoBanco = ControleDeFornecedor.recuperarFornecedorProcedimentoPorID(codigoDoProcedimentoFornecedor, codigoFornecedor);
+
+                return injetarEmFornecedorProcedimento(procedimentoBanco);
+            }
+            else
+                return null;
         }
 
         internal static FornecedorModel SalvarFornecedor(FormCollection form)
@@ -157,6 +114,73 @@ namespace MediCloud.Code.Fornecedor
             fornecedorModel = InjetarEmUsuarioModel(fornecedorDAO);
 
             return fornecedorModel;
+        }
+
+        internal static FornecedorProcedimento salvarProcedimentoFornecedor(FormCollection form)
+        {
+            FornecedorProcedimento fornecedorModel = InjetarEmFornecedorProcedimentoModel(form);
+            fornecedorModel.validar();
+
+            FORNECEDORXPROCEDIMENTO fornecedorDAO = InjetarEmFornecedorProcedimentoDAO(fornecedorModel);
+            fornecedorDAO = ControleDeFornecedor.SalvarFornecedorProcedimento(fornecedorDAO);
+
+            fornecedorModel = injetarEmFornecedorProcedimento(fornecedorDAO);
+
+            return fornecedorModel;
+        }
+
+        #endregion Internal Methods
+
+
+
+        #region Private Methods
+
+        private static FornecedorProcedimento injetarEmFornecedorProcedimento(FORNECEDORXPROCEDIMENTO x)
+        {
+            if (x == null)
+                return null;
+            else
+                return new FornecedorProcedimento()
+                {
+                    Fornecedor = RecuperarFornecedorPorID(x.IDFOR, false),
+                    Procedimento = CadastroDeProcedimentos.RecuperarProcedimentoPorID((int)x.IDPRO),
+                    Valor = x.CUSTO
+                };
+        }
+
+        private static FORNECEDORXPROCEDIMENTO InjetarEmFornecedorProcedimentoDAO(FornecedorProcedimento x)
+        {
+            if (x == null)
+                return null;
+            else
+                return new FORNECEDORXPROCEDIMENTO()
+                {
+                    CUSTO = x.Valor.HasValue ? x.Valor.Value : 0,
+                    IDFOR = x.Fornecedor.IdFornecedor,
+                    IDPRO = x.Procedimento.IdProcedimento
+                };
+        }
+
+        private static List<FornecedorProcedimento> injetarEmFornecedorProcedimentoModel(List<FORNECEDORXPROCEDIMENTO> usuarioencontrado)
+        {
+            List<FornecedorProcedimento> listaTratada = new List<FornecedorProcedimento>();
+
+            usuarioencontrado.ForEach(x =>
+            {
+                listaTratada.Add(injetarEmFornecedorProcedimento(x));
+            });
+
+            return listaTratada;
+        }
+
+        private static FornecedorProcedimento InjetarEmFornecedorProcedimentoModel(FormCollection form)
+        {
+            return new FornecedorProcedimento()
+            {
+                Fornecedor = RecuperarFornecedorPorID(string.IsNullOrEmpty(form["codigoFornecedorProcedimento"]) ? 0 : Convert.ToInt32(form["codigoFornecedorProcedimento"])),
+                Procedimento = CadastroDeProcedimentos.RecuperarProcedimentoPorID(string.IsNullOrEmpty(form["idProcedimento"]) ? 0 : Convert.ToInt32(form["idProcedimento"])),
+                Valor = string.IsNullOrEmpty(form["valorProcedimento"]) ? null : (decimal?)Convert.ToDecimal(form["valorProcedimento"])
+            };
         }
 
         private static FORNECEDOR InjetarEmUsuarioDAO(FornecedorModel x)
@@ -194,57 +218,47 @@ namespace MediCloud.Code.Fornecedor
             };
         }
 
-        internal static FornecedorProcedimento salvarProcedimentoFornecedor(FormCollection form)
+        private static List<FornecedorProcedimento> RecuperarProcedimentosDeFornecedor(int IdFor)
         {
-            FornecedorProcedimento fornecedorModel = InjetarEmFornecedorProcedimentoModel(form);
-            fornecedorModel.validar();
-
-            FORNECEDORXPROCEDIMENTO fornecedorDAO = InjetarEmFornecedorProcedimentoDAO(fornecedorModel);
-            fornecedorDAO = ControleDeFornecedor.SalvarFornecedorProcedimento(fornecedorDAO);
-
-            fornecedorModel = injetarEmFornecedorProcedimento(fornecedorDAO);
-
-            return fornecedorModel;
-        }
-
-        private static FORNECEDORXPROCEDIMENTO InjetarEmFornecedorProcedimentoDAO(FornecedorProcedimento x)
-        {
-            if (x == null)
-                return null;
-            else
-                return new FORNECEDORXPROCEDIMENTO()
-                {
-                    CUSTO = x.Valor.HasValue ? x.Valor.Value : 0,
-                    IDFOR = x.Fornecedor.IdFornecedor,
-                    IDPRO = x.Procedimento.IdProcedimento
-                };
-        }
-
-        private static FornecedorProcedimento InjetarEmFornecedorProcedimentoModel(FormCollection form)
-        {
-            return new FornecedorProcedimento()
+            if (IdFor != 0)
             {
-                Fornecedor = RecuperarFornecedorPorID(string.IsNullOrEmpty(form["codigoFornecedorProcedimento"]) ? 0 : Convert.ToInt32(form["codigoFornecedorProcedimento"])),
-                Procedimento = CadastroDeProcedimentos.RecuperarProcedimentoPorID(string.IsNullOrEmpty(form["idProcedimento"]) ? 0 : Convert.ToInt32(form["idProcedimento"])),
-                Valor = string.IsNullOrEmpty(form["valorProcedimento"]) ? null : (decimal?)Convert.ToDecimal(form["valorProcedimento"])
-            };
-        }
-
-        internal static void DeletarProcedimentoFornecedor(int codigoDoProcedimentoFornecedor, int codigoFornecedor)
-        {
-            ControleDeFornecedor.DeletarProcedimentoFornecedor(codigoDoProcedimentoFornecedor, codigoFornecedor);
-        }
-
-        internal static FornecedorProcedimento recuperarFornecedorProcedimentoPorID(int codigoDoProcedimentoFornecedor, int codigoFornecedor)
-        {
-            if (codigoDoProcedimentoFornecedor > 0)
-            {
-                FORNECEDORXPROCEDIMENTO procedimentoBanco = ControleDeFornecedor.recuperarFornecedorProcedimentoPorID(codigoDoProcedimentoFornecedor, codigoFornecedor);
-
-                return injetarEmFornecedorProcedimento(procedimentoBanco);
+                List<FORNECEDORXPROCEDIMENTO> usuarioencontrado = ControleDeFornecedor.recuperarProcedimentosDeFornecedor(IdFor);
+                return injetarEmFornecedorProcedimentoModel(usuarioencontrado);
             }
             else
                 return null;
         }
+
+        private static string tipoContaEnumParaString(EnumFornecedor.TipoContaFornecedor X)
+        {
+            switch (X)
+            {
+                case EnumFornecedor.TipoContaFornecedor.Poupanca:
+                    return "P";
+
+                case EnumFornecedor.TipoContaFornecedor.Corrente:
+                    return "C";
+
+                default:
+                    return null;
+            }
+        }
+
+        private static EnumFornecedor.TipoContaFornecedor tipoContaStringParaEnum(string X)
+        {
+            switch (X)
+            {
+                case "P":
+                    return EnumFornecedor.TipoContaFornecedor.Poupanca;
+
+                case "C":
+                    return EnumFornecedor.TipoContaFornecedor.Corrente;
+
+                default:
+                    return EnumFornecedor.TipoContaFornecedor.vazio;
+            }
+        }
+
+        #endregion Private Methods
     }
 }

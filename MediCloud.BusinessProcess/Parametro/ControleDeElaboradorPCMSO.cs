@@ -1,17 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
+﻿using MediCloud.BusinessProcess.Util;
 using MediCloud.DatabaseModels;
 using MediCloud.Persistence;
+using System;
+using System.Collections.Generic;
 using System.Data.Entity.Validation;
-using MediCloud.BusinessProcess.Util;
+using System.Linq;
 
 namespace MediCloud.BusinessProcess.Parametro
 {
     public class ControleDeElaboradorPCMSO
     {
+        #region Public Methods
+
         public static List<EPCMSO> BuscarElaboradoresPorTermo(string prefix)
         {
             CloudMedContext contexto = new CloudMedContext();
@@ -84,14 +84,12 @@ namespace MediCloud.BusinessProcess.Parametro
 
             try
             {
-
                 if (elaboradorPCMSODAO.IDEPCMSO > 0)
                 {
                     setorSalvo = contexto.EPCMSO.First(x => x.IDEPCMSO == elaboradorPCMSODAO.IDEPCMSO);
 
                     setorSalvo.IDEPCMSO = elaboradorPCMSODAO.IDEPCMSO;
                     setorSalvo.ELABORADORPCMSO = elaboradorPCMSODAO.ELABORADORPCMSO;
-
                 }
                 else
                 {
@@ -100,7 +98,6 @@ namespace MediCloud.BusinessProcess.Parametro
 
                 contexto.SaveChanges();
                 return setorSalvo;
-
             }
             catch (DbEntityValidationException ex)
             {
@@ -112,5 +109,7 @@ namespace MediCloud.BusinessProcess.Parametro
                 throw ex;
             }
         }
+
+        #endregion Public Methods
     }
 }

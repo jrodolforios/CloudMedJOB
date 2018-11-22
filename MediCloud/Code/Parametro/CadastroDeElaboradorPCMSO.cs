@@ -1,28 +1,42 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using MediCloud.Controllers;
+﻿using MediCloud.BusinessProcess.Parametro;
 using MediCloud.DatabaseModels;
 using MediCloud.Models.Parametro;
-using MediCloud.BusinessProcess;
-using MediCloud.BusinessProcess.Parametro;
+using System;
+using System.Collections.Generic;
 using System.Web.Mvc;
 
 namespace MediCloud.Code.Parametro
 {
     public class CadastroDeElaboradorPCMSO
     {
+        #region Internal Methods
+
+        internal static ElaboradorPCMSOModel BuscarElaboradorPorID(decimal? idEPCMSO)
+        {
+            if (idEPCMSO != 0)
+            {
+                EPCMSO elaboradorEncontrado = ControleDeElaboradorPCMSO.BuscarElaboradorPorID(idEPCMSO.HasValue ? (int)idEPCMSO.Value : 0);
+                return InjetarEmUsuarioModel(elaboradorEncontrado);
+            }
+            else
+                return null;
+        }
+
+        internal static void DeletarElaboradorPCMSO(int codigoElaboradorPCMSO)
+        {
+            ControleDeElaboradorPCMSO.DeletarElaboradorPCMSO(codigoElaboradorPCMSO);
+        }
+
         internal static ElaboradorPCMSOModel InjetarEmUsuarioModel(EPCMSO ePCMSO)
         {
             if (ePCMSO == null)
                 return null;
             else
                 return new ElaboradorPCMSOModel()
-            {
-                IdElaboradorPCMSO = (int)ePCMSO.IDEPCMSO,
-                NomeElaboradorPCMSO = ePCMSO.ELABORADORPCMSO
-            };
+                {
+                    IdElaboradorPCMSO = (int)ePCMSO.IDEPCMSO,
+                    NomeElaboradorPCMSO = ePCMSO.ELABORADORPCMSO
+                };
         }
 
         internal static List<ElaboradorPCMSOModel> RecuperarElaboradorPorTermo(string prefix)
@@ -43,23 +57,6 @@ namespace MediCloud.Code.Parametro
             string prefix = form["keywords"];
 
             return RecuperarElaboradorPorTermo(prefix);
-
-        }
-
-        internal static ElaboradorPCMSOModel BuscarElaboradorPorID(decimal? idEPCMSO)
-        {
-            if (idEPCMSO != 0)
-            {
-                EPCMSO elaboradorEncontrado = ControleDeElaboradorPCMSO.BuscarElaboradorPorID(idEPCMSO.HasValue ? (int)idEPCMSO.Value : 0);
-                return InjetarEmUsuarioModel(elaboradorEncontrado);
-            }
-            else
-                return null;
-        }
-
-        internal static void DeletarElaboradorPCMSO(int codigoElaboradorPCMSO)
-        {
-            ControleDeElaboradorPCMSO.DeletarElaboradorPCMSO(codigoElaboradorPCMSO);
         }
 
         internal static ElaboradorPCMSOModel SalvarElaboradorPCMSO(FormCollection form)
@@ -74,6 +71,12 @@ namespace MediCloud.Code.Parametro
 
             return usuarioModel;
         }
+
+        #endregion Internal Methods
+
+
+
+        #region Private Methods
 
         private static EPCMSO InjetarEmUsuarioDAO(ElaboradorPCMSOModel usuarioModel)
         {
@@ -95,5 +98,7 @@ namespace MediCloud.Code.Parametro
                 NomeElaboradorPCMSO = string.IsNullOrEmpty(form["nomeElaboradorPCMSO"]) ? null : form["nomeElaboradorPCMSO"]
             };
         }
+
+        #endregion Private Methods
     }
 }

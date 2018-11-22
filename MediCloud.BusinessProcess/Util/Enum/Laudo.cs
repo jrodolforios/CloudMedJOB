@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MediCloud.BusinessProcess.Util.Enum
+﻿namespace MediCloud.BusinessProcess.Util.Enum
 {
     public class Laudo
     {
+        #region Public Enums
+
         public enum LaudoReportEnum
         {
             indefinido = 0,
@@ -15,5 +11,7 @@ namespace MediCloud.BusinessProcess.Util.Enum
             imprimirLaudoVisao = 2,
             imprimirAudiometria = 3,
         }
+
+        #endregion Public Enums
     }
 }

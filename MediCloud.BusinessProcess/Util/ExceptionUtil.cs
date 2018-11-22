@@ -1,36 +1,14 @@
 ﻿using MediCloud.DatabaseModels;
 using MediCloud.Persistence;
 using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.Data.Entity.Validation;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MediCloud.BusinessProcess.Util
 {
     public class ExceptionUtil
     {
-        public static void TratarErrosDeValidacaoDoBanco(DbEntityValidationException ex)
-        {
-            string rs = string.Empty;
-            foreach (var eve in ex.EntityValidationErrors)
-            {
-                rs = string.Format("O cadastro de \"{0}\" apresentou o seguinte problema de validação:", eve.Entry.Entity.GetType().Name);
-                Console.WriteLine(rs);
-
-                foreach (var ve in eve.ValidationErrors)
-                {
-                    rs += "" + string.Format("\r\n- {0}", ve.ErrorMessage);
-                }
-            }
-
-            if (string.IsNullOrEmpty(rs))
-                rs = ex.Message;
-
-            throw new InvalidOperationException(rs);
-        }
+        #region Public Methods
 
         public static void GerarLogDeExcecao(Exception exc, string url = "")
         {
@@ -63,5 +41,27 @@ namespace MediCloud.BusinessProcess.Util
                 throw ex;
             }
         }
+
+        public static void TratarErrosDeValidacaoDoBanco(DbEntityValidationException ex)
+        {
+            string rs = string.Empty;
+            foreach (var eve in ex.EntityValidationErrors)
+            {
+                rs = string.Format("O cadastro de \"{0}\" apresentou o seguinte problema de validação:", eve.Entry.Entity.GetType().Name);
+                Console.WriteLine(rs);
+
+                foreach (var ve in eve.ValidationErrors)
+                {
+                    rs += "" + string.Format("\r\n- {0}", ve.ErrorMessage);
+                }
+            }
+
+            if (string.IsNullOrEmpty(rs))
+                rs = ex.Message;
+
+            throw new InvalidOperationException(rs);
+        }
+
+        #endregion Public Methods
     }
 }

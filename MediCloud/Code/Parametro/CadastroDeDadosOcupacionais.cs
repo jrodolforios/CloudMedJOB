@@ -1,19 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using MediCloud.Models.Parametro;
-using MediCloud.DatabaseModels;
-using MediCloud.BusinessProcess.Parametro;
+﻿using MediCloud.BusinessProcess.Parametro;
 using MediCloud.Code.Clientes;
 using MediCloud.Code.Enum;
 using MediCloud.Controllers;
+using MediCloud.DatabaseModels;
+using MediCloud.Models.Parametro;
+using System;
+using System.Collections.Generic;
+using System.Web.Mvc;
 
 namespace MediCloud.Code.Parametro
 {
     public class CadastroDeDadosOcupacionais
     {
+        #region Internal Methods
+
         internal static List<DadosOcupacionaisModel> BuscarDadosOcupacionais(FormCollection form)
         {
             string termo = form["keywords"];
@@ -29,44 +29,6 @@ namespace MediCloud.Code.Parametro
             return listaDeModels;
         }
 
-        private static DadosOcupacionaisModel injetarEmUsuarioModel(CLIENTE_OCUPACIONAL x)
-        {
-            if (x == null)
-                return null;
-            else
-                return new DadosOcupacionaisModel()
-                {
-                    IdClienteOcupacional = (int)x.IDCLIOC,
-                    Cliente = CadastroDeClientes.RecuperarClientePorID((int)x.IDCLI),
-                    CodigoNexo = x.CODNEXO,
-                    ElaboradorPCMSO = CadastroDeElaboradorPCMSO.BuscarElaboradorPorID(x.IDEPCMSO),
-                    ElaboradorPPRA = CadastroDeElaboradorPPRA.BuscarElaboradorPorID(x.IDEPPRA),
-                    Emissao = x.EMISSAO,
-                    NaoDeseja = x.NAODESEJA.HasValue ? (x.NAODESEJA.Value == 1) : false,
-                    Observacao = x.OBSERVACAO,
-                    StatusPCMSOSel = ConverterStatusPCMSOParaEnum(x.PCMSO),
-                    Vencimento = x.VENCIMENTO
-                };
-        }
-
-        internal static void DeletarDadosOcupacionais(DadosOcupacionaisController dadosOcupacionaisController, int codigoDoDadosOcupacionais)
-        {
-            ControleDeDadosOcupacionais.DeletarDadosOcupacionais(codigoDoDadosOcupacionais);
-        }
-
-        private static EnumParametro.StatusPCMSO ConverterStatusPCMSOParaEnum(string PCMSO)
-        {
-            switch (PCMSO)
-            {
-                case "P":
-                    return EnumParametro.StatusPCMSO.PCMSOCMT;
-                case "T":
-                    return EnumParametro.StatusPCMSO.PCMSOTerceiro;
-                default:
-                    return EnumParametro.StatusPCMSO.Vazio;
-            }
-        }
-
         internal static DadosOcupacionaisModel BuscarDadosOcupacionaisPorID(int v)
         {
             if (v != 0)
@@ -78,17 +40,9 @@ namespace MediCloud.Code.Parametro
                 return null;
         }
 
-        private static string ConverterStatusPCMSOParaString(EnumParametro.StatusPCMSO PCMSO)
+        internal static void DeletarDadosOcupacionais(DadosOcupacionaisController dadosOcupacionaisController, int codigoDoDadosOcupacionais)
         {
-            switch (PCMSO)
-            {
-                case EnumParametro.StatusPCMSO.PCMSOCMT:
-                    return "P";
-                case EnumParametro.StatusPCMSO.PCMSOTerceiro:
-                    return "T";
-                default:
-                    return null;
-            }
+            ControleDeDadosOcupacionais.DeletarDadosOcupacionais(codigoDoDadosOcupacionais);
         }
 
         internal static DadosOcupacionaisModel SalvarDadosOcupacionais(FormCollection form)
@@ -102,6 +56,42 @@ namespace MediCloud.Code.Parametro
             usuarioModel = injetarEmUsuarioModel(DadosOcupacionaisDAO);
 
             return usuarioModel;
+        }
+
+        #endregion Internal Methods
+
+
+
+        #region Private Methods
+
+        private static EnumParametro.StatusPCMSO ConverterStatusPCMSOParaEnum(string PCMSO)
+        {
+            switch (PCMSO)
+            {
+                case "P":
+                    return EnumParametro.StatusPCMSO.PCMSOCMT;
+
+                case "T":
+                    return EnumParametro.StatusPCMSO.PCMSOTerceiro;
+
+                default:
+                    return EnumParametro.StatusPCMSO.Vazio;
+            }
+        }
+
+        private static string ConverterStatusPCMSOParaString(EnumParametro.StatusPCMSO PCMSO)
+        {
+            switch (PCMSO)
+            {
+                case EnumParametro.StatusPCMSO.PCMSOCMT:
+                    return "P";
+
+                case EnumParametro.StatusPCMSO.PCMSOTerceiro:
+                    return "T";
+
+                default:
+                    return null;
+            }
         }
 
         private static CLIENTE_OCUPACIONAL injetarEmUsuarioDAO(DadosOcupacionaisModel x)
@@ -124,6 +114,26 @@ namespace MediCloud.Code.Parametro
                 };
         }
 
+        private static DadosOcupacionaisModel injetarEmUsuarioModel(CLIENTE_OCUPACIONAL x)
+        {
+            if (x == null)
+                return null;
+            else
+                return new DadosOcupacionaisModel()
+                {
+                    IdClienteOcupacional = (int)x.IDCLIOC,
+                    Cliente = CadastroDeClientes.RecuperarClientePorID((int)x.IDCLI),
+                    CodigoNexo = x.CODNEXO,
+                    ElaboradorPCMSO = CadastroDeElaboradorPCMSO.BuscarElaboradorPorID(x.IDEPCMSO),
+                    ElaboradorPPRA = CadastroDeElaboradorPPRA.BuscarElaboradorPorID(x.IDEPPRA),
+                    Emissao = x.EMISSAO,
+                    NaoDeseja = x.NAODESEJA.HasValue ? (x.NAODESEJA.Value == 1) : false,
+                    Observacao = x.OBSERVACAO,
+                    StatusPCMSOSel = ConverterStatusPCMSOParaEnum(x.PCMSO),
+                    Vencimento = x.VENCIMENTO
+                };
+        }
+
         private static DadosOcupacionaisModel injetarEmUsuarioModel(FormCollection form)
         {
             return new DadosOcupacionaisModel()
@@ -140,5 +150,7 @@ namespace MediCloud.Code.Parametro
                 Vencimento = string.IsNullOrEmpty(form["vencimento"]) ? null : (DateTime?)Convert.ToDateTime(form["vencimento"])
             };
         }
+
+        #endregion Private Methods
     }
 }

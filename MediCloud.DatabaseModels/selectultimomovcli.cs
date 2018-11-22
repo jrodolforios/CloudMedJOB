@@ -1,14 +1,16 @@
 namespace MediCloud.DatabaseModels
 {
     using System;
-    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
-    using System.Data.Entity.Spatial;
 
     [Table("selectultimomovcli")]
     public partial class selectultimomovcli
     {
+        #region Public Properties
+
+        public DateTime? DATAMOV { get; set; }
+
         [Key]
         [Column(Order = 0, TypeName = "numeric")]
         public decimal IDCLI { get; set; }
@@ -27,6 +29,6 @@ namespace MediCloud.DatabaseModels
         [StringLength(50)]
         public string RAZAOSOCIAL { get; set; }
 
-        public DateTime? DATAMOV { get; set; }
+        #endregion Public Properties
     }
 }

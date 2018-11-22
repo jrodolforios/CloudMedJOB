@@ -1,13 +1,12 @@
 namespace MediCloud.DatabaseModels
 {
-    using System;
-    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
-    using System.Data.Entity.Spatial;
 
     public partial class SYS_USRXREL
     {
+        #region Public Properties
+
         [Key]
         [Column(TypeName = "numeric")]
         public decimal CODUSU { get; set; }
@@ -16,5 +15,7 @@ namespace MediCloud.DatabaseModels
         public byte[] CTRLACESSOREL { get; set; }
 
         public virtual SYS_USUARIO SYS_USUARIO { get; set; }
+
+        #endregion Public Properties
     }
 }

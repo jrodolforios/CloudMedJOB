@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace MediCloud.Code.Enum
+﻿namespace MediCloud.Code.Enum
 {
     public class EnumCliente
     {
+        #region Public Enums
+
         public enum tipoEmpresa
         {
             Vazio = 0,
@@ -14,5 +11,7 @@ namespace MediCloud.Code.Enum
             PessoaJuridica = 2,
             CEI = 3
         }
+
+        #endregion Public Enums
     }
 }

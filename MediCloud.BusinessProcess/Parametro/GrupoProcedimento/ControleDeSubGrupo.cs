@@ -1,17 +1,38 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MediCloud.BusinessProcess.Util;
 using MediCloud.DatabaseModels;
 using MediCloud.Persistence;
-using MediCloud.BusinessProcess.Util;
+using System;
+using System.Collections.Generic;
 using System.Data.Entity.Validation;
+using System.Linq;
 
 namespace MediCloud.BusinessProcess.Parametro.GrupoProcedimento
 {
     public class ControleDeSubGrupo
     {
+        #region Public Methods
+
+        public static void DeletarSubGrupo(int codigoDoSubGrupo)
+        {
+            CloudMedContext contexto = new CloudMedContext();
+
+            try
+            {
+                if (contexto.PROCEDIMENTO_GRUPO_SUBGRUP.Any(x => x.IDSUBGRUPRO == codigoDoSubGrupo))
+                    contexto.PROCEDIMENTO_GRUPO_SUBGRUP.Remove(contexto.PROCEDIMENTO_GRUPO_SUBGRUP.First(x => x.IDSUBGRUPRO == codigoDoSubGrupo));
+
+                contexto.SaveChanges();
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public static PROCEDIMENTO_GRUPO_SUBGRUP recuperarSubGrupoPorID(int idSubGrupo)
         {
             CloudMedContext contexto = new CloudMedContext();
@@ -57,7 +78,6 @@ namespace MediCloud.BusinessProcess.Parametro.GrupoProcedimento
 
             try
             {
-
                 if (subGrupoDAO.IDSUBGRUPRO > 0)
                 {
                     setorSalvo = contexto.PROCEDIMENTO_GRUPO_SUBGRUP.First(x => x.IDSUBGRUPRO == subGrupoDAO.IDSUBGRUPRO);
@@ -65,7 +85,6 @@ namespace MediCloud.BusinessProcess.Parametro.GrupoProcedimento
                     setorSalvo.IDGRUPRO = subGrupoDAO.IDGRUPRO;
                     setorSalvo.IDSUBGRUPRO = subGrupoDAO.IDSUBGRUPRO;
                     setorSalvo.SUBGRUPO = subGrupoDAO.SUBGRUPO;
-
                 }
                 else
                 {
@@ -74,7 +93,6 @@ namespace MediCloud.BusinessProcess.Parametro.GrupoProcedimento
 
                 contexto.SaveChanges();
                 return setorSalvo;
-
             }
             catch (DbEntityValidationException ex)
             {
@@ -87,25 +105,6 @@ namespace MediCloud.BusinessProcess.Parametro.GrupoProcedimento
             }
         }
 
-        public static void DeletarSubGrupo(int codigoDoSubGrupo)
-        {
-            CloudMedContext contexto = new CloudMedContext();
-
-            try
-            {
-                if (contexto.PROCEDIMENTO_GRUPO_SUBGRUP.Any(x => x.IDSUBGRUPRO == codigoDoSubGrupo))
-                    contexto.PROCEDIMENTO_GRUPO_SUBGRUP.Remove(contexto.PROCEDIMENTO_GRUPO_SUBGRUP.First(x => x.IDSUBGRUPRO == codigoDoSubGrupo));
-
-                contexto.SaveChanges();
-            }
-            catch (DbEntityValidationException ex)
-            {
-                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
+        #endregion Public Methods
     }
 }

@@ -1,29 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MediCloud.BusinessProcess.Util;
 using MediCloud.DatabaseModels;
 using MediCloud.Persistence;
+using System;
+using System.Collections.Generic;
 using System.Data.Entity.Validation;
-using MediCloud.BusinessProcess.Util;
+using System.Linq;
 
 namespace MediCloud.BusinessProcess.Financeiro
 {
     public class ControleDeLancamentoDeContratoFixo
     {
-        public static List<CONTRATO_FIXO> BuscarLancamentoPorTermo(string prefix)
+        #region Public Methods
+
+        public static List<CONTRATO_FIXO_DET> BuscarDetalhesDeLancamento(int idLan)
         {
             CloudMedContext contexto = new CloudMedContext();
 
             try
             {
-                return contexto.CONTRATO_FIXO.Where(x => x.FORNECEDOR.NOMEFANTASIA.Contains(prefix)).ToList();
+                return contexto.CONTRATO_FIXO_DET.Where(x => x.IDLAN == idLan).ToList();
             }
             catch (DbEntityValidationException ex)
             {
                 ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
-                return new List<CONTRATO_FIXO>();
+                return new List<CONTRATO_FIXO_DET>();
             }
             catch (Exception ex)
             {
@@ -53,59 +53,18 @@ namespace MediCloud.BusinessProcess.Financeiro
             }
         }
 
-        public static CONTRATO_FIXO SalvarLancamentoDeContrato(CONTRATO_FIXO contratoFixoDAO)
-        {
-            CloudMedContext contexto = new CloudMedContext();
-            CONTRATO_FIXO setorSalvo = new CONTRATO_FIXO();
-
-            try
-            {
-
-                if (contratoFixoDAO.IDLAN > 0)
-                {
-                    setorSalvo = contexto.CONTRATO_FIXO.First(x => x.IDLAN == contratoFixoDAO.IDLAN);
-
-                    setorSalvo.DATA = contratoFixoDAO.DATA;
-                    setorSalvo.DIA = contratoFixoDAO.DIA;
-                    setorSalvo.IDFOR = contratoFixoDAO.IDFOR;
-                    setorSalvo.QUANTIDADE = contratoFixoDAO.QUANTIDADE;
-                    setorSalvo.SITUACAO = contratoFixoDAO.SITUACAO;
-                    setorSalvo.TOTAL = contratoFixoDAO.TOTAL;
-                    setorSalvo.USUARIO = contratoFixoDAO.USUARIO;
-
-                }
-                else
-                {
-                    setorSalvo = contexto.CONTRATO_FIXO.Add(contratoFixoDAO);
-                }
-
-                contexto.SaveChanges();
-                return setorSalvo;
-
-            }
-            catch (DbEntityValidationException ex)
-            {
-                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
-                return null;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        public static List<CONTRATO_FIXO_DET> BuscarDetalhesDeLancamento(int idLan)
+        public static List<CONTRATO_FIXO> BuscarLancamentoPorTermo(string prefix)
         {
             CloudMedContext contexto = new CloudMedContext();
 
             try
             {
-                return contexto.CONTRATO_FIXO_DET.Where(x => x.IDLAN == idLan).ToList();
+                return contexto.CONTRATO_FIXO.Where(x => x.FORNECEDOR.NOMEFANTASIA.Contains(prefix)).ToList();
             }
             catch (DbEntityValidationException ex)
             {
                 ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
-                return new List<CONTRATO_FIXO_DET>();
+                return new List<CONTRATO_FIXO>();
             }
             catch (Exception ex)
             {
@@ -166,5 +125,45 @@ namespace MediCloud.BusinessProcess.Financeiro
                 throw ex;
             }
         }
+
+        public static CONTRATO_FIXO SalvarLancamentoDeContrato(CONTRATO_FIXO contratoFixoDAO)
+        {
+            CloudMedContext contexto = new CloudMedContext();
+            CONTRATO_FIXO setorSalvo = new CONTRATO_FIXO();
+
+            try
+            {
+                if (contratoFixoDAO.IDLAN > 0)
+                {
+                    setorSalvo = contexto.CONTRATO_FIXO.First(x => x.IDLAN == contratoFixoDAO.IDLAN);
+
+                    setorSalvo.DATA = contratoFixoDAO.DATA;
+                    setorSalvo.DIA = contratoFixoDAO.DIA;
+                    setorSalvo.IDFOR = contratoFixoDAO.IDFOR;
+                    setorSalvo.QUANTIDADE = contratoFixoDAO.QUANTIDADE;
+                    setorSalvo.SITUACAO = contratoFixoDAO.SITUACAO;
+                    setorSalvo.TOTAL = contratoFixoDAO.TOTAL;
+                    setorSalvo.USUARIO = contratoFixoDAO.USUARIO;
+                }
+                else
+                {
+                    setorSalvo = contexto.CONTRATO_FIXO.Add(contratoFixoDAO);
+                }
+
+                contexto.SaveChanges();
+                return setorSalvo;
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+                return null;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        #endregion Public Methods
     }
 }

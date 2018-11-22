@@ -1,38 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MediCloud.BusinessProcess.Util;
 using MediCloud.DatabaseModels;
 using MediCloud.Persistence;
+using System;
+using System.Collections.Generic;
 using System.Data.Entity.Validation;
-using MediCloud.BusinessProcess.Util;
+using System.Linq;
 
 namespace MediCloud.BusinessProcess.Financeiro
 {
     public class ControleDeFechamentoCaixa
     {
-        public static List<FECHAMENTO_CAIXA> RecuperarFechamentoCaixaPorTermo(string prefix)
-        {
-            CloudMedContext contexto = new CloudMedContext();
-
-            try
-            {
-                return contexto.FECHAMENTO_CAIXA.Where(x => prefix.Contains(x.USUARIO.ToString())
-                                                    || prefix.Contains(x.DATA.Month.ToString())
-                                                    || prefix.Contains(x.DATA.Year.ToString())
-                                                    || prefix.Contains(x.DATA.Day.ToString())).OrderByDescending(x => x.DATA).ToList();
-            }
-            catch (DbEntityValidationException ex)
-            {
-                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
-                return new List<FECHAMENTO_CAIXA>();
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
+        #region Public Methods
 
         public static FECHAMENTO_CAIXA BuscarFechamentoCaixa(int codigoFechamentoCaixa)
         {
@@ -41,7 +19,6 @@ namespace MediCloud.BusinessProcess.Financeiro
             {
                 if (contexto.FECHAMENTO_CAIXA.Any(x => x.IDFCX == codigoFechamentoCaixa))
                     return contexto.FECHAMENTO_CAIXA.First(x => x.IDFCX == codigoFechamentoCaixa);
-
             }
             catch (DbEntityValidationException ex)
             {
@@ -113,6 +90,27 @@ namespace MediCloud.BusinessProcess.Financeiro
             }
         }
 
+        public static List<FECHAMENTO_CAIXA> RecuperarFechamentoCaixaPorTermo(string prefix)
+        {
+            CloudMedContext contexto = new CloudMedContext();
+
+            try
+            {
+                return contexto.FECHAMENTO_CAIXA.Where(x => prefix.Contains(x.USUARIO.ToString())
+                                                    || prefix.Contains(x.DATA.Month.ToString())
+                                                    || prefix.Contains(x.DATA.Year.ToString())
+                                                    || prefix.Contains(x.DATA.Day.ToString())).OrderByDescending(x => x.DATA).ToList();
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+                return new List<FECHAMENTO_CAIXA>();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
 
         public static FECHAMENTO_CAIXA SalvarFechamentoCaixa(FECHAMENTO_CAIXA fechamentoDAO)
         {
@@ -140,7 +138,6 @@ namespace MediCloud.BusinessProcess.Financeiro
 
                 contexto.SaveChanges();
                 return setorSalvo;
-
             }
             catch (DbEntityValidationException ex)
             {
@@ -152,5 +149,7 @@ namespace MediCloud.BusinessProcess.Financeiro
                 throw ex;
             }
         }
+
+        #endregion Public Methods
     }
 }

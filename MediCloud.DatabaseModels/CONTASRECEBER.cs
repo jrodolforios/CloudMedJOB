@@ -1,14 +1,14 @@
 namespace MediCloud.DatabaseModels
 {
     using System;
-    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
-    using System.Data.Entity.Spatial;
 
     [Table("CONTASRECEBER")]
     public partial class CONTASRECEBER
     {
+        #region Public Properties
+
         [StringLength(6)]
         public string AGENCIABANCOEMI { get; set; }
 
@@ -92,5 +92,7 @@ namespace MediCloud.DatabaseModels
 
         [Column(TypeName = "numeric")]
         public decimal? VALORVENCIMENTO { get; set; }
+
+        #endregion Public Properties
     }
 }

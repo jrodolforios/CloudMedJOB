@@ -1,35 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MediCloud.BusinessProcess.Util;
 using MediCloud.DatabaseModels;
 using MediCloud.Persistence;
+using System;
+using System.Collections.Generic;
 using System.Data.Entity.Validation;
-using MediCloud.BusinessProcess.Util;
+using System.Linq;
 
 namespace MediCloud.BusinessProcess.Parametro.GrupoProcedimento
 {
     public class ControleDeGrupo
     {
-        public static PROCEDIMENTO_GRUPO recuperarSubGrupoPorID(int v)
-        {
-            CloudMedContext contexto = new CloudMedContext();
-
-            try
-            {
-                return contexto.PROCEDIMENTO_GRUPO.First(x => x.IDGRUPRO == v);
-            }
-            catch (DbEntityValidationException ex)
-            {
-                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
-                return new PROCEDIMENTO_GRUPO();
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
+        #region Public Methods
 
         public static void DeletarGrupo(int codigoDoGrupoProcedimento)
         {
@@ -72,6 +53,25 @@ namespace MediCloud.BusinessProcess.Parametro.GrupoProcedimento
             return null;
         }
 
+        public static PROCEDIMENTO_GRUPO recuperarSubGrupoPorID(int v)
+        {
+            CloudMedContext contexto = new CloudMedContext();
+
+            try
+            {
+                return contexto.PROCEDIMENTO_GRUPO.First(x => x.IDGRUPRO == v);
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+                return new PROCEDIMENTO_GRUPO();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public static PROCEDIMENTO_GRUPO SalvarGrupo(PROCEDIMENTO_GRUPO grupoDAO)
         {
             CloudMedContext contexto = new CloudMedContext();
@@ -79,13 +79,11 @@ namespace MediCloud.BusinessProcess.Parametro.GrupoProcedimento
 
             try
             {
-
                 if (grupoDAO.IDGRUPRO > 0)
                 {
                     grupoSalvo = contexto.PROCEDIMENTO_GRUPO.First(x => x.IDGRUPRO == grupoDAO.IDGRUPRO);
 
                     grupoSalvo.GRUPOPROCEDIMENTO = grupoDAO.GRUPOPROCEDIMENTO;
-
                 }
                 else
                 {
@@ -105,5 +103,7 @@ namespace MediCloud.BusinessProcess.Parametro.GrupoProcedimento
                 throw ex;
             }
         }
+
+        #endregion Public Methods
     }
 }

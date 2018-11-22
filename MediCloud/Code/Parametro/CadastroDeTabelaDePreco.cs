@@ -1,23 +1,65 @@
 ﻿using MediCloud.BusinessProcess.Parametro;
-using MediCloud.BusinessProcess.Recomendacao;
 using MediCloud.Code.Enum;
-using MediCloud.DatabaseModels;
-using MediCloud.Models.Parametro;
-using MediCloud.Models.Parametro.GrupoProcedimento;
-using MediCloud.Models.Recomendacao;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using MediCloud.Controllers;
 using MediCloud.Code.Fornecedor;
 using MediCloud.Code.Parametro.GrupoProcedimento;
+using MediCloud.Controllers;
+using MediCloud.DatabaseModels;
+using MediCloud.Models.Parametro.GrupoProcedimento;
+using System;
+using System.Collections.Generic;
+using System.Web.Mvc;
 
 namespace MediCloud.Code.Parametro
 {
     public class CadastroDeTabelaDePreco
     {
+        #region Internal Methods
+
+        internal static List<TabelaPrecoModel> BuscarTabelasDeCliente(int idCliente)
+        {
+            List<TABELA> referenteEncontrado = ControleDeTabelaPreco.RecuperarTabelasDeCLiente(idCliente);
+
+            List<TabelaPrecoModel> encontrados = new List<TabelaPrecoModel>();
+
+            referenteEncontrado.ForEach(x =>
+            {
+                encontrados.Add(injetarEmUsuarioModel(x, false));
+            });
+
+            return encontrados;
+        }
+
+        internal static ValorTabelaDePrecoModel buscarValorDeTabela(int codigoDoValorTabela)
+        {
+            TABELAXFORNECEDORXPROCEDIMENTO valorTabela = ControleDeTabelaPreco.buscarValorDeTabela(codigoDoValorTabela);
+
+            return injetarEmValoresModel(valorTabela);
+        }
+
+        internal static void DeletarTabelaDePreco(TabelaDePrecoController tabelaDePrecoController, int codigoTabelaDePreco)
+        {
+            ControleDeTabelaPreco.DeletarTabelaDePreco(codigoTabelaDePreco);
+        }
+
+        internal static void DeletarValorTabela(int codigoValorTabela)
+        {
+            ControleDeTabelaPreco.DeletarValorTabela(codigoValorTabela);
+        }
+
+        internal static TABELA injetarEmUsuarioDAO(TabelaPrecoModel x)
+        {
+            if (x == null)
+                return null;
+            else
+                return new TABELA()
+                {
+                    IDTAB = x.IdTabela,
+                    TABELA1 = x.NomeTabela,
+                    STATUS = x.Status ? "A" : "I",
+                    TIPOPAGTO = getStringPorEnum(x.TipoPagamento)
+                };
+        }
+
         internal static TabelaPrecoModel RecuperarTabelaDePrecoPorID(int IdRef, bool carregarLista = true)
         {
             if (IdRef != 0)
@@ -50,53 +92,51 @@ namespace MediCloud.Code.Parametro
             return RecuperarTabelaDePrecoPorTermo(termo);
         }
 
-        private static TabelaPrecoModel injetarEmUsuarioModel(TABELA tabelaEncontrada, bool materializarClasses = true)
+        internal static List<TabelaPrecoModel> RecuperarTodos()
         {
-            if (tabelaEncontrada == null)
-                return null;
-            else
-                return new TabelaPrecoModel()
-                {
-                    IdTabela = (int)tabelaEncontrada.IDTAB,
-                    NomeTabela = tabelaEncontrada.TABELA1,
-                    TipoPagamento = getEnumPorString(tabelaEncontrada.TIPOPAGTO),
-                    Status = tabelaEncontrada.STATUS == "A",
+            List<TABELA> referenteEncontrado = ControleDeTabelaPreco.RecuperarTodos();
 
-                    ValorTabelaPreco = materializarClasses ? recuperarValoresTabelaDePreco((int)tabelaEncontrada.IDTAB) : new List<ValorTabelaDePrecoModel>()
-                };
-        }
+            List<TabelaPrecoModel> encontrados = new List<TabelaPrecoModel>();
 
-        internal static void DeletarValorTabela(int codigoValorTabela)
-        {
-            ControleDeTabelaPreco.DeletarValorTabela(codigoValorTabela);
-        }
-
-        private static List<ValorTabelaDePrecoModel> recuperarValoresTabelaDePreco(int idTabela)
-        {
-            List<TABELAXFORNECEDORXPROCEDIMENTO> valoresEncontrados = ControleDeTabelaPreco.recuperarValoresTabelaDePreco(idTabela);
-            List<ValorTabelaDePrecoModel> listaDeModels = new List<ValorTabelaDePrecoModel>();
-
-            valoresEncontrados.ForEach(x =>
+            referenteEncontrado.ForEach(x =>
             {
-                listaDeModels.Add(injetarEmValoresModel(x));
+                encontrados.Add(injetarEmUsuarioModel(x, false));
             });
 
-            return listaDeModels;
+            return encontrados;
         }
 
-        private static ValorTabelaDePrecoModel injetarEmValoresModel(TABELAXFORNECEDORXPROCEDIMENTO x)
+        internal static TabelaPrecoModel SalvarTabela(FormCollection form)
         {
-            if (x == null)
-                return null;
-            else
-                return new ValorTabelaDePrecoModel()
-                {
-                    Fornecedor = new Models.Fornecedor.FornecedorModel() { IdFornecedor = (int)x.IDFOR, RazaoSocial = x.FORNECEDOR.RAZAOSOCIAL },
-                    Procedimento = new ProcedimentoModel() { IdProcedimento = (int)x.IDPRO, Nome = x.PROCEDIMENTO.PROCEDIMENTO1 },
-                    Tabela = new TabelaPrecoModel() { IdTabela = (int)x.IDTAB },
-                    Valor = x.FATURAMENTO
-                };
+            TabelaPrecoModel usuarioModel = injetarEmUsuarioModel(form);
+            usuarioModel.validar();
+
+            TABELA tabelaDePrecoDAO = injetarEmUsuarioDAO(usuarioModel);
+            tabelaDePrecoDAO = ControleDeTabelaPreco.SalvarTabela(tabelaDePrecoDAO);
+
+            usuarioModel = injetarEmUsuarioModel(tabelaDePrecoDAO);
+
+            return usuarioModel;
         }
+
+        internal static ValorTabelaDePrecoModel SalvarValorTabela(FormCollection form)
+        {
+            ValorTabelaDePrecoModel valorTabelaModel = InjetarEmValorTabelaModel(form);
+            valorTabelaModel.validar();
+
+            TABELAXFORNECEDORXPROCEDIMENTO tabelaDePrecoDAO = injetarEmValorTabelaDAO(valorTabelaModel);
+            tabelaDePrecoDAO = ControleDeTabelaPreco.SalvarValorTabela(tabelaDePrecoDAO);
+
+            valorTabelaModel = injetarEmValoresModel(tabelaDePrecoDAO);
+
+            return valorTabelaModel;
+        }
+
+        #endregion Internal Methods
+
+
+
+        #region Private Methods
 
         private static List<TabelaFornecedorModel> BuscarFornecedorDeTabela(decimal idTab)
         {
@@ -110,6 +150,36 @@ namespace MediCloud.Code.Parametro
             });
 
             return listaDeModels;
+        }
+
+        private static EnumFinanceiro.TipoPagamento getEnumPorString(string TIpoPagamento)
+        {
+            switch (TIpoPagamento)
+            {
+                case "V":
+                    return EnumFinanceiro.TipoPagamento.AVista;
+
+                case "P":
+                    return EnumFinanceiro.TipoPagamento.APrazo;
+
+                default:
+                    return EnumFinanceiro.TipoPagamento.Vazio;
+            }
+        }
+
+        private static string getStringPorEnum(EnumFinanceiro.TipoPagamento TIpoPagamento)
+        {
+            switch (TIpoPagamento)
+            {
+                case EnumFinanceiro.TipoPagamento.AVista:
+                    return "V";
+
+                case EnumFinanceiro.TipoPagamento.APrazo:
+                    return "P";
+
+                default:
+                    return null;
+            }
         }
 
         private static TabelaFornecedorModel injetarEmTabelaFornecedorModel(TABELAXFORNECEDORXPROCEDIMENTO x, bool carregarClasses = false)
@@ -126,84 +196,20 @@ namespace MediCloud.Code.Parametro
                 };
         }
 
-        private static EnumFinanceiro.TipoPagamento getEnumPorString(string TIpoPagamento)
+        private static TabelaPrecoModel injetarEmUsuarioModel(TABELA tabelaEncontrada, bool materializarClasses = true)
         {
-            switch (TIpoPagamento)
-            {
-                case "V":
-                    return EnumFinanceiro.TipoPagamento.AVista;
-                case "P":
-                    return EnumFinanceiro.TipoPagamento.APrazo;
-                default:
-                    return EnumFinanceiro.TipoPagamento.Vazio;
-            }
-        }
-
-        internal static void DeletarTabelaDePreco(TabelaDePrecoController tabelaDePrecoController, int codigoTabelaDePreco)
-        {
-            ControleDeTabelaPreco.DeletarTabelaDePreco(codigoTabelaDePreco);
-        }
-
-        private static string getStringPorEnum(EnumFinanceiro.TipoPagamento TIpoPagamento)
-        {
-            switch (TIpoPagamento)
-            {
-                case EnumFinanceiro.TipoPagamento.AVista:
-                    return "V";
-                case EnumFinanceiro.TipoPagamento.APrazo:
-                    return "P";
-                default:
-                    return null;
-            }
-        }
-
-        internal static List<TabelaPrecoModel> RecuperarTodos()
-        {
-            List<TABELA> referenteEncontrado = ControleDeTabelaPreco.RecuperarTodos();
-
-            List<TabelaPrecoModel> encontrados = new List<TabelaPrecoModel>();
-
-            referenteEncontrado.ForEach(x =>
-            {
-                encontrados.Add(injetarEmUsuarioModel(x, false));
-            });
-
-            return encontrados;
-        }
-
-        internal static ValorTabelaDePrecoModel buscarValorDeTabela(int codigoDoValorTabela)
-        {
-            TABELAXFORNECEDORXPROCEDIMENTO valorTabela = ControleDeTabelaPreco.buscarValorDeTabela(codigoDoValorTabela);
-
-            return injetarEmValoresModel(valorTabela);
-        }
-
-        internal static TABELA injetarEmUsuarioDAO(TabelaPrecoModel x)
-        {
-            if (x == null)
+            if (tabelaEncontrada == null)
                 return null;
             else
-                return new TABELA()
+                return new TabelaPrecoModel()
                 {
-                    IDTAB = x.IdTabela,
-                    TABELA1 = x.NomeTabela,
-                    STATUS = x.Status ? "A" : "I",
-                    TIPOPAGTO = getStringPorEnum(x.TipoPagamento)
-                    
+                    IdTabela = (int)tabelaEncontrada.IDTAB,
+                    NomeTabela = tabelaEncontrada.TABELA1,
+                    TipoPagamento = getEnumPorString(tabelaEncontrada.TIPOPAGTO),
+                    Status = tabelaEncontrada.STATUS == "A",
+
+                    ValorTabelaPreco = materializarClasses ? recuperarValoresTabelaDePreco((int)tabelaEncontrada.IDTAB) : new List<ValorTabelaDePrecoModel>()
                 };
-        }
-
-        internal static TabelaPrecoModel SalvarTabela(FormCollection form)
-        {
-            TabelaPrecoModel usuarioModel = injetarEmUsuarioModel(form);
-            usuarioModel.validar();
-
-            TABELA tabelaDePrecoDAO = injetarEmUsuarioDAO(usuarioModel);
-            tabelaDePrecoDAO = ControleDeTabelaPreco.SalvarTabela(tabelaDePrecoDAO);
-
-            usuarioModel = injetarEmUsuarioModel(tabelaDePrecoDAO);
-
-            return usuarioModel;
         }
 
         private static TabelaPrecoModel injetarEmUsuarioModel(FormCollection form)
@@ -217,17 +223,18 @@ namespace MediCloud.Code.Parametro
             };
         }
 
-        internal static ValorTabelaDePrecoModel SalvarValorTabela(FormCollection form)
+        private static ValorTabelaDePrecoModel injetarEmValoresModel(TABELAXFORNECEDORXPROCEDIMENTO x)
         {
-            ValorTabelaDePrecoModel valorTabelaModel = InjetarEmValorTabelaModel(form);
-            valorTabelaModel.validar();
-
-            TABELAXFORNECEDORXPROCEDIMENTO tabelaDePrecoDAO = injetarEmValorTabelaDAO(valorTabelaModel);
-            tabelaDePrecoDAO = ControleDeTabelaPreco.SalvarValorTabela(tabelaDePrecoDAO);
-
-            valorTabelaModel = injetarEmValoresModel(tabelaDePrecoDAO);
-
-            return valorTabelaModel;
+            if (x == null)
+                return null;
+            else
+                return new ValorTabelaDePrecoModel()
+                {
+                    Fornecedor = new Models.Fornecedor.FornecedorModel() { IdFornecedor = (int)x.IDFOR, RazaoSocial = x.FORNECEDOR.RAZAOSOCIAL },
+                    Procedimento = new ProcedimentoModel() { IdProcedimento = (int)x.IDPRO, Nome = x.PROCEDIMENTO.PROCEDIMENTO1 },
+                    Tabela = new TabelaPrecoModel() { IdTabela = (int)x.IDTAB },
+                    Valor = x.FATURAMENTO
+                };
         }
 
         private static TABELAXFORNECEDORXPROCEDIMENTO injetarEmValorTabelaDAO(ValorTabelaDePrecoModel valorTabelaModel)
@@ -255,18 +262,19 @@ namespace MediCloud.Code.Parametro
             };
         }
 
-        internal static List<TabelaPrecoModel> BuscarTabelasDeCliente(int idCliente)
+        private static List<ValorTabelaDePrecoModel> recuperarValoresTabelaDePreco(int idTabela)
         {
-            List<TABELA> referenteEncontrado = ControleDeTabelaPreco.RecuperarTabelasDeCLiente(idCliente);
+            List<TABELAXFORNECEDORXPROCEDIMENTO> valoresEncontrados = ControleDeTabelaPreco.recuperarValoresTabelaDePreco(idTabela);
+            List<ValorTabelaDePrecoModel> listaDeModels = new List<ValorTabelaDePrecoModel>();
 
-            List<TabelaPrecoModel> encontrados = new List<TabelaPrecoModel>();
-
-            referenteEncontrado.ForEach(x =>
+            valoresEncontrados.ForEach(x =>
             {
-                encontrados.Add(injetarEmUsuarioModel(x, false));
+                listaDeModels.Add(injetarEmValoresModel(x));
             });
 
-            return encontrados;
+            return listaDeModels;
         }
+
+        #endregion Private Methods
     }
 }

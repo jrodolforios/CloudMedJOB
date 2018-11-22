@@ -5,18 +5,22 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using static MediCloud.BusinessProcess.Util.Enum.Cliente;
-using MediCloud.BusinessProcess.Util.Enum;
 
 namespace MediCloud.BusinessProcess.Cliente.Reports
 {
     public class ASOReports
     {
-        MOVIMENTO _movimento = null;
-        ASOReportEnum _tipoASOReport = ASOReportEnum.indefinido;
+        #region Private Fields
+
+        private INFORMACOES_CLINICA _infoClinica = null;
+        private MOVIMENTO _movimento = null;
         private Dictionary<NATUREZA, List<RISCO>> _riscosENaturezas = new Dictionary<NATUREZA, List<RISCO>>();
-        INFORMACOES_CLINICA _infoClinica = null;
+        private ASOReportEnum _tipoASOReport = ASOReportEnum.indefinido;
+
+        #endregion Private Fields
+
+        #region Public Constructors
 
         public ASOReports(MOVIMENTO movimento, ASOReportEnum tipoASOReport, INFORMACOES_CLINICA infoClinica)
         {
@@ -31,6 +35,12 @@ namespace MediCloud.BusinessProcess.Cliente.Reports
             this._riscosENaturezas = riscosENaturezas;
         }
 
+        #endregion Public Constructors
+
+
+
+        #region Public Methods
+
         public byte[] generate(params string[] args)
         {
             byte[] retorno = null;
@@ -42,21 +52,27 @@ namespace MediCloud.BusinessProcess.Cliente.Reports
                 case ASOReportEnum.imprimirComMedCoord:
                     retorno = PdfFactory.create(EnumPdfType.TuesPechkin).Parse(substituirParametrosMedCoord(template));
                     break;
+
                 case ASOReportEnum.imprimirSemMedCoord:
                     retorno = PdfFactory.create(EnumPdfType.TuesPechkin).Parse(substituirParametrosSemMedCoord(template));
                     break;
+
                 case ASOReportEnum.imprimirReciboASO:
                     retorno = PdfFactory.create(EnumPdfType.TuesPechkin).Parse(substituirParametrosReciboASO(template));
                     break;
+
                 case ASOReportEnum.imprimirListaDeProcedimentos:
                     retorno = PdfFactory.create(EnumPdfType.TuesPechkin).Parse(substituirParametrosListaDeProcedimentos(template));
                     break;
+
                 case ASOReportEnum.imprimirFichaClinica:
                     retorno = PdfFactory.create(EnumPdfType.TuesPechkin).Parse(substituirParametrosFichaClinica(template));
                     break;
+
                 case ASOReportEnum.imprimirOrdemServicoASO:
                     retorno = PdfFactory.create(EnumPdfType.TuesPechkin).Parse(substituirParametrosOrdemDeServico(template));
                     break;
+
                 default:
                     retorno = null;
                     break;
@@ -65,7 +81,10 @@ namespace MediCloud.BusinessProcess.Cliente.Reports
             return retorno;
         }
 
+        #endregion Public Methods
+
         #region imprimirOrdemServicoASO
+
         private string substituirParametrosOrdemDeServico(string template)
         {
             StringBuilder relatorioProcessado = new StringBuilder();
@@ -95,16 +114,17 @@ namespace MediCloud.BusinessProcess.Cliente.Reports
                     ordemDeServicoTemp += "<div style=\"page-break-before:always; \"> </div>";
 
                     relatorioProcessado.Append(ordemDeServicoTemp);
-
                 });
             else
                 throw new InvalidOperationException("Não é possível imprimir ordens de serviço pois nenhum procedimento foi cadastrado para este movimento.");
 
             return relatorioProcessado.ToString();
         }
-        #endregion
+
+        #endregion imprimirOrdemServicoASO
 
         #region imprimirSemMedCoord
+
         private string substituirParametrosSemMedCoord(string template)
         {
             template = template.Replace("[%Cliente%]", _movimento.CLIENTE.NOMEFANTASIA);
@@ -126,12 +146,24 @@ namespace MediCloud.BusinessProcess.Cliente.Reports
             template = template.Replace("[%TelefoneClinica%]", _infoClinica.TELEFONECLINICA);
             template = template.Replace("[%LogoEmpresa%]", _infoClinica.URLLOGO);
 
-
             return template;
         }
-        #endregion
+
+        #endregion imprimirSemMedCoord
 
         #region imprimirReciboASO
+
+        private string calcularValorTotalDeASO()
+        {
+            decimal valorTotalDaASO = 0;
+            _movimento.MOVIMENTO_PROCEDIMENTO.ToList().ForEach(x =>
+            {
+                valorTotalDaASO += (x.TOTAL.HasValue ? x.TOTAL.Value : 0);
+            });
+
+            return string.Format("{0:n2}", valorTotalDaASO);
+        }
+
         private string substituirParametrosReciboASO(string template)
         {
             template = template.Replace("[%LogoEmpresa%]", _infoClinica.URLLOGO);
@@ -148,49 +180,12 @@ namespace MediCloud.BusinessProcess.Cliente.Reports
             template = template.Replace("[%DataEmissaoPorExtenso%]", Util.Util.dataToExtenso(DateTime.Now));
             template = template.Replace("[%ValorToalASOPorExtenso%]", Util.Util.toExtenso(Convert.ToDecimal(calcularValorTotalDeASO())));
 
-
             return template;
         }
 
-        private string calcularValorTotalDeASO()
-        {
-            decimal valorTotalDaASO = 0;
-            _movimento.MOVIMENTO_PROCEDIMENTO.ToList().ForEach(x =>
-            {
-                valorTotalDaASO += (x.TOTAL.HasValue ? x.TOTAL.Value : 0);
-            });
-
-            return string.Format("{0:n2}", valorTotalDaASO);
-        }
-        #endregion
+        #endregion imprimirReciboASO
 
         #region imprimirComMedCoord
-        private string substituirParametrosMedCoord(string template)
-        {
-
-            template = template.Replace("[%Cliente%]", _movimento.CLIENTE.NOMEFANTASIA);
-            template = template.Replace("[%CNPJCliente%]", _movimento.CLIENTE.CPFCNPJ.Length == 14 ? Util.Util.InserirMascaraCNPJ(_movimento.CLIENTE.CPFCNPJ) : Util.Util.InserirMascaraCPF(_movimento.CLIENTE.CPFCNPJ));
-            template = template.Replace("[%CPFCNPJ%]", _movimento.CLIENTE.CPFCNPJ.Length == 14 ? "CNPJ" : "CPF");
-            template = template.Replace("[%Funcionario%]", _movimento.FUNCIONARIO.FUNCIONARIO1);
-            template = template.Replace("[%Setor%]", _movimento.SETOR.SETOR1);
-            template = template.Replace("[%Cargo%]", _movimento.CARGO.CARGO1);
-            template = template.Replace("[%nomeMedicoCoord%]", _movimento.CLIENTE.EPCMSO?.ELABORADORPCMSO);
-            template = template.Replace("[%DataExame%]", _movimento.DATA.ToShortDateString());
-            template = template.Replace("[%DataNacimentoFuncionario%]", _movimento.FUNCIONARIO.NASCIMENTO.HasValue ? _movimento.FUNCIONARIO.NASCIMENTO.Value.ToShortDateString() : string.Empty);
-            template = template.Replace("[%CalculoIdade%]", Util.Util.CalcularIdade(_movimento.FUNCIONARIO.NASCIMENTO).ToString());
-            template = template.Replace("[%exposicao%]", PreencherRiscosENaturezas(_riscosENaturezas));
-            template = template.Replace("[%procedimentos%]", PreencherProcedimentos(_movimento.MOVIMENTO_PROCEDIMENTO.ToList()));
-            template = template.Replace("[%Referencia%]", _movimento.MOVIMENTO_REFERENTE.NOMEREFERENCIA);
-
-            template = template.Replace("[%DadosEmpresaCabecalho%]", _infoClinica.DADOSCABECALHOREL);
-            template = template.Replace("[%CidadeEstadoClinica%]", _infoClinica.CIDADEESTADOCLINICA);
-            template = template.Replace("[%EnderecoClinica%]", _infoClinica.ENDERECOCLINICA);
-            template = template.Replace("[%TelefoneClinica%]", _infoClinica.TELEFONECLINICA);
-            template = template.Replace("[%LogoEmpresa%]", _infoClinica.URLLOGO);
-
-
-            return template;
-        }
 
         private string PreencherProcedimentos(List<MOVIMENTO_PROCEDIMENTO> movimentoProcedimento)
         {
@@ -199,7 +194,7 @@ namespace MediCloud.BusinessProcess.Cliente.Reports
             movimentoProcedimento.ForEach(x =>
             {
                 strRetorno.AppendLine("<br/>");
-                strRetorno.AppendLine($"{(x.DATAEXAME.HasValue ? x.DATAEXAME.Value.ToShortDateString() : string.Empty)} - {x.PROCEDIMENTO.PROCEDIMENTO1}");
+                strRetorno.AppendLine($"{(x.DATAEXAME.HasValue ? x.DATAEXAME.Value.ToShortDateString() : string.Empty)} - {x.PROCEDIMENTO?.PROCEDIMENTO1}");
             });
 
             return strRetorno.ToString();
@@ -225,9 +220,49 @@ namespace MediCloud.BusinessProcess.Cliente.Reports
 
             return strRetorno.ToString();
         }
-        #endregion
+
+        private string substituirParametrosMedCoord(string template)
+        {
+            template = template.Replace("[%Cliente%]", _movimento.CLIENTE.NOMEFANTASIA);
+            template = template.Replace("[%CNPJCliente%]", _movimento.CLIENTE.CPFCNPJ.Length == 14 ? Util.Util.InserirMascaraCNPJ(_movimento.CLIENTE.CPFCNPJ) : Util.Util.InserirMascaraCPF(_movimento.CLIENTE.CPFCNPJ));
+            template = template.Replace("[%CPFCNPJ%]", _movimento.CLIENTE.CPFCNPJ.Length == 14 ? "CNPJ" : "CPF");
+            template = template.Replace("[%Funcionario%]", _movimento.FUNCIONARIO.FUNCIONARIO1);
+            template = template.Replace("[%Setor%]", _movimento.SETOR.SETOR1);
+            template = template.Replace("[%Cargo%]", _movimento.CARGO.CARGO1);
+            template = template.Replace("[%nomeMedicoCoord%]", _movimento.CLIENTE.EPCMSO?.ELABORADORPCMSO);
+            template = template.Replace("[%DataExame%]", _movimento.DATA.ToShortDateString());
+            template = template.Replace("[%DataNacimentoFuncionario%]", _movimento.FUNCIONARIO.NASCIMENTO.HasValue ? _movimento.FUNCIONARIO.NASCIMENTO.Value.ToShortDateString() : string.Empty);
+            template = template.Replace("[%CalculoIdade%]", Util.Util.CalcularIdade(_movimento.FUNCIONARIO.NASCIMENTO).ToString());
+            template = template.Replace("[%exposicao%]", PreencherRiscosENaturezas(_riscosENaturezas));
+            template = template.Replace("[%procedimentos%]", PreencherProcedimentos(_movimento.MOVIMENTO_PROCEDIMENTO.ToList()));
+            template = template.Replace("[%Referencia%]", _movimento.MOVIMENTO_REFERENTE.NOMEREFERENCIA);
+
+            template = template.Replace("[%DadosEmpresaCabecalho%]", _infoClinica.DADOSCABECALHOREL);
+            template = template.Replace("[%CidadeEstadoClinica%]", _infoClinica.CIDADEESTADOCLINICA);
+            template = template.Replace("[%EnderecoClinica%]", _infoClinica.ENDERECOCLINICA);
+            template = template.Replace("[%TelefoneClinica%]", _infoClinica.TELEFONECLINICA);
+            template = template.Replace("[%LogoEmpresa%]", _infoClinica.URLLOGO);
+
+            return template;
+        }
+
+        #endregion imprimirComMedCoord
 
         #region imprimirListaDeProcedimentos
+
+        private string PreencherProcedimentosComCaixaDeSelecao(List<MOVIMENTO_PROCEDIMENTO> movimentoProcedimento)
+        {
+            StringBuilder strRetorno = new StringBuilder();
+
+            movimentoProcedimento.ForEach(x =>
+            {
+                strRetorno.AppendLine("<br/>");
+                strRetorno.AppendLine($"(&nbsp;&nbsp;) [{x.IDMOVPRO}] {x.PROCEDIMENTO.PROCEDIMENTO1}");
+            });
+
+            return strRetorno.ToString();
+        }
+
         private string substituirParametrosListaDeProcedimentos(string template)
         {
             template = template.Replace("[%LogoEmpresa%]", _infoClinica.URLLOGO);
@@ -246,22 +281,10 @@ namespace MediCloud.BusinessProcess.Cliente.Reports
             return template;
         }
 
-        private string PreencherProcedimentosComCaixaDeSelecao(List<MOVIMENTO_PROCEDIMENTO> movimentoProcedimento)
-        {
-            StringBuilder strRetorno = new StringBuilder();
-
-            movimentoProcedimento.ForEach(x =>
-            {
-                strRetorno.AppendLine("<br/>");
-                strRetorno.AppendLine($"(&nbsp;&nbsp;) [{x.IDMOVPRO}] {x.PROCEDIMENTO.PROCEDIMENTO1}");
-            });
-
-            return strRetorno.ToString();
-        }
-
-        #endregion
+        #endregion imprimirListaDeProcedimentos
 
         #region imprimirFichaClinica
+
         private string substituirParametrosFichaClinica(string template)
         {
             template = template.Replace("[%Referente%]", _movimento.MOVIMENTO_REFERENTE.NOMEREFERENCIA);
@@ -283,6 +306,7 @@ namespace MediCloud.BusinessProcess.Cliente.Reports
 
             return template;
         }
-        #endregion
+
+        #endregion imprimirFichaClinica
     }
 }

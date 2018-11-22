@@ -1,14 +1,14 @@
 namespace MediCloud.DatabaseModels
 {
-    using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
-    using System.Data.Entity.Spatial;
 
     [Table("CIDADE")]
     public partial class CIDADE
     {
+        #region Public Constructors
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public CIDADE()
         {
@@ -17,19 +17,16 @@ namespace MediCloud.DatabaseModels
             NOTAFISCAL = new HashSet<NOTAFISCAL>();
         }
 
-        [Key]
-        [Column(TypeName = "numeric")]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public decimal IDCID { get; set; }
+        #endregion Public Constructors
+
+
+
+        #region Public Properties
 
         [Column("CIDADE")]
         [Required]
         [StringLength(50)]
         public string CIDADE1 { get; set; }
-
-        [Required]
-        [StringLength(50)]
-        public string ESTADO { get; set; }
 
         public int? CIDNF { get; set; }
 
@@ -39,7 +36,18 @@ namespace MediCloud.DatabaseModels
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CLIENTE_GRUPO> CLIENTE_GRUPO { get; set; }
 
+        [Required]
+        [StringLength(50)]
+        public string ESTADO { get; set; }
+
+        [Key]
+        [Column(TypeName = "numeric")]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public decimal IDCID { get; set; }
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<NOTAFISCAL> NOTAFISCAL { get; set; }
+
+        #endregion Public Properties
     }
 }

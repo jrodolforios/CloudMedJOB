@@ -1,17 +1,40 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using MediCloud.Models.Recomendacao;
-using MediCloud.BusinessProcess.Recomendacao;
-using MediCloud.DatabaseModels;
+﻿using MediCloud.BusinessProcess.Recomendacao;
 using MediCloud.Code.Enum;
+using MediCloud.DatabaseModels;
+using MediCloud.Models.Recomendacao;
+using System;
+using System.Collections.Generic;
 using System.Web.Mvc;
 
 namespace MediCloud.Code.Recomendacao
 {
     public class CadastroDeRiscoNatureza
     {
+        #region Internal Methods
+
+        internal static List<NaturezaModel> BuscarNaturezaPorTermo(FormCollection form)
+        {
+            string termo = form["keywords"];
+
+            List<NaturezaModel> listaDeModels = new List<NaturezaModel>();
+
+            List<NATUREZA> usuarioDoBanco = ControleDeRiscoNatureza.buscarNaturezaPorTermo(termo);
+
+            usuarioDoBanco.ForEach(x =>
+            {
+                listaDeModels.Add(InjetarEmNaturezaModel(x));
+            });
+
+            return listaDeModels;
+        }
+
+        internal static RiscoModel BuscarRiscoPorID(int codigoRisco)
+        {
+            RISCO riscoEncontrado = ControleDeRiscoNatureza.BuscarRiscoPorID(codigoRisco);
+
+            return InjetarEmRiscoModel(riscoEncontrado);
+        }
+
         internal static List<RiscoModel> BuscarRiscosPorIDRecomendacao(int idRec)
         {
             List<RISCO> contadoresEncontrados = ControleDeRiscoNatureza.BuscarRiscosPorIDRecomendacao(idRec);
@@ -39,34 +62,21 @@ namespace MediCloud.Code.Recomendacao
             return listaDeModels;
         }
 
-        internal static List<NaturezaModel> BuscarNaturezaPorTermo(FormCollection form)
+        internal static void DeletarNatureza(int codigoNatureza)
         {
-            string termo = form["keywords"];
-
-            List<NaturezaModel> listaDeModels = new List<NaturezaModel>();
-
-            List<NATUREZA> usuarioDoBanco = ControleDeRiscoNatureza.buscarNaturezaPorTermo(termo);
-
-            usuarioDoBanco.ForEach(x =>
-            {
-                listaDeModels.Add(InjetarEmNaturezaModel(x));
-            });
-
-            return listaDeModels;
+            ControleDeRiscoNatureza.DeletarNatureza(codigoNatureza);
         }
 
-        private static RiscoModel InjetarEmRiscoModel(RISCO x, bool materializarclasses = false)
+        internal static void DeletarRisco(int codigoRisco)
         {
-            if (x == null)
-                return null;
-            else
-                return new RiscoModel()
-                {
-                    IdRisco = (int)x.IDRISCO,
-                    NomeRisco = x.RISCO1,
-                    Eventualidade = ConverterEventualidadeParaEnum(x.EVENTUALIDADE),
-                    Natureza = materializarclasses ? RecuperarNaturezaDeRisco((int)x.IDNAT) : new NaturezaModel() { IdNatureza = (int)x.IDNAT }
-                };
+            ControleDeRiscoNatureza.DeletarRisco(codigoRisco);
+        }
+
+        internal static NaturezaModel RecuperarNaturezaPorID(int v)
+        {
+            NATUREZA naturezaEncontrada = ControleDeRiscoNatureza.BuscarNaturezaPorID(v);
+
+            return InjetarEmNaturezaModel(naturezaEncontrada);
         }
 
         internal static NaturezaModel SalvarNatureza(FormCollection form)
@@ -80,6 +90,55 @@ namespace MediCloud.Code.Recomendacao
             usuarioModel = InjetarEmNaturezaModel(naturezaDAO);
 
             return usuarioModel;
+        }
+
+        internal static RiscoModel SalvarRisco(FormCollection form)
+        {
+            RiscoModel riscoModel = InjetarEmRiscoModel(form);
+            riscoModel.validar();
+
+            RISCO riscoDAO = InjetarEmRiscoDAO(riscoModel);
+            riscoDAO = ControleDeRiscoNatureza.SalvarRisco(riscoDAO);
+
+            riscoModel = InjetarEmRiscoModel(riscoDAO);
+
+            return riscoModel;
+        }
+
+        #endregion Internal Methods
+
+
+
+        #region Private Methods
+
+        private static EnumRecomendacao.eventualidadeEnum ConverterEventualidadeParaEnum(string x)
+        {
+            switch (x.ToUpper())
+            {
+                case "E":
+                    return EnumRecomendacao.eventualidadeEnum.Eventual;
+
+                case "H":
+                    return EnumRecomendacao.eventualidadeEnum.Habitual;
+
+                default:
+                    return EnumRecomendacao.eventualidadeEnum.vazio;
+            }
+        }
+
+        private static string ConverterEventualidadeParaString(EnumRecomendacao.eventualidadeEnum x)
+        {
+            switch (x)
+            {
+                case EnumRecomendacao.eventualidadeEnum.Eventual:
+                    return "E";
+
+                case EnumRecomendacao.eventualidadeEnum.Habitual:
+                    return "H";
+
+                default:
+                    return null;
+            }
         }
 
         private static NATUREZA InjetarEmNaturezaDAO(NaturezaModel x)
@@ -117,90 +176,6 @@ namespace MediCloud.Code.Recomendacao
                 };
         }
 
-        private static List<RiscoModel> RecuperarRiscosDeNatureza(decimal iDNAT)
-        {
-            List<RISCO> contadoresEncontrados = ControleDeRiscoNatureza.BuscarRiscosPorIDNatureza(iDNAT);
-            List<RiscoModel> resultados = new List<RiscoModel>();
-
-            contadoresEncontrados.ForEach(x =>
-            {
-                resultados.Add(InjetarEmRiscoModel(x));
-            });
-
-            return resultados;
-        }
-
-        internal static void DeletarNatureza(int codigoNatureza)
-        {
-            ControleDeRiscoNatureza.DeletarNatureza(codigoNatureza);
-        }
-
-        private static NaturezaModel RecuperarNaturezaDeRisco(int idNat)
-        {
-            NATUREZA naturezaEncontrada = ControleDeRiscoNatureza.RecuperarNaturezaPorID(idNat);
-
-            return InjetarEmNaturezaModel(naturezaEncontrada);
-        }
-
-        private static EnumRecomendacao.eventualidadeEnum ConverterEventualidadeParaEnum(string x)
-        {
-            switch (x.ToUpper())
-            {
-                case "E":
-                    return EnumRecomendacao.eventualidadeEnum.Eventual;
-                case "H":
-                    return EnumRecomendacao.eventualidadeEnum.Habitual;
-                default:
-                    return EnumRecomendacao.eventualidadeEnum.vazio;
-            }
-        }
-
-        internal static void DeletarRisco(int codigoRisco)
-        {
-            ControleDeRiscoNatureza.DeletarRisco(codigoRisco);
-        }
-
-        private static string ConverterEventualidadeParaString(EnumRecomendacao.eventualidadeEnum x)
-        {
-            switch (x)
-            {
-                case EnumRecomendacao.eventualidadeEnum.Eventual:
-                    return "E";
-                case EnumRecomendacao.eventualidadeEnum.Habitual:
-                    return "H";
-                default:
-                    return null;
-            }
-        }
-
-        internal static NaturezaModel RecuperarNaturezaPorID(int v)
-        {
-            NATUREZA naturezaEncontrada = ControleDeRiscoNatureza.BuscarNaturezaPorID(v);
-
-            return InjetarEmNaturezaModel(naturezaEncontrada);
-
-        }
-
-        internal static RiscoModel BuscarRiscoPorID(int codigoRisco)
-        {
-            RISCO riscoEncontrado = ControleDeRiscoNatureza.BuscarRiscoPorID(codigoRisco);
-
-            return InjetarEmRiscoModel(riscoEncontrado);
-        }
-
-        internal static RiscoModel SalvarRisco(FormCollection form)
-        {
-            RiscoModel riscoModel = InjetarEmRiscoModel(form);
-            riscoModel.validar();
-
-            RISCO riscoDAO = InjetarEmRiscoDAO(riscoModel);
-            riscoDAO = ControleDeRiscoNatureza.SalvarRisco(riscoDAO);
-
-            riscoModel = InjetarEmRiscoModel(riscoDAO);
-
-            return riscoModel;
-        }
-
         private static RISCO InjetarEmRiscoDAO(RiscoModel x)
         {
             if (x == null)
@@ -215,6 +190,20 @@ namespace MediCloud.Code.Recomendacao
                 };
         }
 
+        private static RiscoModel InjetarEmRiscoModel(RISCO x, bool materializarclasses = false)
+        {
+            if (x == null)
+                return null;
+            else
+                return new RiscoModel()
+                {
+                    IdRisco = (int)x.IDRISCO,
+                    NomeRisco = x.RISCO1,
+                    Eventualidade = ConverterEventualidadeParaEnum(x.EVENTUALIDADE),
+                    Natureza = materializarclasses ? RecuperarNaturezaDeRisco((int)x.IDNAT) : new NaturezaModel() { IdNatureza = (int)x.IDNAT }
+                };
+        }
+
         private static RiscoModel InjetarEmRiscoModel(FormCollection form)
         {
             return new RiscoModel()
@@ -225,5 +214,27 @@ namespace MediCloud.Code.Recomendacao
                 NomeRisco = string.IsNullOrEmpty(form["nomeRisco"]) ? null : form["nomeRisco"]
             };
         }
+
+        private static NaturezaModel RecuperarNaturezaDeRisco(int idNat)
+        {
+            NATUREZA naturezaEncontrada = ControleDeRiscoNatureza.RecuperarNaturezaPorID(idNat);
+
+            return InjetarEmNaturezaModel(naturezaEncontrada);
+        }
+
+        private static List<RiscoModel> RecuperarRiscosDeNatureza(decimal iDNAT)
+        {
+            List<RISCO> contadoresEncontrados = ControleDeRiscoNatureza.BuscarRiscosPorIDNatureza(iDNAT);
+            List<RiscoModel> resultados = new List<RiscoModel>();
+
+            contadoresEncontrados.ForEach(x =>
+            {
+                resultados.Add(InjetarEmRiscoModel(x));
+            });
+
+            return resultados;
+        }
+
+        #endregion Private Methods
     }
 }

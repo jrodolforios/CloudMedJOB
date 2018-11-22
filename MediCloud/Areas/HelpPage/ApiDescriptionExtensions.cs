@@ -7,6 +7,8 @@ namespace MediCloud.View.Areas.HelpPage
 {
     public static class ApiDescriptionExtensions
     {
+        #region Public Methods
+
         /// <summary>
         /// Generates an URI-friendly ID for the <see cref="ApiDescription"/>. E.g. "Get-Values-id_name" instead of "GetValues/{id}?name={name}"
         /// </summary>
@@ -35,5 +37,7 @@ namespace MediCloud.View.Areas.HelpPage
             }
             return friendlyPath.ToString();
         }
+
+        #endregion Public Methods
     }
 }

@@ -1,17 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
+﻿using MediCloud.BusinessProcess.Util;
 using MediCloud.DatabaseModels;
-using MediCloud.BusinessProcess.Util;
-using System.Data.Entity.Validation;
 using MediCloud.Persistence;
+using System;
+using System.Collections.Generic;
+using System.Data.Entity.Validation;
+using System.Linq;
 
 namespace MediCloud.BusinessProcess.Parametro
 {
     public class ControleDeElaboradorPPRA
     {
+        #region Public Methods
+
         public static List<EPPRA> BuscarElaboradoresPorTermo(string prefix)
         {
             CloudMedContext contexto = new CloudMedContext();
@@ -80,14 +80,12 @@ namespace MediCloud.BusinessProcess.Parametro
 
             try
             {
-
                 if (elaboradorPPRADAO.IDEPPRA > 0)
                 {
                     setorSalvo = contexto.EPPRA.First(x => x.IDEPPRA == elaboradorPPRADAO.IDEPPRA);
 
                     setorSalvo.IDEPPRA = elaboradorPPRADAO.IDEPPRA;
                     setorSalvo.ELABORADORPPRA = elaboradorPPRADAO.ELABORADORPPRA;
-
                 }
                 else
                 {
@@ -96,7 +94,6 @@ namespace MediCloud.BusinessProcess.Parametro
 
                 contexto.SaveChanges();
                 return setorSalvo;
-
             }
             catch (DbEntityValidationException ex)
             {
@@ -108,5 +105,7 @@ namespace MediCloud.BusinessProcess.Parametro
                 throw ex;
             }
         }
+
+        #endregion Public Methods
     }
 }

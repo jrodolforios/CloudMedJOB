@@ -4,15 +4,22 @@ namespace MediCloud.DatabaseModels
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
-    using System.Data.Entity.Spatial;
 
     public partial class SYS_USRCOMPONENT
     {
+        #region Public Constructors
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public SYS_USRCOMPONENT()
         {
             SYS_FICHATECNICA = new HashSet<SYS_FICHATECNICA>();
         }
+
+        #endregion Public Constructors
+
+
+
+        #region Public Properties
 
         [Key]
         [Column(TypeName = "numeric")]
@@ -44,15 +51,17 @@ namespace MediCloud.DatabaseModels
         [StringLength(300)]
         public string PARENT { get; set; }
 
-        [Required]
-        [StringLength(300)]
-        public string TIPO { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SYS_FICHATECNICA> SYS_FICHATECNICA { get; set; }
 
         public virtual SYS_USRCOLUMN SYS_USRCOLUMN { get; set; }
 
         public virtual SYS_USRFORM SYS_USRFORM { get; set; }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SYS_FICHATECNICA> SYS_FICHATECNICA { get; set; }
+        [Required]
+        [StringLength(300)]
+        public string TIPO { get; set; }
+
+        #endregion Public Properties
     }
 }

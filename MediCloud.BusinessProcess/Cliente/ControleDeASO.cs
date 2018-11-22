@@ -1,19 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MediCloud.BusinessProcess.Cliente.Reports;
+using MediCloud.BusinessProcess.Util;
 using MediCloud.DatabaseModels;
 using MediCloud.Persistence;
+using System;
+using System.Collections.Generic;
 using System.Data.Entity.Validation;
-using MediCloud.BusinessProcess.Util;
-using MediCloud.BusinessProcess.Cliente.Reports;
-using MediCloud.BusinessProcess.Recomendacao;
+using System.Linq;
 
 namespace MediCloud.BusinessProcess.Cliente
 {
     public class ControleDeASO
     {
+        #region Public Methods
+
         public static List<MOVIMENTO> buscarASO(string termo)
         {
             CloudMedContext contexto = new CloudMedContext();
@@ -42,18 +41,25 @@ namespace MediCloud.BusinessProcess.Cliente
             }
         }
 
-        public static List<MOVIMENTO> UltimosASOS()
+        public static MOVIMENTO buscarASOPorId(int idASO)
         {
             CloudMedContext contexto = new CloudMedContext();
 
             try
             {
-                return contexto.MOVIMENTO.OrderByDescending(x => x.DATAMOV).Take(5).ToList();
+                if (idASO <= 0)
+                {
+                    return null;
+                }
+                else
+                {
+                    return contexto.MOVIMENTO.First(x => x.IDMOV == idASO);
+                }
             }
             catch (DbEntityValidationException ex)
             {
                 ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
-                return new List<MOVIMENTO>();
+                return new MOVIMENTO();
             }
             catch (Exception ex)
             {
@@ -61,31 +67,78 @@ namespace MediCloud.BusinessProcess.Cliente
             }
         }
 
-        public static Dictionary<decimal, int> GraficoASOs()
+        public static decimal CalcularValorTotalDeASO(MOVIMENTO MOV)
         {
-           CloudMedContext contexto = new CloudMedContext();
-            Dictionary<decimal, int> tipo = new Dictionary<decimal, int>();
+            decimal soma = 0;
+
+            MOV.MOVIMENTO_PROCEDIMENTO.ToList().ForEach(x =>
+            {
+                soma += x.TOTAL.HasValue ? x.TOTAL.Value : 0;
+            });
+
+            return soma;
+        }
+
+        public static List<MOVIMENTO_ARQUIVOS> CarregarArquivosSemBinarios(decimal iDMOV)
+        {
+            CloudMedContext contexto = new CloudMedContext();
+            List<MOVIMENTO_ARQUIVOS> listaBancoSemBinarios = new List<MOVIMENTO_ARQUIVOS>();
+
             try
             {
-                var resultado = contexto.MOVIMENTO.GroupBy(x => x.DATA.Year).Select(g => new { g.Key, Count = g.Count() }).OrderByDescending(x => x.Key).Take(7).OrderBy(x => x.Key).ToList();
+                var lista = contexto.MOVIMENTO_ARQUIVOS.Where(x => x.IDMOV == iDMOV);
 
-                foreach (dynamic item in resultado)
+                foreach (var item in lista)
                 {
-                    tipo.Add(item.Key, item.Count);
+                    listaBancoSemBinarios.Add(new MOVIMENTO_ARQUIVOS()
+                    {
+                        DATAENVIO = item.DATAENVIO,
+                        IDARQUIVO = item.IDARQUIVO,
+                        IDMOV = item.IDMOV,
+                        MOVIMENTO = item.MOVIMENTO,
+                        NOMEARQUIVO = item.NOMEARQUIVO,
+                        ARQUIVO = null
+                    });
                 }
 
-                return tipo;
+                return listaBancoSemBinarios;
             }
             catch (DbEntityValidationException ex)
             {
                 ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
-                return new Dictionary<decimal, int>();
+                return new List<MOVIMENTO_ARQUIVOS>();
             }
             catch (Exception ex)
             {
                 throw ex;
             }
-            return new Dictionary<decimal, int>();
+        }
+
+        public static void ConfirmarASO(string login, int codigoDoMovimento)
+        {
+            CloudMedContext contexto = new CloudMedContext();
+            MOVIMENTO usuarioSalvo = new MOVIMENTO();
+
+            try
+            {
+                if (codigoDoMovimento > 0)
+                {
+                    usuarioSalvo = contexto.MOVIMENTO.First(x => x.IDMOV == codigoDoMovimento);
+
+                    usuarioSalvo.MOVIMENTO_PROCEDIMENTO.ToList().ForEach(x =>
+                    {
+                        ControleDeProcedimentosMovimento.ConfirmarExame(login, (int)x.IDMOVPRO);
+                    });
+                }
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         public static int ContagemASOsNoMes()
@@ -126,112 +179,6 @@ namespace MediCloud.BusinessProcess.Cliente
             }
         }
 
-        public static MOVIMENTO buscarASOPorId(int idASO)
-        {
-            CloudMedContext contexto = new CloudMedContext();
-
-            try
-            {
-                if (idASO <= 0)
-                {
-                    return null;
-                }
-                else
-                {
-                    return contexto.MOVIMENTO.First(x => x.IDMOV == idASO);
-                }
-            }
-            catch (DbEntityValidationException ex)
-            {
-                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
-                return new MOVIMENTO();
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        public static MOVIMENTO SalvarASO(MOVIMENTO ASODAO)
-        {
-            CloudMedContext contexto = new CloudMedContext();
-            MOVIMENTO usuarioSalvo = new MOVIMENTO();
-
-            try
-            {
-
-                if (ASODAO.IDMOV > 0)
-                {
-                    usuarioSalvo = contexto.MOVIMENTO.First(x => x.IDMOV == ASODAO.IDMOV);
-
-                    usuarioSalvo.CAIXAPENDENTE = ASODAO.CAIXAPENDENTE;
-                    usuarioSalvo.DATA = ASODAO.DATA;
-                    usuarioSalvo.DATAMOV = ASODAO.DATAMOV;
-                    usuarioSalvo.FATURA = ASODAO.FATURA;
-                    usuarioSalvo.IDCGO = ASODAO.IDCGO;
-                    usuarioSalvo.IDCLI = ASODAO.IDCLI;
-                    usuarioSalvo.IDFAT = ASODAO.IDFAT;
-                    usuarioSalvo.IDFCX = ASODAO.IDFCX;
-                    usuarioSalvo.IDFORPAG = ASODAO.IDFORPAG;
-                    usuarioSalvo.IDFUN = ASODAO.IDFUN;
-                    usuarioSalvo.IDMOV = ASODAO.IDMOV;
-                    usuarioSalvo.IDREF = ASODAO.IDREF;
-                    usuarioSalvo.IDSETOR = ASODAO.IDSETOR;
-                    usuarioSalvo.IDTAB = ASODAO.IDTAB;
-                    usuarioSalvo.OBSERVACAO = ASODAO.OBSERVACAO;
-                    usuarioSalvo.STATUS = ASODAO.STATUS;
-                    usuarioSalvo.TIPO = ASODAO.TIPO;
-                    usuarioSalvo.USUARIO = ASODAO.USUARIO;
-
-                }
-                else
-                {
-                    //ASOs novos tem seu caixa sempre pendente
-                    ASODAO.CAIXAPENDENTE = true;
-
-                    usuarioSalvo = contexto.MOVIMENTO.Add(ASODAO);
-                }
-
-                contexto.SaveChanges();
-                return usuarioSalvo;
-
-            }
-            catch (DbEntityValidationException ex)
-            {
-                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
-                return null;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        public static void MarcarASOComoEntregue(int codigoASO)
-        {
-            CloudMedContext contexto = new CloudMedContext();
-            MOVIMENTO ASOASerEntregue = null;
-            try
-            {
-                if (contexto.MOVIMENTO.Any(x => x.IDMOV == codigoASO))
-                {
-                    ASOASerEntregue = contexto.MOVIMENTO.First(x => x.IDMOV == codigoASO);
-
-                    ASOASerEntregue.STATUS = !string.IsNullOrEmpty(ASOASerEntregue.STATUS) ? (ASOASerEntregue.STATUS == "ENTREGUE" ? "PENDENTE" : "ENTREGUE") : "ENTREGUE";
-                }
-
-                contexto.SaveChanges();
-            }
-            catch (DbEntityValidationException ex)
-            {
-                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
         public static void CriarProcedimentosAPartirDeRecomendacao(int iDMOV)
         {
             List<PROCEDIMENTO> procedimentosParaAdicionar = new List<PROCEDIMENTO>();
@@ -250,12 +197,12 @@ namespace MediCloud.BusinessProcess.Cliente
                     recomendacaoReferenteProcedimentos.AddRange(contexto.RECOMENDACAOXASO.Where(y => y.IDREC == x.IDREC && mov.IDREF == y.IDREF));
                 });
 
-                recomendacaoReferenteProcedimentos.ForEach(x => 
+                recomendacaoReferenteProcedimentos.ForEach(x =>
                 {
                     recomendacaoProcedimentos.AddRange(contexto.RECOMENDACAOXASOXPRO.Where(y => y.IDRECASO == x.IDRECASO));
                 });
 
-                recomendacaoProcedimentos.ForEach(x => 
+                recomendacaoProcedimentos.ForEach(x =>
                 {
                     movimentoProcedientoParaAdicionar = new MOVIMENTO_PROCEDIMENTO()
                     {
@@ -279,34 +226,20 @@ namespace MediCloud.BusinessProcess.Cliente
             }
         }
 
-        public static List<MOVIMENTO_ARQUIVOS> CarregarArquivosSemBinarios(decimal iDMOV)
+        public static void DeletarArquivo(int codigoArquivo)
         {
             CloudMedContext contexto = new CloudMedContext();
-            List<MOVIMENTO_ARQUIVOS> listaBancoSemBinarios = new List<MOVIMENTO_ARQUIVOS>();
 
             try
             {
-                var lista = contexto.MOVIMENTO_ARQUIVOS.Where(x => x.IDMOV == iDMOV);
+                if (contexto.MOVIMENTO_ARQUIVOS.Any(x => x.IDARQUIVO == codigoArquivo))
+                    contexto.MOVIMENTO_ARQUIVOS.Remove(contexto.MOVIMENTO_ARQUIVOS.First(x => x.IDARQUIVO == codigoArquivo));
 
-                foreach (var item in lista)
-                {
-                    listaBancoSemBinarios.Add(new MOVIMENTO_ARQUIVOS()
-                    {
-                        DATAENVIO = item.DATAENVIO,
-                        IDARQUIVO = item.IDARQUIVO,
-                        IDMOV = item.IDMOV,
-                        MOVIMENTO = item.MOVIMENTO,
-                        NOMEARQUIVO = item.NOMEARQUIVO,
-                        ARQUIVO = null
-                    });
-                }
-
-                return listaBancoSemBinarios;
+                contexto.SaveChanges();
             }
             catch (DbEntityValidationException ex)
             {
                 ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
-                return new List<MOVIMENTO_ARQUIVOS>();
             }
             catch (Exception ex)
             {
@@ -314,22 +247,104 @@ namespace MediCloud.BusinessProcess.Cliente
             }
         }
 
-        public static void SalvarArquivo(byte[] fileData, string fileName, int codigoASO)
+        public static Dictionary<decimal, int> GraficoASOs()
         {
             CloudMedContext contexto = new CloudMedContext();
-
+            Dictionary<decimal, int> tipo = new Dictionary<decimal, int>();
             try
             {
-                MOVIMENTO_ARQUIVOS arquivo = new MOVIMENTO_ARQUIVOS()
-                {
-                    ARQUIVO = fileData,
-                    DATAENVIO = DateTime.Now,
-                    IDARQUIVO = 0,
-                    IDMOV = codigoASO,
-                    NOMEARQUIVO = fileName
-                };
+                var resultado = contexto.MOVIMENTO.GroupBy(x => x.DATA.Year).Select(g => new { g.Key, Count = g.Count() }).OrderByDescending(x => x.Key).Take(7).OrderBy(x => x.Key).ToList();
 
-                contexto.MOVIMENTO_ARQUIVOS.Add(arquivo);
+                foreach (dynamic item in resultado)
+                {
+                    tipo.Add(item.Key, item.Count);
+                }
+
+                return tipo;
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+                return new Dictionary<decimal, int>();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static byte[] ImprimirASOComMedCoord(int codigoASO)
+        {
+            MOVIMENTO aso = ControleDeASO.buscarASOPorId(codigoASO);
+            INFORMACOES_CLINICA infoClinica = Util.Util.RecuperarInformacoesDaClinica();
+
+            ASOReports Report = new ASOReports(infoClinica, aso, recuperarNaturezaERiscosDeASO(aso), Util.Enum.Cliente.ASOReportEnum.imprimirComMedCoord);
+
+            return Report.generate();
+        }
+
+        public static byte[] ImprimirASOSemMedCoord(int codigoASO)
+        {
+            MOVIMENTO aso = ControleDeASO.buscarASOPorId(codigoASO);
+            INFORMACOES_CLINICA infoClinica = Util.Util.RecuperarInformacoesDaClinica();
+
+            ASOReports Report = new ASOReports(infoClinica, aso, recuperarNaturezaERiscosDeASO(aso), Util.Enum.Cliente.ASOReportEnum.imprimirSemMedCoord);
+
+            return Report.generate();
+        }
+
+        public static byte[] ImprimirFichaClinica(int codigoASO)
+        {
+            MOVIMENTO aso = ControleDeASO.buscarASOPorId(codigoASO);
+            INFORMACOES_CLINICA infoClinica = Util.Util.RecuperarInformacoesDaClinica();
+
+            ASOReports Report = new ASOReports(aso, Util.Enum.Cliente.ASOReportEnum.imprimirFichaClinica, infoClinica);
+
+            return Report.generate();
+        }
+
+        public static byte[] ImprimirListaDeProcedimentos(int codigoASO)
+        {
+            MOVIMENTO aso = ControleDeASO.buscarASOPorId(codigoASO);
+            INFORMACOES_CLINICA infoClinica = Util.Util.RecuperarInformacoesDaClinica();
+
+            ASOReports Report = new ASOReports(aso, Util.Enum.Cliente.ASOReportEnum.imprimirListaDeProcedimentos, infoClinica);
+
+            return Report.generate();
+        }
+
+        public static byte[] ImprimirOrdemDeServico(int codigoASO)
+        {
+            MOVIMENTO aso = ControleDeASO.buscarASOPorId(codigoASO);
+            INFORMACOES_CLINICA infoClinica = Util.Util.RecuperarInformacoesDaClinica();
+
+            ASOReports Report = new ASOReports(aso, Util.Enum.Cliente.ASOReportEnum.imprimirOrdemServicoASO, infoClinica);
+
+            return Report.generate();
+        }
+
+        public static byte[] ImprimirReciboASO(int codigoASO)
+        {
+            MOVIMENTO aso = ControleDeASO.buscarASOPorId(codigoASO);
+            INFORMACOES_CLINICA infoClinica = Util.Util.RecuperarInformacoesDaClinica();
+
+            ASOReports Report = new ASOReports(infoClinica, aso, recuperarNaturezaERiscosDeASO(aso), Util.Enum.Cliente.ASOReportEnum.imprimirReciboASO);
+
+            return Report.generate();
+        }
+
+        public static void MarcarASOComoEntregue(int codigoASO)
+        {
+            CloudMedContext contexto = new CloudMedContext();
+            MOVIMENTO ASOASerEntregue = null;
+            try
+            {
+                if (contexto.MOVIMENTO.Any(x => x.IDMOV == codigoASO))
+                {
+                    ASOASerEntregue = contexto.MOVIMENTO.First(x => x.IDMOV == codigoASO);
+
+                    ASOASerEntregue.STATUS = !string.IsNullOrEmpty(ASOASerEntregue.STATUS) ? (ASOASerEntregue.STATUS == "ENTREGUE" ? "PENDENTE" : "ENTREGUE") : "ENTREGUE";
+                }
 
                 contexto.SaveChanges();
             }
@@ -363,38 +378,6 @@ namespace MediCloud.BusinessProcess.Cliente
             {
                 throw ex;
             }
-        }
-
-        public static void DeletarArquivo(int codigoArquivo)
-        {
-            CloudMedContext contexto = new CloudMedContext();
-
-            try
-            {
-                if (contexto.MOVIMENTO_ARQUIVOS.Any(x => x.IDARQUIVO == codigoArquivo))
-                    contexto.MOVIMENTO_ARQUIVOS.Remove(contexto.MOVIMENTO_ARQUIVOS.First(x => x.IDARQUIVO == codigoArquivo));
-
-                contexto.SaveChanges();
-
-            }
-            catch (DbEntityValidationException ex)
-            {
-                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        public static byte[] ImprimirASOComMedCoord(int codigoASO)
-        {
-            MOVIMENTO aso = ControleDeASO.buscarASOPorId(codigoASO);
-            INFORMACOES_CLINICA infoClinica = Util.Util.RecuperarInformacoesDaClinica();
-
-            ASOReports Report = new ASOReports(infoClinica, aso, recuperarNaturezaERiscosDeASO(aso), Util.Enum.Cliente.ASOReportEnum.imprimirComMedCoord);
-
-            return Report.generate();
         }
 
         public static Dictionary<NATUREZA, List<RISCO>> recuperarNaturezaERiscosDeASO(MOVIMENTO mov)
@@ -442,23 +425,24 @@ namespace MediCloud.BusinessProcess.Cliente
             return naturezasERiscos;
         }
 
-        public static void ConfirmarASO(string login, int codigoDoMovimento)
+        public static void SalvarArquivo(byte[] fileData, string fileName, int codigoASO)
         {
             CloudMedContext contexto = new CloudMedContext();
-            MOVIMENTO usuarioSalvo = new MOVIMENTO();
 
             try
             {
-
-                if (codigoDoMovimento > 0)
+                MOVIMENTO_ARQUIVOS arquivo = new MOVIMENTO_ARQUIVOS()
                 {
-                    usuarioSalvo = contexto.MOVIMENTO.First(x => x.IDMOV == codigoDoMovimento);
+                    ARQUIVO = fileData,
+                    DATAENVIO = DateTime.Now,
+                    IDARQUIVO = 0,
+                    IDMOV = codigoASO,
+                    NOMEARQUIVO = fileName
+                };
 
-                    usuarioSalvo.MOVIMENTO_PROCEDIMENTO.ToList().ForEach(x =>
-                    {
-                        ControleDeProcedimentosMovimento.ConfirmarExame(login, (int)x.IDMOVPRO);
-                    });
-                }
+                contexto.MOVIMENTO_ARQUIVOS.Add(arquivo);
+
+                contexto.SaveChanges();
             }
             catch (DbEntityValidationException ex)
             {
@@ -470,66 +454,77 @@ namespace MediCloud.BusinessProcess.Cliente
             }
         }
 
-        public static byte[] ImprimirOrdemDeServico(int codigoASO)
+        public static MOVIMENTO SalvarASO(MOVIMENTO ASODAO)
         {
-            MOVIMENTO aso = ControleDeASO.buscarASOPorId(codigoASO);
-            INFORMACOES_CLINICA infoClinica = Util.Util.RecuperarInformacoesDaClinica();
+            CloudMedContext contexto = new CloudMedContext();
+            MOVIMENTO usuarioSalvo = new MOVIMENTO();
 
-            ASOReports Report = new ASOReports(aso, Util.Enum.Cliente.ASOReportEnum.imprimirOrdemServicoASO, infoClinica);
-
-            return Report.generate();
-        }
-
-        public static byte[] ImprimirFichaClinica(int codigoASO)
-        {
-            MOVIMENTO aso = ControleDeASO.buscarASOPorId(codigoASO);
-            INFORMACOES_CLINICA infoClinica = Util.Util.RecuperarInformacoesDaClinica();
-
-            ASOReports Report = new ASOReports(aso, Util.Enum.Cliente.ASOReportEnum.imprimirFichaClinica, infoClinica);
-
-            return Report.generate();
-        }
-
-        public static byte[] ImprimirListaDeProcedimentos(int codigoASO)
-        {
-            MOVIMENTO aso = ControleDeASO.buscarASOPorId(codigoASO);
-            INFORMACOES_CLINICA infoClinica = Util.Util.RecuperarInformacoesDaClinica();
-
-            ASOReports Report = new ASOReports(aso, Util.Enum.Cliente.ASOReportEnum.imprimirListaDeProcedimentos, infoClinica);
-
-            return Report.generate();
-        }
-
-        public static byte[] ImprimirASOSemMedCoord(int codigoASO)
-        {
-            MOVIMENTO aso = ControleDeASO.buscarASOPorId(codigoASO);
-            INFORMACOES_CLINICA infoClinica = Util.Util.RecuperarInformacoesDaClinica();
-
-            ASOReports Report = new ASOReports(infoClinica, aso, recuperarNaturezaERiscosDeASO(aso), Util.Enum.Cliente.ASOReportEnum.imprimirSemMedCoord);
-
-            return Report.generate();
-        }
-
-        public static byte[] ImprimirReciboASO(int codigoASO)
-        {
-            MOVIMENTO aso = ControleDeASO.buscarASOPorId(codigoASO);
-            INFORMACOES_CLINICA infoClinica = Util.Util.RecuperarInformacoesDaClinica();
-
-            ASOReports Report = new ASOReports(infoClinica, aso, recuperarNaturezaERiscosDeASO(aso), Util.Enum.Cliente.ASOReportEnum.imprimirReciboASO);
-
-            return Report.generate();
-        }
-
-        public static decimal CalcularValorTotalDeASO(MOVIMENTO MOV)
-        {
-            decimal soma = 0;
-
-            MOV.MOVIMENTO_PROCEDIMENTO.ToList().ForEach(x =>
+            try
             {
-                soma += x.TOTAL.HasValue ? x.TOTAL.Value : 0;
-            });
+                if (ASODAO.IDMOV > 0)
+                {
+                    usuarioSalvo = contexto.MOVIMENTO.First(x => x.IDMOV == ASODAO.IDMOV);
 
-            return soma;
+                    usuarioSalvo.CAIXAPENDENTE = ASODAO.CAIXAPENDENTE;
+                    usuarioSalvo.DATA = ASODAO.DATA;
+                    usuarioSalvo.DATAMOV = ASODAO.DATAMOV;
+                    usuarioSalvo.FATURA = ASODAO.FATURA;
+                    usuarioSalvo.IDCGO = ASODAO.IDCGO;
+                    usuarioSalvo.IDCLI = ASODAO.IDCLI;
+                    usuarioSalvo.IDFAT = ASODAO.IDFAT;
+                    usuarioSalvo.IDFCX = ASODAO.IDFCX;
+                    usuarioSalvo.IDFORPAG = ASODAO.IDFORPAG;
+                    usuarioSalvo.IDFUN = ASODAO.IDFUN;
+                    usuarioSalvo.IDMOV = ASODAO.IDMOV;
+                    usuarioSalvo.IDREF = ASODAO.IDREF;
+                    usuarioSalvo.IDSETOR = ASODAO.IDSETOR;
+                    usuarioSalvo.IDTAB = ASODAO.IDTAB;
+                    usuarioSalvo.OBSERVACAO = ASODAO.OBSERVACAO;
+                    usuarioSalvo.STATUS = ASODAO.STATUS;
+                    usuarioSalvo.TIPO = ASODAO.TIPO;
+                    usuarioSalvo.USUARIO = ASODAO.USUARIO;
+                }
+                else
+                {
+                    //ASOs novos tem seu caixa sempre pendente
+                    ASODAO.CAIXAPENDENTE = true;
+
+                    usuarioSalvo = contexto.MOVIMENTO.Add(ASODAO);
+                }
+
+                contexto.SaveChanges();
+                return usuarioSalvo;
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+                return null;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
+
+        public static List<MOVIMENTO> UltimosASOS()
+        {
+            CloudMedContext contexto = new CloudMedContext();
+
+            try
+            {
+                return contexto.MOVIMENTO.OrderByDescending(x => x.DATAMOV).Take(5).ToList();
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+                return new List<MOVIMENTO>();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        #endregion Public Methods
     }
 }

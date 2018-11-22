@@ -1,26 +1,37 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using MediCloud.BusinessProcess.Parametro;
 using MediCloud.DatabaseModels;
 using MediCloud.Models.Parametro;
-using MediCloud.BusinessProcess.Parametro;
+using System;
+using System.Collections.Generic;
 using System.Web.Mvc;
 
 namespace MediCloud.Code.Parametro
 {
     public class CadastroDeSegmento
     {
+        #region Internal Methods
+
+        internal static SegmentoModel buscarSegmentoPorID(int v)
+        {
+            SEGMENTO segmentoEncontrado = ControleDeSegmento.BuscarSegmentoPorID(v);
+            return InjetarEmUsuarioModel(segmentoEncontrado);
+        }
+
+        internal static void DeletarSegmento(int codigoSegmento)
+        {
+            ControleDeSegmento.DeletarSegmento(codigoSegmento);
+        }
+
         internal static SegmentoModel InjetarEmUsuarioModel(SEGMENTO sEGMENTO)
         {
             if (sEGMENTO == null)
                 return null;
             else
                 return new SegmentoModel()
-            {
-                IdSegmento = (int)sEGMENTO.IDSEG,
-                NomeSegmento = sEGMENTO.SEGMENTO1
-            };
+                {
+                    IdSegmento = (int)sEGMENTO.IDSEG,
+                    NomeSegmento = sEGMENTO.SEGMENTO1
+                };
         }
 
         internal static List<SegmentoModel> RecuperarSegmentoPorTermo(string prefix)
@@ -51,18 +62,6 @@ namespace MediCloud.Code.Parametro
             return resultados;
         }
 
-        internal static SegmentoModel buscarSegmentoPorID(int v)
-        {
-
-            SEGMENTO segmentoEncontrado = ControleDeSegmento.BuscarSegmentoPorID(v);
-            return InjetarEmUsuarioModel(segmentoEncontrado);
-        }
-
-        internal static void DeletarSegmento(int codigoSegmento)
-        {
-            ControleDeSegmento.DeletarSegmento(codigoSegmento);
-        }
-
         internal static SegmentoModel SalvarSegmento(FormCollection form)
         {
             SegmentoModel usuarioModel = InjetarEmUsuarioModel(form);
@@ -75,6 +74,12 @@ namespace MediCloud.Code.Parametro
 
             return usuarioModel;
         }
+
+        #endregion Internal Methods
+
+
+
+        #region Private Methods
 
         private static SEGMENTO InjetarEmUsuarioDAO(SegmentoModel usuarioModel)
         {
@@ -96,5 +101,7 @@ namespace MediCloud.Code.Parametro
                 NomeSegmento = string.IsNullOrEmpty(form["nomeSegmento"]) ? null : form["nomeSegmento"]
             };
         }
+
+        #endregion Private Methods
     }
 }

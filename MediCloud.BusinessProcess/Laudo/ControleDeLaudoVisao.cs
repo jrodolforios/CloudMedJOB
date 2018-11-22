@@ -1,18 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MediCloud.BusinessProcess.Laudo.Reports;
+using MediCloud.BusinessProcess.Util;
 using MediCloud.DatabaseModels;
 using MediCloud.Persistence;
+using System;
+using System.Collections.Generic;
 using System.Data.Entity.Validation;
-using MediCloud.BusinessProcess.Util;
-using MediCloud.BusinessProcess.Laudo.Reports;
+using System.Linq;
 
 namespace MediCloud.BusinessProcess.Laudo
 {
     public class ControleDeLaudoVisao
     {
+        #region Public Methods
+
         public static List<LAUDOAV> buscarLaudoAudio(string termo)
         {
             CloudMedContext contexto = new CloudMedContext();
@@ -82,6 +82,16 @@ namespace MediCloud.BusinessProcess.Laudo
             }
         }
 
+        public static byte[] ImprimirLaudo(int codigoLaudo)
+        {
+            LAUDOAV laudoVisao = ControleDeLaudoVisao.buscarLaudoVisaoPorId(codigoLaudo);
+            INFORMACOES_CLINICA infoClinica = Util.Util.RecuperarInformacoesDaClinica();
+
+            LaudoReports Report = new LaudoReports(laudoVisao, Util.Enum.Laudo.LaudoReportEnum.imprimirLaudoVisao, infoClinica);
+
+            return Report.generate();
+        }
+
         public static LAUDOAV SalvarLaudoVisao(LAUDOAV s)
         {
             CloudMedContext contexto = new CloudMedContext();
@@ -89,7 +99,6 @@ namespace MediCloud.BusinessProcess.Laudo
 
             try
             {
-
                 if (s.IDLAUDO > 0)
                 {
                     a = contexto.LAUDOAV.First(x => x.IDLAUDO == s.IDLAUDO);
@@ -114,7 +123,6 @@ namespace MediCloud.BusinessProcess.Laudo
 
                 contexto.SaveChanges();
                 return a;
-
             }
             catch (DbEntityValidationException ex)
             {
@@ -127,14 +135,6 @@ namespace MediCloud.BusinessProcess.Laudo
             }
         }
 
-        public static byte[] ImprimirLaudo(int codigoLaudo)
-        {
-            LAUDOAV laudoVisao = ControleDeLaudoVisao.buscarLaudoVisaoPorId(codigoLaudo);
-            INFORMACOES_CLINICA infoClinica = Util.Util.RecuperarInformacoesDaClinica();
-
-            LaudoReports Report = new LaudoReports(laudoVisao, Util.Enum.Laudo.LaudoReportEnum.imprimirLaudoVisao, infoClinica);
-
-            return Report.generate();
-        }
+        #endregion Public Methods
     }
 }

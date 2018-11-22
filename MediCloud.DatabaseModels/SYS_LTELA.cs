@@ -1,13 +1,16 @@
 namespace MediCloud.DatabaseModels
 {
     using System;
-    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
-    using System.Data.Entity.Spatial;
 
     public partial class SYS_LTELA
     {
+        #region Public Properties
+
+        [StringLength(100)]
+        public string CATEGORIA_FT { get; set; }
+
         [Key]
         [Column(TypeName = "numeric")]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -30,9 +33,8 @@ namespace MediCloud.DatabaseModels
         [Required]
         public byte[] PROPCOMPONENTE { get; set; }
 
-        [StringLength(100)]
-        public string CATEGORIA_FT { get; set; }
-
         public virtual SYS_USUARIO SYS_USUARIO { get; set; }
+
+        #endregion Public Properties
     }
 }

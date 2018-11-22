@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
-using iTextSharp2.text;
-using iTextSharp2.text.pdf;
+﻿using iTextSharp2.text;
 using iTextSharp2.text.html.simpleparser;
+using iTextSharp2.text.pdf;
 using System.Drawing.Printing;
+using System.IO;
 using TuesPechkin;
 
 namespace MediCLoud.Pdf.Entity
@@ -32,14 +28,20 @@ namespace MediCLoud.Pdf.Entity
         //    return document;
         //}
 
+
+
+        #region Public Methods
+
         public byte[] Parse(string html)
         {
             return Parse(html, 5f, 5f, 5f, 5f);
         }
+
         public byte[] Parse(string html, double marginTop, double marginRight, double marginBottom, double marginLeft, TuesPechkin.Unit unit)
         {
             return Parse(html, (float)marginLeft, (float)marginRight, (float)marginTop, (float)marginBottom);
         }
+
         public byte[] Parse(string html, float marginLeft, float marginRight, float marginTop, float marginBottom)
         {
             byte[] bytes = new byte[] { };
@@ -77,16 +79,58 @@ namespace MediCLoud.Pdf.Entity
 
             return bytes;
         }
-        public byte[] ParseOrientacao(string html, TipoOrientacaoPdf orientacao)
-        {
-            MemoryStream memoryStream = new MemoryStream();
-            return memoryStream.ToArray();
-        }
+
         public byte[] ParseCupomFiscal(string html)
         {
             MemoryStream memoryStream = new MemoryStream();
             return memoryStream.ToArray();
         }
+
+        public byte[] ParseOrientacao(string html, TipoOrientacaoPdf orientacao)
+        {
+            MemoryStream memoryStream = new MemoryStream();
+            return memoryStream.ToArray();
+        }
+
+        public byte[] ParseOrientacaoFooterFixo(string html, TipoOrientacaoPdf orientacao, string footer)
+        {
+            HtmlToPdfDocument document = new HtmlToPdfDocument
+            {
+                GlobalSettings =
+                {
+                    ProduceOutline = true,
+                    //DocumentTitle = "Pretty Websites",/
+                    PaperSize = PaperKind.A4, // Implicit conversion to PechkinPaperSize
+                    Margins =
+                    {
+                        All = 0.5,
+                        Unit = Unit.Centimeters
+                    },
+                    Orientation = PdfTuesPechkin.CreateOrientacao(orientacao)
+                },
+                Objects = {
+                    new ObjectSettings {
+                        HtmlText = html,
+                        ProduceExternalLinks = true,
+                        HeaderSettings = {
+                        },
+                        FooterSettings = {
+                            HtmlUrl = footer,
+                        },
+                        LoadSettings = {
+                            ZoomFactor = 0,
+                        },
+                        WebSettings = {
+                             LoadImages = true,
+                             PrintBackground= true,
+                             PrintMediaType = true,
+                        }
+                    }
+                }
+            };
+            return TuesPechkin.Factory.Create().Convert(document);
+        }
+
         public byte[] ParseTipoPapel(string html, string largura, string altura, double marginTop, double marginRight, double marginBottom, double marginLeft, TuesPechkin.Unit unit)
         {
             MemoryStream memoryStream = new MemoryStream();
@@ -134,44 +178,6 @@ namespace MediCLoud.Pdf.Entity
             return bytes;
         }
 
-        public byte[] ParseOrientacaoFooterFixo(string html, TipoOrientacaoPdf orientacao, string footer)
-        {
-            HtmlToPdfDocument document = new HtmlToPdfDocument
-            {
-                GlobalSettings =
-                {
-                    ProduceOutline = true,
-                    //DocumentTitle = "Pretty Websites",/
-                    PaperSize = PaperKind.A4, // Implicit conversion to PechkinPaperSize
-                    Margins =
-                    {
-                        All = 0.5,
-                        Unit = Unit.Centimeters
-                    },
-                    Orientation = PdfTuesPechkin.CreateOrientacao(orientacao)
-                },
-                Objects = {
-                    new ObjectSettings {
-                        HtmlText = html,
-                        ProduceExternalLinks = true,
-                        HeaderSettings = { 
-                        },
-                        FooterSettings = {
-                            HtmlUrl = footer,                            
-                        },
-                        LoadSettings = {
-                            ZoomFactor = 0,
-                        },
-                        WebSettings = {
-                             LoadImages = true,
-                             PrintBackground= true,
-                             PrintMediaType = true,
-                        }
-                        
-                    }
-                }
-            };
-            return TuesPechkin.Factory.Create().Convert(document);
-        }
+        #endregion Public Methods
     }
 }

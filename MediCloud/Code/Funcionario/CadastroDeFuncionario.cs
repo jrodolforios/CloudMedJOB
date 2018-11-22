@@ -60,7 +60,7 @@ namespace MediCloud.Code.Funcionario
                     CodigoNexo = x.CODNEXO,
                     CTPS = x.CTPS,
                     DataNascimento = x.NASCIMENTO,
-                    Empresa = CadastroDeClientes.RecuperarClientePorID((int)x.IDCLI, materializarClasses),
+                    Empresa = CadastroDeClientes.RecuperarClientePorID(x.IDCLI.HasValue ? (int)x.IDCLI.Value : 0, materializarClasses),
                     Endereco = x.ENDERECO,
                     IdFuncionario = (int)x.IDFUN,
                     Inativo = x.INATIVO,

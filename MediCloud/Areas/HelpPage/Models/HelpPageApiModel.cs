@@ -1,8 +1,8 @@
+using MediCloud.View.Areas.HelpPage.ModelDescriptions;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Net.Http.Headers;
 using System.Web.Http.Description;
-using MediCloud.View.Areas.HelpPage.ModelDescriptions;
 
 namespace MediCloud.View.Areas.HelpPage.Models
 {
@@ -11,6 +11,8 @@ namespace MediCloud.View.Areas.HelpPage.Models
     /// </summary>
     public class HelpPageApiModel
     {
+        #region Public Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="HelpPageApiModel"/> class.
         /// </summary>
@@ -22,25 +24,21 @@ namespace MediCloud.View.Areas.HelpPage.Models
             ErrorMessages = new Collection<string>();
         }
 
+        #endregion Public Constructors
+
+
+
+        #region Public Properties
+
         /// <summary>
         /// Gets or sets the <see cref="ApiDescription"/> that describes the API.
         /// </summary>
         public ApiDescription ApiDescription { get; set; }
 
         /// <summary>
-        /// Gets or sets the <see cref="ParameterDescription"/> collection that describes the URI parameters for the API.
+        /// Gets the error messages associated with this model.
         /// </summary>
-        public Collection<ParameterDescription> UriParameters { get; private set; }
-
-        /// <summary>
-        /// Gets or sets the documentation for the request.
-        /// </summary>
-        public string RequestDocumentation { get; set; }
-
-        /// <summary>
-        /// Gets or sets the <see cref="ModelDescription"/> that describes the request body.
-        /// </summary>
-        public ModelDescription RequestModelDescription { get; set; }
+        public Collection<string> ErrorMessages { get; private set; }
 
         /// <summary>
         /// Gets the request body parameter descriptions.
@@ -52,6 +50,16 @@ namespace MediCloud.View.Areas.HelpPage.Models
                 return GetParameterDescriptions(RequestModelDescription);
             }
         }
+
+        /// <summary>
+        /// Gets or sets the documentation for the request.
+        /// </summary>
+        public string RequestDocumentation { get; set; }
+
+        /// <summary>
+        /// Gets or sets the <see cref="ModelDescription"/> that describes the request body.
+        /// </summary>
+        public ModelDescription RequestModelDescription { get; set; }
 
         /// <summary>
         /// Gets or sets the <see cref="ModelDescription"/> that describes the resource.
@@ -80,9 +88,15 @@ namespace MediCloud.View.Areas.HelpPage.Models
         public IDictionary<MediaTypeHeaderValue, object> SampleResponses { get; private set; }
 
         /// <summary>
-        /// Gets the error messages associated with this model.
+        /// Gets or sets the <see cref="ParameterDescription"/> collection that describes the URI parameters for the API.
         /// </summary>
-        public Collection<string> ErrorMessages { get; private set; }
+        public Collection<ParameterDescription> UriParameters { get; private set; }
+
+        #endregion Public Properties
+
+
+
+        #region Private Methods
 
         private static IList<ParameterDescription> GetParameterDescriptions(ModelDescription modelDescription)
         {
@@ -104,5 +118,7 @@ namespace MediCloud.View.Areas.HelpPage.Models
 
             return null;
         }
+
+        #endregion Private Methods
     }
 }

@@ -23,17 +23,11 @@ namespace MediCloud.Code.Financeiro.Reports
                 DataFinal = string.IsNullOrEmpty(form["dataExameFim"]) ? null : (DateTime?)Convert.ToDateTime(form["dataExameFim"])
             };
 
-            IntervaloDeDatasModel dataDoMovimento = new IntervaloDeDatasModel()
-            {
-                DataInicial = string.IsNullOrEmpty(form["dataMovimentoInicio"]) ? null : (DateTime?)Convert.ToDateTime(form["dataMovimentoInicio"]),
-                DataFinal = string.IsNullOrEmpty(form["dataMovimentoFim"]) ? null : (DateTime?)Convert.ToDateTime(form["dataMovimentoFim"])
-            };
-
             int idFuncionario = string.IsNullOrEmpty(form["idFuncionario"]) ? 0 : Convert.ToInt32(form["idFuncionario"]);
             int idCliente = string.IsNullOrEmpty(form["idCliente"]) ? 0 : Convert.ToInt32(form["idCliente"]);
             #endregion
 
-            return ControleDeRelatoriosFinanceiros.ImprimirRelatorioDeMovimentos(idProcedimento,IdProfissional, idFornecedor, dataDoExame.DataInicial, dataDoExame.DataFinal, dataDoMovimento.DataInicial, dataDoMovimento.DataFinal, idFuncionario, idCliente);
+            return ControleDeRelatoriosFinanceiros.ImprimirRelatorioDeMovimentos(idProcedimento,IdProfissional, idFornecedor, dataDoExame.DataInicial, dataDoExame.DataFinal, idFuncionario, idCliente);
         }
 
         internal static byte[] GerarRelatorioAnaliticoDeFaturamento(FormCollection form)

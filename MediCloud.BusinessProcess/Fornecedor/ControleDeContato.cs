@@ -1,18 +1,18 @@
 ﻿using MediCloud.BusinessProcess.Util;
+using MediCloud.DatabaseModels;
 using MediCloud.Persistence;
+using Phidelis.Criptografia.Criptors;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity.Validation;
-using System.IO;
 using System.Linq;
-using System.Text;
-using MediCloud.DatabaseModels;
-using Phidelis.Criptografia.Criptors;
 
 namespace MediCloud.BusinessProcess.Fornecedor
 {
     public class ControleDeContato
     {
+        #region Public Methods
+
         public static void ExcluirContato(int codigoDoContato)
         {
             CloudMedContext contexto = new CloudMedContext();
@@ -33,43 +33,19 @@ namespace MediCloud.BusinessProcess.Fornecedor
             }
         }
 
-        public static CLIENTE_CONTATO SalvarContato(CLIENTE_CONTATO contatoDAO)
+        public static void ExcluirContatoFornecedor(int codigoDoContatoFornecedor)
         {
             CloudMedContext contexto = new CloudMedContext();
-            CLIENTE_CONTATO usuarioSalvo = new CLIENTE_CONTATO();
-            MD5Criptor criptor = new MD5Criptor();
-
             try
             {
-
-                if (contatoDAO.IDCON > 0)
-                {
-                    usuarioSalvo = contexto.CLIENTE_CONTATO.First(x => x.IDCON == contatoDAO.IDCON);
-
-                    usuarioSalvo.DEPARTAMENTO = contatoDAO.DEPARTAMENTO;
-                    usuarioSalvo.EMAIL = contatoDAO.EMAIL;
-                    usuarioSalvo.FONEFIXO = contatoDAO.FONEFIXO;
-                    usuarioSalvo.FONEMOVEL = contatoDAO.FONEMOVEL;
-                    usuarioSalvo.FUNCAO = contatoDAO.FUNCAO;
-                    usuarioSalvo.IDCLI = contatoDAO.IDCLI;
-                    usuarioSalvo.NASCIMENTO = contatoDAO.NASCIMENTO;
-                    usuarioSalvo.NOME = contatoDAO.NOME;
-                    usuarioSalvo.OBS = contatoDAO.OBS;
-
-                }
-                else
-                {
-                    usuarioSalvo = contexto.CLIENTE_CONTATO.Add(contatoDAO);
-                }
+                if (contexto.FORNECEDOR_CONTATO.Any(x => x.IDCON == codigoDoContatoFornecedor))
+                    contexto.FORNECEDOR_CONTATO.Remove(contexto.FORNECEDOR_CONTATO.First(x => x.IDCON == codigoDoContatoFornecedor));
 
                 contexto.SaveChanges();
-                return usuarioSalvo;
-
             }
             catch (DbEntityValidationException ex)
             {
                 ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
-                return null;
             }
             catch (Exception ex)
             {
@@ -77,19 +53,20 @@ namespace MediCloud.BusinessProcess.Fornecedor
             }
         }
 
-        public static void ExcluirContatoFornecedor(int codigoDoContatoFornecedor)
+        public static FORNECEDOR_CONTATO recuperarContatoFornecedorPorID(int codigoDoContatoFornecedor)
         {
             CloudMedContext contexto = new CloudMedContext();
             try
             {
                 if (contexto.FORNECEDOR_CONTATO.Any(x => x.IDCON == codigoDoContatoFornecedor))
-                contexto.FORNECEDOR_CONTATO.Remove(contexto.FORNECEDOR_CONTATO.First(x => x.IDCON == codigoDoContatoFornecedor));
-
-                contexto.SaveChanges();
+                    return contexto.FORNECEDOR_CONTATO.Where(x => x.IDCON == codigoDoContatoFornecedor).First();
+                else
+                    return null;
             }
             catch (DbEntityValidationException ex)
             {
                 ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+                return null;
             }
             catch (Exception ex)
             {
@@ -133,15 +110,35 @@ namespace MediCloud.BusinessProcess.Fornecedor
             }
         }
 
-        public static FORNECEDOR_CONTATO recuperarContatoFornecedorPorID(int codigoDoContatoFornecedor)
+        public static CLIENTE_CONTATO SalvarContato(CLIENTE_CONTATO contatoDAO)
         {
             CloudMedContext contexto = new CloudMedContext();
+            CLIENTE_CONTATO usuarioSalvo = new CLIENTE_CONTATO();
+            MD5Criptor criptor = new MD5Criptor();
+
             try
             {
-                if (contexto.FORNECEDOR_CONTATO.Any(x => x.IDCON == codigoDoContatoFornecedor))
-                    return contexto.FORNECEDOR_CONTATO.Where(x => x.IDCON == codigoDoContatoFornecedor).First();
+                if (contatoDAO.IDCON > 0)
+                {
+                    usuarioSalvo = contexto.CLIENTE_CONTATO.First(x => x.IDCON == contatoDAO.IDCON);
+
+                    usuarioSalvo.DEPARTAMENTO = contatoDAO.DEPARTAMENTO;
+                    usuarioSalvo.EMAIL = contatoDAO.EMAIL;
+                    usuarioSalvo.FONEFIXO = contatoDAO.FONEFIXO;
+                    usuarioSalvo.FONEMOVEL = contatoDAO.FONEMOVEL;
+                    usuarioSalvo.FUNCAO = contatoDAO.FUNCAO;
+                    usuarioSalvo.IDCLI = contatoDAO.IDCLI;
+                    usuarioSalvo.NASCIMENTO = contatoDAO.NASCIMENTO;
+                    usuarioSalvo.NOME = contatoDAO.NOME;
+                    usuarioSalvo.OBS = contatoDAO.OBS;
+                }
                 else
-                    return null;
+                {
+                    usuarioSalvo = contexto.CLIENTE_CONTATO.Add(contatoDAO);
+                }
+
+                contexto.SaveChanges();
+                return usuarioSalvo;
             }
             catch (DbEntityValidationException ex)
             {
@@ -161,7 +158,6 @@ namespace MediCloud.BusinessProcess.Fornecedor
 
             try
             {
-
                 if (contatoDAO.IDCON > 0)
                 {
                     usuarioSalvo = contexto.FORNECEDOR_CONTATO.First(x => x.IDCON == contatoDAO.IDCON);
@@ -175,7 +171,6 @@ namespace MediCloud.BusinessProcess.Fornecedor
                     usuarioSalvo.NASCIMENTO = contatoDAO.NASCIMENTO;
                     usuarioSalvo.NOME = contatoDAO.NOME;
                     usuarioSalvo.OBS = contatoDAO.OBS;
-
                 }
                 else
                 {
@@ -184,7 +179,6 @@ namespace MediCloud.BusinessProcess.Fornecedor
 
                 contexto.SaveChanges();
                 return usuarioSalvo;
-
             }
             catch (DbEntityValidationException ex)
             {
@@ -196,5 +190,7 @@ namespace MediCloud.BusinessProcess.Fornecedor
                 throw ex;
             }
         }
+
+        #endregion Public Methods
     }
 }

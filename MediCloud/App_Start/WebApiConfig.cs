@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
+﻿using Microsoft.Owin.Security.OAuth;
 using System.Web.Http;
-using Microsoft.Owin.Security.OAuth;
-using Newtonsoft.Json.Serialization;
 
 namespace MediCloud.View
 {
     public static class WebApiConfig
     {
+        #region Public Methods
+
         public static void Register(HttpConfiguration config)
         {
             // Web API configuration and services
@@ -26,5 +23,7 @@ namespace MediCloud.View
                 defaults: new { id = RouteParameter.Optional }
             );
         }
+
+        #endregion Public Methods
     }
 }

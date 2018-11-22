@@ -1,17 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MediCloud.BusinessProcess.Util;
 using MediCloud.DatabaseModels;
 using MediCloud.Persistence;
+using System;
+using System.Collections.Generic;
 using System.Data.Entity.Validation;
-using MediCloud.BusinessProcess.Util;
+using System.Linq;
 
 namespace MediCloud.BusinessProcess.Funcionario
 {
     public class ControleDeFuncionario
     {
+        #region Public Methods
+
         public static List<FUNCIONARIO> buscarFuncionario(string termo)
         {
             CloudMedContext contexto = new CloudMedContext();
@@ -43,45 +43,6 @@ namespace MediCloud.BusinessProcess.Funcionario
             }
         }
 
-        public static void InativarFuncionario(int codigoDoFuncionario, bool inativar)
-        {
-            CloudMedContext contexto = new CloudMedContext();
-            try
-            {
-                FUNCIONARIO usuario = contexto.FUNCIONARIO.First(x => x.IDFUN == codigoDoFuncionario);
-                usuario.INATIVO = inativar;
-
-                contexto.SaveChanges();
-            }
-            catch (DbEntityValidationException ex)
-            {
-                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        public static void ExcluirFuncionario(int codigoDoFuncionario)
-        {
-            CloudMedContext contexto = new CloudMedContext();
-            try
-            {
-                contexto.FUNCIONARIO.Remove(contexto.FUNCIONARIO.First(x => x.IDFUN == codigoDoFuncionario));
-
-                contexto.SaveChanges();
-            }
-            catch (DbEntityValidationException ex)
-            {
-                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
         public static FUNCIONARIO buscarFuncionarioPorID(int codigoFuncionario)
         {
             CloudMedContext contexto = new CloudMedContext();
@@ -101,54 +62,6 @@ namespace MediCloud.BusinessProcess.Funcionario
             }
 
             return null;
-        }
-
-        public static FUNCIONARIO SalvarFuncionario(FUNCIONARIO funcionarioDAO)
-        {
-            CloudMedContext contexto = new CloudMedContext();
-            FUNCIONARIO funcionarioSalvo = new FUNCIONARIO();
-
-            try
-            {
-                if (contexto.FUNCIONARIO.Any(x => x.FUNCIONARIO1 == funcionarioDAO.FUNCIONARIO1 && x.IDCLI == funcionarioDAO.IDCLI && x.IDFUN != funcionarioDAO.IDFUN))
-                    throw new InvalidOperationException("Já existe um funcionário com este nome cadastrado para o cliente indicado.");
-
-
-                if (funcionarioDAO.IDFUN > 0)
-                {
-                    funcionarioSalvo = contexto.FUNCIONARIO.First(x => x.IDFUN == funcionarioDAO.IDFUN);
-
-                    funcionarioSalvo.CELULAR = funcionarioDAO.CELULAR;
-                    funcionarioSalvo.CODNEXO = funcionarioDAO.CODNEXO;
-                    funcionarioSalvo.CTPS = funcionarioDAO.CTPS;
-                    funcionarioSalvo.ENDERECO = funcionarioDAO.ENDERECO;
-                    funcionarioSalvo.FUNCIONARIO1 = funcionarioDAO.FUNCIONARIO1;
-                    funcionarioSalvo.IDCLI = funcionarioDAO.IDCLI;
-                    funcionarioSalvo.INATIVO = funcionarioDAO.INATIVO;
-                    funcionarioSalvo.MATRICULA = funcionarioDAO.MATRICULA;
-                    funcionarioSalvo.NASCIMENTO = funcionarioDAO.NASCIMENTO;
-                    funcionarioSalvo.RG = funcionarioDAO.RG;
-                    funcionarioSalvo.TELEFONE = funcionarioDAO.TELEFONE;
-
-                }
-                else
-                {
-                    funcionarioSalvo = contexto.FUNCIONARIO.Add(funcionarioDAO);
-                }
-
-                contexto.SaveChanges();
-                return funcionarioSalvo;
-
-            }
-            catch (DbEntityValidationException ex)
-            {
-                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
-                return null;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
         }
 
         public static List<FUNCIONARIO> buscarFuncionariosDeClientePorTermo(string prefix, int idCliente)
@@ -171,5 +84,91 @@ namespace MediCloud.BusinessProcess.Funcionario
 
             return null;
         }
+
+        public static void ExcluirFuncionario(int codigoDoFuncionario)
+        {
+            CloudMedContext contexto = new CloudMedContext();
+            try
+            {
+                contexto.FUNCIONARIO.Remove(contexto.FUNCIONARIO.First(x => x.IDFUN == codigoDoFuncionario));
+
+                contexto.SaveChanges();
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static void InativarFuncionario(int codigoDoFuncionario, bool inativar)
+        {
+            CloudMedContext contexto = new CloudMedContext();
+            try
+            {
+                FUNCIONARIO usuario = contexto.FUNCIONARIO.First(x => x.IDFUN == codigoDoFuncionario);
+                usuario.INATIVO = inativar;
+
+                contexto.SaveChanges();
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static FUNCIONARIO SalvarFuncionario(FUNCIONARIO funcionarioDAO)
+        {
+            CloudMedContext contexto = new CloudMedContext();
+            FUNCIONARIO funcionarioSalvo = new FUNCIONARIO();
+
+            try
+            {
+                if (contexto.FUNCIONARIO.Any(x => x.FUNCIONARIO1 == funcionarioDAO.FUNCIONARIO1 && x.IDCLI == funcionarioDAO.IDCLI && x.IDFUN != funcionarioDAO.IDFUN))
+                    throw new InvalidOperationException("Já existe um funcionário com este nome cadastrado para o cliente indicado.");
+
+                if (funcionarioDAO.IDFUN > 0)
+                {
+                    funcionarioSalvo = contexto.FUNCIONARIO.First(x => x.IDFUN == funcionarioDAO.IDFUN);
+
+                    funcionarioSalvo.CELULAR = funcionarioDAO.CELULAR;
+                    funcionarioSalvo.CODNEXO = funcionarioDAO.CODNEXO;
+                    funcionarioSalvo.CTPS = funcionarioDAO.CTPS;
+                    funcionarioSalvo.ENDERECO = funcionarioDAO.ENDERECO;
+                    funcionarioSalvo.FUNCIONARIO1 = funcionarioDAO.FUNCIONARIO1;
+                    funcionarioSalvo.IDCLI = funcionarioDAO.IDCLI;
+                    funcionarioSalvo.INATIVO = funcionarioDAO.INATIVO;
+                    funcionarioSalvo.MATRICULA = funcionarioDAO.MATRICULA;
+                    funcionarioSalvo.NASCIMENTO = funcionarioDAO.NASCIMENTO;
+                    funcionarioSalvo.RG = funcionarioDAO.RG;
+                    funcionarioSalvo.TELEFONE = funcionarioDAO.TELEFONE;
+                }
+                else
+                {
+                    funcionarioSalvo = contexto.FUNCIONARIO.Add(funcionarioDAO);
+                }
+
+                contexto.SaveChanges();
+                return funcionarioSalvo;
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+                return null;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        #endregion Public Methods
     }
 }

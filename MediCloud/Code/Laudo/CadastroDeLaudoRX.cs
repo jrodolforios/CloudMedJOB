@@ -1,19 +1,19 @@
 ﻿using MediCloud.BusinessProcess.Laudo;
 using MediCloud.Code.Clientes;
+using MediCloud.Controllers;
 using MediCloud.DatabaseModels;
 using MediCloud.Models.Laudo;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using static MediCloud.Code.Enum.EnumLaudo;
-using MediCloud.Controllers;
 
 namespace MediCloud.Code.Laudo
 {
     public class CadastroDeLaudoRX
     {
+        #region Internal Methods
+
         internal static List<LaudoRXModel> buscarClientes(FormCollection form)
         {
             string termo = form["keywords"];
@@ -27,6 +27,53 @@ namespace MediCloud.Code.Laudo
             });
 
             return listaDeModels;
+        }
+
+        internal static LaudoRXModel buscarLaudoRXPorID(int v)
+        {
+            LAUDORX LaudoRXEncontrado = ControleDeLaudoRX.buscarLaudoRXPorId(v);
+
+            return injetarEmUsuarioModel(LaudoRXEncontrado);
+        }
+
+        internal static StatusLiberadoLaudo ConverteStatusLaudoParaEnum(string status)
+        {
+            switch (status.ToUpper())
+            {
+                case "LIBERADO":
+                    return StatusLiberadoLaudo.liberado;
+
+                case "PENDENTE":
+                    return StatusLiberadoLaudo.pendente;
+
+                default:
+                    return StatusLiberadoLaudo.vazio;
+            }
+        }
+
+        internal static string ConverteStatusLaudoParaString(StatusLiberadoLaudo status)
+        {
+            switch (status)
+            {
+                case StatusLiberadoLaudo.liberado:
+                    return "LIBERADO";
+
+                case StatusLiberadoLaudo.pendente:
+                    return "PENDENTE";
+
+                default:
+                    return null;
+            }
+        }
+
+        internal static void DeletarLaudoRX(RaioXController raioXController, int codigoRaioX)
+        {
+            ControleDeLaudoRX.DeletarLaudoRX(codigoRaioX);
+        }
+
+        internal static byte[] ImprimirLaudo(int codigoLaudo)
+        {
+            return ControleDeLaudoRX.ImprimirLaudo(codigoLaudo);
         }
 
         internal static LaudoRXModel injetarEmUsuarioModel(LAUDORX x)
@@ -50,11 +97,9 @@ namespace MediCloud.Code.Laudo
                 };
         }
 
-        internal static LaudoRXModel buscarLaudoRXPorID(int v)
+        internal static void LiberarLaudoRX(RaioXController raioXController, int codigoRaioX)
         {
-            LAUDORX LaudoRXEncontrado = ControleDeLaudoRX.buscarLaudoRXPorId(v);
-
-            return injetarEmUsuarioModel(LaudoRXEncontrado);
+            ControleDeLaudoRX.LiberarLaudoRX(codigoRaioX);
         }
 
         internal static LaudoRXModel SalvarLaudoRX(FormCollection form)
@@ -69,6 +114,12 @@ namespace MediCloud.Code.Laudo
 
             return usuarioModel;
         }
+
+        #endregion Internal Methods
+
+
+
+        #region Private Methods
 
         private static LAUDORX injetarEmCargoModelDAO(LaudoRXModel x)
         {
@@ -109,45 +160,6 @@ namespace MediCloud.Code.Laudo
             };
         }
 
-        internal static void DeletarLaudoRX(RaioXController raioXController, int codigoRaioX)
-        {
-            ControleDeLaudoRX.DeletarLaudoRX(codigoRaioX);
-        }
-
-        internal static StatusLiberadoLaudo ConverteStatusLaudoParaEnum (string status)
-        {
-            switch (status.ToUpper())
-            {
-                case "LIBERADO":
-                    return StatusLiberadoLaudo.liberado;
-                case "PENDENTE":
-                    return StatusLiberadoLaudo.pendente;
-                default:
-                    return StatusLiberadoLaudo.vazio;
-            }
-        }
-
-        internal static byte[] ImprimirLaudo(int codigoLaudo)
-        {
-            return ControleDeLaudoRX.ImprimirLaudo(codigoLaudo);
-        }
-
-        internal static string ConverteStatusLaudoParaString(StatusLiberadoLaudo status)
-        {
-            switch (status)
-            {
-                case StatusLiberadoLaudo.liberado:
-                    return "LIBERADO";
-                case StatusLiberadoLaudo.pendente:
-                    return "PENDENTE";
-                default:
-                    return null;
-            }
-        }
-
-        internal static void LiberarLaudoRX(RaioXController raioXController, int codigoRaioX)
-        {
-            ControleDeLaudoRX.LiberarLaudoRX(codigoRaioX);
-        }
+        #endregion Private Methods
     }
 }

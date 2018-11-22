@@ -1,17 +1,12 @@
 namespace MediCloud.DatabaseModels
 {
     using System;
-    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
-    using System.Data.Entity.Spatial;
 
     public partial class SYS_MAIL
     {
-        [Key]
-        [Column(Order = 0, TypeName = "numeric")]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public decimal CODMAI { get; set; }
+        #region Public Properties
 
         [StringLength(250)]
         public string ASSUNTO { get; set; }
@@ -19,6 +14,11 @@ namespace MediCloud.DatabaseModels
         [Key]
         [Column(Order = 1, TypeName = "numeric")]
         public decimal CODCAI { get; set; }
+
+        [Key]
+        [Column(Order = 0, TypeName = "numeric")]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public decimal CODMAI { get; set; }
 
         [Key]
         [Column(Order = 2, TypeName = "numeric")]
@@ -50,11 +50,12 @@ namespace MediCloud.DatabaseModels
         [Column(TypeName = "text")]
         public string SOURCE { get; set; }
 
+        public virtual SYS_CAIXA SYS_CAIXA { get; set; }
         public double? TAMANHO { get; set; }
 
         [StringLength(1)]
         public string TEMANEXOS { get; set; }
 
-        public virtual SYS_CAIXA SYS_CAIXA { get; set; }
+        #endregion Public Properties
     }
 }

@@ -9,71 +9,67 @@ using MediCloud.Models.Seguranca;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace MediCloud.Controllers
 {
     public class ClienteController : BaseController
     {
-        // GET: Cliente
-        public ActionResult Index()
+        #region Public Methods
+
+        [HttpPost]
+        public JsonResult AdicionarTabela(int codigoCliente, int codigoTabela)
         {
+            ResultadoAjaxGenericoModel resultado = new ResultadoAjaxGenericoModel();
             try
             {
                 base.EstahLogado();
-                ViewBag.Title = "Clientes";
 
-                return View();
+                CadastroDeClientes.AdicionarTabela(codigoCliente, codigoTabela);
+
+                resultado.mensagem = "Tabela adicionada.";
+                resultado.acaoBemSucedida = true;
+
+                return Json(resultado, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
                 ExceptionUtil.GerarLogDeExcecao(ex, Request.Url.ToString());
-                base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
-                return View();
+                resultado.mensagem = Constantes.MENSAGEM_GENERICA_DE_ERRO;
+                resultado.acaoBemSucedida = false;
+
+                return Json(resultado, JsonRequestBehavior.AllowGet);
             }
         }
 
         [HttpPost]
-        public ActionResult Index(FormCollection form)
+        public JsonResult BuscaClienteAJAX(string Prefix)
         {
+            List<ClienteModel> contadoresEncontrados = CadastroDeClientes.RecuperarClientePorTermoAJAX(Prefix);
+            List<AutoCompleteDefaultModel> ObjList = new List<AutoCompleteDefaultModel>();
+
             try
             {
-                base.EstahLogado();
-                ViewBag.Title = "Clientes";
+                contadoresEncontrados.ForEach(x =>
+                {
+                    ObjList.Add(new AutoCompleteDefaultModel() { Id = x.IdCliente, Name = x.NomeFantasia });
+                });
 
-                List<ClienteModel> model = CadastroDeClientes.buscarClientes(form);
-
-                return View(model);
+                //Searching records from list using LINQ query
+                var results = (from N in ObjList
+                               select new { N.Id, N.Name }).ToArray();
+                return Json(results, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
                 ExceptionUtil.GerarLogDeExcecao(ex, Request.Url.ToString());
-                base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
-                return View();
+                ObjList = new List<AutoCompleteDefaultModel>()
+                {
+                new AutoCompleteDefaultModel {Id=-1,Name=Constantes.MENSAGEM_GENERICA_DE_ERRO },
+                };
+                return Json(ObjList.ToArray(), JsonRequestBehavior.AllowGet);
             }
         }
-
-
-        public ActionResult ClientesAtendidosNoMes()
-        {
-            try
-            {
-                base.EstahLogado();
-                ViewBag.Title = "Clientes";
-
-                List<ClienteModel> model = CadastroDeClientes.buscarClientesDoMes();
-
-                return View("Index",model);
-            }
-            catch (Exception ex)
-            {
-                ExceptionUtil.GerarLogDeExcecao(ex, Request.Url.ToString());
-                base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
-                return View();
-            }
-        }
-
 
         public ActionResult ClientesAtendidosDoMesAnterior()
         {
@@ -94,67 +90,23 @@ namespace MediCloud.Controllers
             }
         }
 
-
-        [HttpPost]
-        public ActionResult SalvarContato(FormCollection form)
+        public ActionResult ClientesAtendidosNoMes()
         {
-            int codigoCliente = Convert.ToInt32(form["codigoClienteContato"]);
-
             try
             {
                 base.EstahLogado();
                 ViewBag.Title = "Clientes";
 
-                ContatoModel model = CadastroDeContato.salvarContato(form);
+                List<ClienteModel> model = CadastroDeClientes.buscarClientesDoMes();
 
-                base.FlashMessage("Contato cadastrado.", MessageType.Success);
-                Response.Redirect($"/Cliente/DetalhamentoCliente?codigoCliente={codigoCliente}");
-            }
-            catch (InvalidOperationException ex)
-            {
-                ExceptionUtil.GerarLogDeExcecao(ex, Request.Url.ToString());
-                base.FlashMessage(ex.Message, MessageType.Error);
-                Response.Redirect($"/Cliente/DetalhamentoCliente?codigoCliente={codigoCliente}");
+                return View("Index", model);
             }
             catch (Exception ex)
             {
                 ExceptionUtil.GerarLogDeExcecao(ex, Request.Url.ToString());
                 base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
-                Response.Redirect($"/Cliente/DetalhamentoCliente?codigoCliente={codigoCliente}");
+                return View();
             }
-
-            return null;
-        }
-
-        [HttpPost]
-        public ActionResult SalvarEmpresa(FormCollection form)
-        {
-            int codigoCliente = Convert.ToInt32(form["codigoClienteEmpresa"]);
-
-            try
-            {
-                base.EstahLogado();
-                ViewBag.Title = "Clientes";
-
-                EmpresaModel model = CadastroDeClientes.SalvarEmpresa(form);
-
-                base.FlashMessage("Empresa cadastrada.", MessageType.Success);
-                Response.Redirect($"/Cliente/DetalhamentoCliente?codigoCliente={codigoCliente}");
-            }
-            catch (InvalidOperationException ex)
-            {
-                ExceptionUtil.GerarLogDeExcecao(ex, Request.Url.ToString());
-                base.FlashMessage(ex.Message, MessageType.Error);
-                Response.Redirect($"/Cliente/DetalhamentoCliente?codigoCliente={codigoCliente}");
-            }
-            catch (Exception ex)
-            {
-                ExceptionUtil.GerarLogDeExcecao(ex, Request.Url.ToString());
-                base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
-                Response.Redirect($"/Cliente/DetalhamentoCliente?codigoCliente={codigoCliente}");
-            }
-
-            return null;
         }
 
         [HttpPost]
@@ -193,6 +145,31 @@ namespace MediCloud.Controllers
                 CadastroDeClientes.DeletarEmpresa(this, codigoDaEmpresa);
 
                 resultado.mensagem = "Empresa excluída.";
+                resultado.acaoBemSucedida = true;
+
+                return Json(resultado, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                ExceptionUtil.GerarLogDeExcecao(ex, Request.Url.ToString());
+                resultado.mensagem = Constantes.MENSAGEM_GENERICA_DE_ERRO;
+                resultado.acaoBemSucedida = false;
+
+                return Json(resultado, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpPost]
+        public JsonResult DeletarTabela(int codigoCliente, int codigoTabela)
+        {
+            ResultadoAjaxGenericoModel resultado = new ResultadoAjaxGenericoModel();
+            try
+            {
+                base.EstahLogado();
+
+                CadastroDeClientes.DeletarTabelaDeCliente(codigoCliente, codigoTabela);
+
+                resultado.mensagem = "Tabela excluída.";
                 resultado.acaoBemSucedida = true;
 
                 return Json(resultado, JsonRequestBehavior.AllowGet);
@@ -257,6 +234,27 @@ namespace MediCloud.Controllers
             }
         }
 
+        [HttpPost]
+        public JsonResult DetalharEmpresa(int codigoDaEmpresa)
+        {
+            try
+            {
+                EmpresaModel empresaEncontrada = CadastroDeClientes.RecuperarEmpresaPorID(codigoDaEmpresa);
+
+                return Json(empresaEncontrada, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                ExceptionUtil.GerarLogDeExcecao(ex, Request.Url.ToString());
+                ResultadoAjaxGenericoModel resultado = new ResultadoAjaxGenericoModel();
+
+                resultado.mensagem = Constantes.MENSAGEM_GENERICA_DE_ERRO;
+                resultado.acaoBemSucedida = false;
+
+                return Json(resultado, JsonRequestBehavior.AllowGet);
+            }
+        }
+
         public ActionResult ExcluirCliente(int codigoCliente)
         {
             ClienteModel modelCliente = null;
@@ -282,105 +280,106 @@ namespace MediCloud.Controllers
             }
         }
 
-        [HttpPost]
-        public JsonResult BuscaClienteAJAX(string Prefix)
+        // GET: Cliente
+        public ActionResult Index()
         {
-            List<ClienteModel> contadoresEncontrados = CadastroDeClientes.RecuperarClientePorTermoAJAX(Prefix);
-            List<AutoCompleteDefaultModel> ObjList = new List<AutoCompleteDefaultModel>();
-
-            try
-            {
-                contadoresEncontrados.ForEach(x =>
-                {
-                    ObjList.Add(new AutoCompleteDefaultModel() { Id = x.IdCliente, Name = x.NomeFantasia });
-                });
-
-                //Searching records from list using LINQ query  
-                var results = (from N in ObjList
-                               select new { N.Id, N.Name }).ToArray();
-                return Json(results, JsonRequestBehavior.AllowGet);
-            }
-            catch (Exception ex)
-            {
-                ExceptionUtil.GerarLogDeExcecao(ex, Request.Url.ToString());
-                ObjList = new List<AutoCompleteDefaultModel>()
-                {
-                new AutoCompleteDefaultModel {Id=-1,Name=Constantes.MENSAGEM_GENERICA_DE_ERRO },
-                };
-                return Json(ObjList.ToArray(), JsonRequestBehavior.AllowGet);
-            }
-        }
-
-        [HttpPost]
-        public JsonResult DetalharEmpresa(int codigoDaEmpresa)
-        {
-            try
-            {
-                EmpresaModel empresaEncontrada = CadastroDeClientes.RecuperarEmpresaPorID(codigoDaEmpresa);
-
-
-                return Json(empresaEncontrada, JsonRequestBehavior.AllowGet);
-            }
-            catch (Exception ex)
-            {
-                ExceptionUtil.GerarLogDeExcecao(ex, Request.Url.ToString());
-                ResultadoAjaxGenericoModel resultado = new ResultadoAjaxGenericoModel();
-
-                resultado.mensagem = Constantes.MENSAGEM_GENERICA_DE_ERRO;
-                resultado.acaoBemSucedida = false;
-
-                return Json(resultado, JsonRequestBehavior.AllowGet);
-            }
-        }
-
-        [HttpPost]
-        public JsonResult AdicionarTabela(int codigoCliente, int codigoTabela)
-        {
-            ResultadoAjaxGenericoModel resultado = new ResultadoAjaxGenericoModel();
             try
             {
                 base.EstahLogado();
+                ViewBag.Title = "Clientes";
 
-                CadastroDeClientes.AdicionarTabela(codigoCliente, codigoTabela);
-
-                resultado.mensagem = "Tabela adicionada.";
-                resultado.acaoBemSucedida = true;
-
-                return Json(resultado, JsonRequestBehavior.AllowGet);
+                return View();
             }
             catch (Exception ex)
             {
                 ExceptionUtil.GerarLogDeExcecao(ex, Request.Url.ToString());
-                resultado.mensagem = Constantes.MENSAGEM_GENERICA_DE_ERRO;
-                resultado.acaoBemSucedida = false;
-
-                return Json(resultado, JsonRequestBehavior.AllowGet);
+                base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
+                return View();
             }
         }
 
         [HttpPost]
-        public JsonResult DeletarTabela(int codigoCliente, int codigoTabela)
+        public ActionResult Index(FormCollection form)
         {
-            ResultadoAjaxGenericoModel resultado = new ResultadoAjaxGenericoModel();
             try
             {
                 base.EstahLogado();
+                ViewBag.Title = "Clientes";
 
-                CadastroDeClientes.DeletarTabelaDeCliente(codigoCliente, codigoTabela);
+                List<ClienteModel> model = CadastroDeClientes.buscarClientes(form);
 
-                resultado.mensagem = "Tabela excluída.";
-                resultado.acaoBemSucedida = true;
-
-                return Json(resultado, JsonRequestBehavior.AllowGet);
+                return View(model);
             }
             catch (Exception ex)
             {
                 ExceptionUtil.GerarLogDeExcecao(ex, Request.Url.ToString());
-                resultado.mensagem = Constantes.MENSAGEM_GENERICA_DE_ERRO;
-                resultado.acaoBemSucedida = false;
-
-                return Json(resultado, JsonRequestBehavior.AllowGet);
+                base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
+                return View();
             }
         }
+
+        [HttpPost]
+        public ActionResult SalvarContato(FormCollection form)
+        {
+            int codigoCliente = Convert.ToInt32(form["codigoClienteContato"]);
+
+            try
+            {
+                base.EstahLogado();
+                ViewBag.Title = "Clientes";
+
+                ContatoModel model = CadastroDeContato.salvarContato(form);
+
+                base.FlashMessage("Contato cadastrado.", MessageType.Success);
+                Response.Redirect($"/Cliente/DetalhamentoCliente?codigoCliente={codigoCliente}");
+            }
+            catch (InvalidOperationException ex)
+            {
+                ExceptionUtil.GerarLogDeExcecao(ex, Request.Url.ToString());
+                base.FlashMessage(ex.Message, MessageType.Error);
+                Response.Redirect($"/Cliente/DetalhamentoCliente?codigoCliente={codigoCliente}");
+            }
+            catch (Exception ex)
+            {
+                ExceptionUtil.GerarLogDeExcecao(ex, Request.Url.ToString());
+                base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
+                Response.Redirect($"/Cliente/DetalhamentoCliente?codigoCliente={codigoCliente}");
+            }
+
+            return null;
+        }
+
+        [HttpPost]
+        public ActionResult SalvarEmpresa(FormCollection form)
+        {
+            int codigoCliente = Convert.ToInt32(form["codigoClienteEmpresa"]);
+
+            try
+            {
+                base.EstahLogado();
+                ViewBag.Title = "Clientes";
+
+                EmpresaModel model = CadastroDeClientes.SalvarEmpresa(form);
+
+                base.FlashMessage("Empresa cadastrada.", MessageType.Success);
+                Response.Redirect($"/Cliente/DetalhamentoCliente?codigoCliente={codigoCliente}");
+            }
+            catch (InvalidOperationException ex)
+            {
+                ExceptionUtil.GerarLogDeExcecao(ex, Request.Url.ToString());
+                base.FlashMessage(ex.Message, MessageType.Error);
+                Response.Redirect($"/Cliente/DetalhamentoCliente?codigoCliente={codigoCliente}");
+            }
+            catch (Exception ex)
+            {
+                ExceptionUtil.GerarLogDeExcecao(ex, Request.Url.ToString());
+                base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
+                Response.Redirect($"/Cliente/DetalhamentoCliente?codigoCliente={codigoCliente}");
+            }
+
+            return null;
+        }
+
+        #endregion Public Methods
     }
 }

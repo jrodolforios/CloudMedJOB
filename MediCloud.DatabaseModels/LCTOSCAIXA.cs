@@ -1,14 +1,16 @@
 namespace MediCloud.DatabaseModels
 {
     using System;
-    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
-    using System.Data.Entity.Spatial;
 
     [Table("LCTOSCAIXA")]
     public partial class LCTOSCAIXA
     {
+        #region Public Properties
+
+        public virtual CENTROCUSTO CENTROCUSTO { get; set; }
+
         [Column(TypeName = "numeric")]
         public decimal? CODIGOCENTROCUSTO { get; set; }
 
@@ -24,6 +26,8 @@ namespace MediCloud.DatabaseModels
         [Key]
         [Column(Order = 2, TypeName = "numeric")]
         public decimal CODIGOPASTAMOV { get; set; }
+
+        public virtual COMPOSICOESCAIXA COMPOSICOESCAIXA { get; set; }
 
         [Key]
         [Column(Order = 3, TypeName = "numeric")]
@@ -57,16 +61,14 @@ namespace MediCloud.DatabaseModels
         [StringLength(10)]
         public string ORIGEM { get; set; }
 
+        public virtual PASTASMOV PASTASMOV { get; set; }
+
+        public virtual PASTASMOV PASTASMOV1 { get; set; }
+
         [Key]
         [Column(Order = 9, TypeName = "numeric")]
         public decimal VALOR { get; set; }
 
-        public virtual CENTROCUSTO CENTROCUSTO { get; set; }
-
-        public virtual COMPOSICOESCAIXA COMPOSICOESCAIXA { get; set; }
-
-        public virtual PASTASMOV PASTASMOV { get; set; }
-
-        public virtual PASTASMOV PASTASMOV1 { get; set; }
+        #endregion Public Properties
     }
 }

@@ -1,14 +1,14 @@
-﻿@model MediCloud.Models.Cliente.ASOModel
+﻿    @model MediCloud.Models.Cliente.ASOModel
 @{
-    ViewBag.Title = "Relatório Analítico de Faturamento";
+    ViewBag.Title = "Relatório de Convocações";
 }
 <script src="/assets/js/jquery-2.1.4.min.js"></script>
 <div class="page-header">
     <h1>
-        Relatórios Financeiros
+        Relatórios de movimentos
         <small>
             <i class="ace-icon fa fa-angle-double-right"></i>
-            Relatório Analítico de Faturamento
+            Relatório de Convocações
         </small>
     </h1>
 </div><!-- /.page-header -->
@@ -18,7 +18,7 @@
             <div class="col-sm-offset-1 col-sm-10">
 
                 <div class="space"></div>
-                <form method="post" autocomplete="off" id="relatorioAnaliticoForm" class="form-horizontal" action="@Url.Content("~/RelatoriosFinanceiros/RelatorioAnalitoDeFaturamento")">
+                <form method="post" autocomplete="off" class="form-horizontal" action="@Url.Content("~/RelatoriosDeMovimentos/RelatorioDeConvocacoes")">
                     <div class="tabbable">
                         <ul class="nav nav-tabs padding-16">
                             <li class="active">
@@ -49,60 +49,45 @@
                             </div>
 
                             <div class="form-group">
-                                <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Grupo de clientes </label>
+                                <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Funcionário</label>
 
                                 <div class="col-sm-8">
-                                    <input type="hidden" name="idGrupoDeClientes" id="idGrupoDeClientes" value="" />
+                                    <input type="hidden" name="idFuncionario" id="idFuncionario" value="" />
                                     <div class="input-group">
                                         <span class="input-group-addon">
                                             <i class="ace-icon fa fa-search"></i>
                                         </span>
-                                        <input class="col-xs-12 col-sm-6" type="text" id="grupoDeClientes" name="grupoDeClientes" placeholder="Digite o grupo de clientes" value="" />
+                                        <input class="col-xs-12 col-sm-6 componenteFormulario" type="text" id="funcionario" name="funcionario" placeholder="Digite o nome do Funcionário" value="" />
                                     </div>
                                 </div>
                             </div>
 
                             <div class="form-group">
-                                <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Procedimento </label>
+                                <label class="col-sm-4 control-label no-padding-right" for="form-field-date">Data da convocação</label>
 
                                 <div class="col-sm-8">
-                                    <input type="hidden" name="idProcedimento" id="idProcedimento" value="" />
-                                    <div class="input-group">
-                                        <span class="input-group-addon">
-                                            <i class="ace-icon fa fa-search"></i>
-                                        </span>
-                                        <input class="col-xs-12 col-sm-6" type="text" id="procedimento" name="procedimento" placeholder="Digite o procedimento" value="" />
+                                    <div class="input-medium">
+                                        <div class="input-group">
+                                            <input class="input-medium date-picker input-mask-date" id="dataMovimentoInicio" name="dataMovimentoInicio" type="text" data-date-format="dd/mm/yyyy" placeholder="dd/mm/aaaa" value="" />
+                                            <span class="input-group-addon">
+                                                <i class="ace-icon fa fa-calendar"></i>
+                                            </span>
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Faturamento </label>
-
-                                <div class="col-sm-8">
-                                    <input type="hidden" name="idFaturamento" id="idFaturamento" value="" />
-                                    <div class="input-group">
-                                        <span class="input-group-addon">
-                                            <i class="ace-icon fa fa-search"></i>
-                                        </span>
-                                        <input class="col-xs-12 col-sm-6" type="text" id="Faturamento" name="Faturamento" placeholder="Digite o faturamento" value="" />
+                                    <div class="input-medium">
+                                        <div class="input-group">
+                                            <input class="input-medium date-picker input-mask-date" id="dataMovimentoFim" name="dataMovimentoFim" type="text" data-date-format="dd/mm/yyyy" placeholder="dd/mm/aaaa" value="" />
+                                            <span class="input-group-addon">
+                                                <i class="ace-icon fa fa-calendar"></i>
+                                            </span>
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
-
-                            <h4 class="header blue bolder smaller">Informações adicionais</h4>
-                            <div class="vspace-12-sm"></div>
-
-                            <div class="form-group">
-                                <div class="col-sm-12">
-                                    <div class="wysiwyg-editor" id="informacoesAdicionais"></div>
-                                    <input type="hidden" id="informacoesAdicionaisRel" name="informacoesAdicionaisRel"/>
                                 </div>
                             </div>
 
                             <div class="clearfix form-actions">
                                 <div class="col-md-offset-3 col-md-9">
-                                    <button class="btn btn-info" id="GerarRelatorio">
+                                    <button class="btn btn-info" type="submit">
                                         <i class="ace-icon fa fa-circle-o-notch bigger-110"></i>
                                         Gerar
                                     </button>
@@ -120,126 +105,18 @@
         </div>
     </div>
 </div>
-<script src="/assets/js/jquery-2.1.4.min.js"></script>
-
-<script src="/assets/js/jquery-ui.custom.min.js"></script>
-<script src="/assets/js/jquery.ui.touch-punch.min.js"></script>
-<script src="/assets/js/markdown.min.js"></script>
-<script src="/assets/js/bootstrap-markdown.min.js"></script>
-<script src="/assets/js/jquery.hotkeys.index.min.js"></script>
-<script src="/assets/js/bootstrap-wysiwyg.min.js"></script>
-<script src="/assets/js/bootbox.js"></script>
-<script src="/assets/js/chosen.jquery.min.js"></script>
 <script src="/assets/js/jquery-ui.min.js"></script>
-
+<script src="/assets/js/bootstrap-datepicker.min.js"></script>
+<script src="/assets/js/jquery.maskedinput.min.js"></script>
+<script src="/assets/js/jquery.ui.touch-punch.min.js"></script>
 <script src="/assets/js/ace-elements.min.js"></script>
 <script src="/assets/js/ace.min.js"></script>
-
 <script type="text/javascript">
-    $(document).ready(function () {
-        $("#GerarRelatorio").on("click", function () {
-            var emailText = $("#informacoesAdicionais").html();
-            $("#informacoesAdicionaisRel").val(emailText);
-
-            $('form#relatorioAnaliticoForm').submit();
-        });
+    $('.date-picker').datepicker({
+        format: 'dd/mm/yyyy',
+        language: 'pt-BR',
     });
-
-    $('#informacoesAdicionais').ace_wysiwyg({
-        toolbar:
-        [
-            'font',
-            null,
-            'fontSize',
-            null,
-            { name: 'bold', className: 'btn-info' },
-            { name: 'italic', className: 'btn-info' },
-            { name: 'strikethrough', className: 'btn-info' },
-            { name: 'underline', className: 'btn-info' },
-            null,
-            { name: 'insertunorderedlist', className: 'btn-success' },
-            { name: 'insertorderedlist', className: 'btn-success' },
-            { name: 'outdent', className: 'btn-purple' },
-            { name: 'indent', className: 'btn-purple' },
-            null,
-            { name: 'justifyleft', className: 'btn-primary' },
-            { name: 'justifycenter', className: 'btn-primary' },
-            { name: 'justifyright', className: 'btn-primary' },
-            { name: 'justifyfull', className: 'btn-inverse' },
-            null,
-            { name: 'createLink', className: 'btn-pink' },
-            { name: 'unlink', className: 'btn-pink' },
-            null,
-            null,
-            null,
-            'foreColor',
-            null,
-            { name: 'undo', className: 'btn-grey' },
-            { name: 'redo', className: 'btn-grey' }
-        ],
-        'wysiwyg': {
-            fileUploadError: null
-        }
-
-    }).prev().addClass('wysiwyg-style2');
-
-    $('textarea[data-provide="markdown"]').each(function () {
-        var $this = $(this);
-
-        if ($this.data('markdown')) {
-            $this.data('markdown').showEditor();
-        }
-        else $this.markdown()
-
-        $this.parent().find('.btn').addClass('btn-white');
-    });
-
-    $('[data-toggle="buttons"] .btn').on('click', function (e) {
-        var target = $(this).find('input[type=radio]');
-        var which = parseInt(target.val());
-        var toolbar = $('#informacoesAdicionais').prev().get(0);
-        if (which >= 1 && which <= 4) {
-            toolbar.className = toolbar.className.replace(/wysiwyg\-style(1|2)/g, '');
-            if (which == 1) $(toolbar).addClass('wysiwyg-style1');
-            else if (which == 2) $(toolbar).addClass('wysiwyg-style2');
-            if (which == 4) {
-                $(toolbar).find('.btn-group > .btn').addClass('btn-white btn-round');
-            } else $(toolbar).find('.btn-group > .btn-white').removeClass('btn-white btn-round');
-        }
-    });
-
-    var enableImageResize = function () {
-        $('.wysiwyg-editor')
-            .on('mousedown', function (e) {
-                var target = $(e.target);
-                if (e.target instanceof HTMLImageElement) {
-                    if (!target.data('resizable')) {
-                        target.resizable({
-                            aspectRatio: e.target.width / e.target.height,
-                        });
-                        target.data('resizable', true);
-
-                        if (lastResizableImg != null) {
-                            //disable previous resizable image
-                            lastResizableImg.resizable("destroy");
-                            lastResizableImg.removeData('resizable');
-                        }
-                        lastResizableImg = target;
-                    }
-                }
-            })
-            .on('click', function (e) {
-                if (lastResizableImg != null && !(e.target instanceof HTMLImageElement)) {
-                    destroyResizable();
-                }
-            })
-            .on('keydown', function () {
-                destroyResizable();
-            });
-    }
-
-    enableImageResize();
-
+    $('.input-mask-date').mask('99/99/9999');
 
     $("#cliente").autocomplete({
         source: function (request, response) {
@@ -271,90 +148,33 @@
         }
     });
 
-    $("#procedimento").autocomplete({
+    $("#funcionario").autocomplete({
         source: function (request, response) {
             $.ajax({
-                url: "/Procedimento/BuscarProcedimentoAJAX",
+                url: "/Funcionario/BuscaFuncionarioDeClienteAJAX",
                 type: "POST",
                 dataType: "json",
-                data: { Prefix: request.term },
+                data: { Prefix: request.term, IdCliente: $('#idCliente').attr('value')},
                 success: function (data) {
                     response($.map(data, function (item) {
-                        return { label: item.Name, value: item.Name, Id: item.Id, Value: item.Value };
+                        return { label: item.Name, value: item.Name, Id: item.Id };
                     }))
-                }
-            })
-        },
-        select: function (event, ui) {
-            $('#idProcedimento').attr('value', ui.item.Id);
-            $('#procedimento').val(ui.item.label);
-            return false;
-        },
-        messages: {
-            noResults: "Sem resultados", results: ""
-        }
-    });
-    $('#procedimento').on('blur', function () {
-        if ($(this).val().length === 0) {  //check for no. of characters entered
-            $('#idProcedimento').attr('value', 0);  // clear the textbox
-        }
-    });
 
-    $("#grupoDeClientes").autocomplete({
-        source: function (request, response) {
-            $.ajax({
-                url: "/GrupoDeClientes/BuscaGrupoDeClientesAJAX",
-                type: "POST",
-                dataType: "json",
-                data: { Prefix: request.term },
-                success: function (data) {
-                    response($.map(data, function (item) {
-                        return { label: item.Name, value: item.Name, Id: item.Id, Value: item.Value };
-                    }))
                 }
             })
         },
         select: function (event, ui) {
-            $('#idGrupoDeClientes').attr('value', ui.item.Id);
-            $('#grupoDeClientes').val(ui.item.label);
+            $('#idFuncionario').attr('value', ui.item.Id);
+            $('#funcionario').val(ui.item.label);
             return false;
         },
         messages: {
             noResults: "Sem resultados", results: ""
         }
     });
-    $('#grupoDeClientes').on('blur', function () {
+    $('#funcionario').on('blur', function () {
         if ($(this).val().length === 0) {  //check for no. of characters entered
-            $('#idGrupoDeClientes').attr('value', 0);  // clear the textbox
-        }
-    });
-
-    $("#Faturamento").autocomplete({
-        source: function (request, response) {
-            $.ajax({
-                url: "/Faturamento/BuscaFaturamentoAJAX",
-                type: "POST",
-                dataType: "json",
-                data: { Prefix: request.term },
-                success: function (data) {
-                    response($.map(data, function (item) {
-                        return { label: item.Name, value: item.Name, Id: item.Id, Value: item.Value };
-                    }))
-                }
-            })
-        },
-        select: function (event, ui) {
-            $('#idFaturamento').attr('value', ui.item.Id);
-            $('#Faturamento').val(ui.item.label);
-            return false;
-        },
-        messages: {
-            noResults: "Sem resultados", results: ""
-        }
-    });
-    $('#Faturamento').on('blur', function () {
-        if ($(this).val().length === 0) {  //check for no. of characters entered
-            $('#idFaturamento').attr('value', 0);  // clear the textbox
+            $('#idFuncionario').attr('value', 0);  // clear the textbox
         }
     });
 </script>
