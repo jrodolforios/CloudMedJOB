@@ -2,6 +2,7 @@
 {
     using DatabaseModels;
     using System.Data.Entity;
+    using System.Data.Entity.Infrastructure;
 
     public partial class CloudMedContext : DbContext
     {
@@ -10,6 +11,7 @@
         public CloudMedContext()
             : base("name=MediCloudConnection")
         {
+            ((IObjectContextAdapter)this).ObjectContext.CommandTimeout = 300;  
         }
 
         #endregion Public Constructors

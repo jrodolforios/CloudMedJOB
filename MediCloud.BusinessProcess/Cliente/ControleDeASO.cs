@@ -271,7 +271,6 @@ namespace MediCloud.BusinessProcess.Cliente
             {
                 throw ex;
             }
-            return new Dictionary<decimal, int>();
         }
 
         public static byte[] ImprimirASOComMedCoord(int codigoASO)

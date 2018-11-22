@@ -82,7 +82,7 @@
     <h4 class="header blue bolder smaller">&nbsp;</h4>
     <div class="vspace-12-sm"></div>
 
-    <div class="row">
+        <div class="row">
         <div class="col-sm-3">
             <a href="/ASO" class="btn btn-success btn-block">
                 <div>
@@ -234,23 +234,23 @@
 }
 
 <script type="text/javascript">
-        var sales_charts = $('#sales-charts').css({ 'width': '100%', 'height': '280px' });
-        $.plot("#sales-charts", [
-            { label: "ASOs", data: d1 }
-        ], {
-                hoverable: true,
-                shadowSize: 0,
-                series: {
-                    lines: { show: true },
-                    points: { show: true }
-                },
+            var sales_charts = $('#sales-charts').css({ 'width': '100%', 'height': '280px' });
+            $.plot("#sales-charts", [
+                { label: "ASOs", data: d1 }
+            ], {
+                    hoverable: true,
+                    shadowSize: 0,
+                    series: {
+                        lines: { show: true },
+                        points: { show: true }
+                    },
             
-                grid: {
-                    backgroundColor: { colors: ["#fff", "#fff"] },
-                    borderWidth: 1,
-                    borderColor: '#555'
-                }
-            });
+                    grid: {
+                        backgroundColor: { colors: ["#fff", "#fff"] },
+                        borderWidth: 1,
+                        borderColor: '#555'
+                    }
+                });
 
         function imprimirASO(codigo) {
             window.location.replace("/ASO/ImprimirASOComMedCoord?codigoASO=" + codigo);
