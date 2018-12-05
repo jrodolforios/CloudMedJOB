@@ -3,7 +3,7 @@
 @using MediCloud.Models.Parametro.GrupoProcedimento
 @using System.Linq
 
-@model MediCloud.Models.Cliente.ASOModel
+@model MediCloud.DatabaseModels.MOVIMENTO
 @{
     ViewBag.Title = "ASO";
 
@@ -31,14 +31,14 @@
 
     if (Model != null)
     {
-        checkedAtivo = (Model.Status == "ENTREGUE") ? "checked" : string.Empty;
+        checkedAtivo = (Model.STATUS == "ENTREGUE") ? "checked" : string.Empty;
 
-        if (Model.ProcedimentosMovimento.Any())
+        if (Model.MOVIMENTO_PROCEDIMENTO.Any())
         {
-            Model.ProcedimentosMovimento.ForEach(x =>
+            foreach(var item in Model.MOVIMENTO_PROCEDIMENTO)
             {
-                valorTotalDaASO += (x.Total.HasValue ? x.Total.Value : 0);
-            });
+                valorTotalDaASO += (item.TOTAL.HasValue ? item.TOTAL.Value : 0);
+            }
         }
         ASONovo = false;
     }
@@ -66,11 +66,11 @@
 
                 <div class="space"></div>
                 <form method="post" autocomplete="off" id="formPrincipalASO" class="form-horizontal" action="@Url.Content("~/ASO/DetalhamentoASO")" enctype="multipart/form-data">
-                    <input type="hidden" id="codigoASO" name="codigoASO" value="@Html.ValueFor(x => x.IdASO)" />
-                    <input type="hidden" id="usuario" name="usuario" value="@Html.ValueFor(x => x.Usuario)" />
-                    <input type="hidden" id="caixaPendente" name="caixaPendente" value="@Html.ValueFor(x => x.CaixaPendente)" />
-                    <input type="hidden" id="fechamentoCaixa" name="fechamentoCaixa" value="@Html.ValueFor(x => x.IdFechamentoCaixa)" />
-                    <input type="hidden" id="faturamento" name="faturamento" value="@Html.ValueFor(x => x.Faturamento.IdFaturamento)" />
+                    <input type="hidden" id="codigoASO" name="codigoASO" value="@Html.ValueFor(x => x.IDMOV)" />
+                    <input type="hidden" id="usuario" name="usuario" value="@Html.ValueFor(x => x.USUARIO)" />
+                    <input type="hidden" id="caixaPendente" name="caixaPendente" value="@Html.ValueFor(x => x.CAIXAPENDENTE)" />
+                    <input type="hidden" id="fechamentoCaixa" name="fechamentoCaixa" value="@Html.ValueFor(x => x.IDFCX)" />
+                    <input type="hidden" id="faturamento" name="faturamento" value="@Html.ValueFor(x => x.IDFAT)" />
                     <div class="tabbable">
                         <ul class="nav nav-tabs padding-16">
                             <li class="active">
@@ -79,7 +79,7 @@
                                     Cadastro
                                 </a>
                             </li>
-                            @if (Model != null && Model.IdASO > 0)
+                            @if (Model != null && Model.IDMOV > 0)
                             {
                                 <li>
                                     <a data-toggle="tab" href="#edit-settings">
@@ -99,34 +99,34 @@
                     </div>
                     <div class="tab-content profile-edit-tab-content">
                         <div id="edit-basic" class="tab-pane in active fade">
-                            @if (Model != null && Model.IdASO > 0)
+                            @if (Model != null && Model.IDMOV > 0)
                             {
                                 <div class="action-buttons bigger-150">
-                                    <a href="javascript:imprimirASO(@Html.ValueFor(x => x.IdASO));" class="tooltipASO" title="Imprimir (C/ Médico Coord)">
+                                    <a href="javascript:imprimirASO(@Html.ValueFor(x => x.IDMOV));" class="tooltipASO" title="Imprimir (C/ Médico Coord)">
                                         <i class="ace-icon purple fa fa-file-text-o"></i>
                                     </a>
                                     &nbsp;&nbsp;
-                                    <a href="javascript:imprimirASOSemMedCoord(@Html.ValueFor(x => x.IdASO));" class="tooltipASO" title="Imprimir (S/ Médico Coord)">
+                                    <a href="javascript:imprimirASOSemMedCoord(@Html.ValueFor(x => x.IDMOV));" class="tooltipASO" title="Imprimir (S/ Médico Coord)">
                                         <i class="ace-icon purple fa fa-file-o"></i>
                                     </a>
                                     &nbsp;&nbsp;
-                                    <a href="javascript:GerarRecibo(@Html.ValueFor(x => x.IdASO));" class="tooltipASO" title="Gerar recibo">
+                                    <a href="javascript:GerarRecibo(@Html.ValueFor(x => x.IDMOV));" class="tooltipASO" title="Gerar recibo">
                                         <i class="ace-icon orange fa fa-file-excel-o"></i>
                                     </a>
                                     &nbsp;&nbsp;
-                                    <a href="javascript:GerarFichaClinica(@Html.ValueFor(x => x.IdASO));" class="tooltipASO" title="Ficha Clínica">
+                                    <a href="javascript:GerarFichaClinica(@Html.ValueFor(x => x.IDMOV));" class="tooltipASO" title="Ficha Clínica">
                                         <i class="ace-icon green fa fa-clipboard"></i>
                                     </a>
                                     &nbsp;&nbsp;
-                                    <a href="javascript:GerarListaDeProcedimentos(@Html.ValueFor(x => x.IdASO));" class="tooltipASO" title="Lista de procedimentos">
+                                    <a href="javascript:GerarListaDeProcedimentos(@Html.ValueFor(x => x.IDMOV));" class="tooltipASO" title="Lista de procedimentos">
                                         <i class="ace-icon blue fa fa-list"></i>
                                     </a>
                                     &nbsp;&nbsp;
-                                    <a href="javascript:GerarOrdemDeServico(@Html.ValueFor(x => x.IdASO));" class="tooltipASO" title="Ordem de Serviço">
+                                    <a href="javascript:GerarOrdemDeServico(@Html.ValueFor(x => x.IDMOV));" class="tooltipASO" title="Ordem de Serviço">
                                         <i class="ace-icon blue fa fa-calculator "></i>
                                     </a>
                                     &nbsp;&nbsp;
-                                    <a href="javascript:ConfirmarASO(@Html.ValueFor(x => x.IdASO));" class="tooltipASO" title="Confirmar exames deste ASO">
+                                    <a href="javascript:ConfirmarASO(@Html.ValueFor(x => x.IDMOV));" class="tooltipASO" title="Confirmar exames deste ASO">
                                         <i class="ace-icon green fa fa-check"></i>
                                     </a>
                                 </div>
@@ -145,6 +145,10 @@
                                             <option value="@item.IdReferencia">@item.NomeReferencia</option>
                                         }
                                     </select>
+
+                                    <script type="text/javascript">
+                                        $('#referente').val('@Html.ValueFor(x => x.IDREF)');
+                                    </script>
                                 </div>
                             </div>
 
@@ -154,7 +158,7 @@
                                 <div class="col-sm-8">
                                     <div class="input-medium">
                                         <div class="input-group">
-                                            <input class="input-medium date-picker input-mask-date" id="data" name="data" type="text" data-date-format="dd/mm/yyyy" placeholder="dd/mm/aaaa" value="@(Model == null ? DateTime.Now.ToShortDateString() : (Model.Data.HasValue ? Model.Data.Value.ToShortDateString() : string.Empty)))" />
+                                            <input class="input-medium date-picker input-mask-date" id="data" name="data" type="text" data-date-format="dd/mm/yyyy" placeholder="dd/mm/aaaa" value="@(Model == null ? DateTime.Now.ToShortDateString() : Model.DATA.ToShortDateString()))" />
                                             <span class="input-group-addon">
                                                 <i class="ace-icon fa fa-calendar"></i>
                                             </span>
@@ -167,12 +171,12 @@
                                 <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Cliente &nbsp;<span class="badge badge-important mail-tag"></span></label>
 
                                 <div class="col-sm-8">
-                                    <input type="hidden" name="idCliente" id="idCliente" value="@Html.ValueFor(x => x.Cliente.IdCliente)" />
+                                    <input type="hidden" name="idCliente" id="idCliente" value="@Html.ValueFor(x => x.IDCLI)" />
                                     <div class="input-group">
                                         <span class="input-group-addon">
                                             <i class="ace-icon fa fa-search"></i>
                                         </span>
-                                        <input class="col-xs-12 col-sm-6 componenteFormulario" type="text" id="cliente" name="cliente" placeholder="Digite o nome do cliente" value="@Html.ValueFor(x => x.Cliente.RazaoSocial)" />
+                                        <input class="col-xs-12 col-sm-6 componenteFormulario" type="text" id="cliente" name="cliente" placeholder="Digite o nome do cliente" value="@Html.ValueFor(x => x.CLIENTE.RAZAOSOCIAL)" />
                                     </div>
                                 </div>
                             </div>
@@ -188,7 +192,7 @@
                                         }
                                     </select>
                                     <script type="text/javascript">
-                                        $('#tabela').val('@Html.ValueFor(x => x.Tabela.IdTabela)');
+                                        $('#tabela').val('@Html.ValueFor(x => x.TABELA.IDTAB)');
                                     </script>
 
                                 </div>
@@ -200,12 +204,12 @@
                                 <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Funcionário &nbsp;<span class="badge badge-important mail-tag"></span></label>
 
                                 <div class="col-sm-8">
-                                    <input type="hidden" name="idFuncionario" id="idFuncionario" value="@Html.ValueFor(x => x.Funcionario.IdFuncionario)" />
+                                    <input type="hidden" name="idFuncionario" id="idFuncionario" value="@Html.ValueFor(x => x.IDFUN)" />
                                     <div class="input-group">
                                         <span class="input-group-addon">
                                             <i class="ace-icon fa fa-search"></i>
                                         </span>
-                                        <input class="col-xs-12 col-sm-6 componenteFormulario" type="text" id="funcionario" name="funcionario" placeholder="Digite o nome do Funcionário" value="@Html.ValueFor(x => x.Funcionario.NomeCompleto)" />
+                                        <input class="col-xs-12 col-sm-6 componenteFormulario" type="text" id="funcionario" name="funcionario" placeholder="Digite o nome do Funcionário" value="@Html.ValueFor(x => x.FUNCIONARIO.FUNCIONARIO1)" />
                                     </div>
                                 </div>
                             </div>
@@ -214,12 +218,12 @@
                                 <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Cargo &nbsp;<span class="badge badge-important mail-tag"></span></label>
 
                                 <div class="col-sm-8">
-                                    <input type="hidden" name="idCargo" id="idCargo" value="@Html.ValueFor(x => x.Cargo.IdCargo)" />
+                                    <input type="hidden" name="idCargo" id="idCargo" value="@Html.ValueFor(x => x.CARGO.IDCGO)" />
                                     <div class="input-group">
                                         <span class="input-group-addon">
                                             <i class="ace-icon fa fa-search"></i>
                                         </span>
-                                        <input class="col-xs-12 col-sm-6 componenteFormulario" type="text" id="cargo" name="cargo" placeholder="Digite o cargo do funcionário" value="@Html.ValueFor(x => x.Cargo.NomeCargo)" />
+                                        <input class="col-xs-12 col-sm-6 componenteFormulario" type="text" id="cargo" name="cargo" placeholder="Digite o cargo do funcionário" value="@Html.ValueFor(x => x.CARGO.CARGO1)" />
                                     </div>
                                 </div>
                             </div>
@@ -228,12 +232,12 @@
                                 <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Setor &nbsp;<span class="badge badge-important mail-tag"></span></label>
 
                                 <div class="col-sm-8">
-                                    <input type="hidden" name="idSetor" id="idSetor" value="@Html.ValueFor(x => x.Setor.IdSetor)" />
+                                    <input type="hidden" name="idSetor" id="idSetor" value="@Html.ValueFor(x => x.IDSETOR)" />
                                     <div class="input-group">
                                         <span class="input-group-addon">
                                             <i class="ace-icon fa fa-search"></i>
                                         </span>
-                                        <input class="col-xs-12 col-sm-6 componenteFormulario" type="text" id="setor" name="setor" placeholder="Digite o setor" value="@Html.ValueFor(x => x.Setor.NomeSetor)" />
+                                        <input class="col-xs-12 col-sm-6 componenteFormulario" type="text" id="setor" name="setor" placeholder="Digite o setor" value="@Html.ValueFor(x => x.SETOR.SETOR1)" />
                                     </div>
                                 </div>
                             </div>
@@ -250,7 +254,7 @@
                                     </select>
                                 </div>
                                 <script type="text/javascript">
-                                                    $('#formaPagamento').val('@Html.ValueFor(x => x.FormaPagamento.IdFormaPagamento)');
+                                                    $('#formaPagamento').val('@Html.ValueFor(x => x.IDFORPAG)');
                                 </script>
                             </div>
 
@@ -271,7 +275,7 @@
                                 <label class="col-sm-1 control-label no-padding-right" for="form-field-first">Observação</label>
 
                                 <div class="col-sm-12">
-                                    <textarea class="col-sm-12 componenteFormulario" id="observacoes" name="observacoes" placeholder="observações adicionais">@Html.ValueFor(x => x.Observacao)</textarea>
+                                    <textarea class="col-sm-12 componenteFormulario" id="observacoes" name="observacoes" placeholder="observações adicionais">@Html.ValueFor(x => x.OBSERVACAO)</textarea>
                                 </div>
                             </div>
 
@@ -290,26 +294,26 @@
                                                     </li>
 
                                                     <li>
-                                                        Código de fechamento do caixa: <b>@Html.ValueFor(x => x.IdFechamentoCaixa)</b>
+                                                        Código de fechamento do caixa: <b>@Html.ValueFor(x => x.IDFCX)</b>
                                                     </li>
 
                                                     <li>
-                                                        Data do faturamento: <b>@Html.ValueFor(x => x.Faturamento.Data)</b>
+                                                        Data do faturamento: <b>@Html.ValueFor(x => x.FATURAMENTO.DATA)</b>
                                                     </li>
 
                                                     <li>
-                                                        Usuário: <b>@Html.ValueFor(x => x.Usuario)</b>
+                                                        Usuário: <b>@Html.ValueFor(x => x.USUARIO)</b>
                                                     </li>
                                                 </ul>
 
                                                 <hr />
                                                 <div class="price">
                                                     <small>Situação do caixa:</small>
-                                                    @if (Model != null && Model.CaixaPendente)
+                                                    @if (Model != null && (Model.CAIXAPENDENTE.HasValue ? Model.CAIXAPENDENTE.Value : true))
                                                     {
                                                         <span class="label label-danger">Pendente</span>
                                                     }
-                                                    else if (Model != null && !Model.CaixaPendente)
+                                                    else if (Model != null && !(Model.CAIXAPENDENTE.HasValue ? Model.CAIXAPENDENTE.Value: true))
                                                     {
                                                         <span class="label label-success">Fechado</span>
                                                     }
@@ -328,31 +332,31 @@
                         <div id="edit-settings" class="tab-pane fade">
                             <div class="space-10"></div>
                             <a href="javascript:detalhamentoDoProcedimento(0)" class="btn btn-xs">+ Novo procedimento</a>
-                            @if (Model != null && Model.ProcedimentosMovimento != null && Model.ProcedimentosMovimento.Any())
+                            @if (Model != null && Model.MOVIMENTO_PROCEDIMENTO != null && Model.MOVIMENTO_PROCEDIMENTO.Any())
                             {
                                 string nomeProfissional = string.Empty;
                                 string nomeProcedimento = string.Empty;
-                                foreach (MediCloud.Models.Cliente.ProcedimentoMovimentoModel item in Model.ProcedimentosMovimento)
+                                foreach (var item in Model.MOVIMENTO_PROCEDIMENTO)
                                 {
-                                    if (item.Profissional != null)
+                                    if (item.PROFISSIONAIS != null)
                                     {
-                                        nomeProfissional = item.Profissional.NomeProfissional;
+                                        nomeProfissional = item.PROFISSIONAIS.PROFISSIONAL;
                                     }
                                     else
                                     {
                                         nomeProfissional = string.Empty;
                                     }
 
-                                    if (item.Procedimento != null)
+                                    if (item.PROCEDIMENTO != null)
                                     {
-                                        nomeProcedimento = item.Procedimento.Nome;
+                                        nomeProcedimento = item.PROCEDIMENTO.PROCEDIMENTO1;
                                     }
                                     else
                                     {
                                         nomeProcedimento = string.Empty;
                                     }
                                     <div class="row">
-                                        <div class="col-xs-12" id="@item.IdMovimentoProcedimento">
+                                        <div class="col-xs-12" id="@item.IDPRF">
                                             <div class="media search-media">
                                                 <div class="media-body">
                                                     <div class="container">
@@ -360,21 +364,21 @@
                                                             <span class="blue">@nomeProcedimento </span>
                                                         </h4>
                                                     </div>
-                                                    <p><b>Profissional:</b> @nomeProfissional <br /> <b>Valor:</b>R$ @item.Total</p>
+                                                    <p><b>Profissional:</b> @nomeProfissional <br /> <b>Valor:</b>R$ @item.TOTAL</p>
 
                                                     <div class="search-actions text-center">
                                                         <span class="blue bolder bigger-110">Ações</span>
 
                                                         <div class="action-buttons bigger-150">
-                                                            <a class="tooltipASO" title="Confirmar Exame" href="javascript:confirmarExame(@item.IdMovimentoProcedimento);">
+                                                            <a class="tooltipASO" title="Confirmar Exame" href="javascript:confirmarExame(@item.IDMOVPRO);">
                                                                 <i class="green ace-icon fa fa-check"></i>
                                                             </a>
 
-                                                            <a class="tooltipASO" title="Excluir" href="javascript:excluirProcedimento(@item.IdMovimentoProcedimento);">
+                                                            <a class="tooltipASO" title="Excluir" href="javascript:excluirProcedimento(@item.IDMOVPRO);">
                                                                 <i class="ace-icon fa fa-trash"></i>
                                                             </a>
                                                         </div>
-                                                        <a href="javascript:detalhamentoDoProcedimento(@item.IdMovimentoProcedimento)" class="search-btn-action btn btn-sm btn-block btn-info">Editar</a>
+                                                        <a href="javascript:detalhamentoDoProcedimento(@item.IDMOVPRO)" class="search-btn-action btn btn-sm btn-block btn-info">Editar</a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -410,12 +414,12 @@
 
                             <div class="vspace-12-sm"></div>
 
-                            @if (Model != null && Model.AnexosMovimento != null && Model.AnexosMovimento.Any())
+                            @if (Model != null && Model.MOVIMENTO_ARQUIVOS != null && Model.MOVIMENTO_ARQUIVOS.Any())
                             {
-                                foreach (MediCloud.Models.Cliente.ArquivoMovimentoModel item in Model.AnexosMovimento)
+                                foreach (var item in Model.MOVIMENTO_ARQUIVOS)
                                 {
                             <div class="row">
-                                <div class="col-xs-12" id="@item.IdArquivo">
+                                <div class="col-xs-12" id="@item.IDARQUIVO">
                                     <div class="media search-media">
                                         <div class="media-left">
                                             <a href="#">
@@ -425,20 +429,20 @@
                                         <div class="media-body">
                                             <div class="container">
                                                 <h4 class="media-heading">
-                                                    <span class="blue">@item.NomeArquivo </span>
+                                                    <span class="blue">@item.NOMEARQUIVO </span>
                                                 </h4>
                                             </div>
-                                            <p><b>Data de envio:</b><br /> @item.DataEnvio.ToShortDateString()</p>
+                                            <p><b>Data de envio:</b><br /> @item.DATAENVIO.ToShortDateString()</p>
 
                                             <div class="search-actions text-center">
                                                 <span class="blue bolder bigger-110">Ações</span>
 
                                                 <div class="action-buttons bigger-150">
-                                                    <a href="javascript:excluirArquivoMovimento(@item.IdArquivo);">
+                                                    <a href="javascript:excluirArquivoMovimento(@item.IDARQUIVO);">
                                                         <i class="ace-icon fa fa-trash"></i>
                                                     </a>
                                                 </div>
-                                                <a href="javascript:baixarArquivoMovimento(@item.IdArquivo)" class="search-btn-action btn btn-sm btn-block btn-info"><i class="ace-icon fa fa-arrow-down"></i>Baixar</a>
+                                                <a href="javascript:baixarArquivoMovimento(@item.IDARQUIVO)" class="search-btn-action btn btn-sm btn-block btn-info"><i class="ace-icon fa fa-arrow-down"></i>Baixar</a>
                                             </div>
                                         </div>
                                     </div>
@@ -536,7 +540,7 @@
             <form method="post" autocomplete="off" id="formProcedimentoASO" class="form-horizontal" action="@Url.Content("~/ASO/SalvarProcedimentoMovimento")">
                 <div class="modal-body">
                     <input type="hidden" id="codigoProcedimento" name="codigoProcedimento" value="0" />
-                    <input type="hidden" id="codigoASOProcedimento" name="codigoASOProcedimento" value="@Html.ValueFor(x => x.IdASO)" />
+                    <input type="hidden" id="codigoASOProcedimento" name="codigoASOProcedimento" value="@Html.ValueFor(x => x.IDMOV)" />
                     <input type="hidden" id="codigoFaturamento" name="codigoFaturamento" value="" />
                     <input type="hidden" id="codigoFechamentoCaixa" name="codigoFechamentoCaixa" value="" />
                     <input type="hidden" id="usuarioProcedimentoRealizado" name="usuarioProcedimentoRealizado" value="" />

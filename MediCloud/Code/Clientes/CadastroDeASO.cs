@@ -32,6 +32,15 @@ namespace MediCloud.Code.Clientes
             return listaDeModels;
         }
 
+        internal static List<MOVIMENTO> buscarASOMOV(FormCollection form)
+        {
+            string termo = form["keywords"];
+
+            List<MOVIMENTO> usuarioDoBanco = ControleDeASO.buscarASO(termo);
+
+            return usuarioDoBanco;
+        }
+
         internal static List<ASOModel> UltimosASOS()
         {
             List<ASOModel> listaDeModels = new List<ASOModel>();
@@ -155,6 +164,14 @@ namespace MediCloud.Code.Clientes
             return injetarEmUsuarioModel(ASOEncontrada, materializarClassesDoMovimento);
         }
 
+        internal static MOVIMENTO RecuperarASOPorIDMOV(int idASO)
+        {
+
+            MOVIMENTO ASOEncontrada = ControleDeASO.buscarASOPorId(idASO);
+
+            return ASOEncontrada;
+        }
+
         internal static ASOModel SalvarASO(FormCollection form, bool gerarProcedimentosAutomaticamente = false)
         {
             ASOModel usuarioModel = injetarEmUsuarioModel(form);
@@ -171,6 +188,22 @@ namespace MediCloud.Code.Clientes
             usuarioModel = injetarEmUsuarioModel(ASODAO);
 
             return usuarioModel;
+        }
+
+        internal static MOVIMENTO SalvarASOMOV(FormCollection form, bool gerarProcedimentosAutomaticamente = false)
+        {
+            ASOModel usuarioModel = injetarEmUsuarioModel(form);
+            usuarioModel.validar();
+
+            MOVIMENTO ASODAO = injetarEmUsuarioDAO(usuarioModel);
+            ASODAO = ControleDeASO.SalvarASO(ASODAO);
+
+            if (gerarProcedimentosAutomaticamente)
+            {
+                ControleDeASO.CriarProcedimentosAPartirDeRecomendacao((int)ASODAO.IDMOV);
+            }
+
+            return ASODAO;
         }
 
         private static MOVIMENTO injetarEmUsuarioDAO(ASOModel x)

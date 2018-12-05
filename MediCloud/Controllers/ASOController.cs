@@ -5,6 +5,7 @@ using MediCloud.Code.Clientes;
 using MediCloud.Code.Financeiro;
 using MediCloud.Code.Parametro;
 using MediCloud.Code.Recomendacao;
+using MediCloud.DatabaseModels;
 using MediCloud.Models.Cliente;
 using MediCloud.Models.Financeiro;
 using MediCloud.Models.Parametro;
@@ -37,7 +38,7 @@ namespace MediCloud.Controllers
                 base.EstahLogado();
                 ViewBag.Title = "ASO";
 
-                List<ASOModel> model = CadastroDeASO.buscarASO(form);
+                List<MOVIMENTO> model = CadastroDeASO.buscarASOMOV(form);
 
                 return View(model);
             }
@@ -55,15 +56,10 @@ namespace MediCloud.Controllers
             {
                 base.EstahLogado();
                 ViewBag.Title = "ASO";
-                ASOModel model = null;
+                MOVIMENTO model = null;
 
-                if (!useCache || Session["ASOModel"] == null)
-                    model = CadastroDeASO.RecuperarASOPorID(codigoASO.HasValue ? codigoASO.Value : 0);
-                else
-                {
-                    model = Session["ASOModel"] as ASOModel;
-                    model = CadastroDeASO.AtualizarProcedimentos(model);
-                }
+                model = CadastroDeASO.RecuperarASOPorIDMOV(codigoASO.HasValue ? codigoASO.Value : 0);
+
 
                 Session["ASOModel"] = model;
 
@@ -134,7 +130,7 @@ namespace MediCloud.Controllers
         [HttpPost]
         public ActionResult DetalhamentoASO(FormCollection form)
         {
-            ASOModel modelASO = null;
+            MOVIMENTO modelASO = null;
             try
             {
                 base.EstahLogado();
@@ -148,7 +144,7 @@ namespace MediCloud.Controllers
                 if (!Int32.TryParse(form["codigoASO"], out codigoASO) || codigoASO <= 0)
                     form["usuario"] = base.CurrentUser.login;
 
-                modelASO = CadastroDeASO.SalvarASO(form,true);
+                modelASO = CadastroDeASO.SalvarASOMOV(form, true);
 
                 base.FlashMessage("ASO cadastrado.", MessageType.Success);
                 return View(modelASO);
@@ -156,7 +152,7 @@ namespace MediCloud.Controllers
             catch (InvalidOperationException ex)
             {
                 if (!string.IsNullOrEmpty(form["codigoASO"]))
-                    modelASO = CadastroDeASO.RecuperarASOPorID(Convert.ToInt32(form["codigoASO"]));
+                    modelASO = CadastroDeASO.RecuperarASOPorIDMOV(Convert.ToInt32(form["codigoASO"]));
 
                 base.FlashMessage(ex.Message, MessageType.Error);
                 return View(modelASO);

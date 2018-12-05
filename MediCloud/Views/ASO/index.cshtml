@@ -1,6 +1,6 @@
 ﻿@using System.Linq
 
-@model List<MediCloud.Models.Cliente.ASOModel>
+@model List<MediCloud.DatabaseModels.MOVIMENTO>
 @{
     ViewBag.Title = "ASO";
 }
@@ -32,41 +32,41 @@
 <div class="hr"></div>
 @if (Model != null && Model.Any())
 {
-    foreach (MediCloud.Models.Cliente.ASOModel item in Model)
+    foreach (var item in Model)
     {
-        <div class="col-xs-12" id="@item.IdASO">
+        <div class="col-xs-12" id="@item.IDMOV">
             <div class="media search-media">
                 <div class="media-body">
                     <div class="container">
                         <h4 class="media-heading">
-                            <span class="blue">@item.Funcionario.NomeCompleto - @item.Cliente.NomeFantasia </span>
+                            <span class="blue">@item.FUNCIONARIO.FUNCIONARIO1 - @item.CLIENTE.NOMEFANTASIA </span>
                             <span id="entregue">
-                                @if (item.Status == "ENTREGUE")
+                                @if (item.STATUS == "ENTREGUE")
                                 {
                                     <span class="label label-success" id="spanEntregue">Entregue</span>
                                 }
                             </span>
                         </h4>
                     </div>
-                    <p><b>Referente a:</b> @item.Referente.NomeReferencia &nbsp;&nbsp; <b>Data:</b> @(item.Data.HasValue ? item.Data.Value.ToShortDateString() : string.Empty) <br /> <b>Cargo:</b> @item.Cargo.NomeCargo</p>
+                    <p><b>Referente a:</b> @item.MOVIMENTO_REFERENTE.NOMEREFERENCIA &nbsp;&nbsp; <b>Data:</b> @(item.DATA.ToShortDateString()) <br /> <b>Cargo:</b> @item.CARGO.CARGO1</p>
 
                     <div class="search-actions text-center">
                         <span class="blue bolder bigger-110">Ações</span>
 
                         <div class="action-buttons bigger-150">
-                            <a href="javascript:ConfirmarASO(@item.IdASO);" class="tooltipASO" title="Confirmar exames deste ASO">
+                            <a href="javascript:ConfirmarASO(@item.IDMOV);" class="tooltipASO" title="Confirmar exames deste ASO">
                                 <i class="ace-icon green fa fa-check"></i>
                             </a>
                             &nbsp;&nbsp;
-                            <a href="javascript:imprimirASO(@item.IdASO);" class="tooltipASO" title="Imprimir (C/ Médico Coord)">
+                            <a href="javascript:imprimirASO(@item.IDMOV);" class="tooltipASO" title="Imprimir (C/ Médico Coord)">
                                 <i class="ace-icon purple fa fa-file-text-o"></i>
                             </a>
                             &nbsp;&nbsp;
-                            <a href="javascript:GerarRecibo(@item.IdASO);" class="tooltipASO" title="Gerar recibo">
+                            <a href="javascript:GerarRecibo(@item.IDMOV);" class="tooltipASO" title="Gerar recibo">
                                 <i class="ace-icon orange fa fa-file-excel-o"></i>
                             </a>
                         </div>
-                        <a href="/ASO/DetalhamentoASO?codigoASO=@item.IdASO" class="search-btn-action btn btn-sm btn-block btn-info">Editar</a>
+                        <a href="/ASO/DetalhamentoASO?codigoASO=@item.IDMOV" class="search-btn-action btn btn-sm btn-block btn-info">Editar</a>
                     </div>
                 </div>
             </div>
