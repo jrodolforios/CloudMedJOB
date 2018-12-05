@@ -108,7 +108,8 @@ namespace MediCloud.BusinessProcess.Cliente.Reports
                     ordemDeServicoTemp = ordemDeServicoTemp.Replace("[%Referente%]", _movimento.MOVIMENTO_REFERENTE.NOMEREFERENCIA);
                     ordemDeServicoTemp = ordemDeServicoTemp.Replace("[%NomeProcedimento%]", x.PROCEDIMENTO.PROCEDIMENTO1);
 
-                    ordemDeServicoTemp = ordemDeServicoTemp.Replace("[%DataAgora%]", DateTime.Now.ToShortDateString());
+                   
+                    ordemDeServicoTemp = ordemDeServicoTemp.Replace("[%DataAgora%]", x.DATAEXAME.Value.ToShortDateString());
 
                     ordemDeServicoTemp += "<div style=\"page-break-before:always; \"> </div>";
 
