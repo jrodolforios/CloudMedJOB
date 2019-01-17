@@ -45,29 +45,37 @@ namespace MediCloud.Controllers
         [HttpPost]
         public JsonResult BuscaClienteAJAX(string Prefix)
         {
-            List<ClienteModel> contadoresEncontrados = CadastroDeClientes.RecuperarClientePorTermoAJAX(Prefix);
-            List<AutoCompleteDefaultModel> ObjList = new List<AutoCompleteDefaultModel>();
-
-            try
+            if (Prefix.Length >= 3)
             {
-                contadoresEncontrados.ForEach(x =>
+               List<ClienteModel> contadoresEncontrados = CadastroDeClientes.RecuperarClientePorTermoAJAX(Prefix);
+
+                List<AutoCompleteDefaultModel> ObjList = new List<AutoCompleteDefaultModel>();
+
+                try
                 {
-                    ObjList.Add(new AutoCompleteDefaultModel() { Id = x.IdCliente, Name = x.NomeFantasia });
-                });
+                    contadoresEncontrados.ForEach(x =>
+                    {
+                        ObjList.Add(new AutoCompleteDefaultModel() { Id = x.IdCliente, Name = x.NomeFantasia });
+                    });
 
-                //Searching records from list using LINQ query
-                var results = (from N in ObjList
-                               select new { N.Id, N.Name }).ToArray();
-                return Json(results, JsonRequestBehavior.AllowGet);
-            }
-            catch (Exception ex)
-            {
-                ExceptionUtil.GerarLogDeExcecao(ex, Request.Url.ToString());
-                ObjList = new List<AutoCompleteDefaultModel>()
+                    //Searching records from list using LINQ query
+                    var results = (from N in ObjList
+                                   select new { N.Id, N.Name }).ToArray();
+                    return Json(results, JsonRequestBehavior.AllowGet);
+                }
+                catch (Exception ex)
+                {
+                    ExceptionUtil.GerarLogDeExcecao(ex, Request.Url.ToString());
+                    ObjList = new List<AutoCompleteDefaultModel>()
                 {
                 new AutoCompleteDefaultModel {Id=-1,Name=Constantes.MENSAGEM_GENERICA_DE_ERRO },
                 };
-                return Json(ObjList.ToArray(), JsonRequestBehavior.AllowGet);
+                    return Json(ObjList.ToArray(), JsonRequestBehavior.AllowGet);
+                }
+            }
+            else
+            {
+                return null;
             }
         }
 
