@@ -146,6 +146,8 @@ namespace MediCloud.Controllers
 
                 modelASO = CadastroDeASO.SalvarASOMOV(form, true);
 
+                modelASO = CadastroDeASO.RecuperarASOPorIDMOV((int)modelASO.IDMOV);
+
                 base.FlashMessage("ASO cadastrado.", MessageType.Success);
                 return View(modelASO);
             }

@@ -35,7 +35,7 @@
 
         if (Model.MOVIMENTO_PROCEDIMENTO.Any())
         {
-            foreach(var item in Model.MOVIMENTO_PROCEDIMENTO)
+            foreach (var item in Model.MOVIMENTO_PROCEDIMENTO)
             {
                 valorTotalDaASO += (item.TOTAL.HasValue ? item.TOTAL.Value : 0);
             }
@@ -58,278 +58,279 @@
     <div class="col-xs-12">
         <div id="user-profile-3" class="user-profile row">
             <div class="col-sm-offset-1 col-sm-10">
-               
-                </div><!-- /.well -->
-                <div class="row">
-                    <label class="col-sm-4 control-label no-padding-right" for="form-field-username"><span class="badge badge-important mail-tag"></span>Obrigatório</label>
-                </div>
 
-                <div class="space"></div>
-                <form method="post" autocomplete="off" id="formPrincipalASO" class="form-horizontal" action="@Url.Content("~/ASO/DetalhamentoASO")" enctype="multipart/form-data">
-                    <input type="hidden" id="codigoASO" name="codigoASO" value="@Html.ValueFor(x => x.IDMOV)" />
-                    <input type="hidden" id="usuario" name="usuario" value="@Html.ValueFor(x => x.USUARIO)" />
-                    <input type="hidden" id="caixaPendente" name="caixaPendente" value="@Html.ValueFor(x => x.CAIXAPENDENTE)" />
-                    <input type="hidden" id="fechamentoCaixa" name="fechamentoCaixa" value="@Html.ValueFor(x => x.IDFCX)" />
-                    <input type="hidden" id="faturamento" name="faturamento" value="@Html.ValueFor(x => x.IDFAT)" />
-                    <div class="tabbable">
-                        <ul class="nav nav-tabs padding-16">
-                            <li class="active">
-                                <a data-toggle="tab" href="#edit-basic">
-                                    <i class="green ace-icon fa fa-pencil-square-o bigger-125"></i>
-                                    Cadastro
+            </div><!-- /.well -->
+            <div class="row">
+                <label class="col-sm-4 control-label no-padding-right" for="form-field-username"><span class="badge badge-important mail-tag"></span>Obrigatório</label>
+            </div>
+
+            <div class="space"></div>
+            <form method="post" autocomplete="off" id="formPrincipalASO" class="form-horizontal" action="@Url.Content("~/ASO/DetalhamentoASO")" enctype="multipart/form-data">
+                <input type="hidden" id="codigoASO" name="codigoASO" value="@Html.ValueFor(x => x.IDMOV)" />
+                <input type="hidden" id="usuario" name="usuario" value="@Html.ValueFor(x => x.USUARIO)" />
+                <input type="hidden" id="caixaPendente" name="caixaPendente" value="@Html.ValueFor(x => x.CAIXAPENDENTE)" />
+                <input type="hidden" id="fechamentoCaixa" name="fechamentoCaixa" value="@Html.ValueFor(x => x.IDFCX)" />
+                <input type="hidden" id="faturamento" name="faturamento" value="@Html.ValueFor(x => x.IDFAT)" />
+                <div class="tabbable">
+                    <ul class="nav nav-tabs padding-16">
+                        <li class="active">
+                            <a data-toggle="tab" href="#edit-basic">
+                                <i class="green ace-icon fa fa-pencil-square-o bigger-125"></i>
+                                Cadastro
+                            </a>
+                        </li>
+                        @if (Model != null && Model.IDMOV > 0)
+                        {
+                            <li>
+                                <a data-toggle="tab" href="#edit-settings">
+                                    <i class="purple ace-icon fa fa-navicon bigger-125"></i>
+                                    Procedimentos
                                 </a>
                             </li>
-                            @if (Model != null && Model.IDMOV > 0)
-                            {
-                                <li>
-                                    <a data-toggle="tab" href="#edit-settings">
-                                        <i class="purple ace-icon fa fa-navicon bigger-125"></i>
-                                        Procedimentos
-                                    </a>
-                                </li>
 
-                                <li>
-                                    <a data-toggle="tab" href="#edit-files">
-                                        <i class="orange ace-icon fa fa-file-text-o bigger-125"></i>
-                                        Arquivos
-                                    </a>
-                                </li>
-                            }
-                        </ul>
-                    </div>
-                    <div class="tab-content profile-edit-tab-content">
-                        <div id="edit-basic" class="tab-pane in active fade">
-                            @if (Model != null && Model.IDMOV > 0)
-                            {
-                                <div class="action-buttons bigger-150">
-                                    <a href="javascript:imprimirASO(@Html.ValueFor(x => x.IDMOV));" class="tooltipASO" title="Imprimir (C/ Médico Coord)">
-                                        <i class="ace-icon purple fa fa-file-text-o"></i>
-                                    </a>
-                                    &nbsp;&nbsp;
-                                    <a href="javascript:imprimirASOSemMedCoord(@Html.ValueFor(x => x.IDMOV));" class="tooltipASO" title="Imprimir (S/ Médico Coord)">
-                                        <i class="ace-icon purple fa fa-file-o"></i>
-                                    </a>
-                                    &nbsp;&nbsp;
-                                    <a href="javascript:GerarRecibo(@Html.ValueFor(x => x.IDMOV));" class="tooltipASO" title="Gerar recibo">
-                                        <i class="ace-icon orange fa fa-file-excel-o"></i>
-                                    </a>
-                                    &nbsp;&nbsp;
-                                    <a href="javascript:GerarFichaClinica(@Html.ValueFor(x => x.IDMOV));" class="tooltipASO" title="Ficha Clínica">
-                                        <i class="ace-icon green fa fa-clipboard"></i>
-                                    </a>
-                                    &nbsp;&nbsp;
-                                    <a href="javascript:GerarListaDeProcedimentos(@Html.ValueFor(x => x.IDMOV));" class="tooltipASO" title="Lista de procedimentos">
-                                        <i class="ace-icon blue fa fa-list"></i>
-                                    </a>
-                                    &nbsp;&nbsp;
-                                    <a href="javascript:GerarOrdemDeServico(@Html.ValueFor(x => x.IDMOV));" class="tooltipASO" title="Ordem de Serviço">
-                                        <i class="ace-icon blue fa fa-calculator "></i>
-                                    </a>
-                                    &nbsp;&nbsp;
-                                    <a href="javascript:ConfirmarASO(@Html.ValueFor(x => x.IDMOV));" class="tooltipASO" title="Confirmar exames deste ASO">
-                                        <i class="ace-icon green fa fa-check"></i>
-                                    </a>
-                                </div>
-                            }
-                            <h4 class="header blue bolder smaller">Dados do ASO</h4>
-
-                            <div class="vspace-12-sm"></div>
-
-                            <div class="form-group">
-                                <label class="col-sm-4 control-label no-padding-right" for="form-field-username">Referente a &nbsp;<span class="badge badge-important mail-tag"></span></label>
-
-                                <div class="col-sm-8">
-                                    <select class="chosen-select form-control" id="referente" name="referente" data-placeholder="Selecione um...">
-                                        @foreach (var item in todosReferentes)
-                                        {
-                                            <option value="@item.IdReferencia">@item.NomeReferencia</option>
-                                        }
-                                    </select>
-
-                                    <script type="text/javascript">
-                                        $('#referente').val('@Html.ValueFor(x => x.IDREF)');
-                                    </script>
-                                </div>
+                            <li>
+                                <a data-toggle="tab" href="#edit-files">
+                                    <i class="orange ace-icon fa fa-file-text-o bigger-125"></i>
+                                    Arquivos
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+                <div class="tab-content profile-edit-tab-content">
+                    <div id="edit-basic" class="tab-pane in active fade">
+                        @if (Model != null && Model.IDMOV > 0)
+                        {
+                            <div class="action-buttons bigger-150">
+                                <a href="javascript:imprimirASO(@Html.ValueFor(x => x.IDMOV));" class="tooltipASO" title="Imprimir (C/ Médico Coord)">
+                                    <i class="ace-icon purple fa fa-file-text-o"></i>
+                                </a>
+                                &nbsp;&nbsp;
+                                <a href="javascript:imprimirASOSemMedCoord(@Html.ValueFor(x => x.IDMOV));" class="tooltipASO" title="Imprimir (S/ Médico Coord)">
+                                    <i class="ace-icon purple fa fa-file-o"></i>
+                                </a>
+                                &nbsp;&nbsp;
+                                <a href="javascript:GerarRecibo(@Html.ValueFor(x => x.IDMOV));" class="tooltipASO" title="Gerar recibo">
+                                    <i class="ace-icon orange fa fa-file-excel-o"></i>
+                                </a>
+                                &nbsp;&nbsp;
+                                <a href="javascript:GerarFichaClinica(@Html.ValueFor(x => x.IDMOV));" class="tooltipASO" title="Ficha Clínica">
+                                    <i class="ace-icon green fa fa-clipboard"></i>
+                                </a>
+                                &nbsp;&nbsp;
+                                <a href="javascript:GerarListaDeProcedimentos(@Html.ValueFor(x => x.IDMOV));" class="tooltipASO" title="Lista de procedimentos">
+                                    <i class="ace-icon blue fa fa-list"></i>
+                                </a>
+                                &nbsp;&nbsp;
+                                <a href="javascript:GerarOrdemDeServico(@Html.ValueFor(x => x.IDMOV));" class="tooltipASO" title="Ordem de Serviço">
+                                    <i class="ace-icon blue fa fa-calculator "></i>
+                                </a>
+                                &nbsp;&nbsp;
+                                <a href="javascript:ConfirmarASO(@Html.ValueFor(x => x.IDMOV));" class="tooltipASO" title="Confirmar exames deste ASO">
+                                    <i class="ace-icon green fa fa-check"></i>
+                                </a>
                             </div>
+                        }
+                        <h4 class="header blue bolder smaller">Dados do ASO</h4>
 
-                            <div class="form-group">
-                                <label class="col-sm-4 control-label no-padding-right" for="form-field-date">Data &nbsp;<span class="badge badge-important mail-tag"></span></label>
+                        <div class="vspace-12-sm"></div>
 
-                                <div class="col-sm-8">
-                                    <div class="input-medium">
-                                        <div class="input-group">
-                                            <input class="input-medium date-picker input-mask-date" id="data" name="data" type="text" data-date-format="dd/mm/yyyy" placeholder="dd/mm/aaaa" value="@(Model == null ? DateTime.Now.ToShortDateString() : Model.DATA.ToShortDateString()))" />
-                                            <span class="input-group-addon">
-                                                <i class="ace-icon fa fa-calendar"></i>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label no-padding-right" for="form-field-username">Referente a &nbsp;<span class="badge badge-important mail-tag"></span></label>
 
-                            <div class="form-group">
-                                <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Cliente &nbsp;<span class="badge badge-important mail-tag"></span></label>
+                            <div class="col-sm-8">
+                                <select class="chosen-select form-control" id="referente" name="referente" data-placeholder="Selecione um...">
+                                    @foreach (var item in todosReferentes)
+                                    {
+                                        <option value="@item.IdReferencia">@item.NomeReferencia</option>
+                                    }
+                                </select>
 
-                                <div class="col-sm-8">
-                                    <input type="hidden" name="idCliente" id="idCliente" value="@Html.ValueFor(x => x.IDCLI)" />
-                                    <div class="input-group">
-                                        <span class="input-group-addon">
-                                            <i class="ace-icon fa fa-search"></i>
-                                        </span>
-                                        <input class="col-xs-12 col-sm-6 componenteFormulario" type="text" id="cliente" name="cliente" placeholder="Digite o nome do cliente" value="@Html.ValueFor(x => x.CLIENTE.RAZAOSOCIAL)" />
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="col-sm-4 control-label no-padding-right" for="form-field-username">Tabela &nbsp;<span class="badge badge-important mail-tag"></span></label>
-
-                                <div class="col-sm-8">
-                                    <select class="chosen-select form-control" id="tabela" name="tabela" data-placeholder="Selecione um...">
-                                        @foreach (var item in todasTabelas)
-                                        {
-                                            <option value="@item.IdTabela">@item.NomeTabela</option>
-                                        }
-                                    </select>
-                                    <script type="text/javascript">
-                                        $('#tabela').val('@Html.ValueFor(x => x.TABELA.IDTAB)');
-                                    </script>
-
-                                </div>
-                            </div>
-
-
-
-                            <div class="form-group">
-                                <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Funcionário &nbsp;<span class="badge badge-important mail-tag"></span></label>
-
-                                <div class="col-sm-8">
-                                    <input type="hidden" name="idFuncionario" id="idFuncionario" value="@Html.ValueFor(x => x.IDFUN)" />
-                                    <div class="input-group">
-                                        <span class="input-group-addon">
-                                            <i class="ace-icon fa fa-search"></i>
-                                        </span>
-                                        <input class="col-xs-12 col-sm-6 componenteFormulario" type="text" id="funcionario" name="funcionario" placeholder="Digite o nome do Funcionário" value="@Html.ValueFor(x => x.FUNCIONARIO.FUNCIONARIO1)" />
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Cargo &nbsp;<span class="badge badge-important mail-tag"></span></label>
-
-                                <div class="col-sm-8">
-                                    <input type="hidden" name="idCargo" id="idCargo" value="@Html.ValueFor(x => x.CARGO.IDCGO)" />
-                                    <div class="input-group">
-                                        <span class="input-group-addon">
-                                            <i class="ace-icon fa fa-search"></i>
-                                        </span>
-                                        <input class="col-xs-12 col-sm-6 componenteFormulario" type="text" id="cargo" name="cargo" placeholder="Digite o cargo do funcionário" value="@Html.ValueFor(x => x.CARGO.CARGO1)" />
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Setor &nbsp;<span class="badge badge-important mail-tag"></span></label>
-
-                                <div class="col-sm-8">
-                                    <input type="hidden" name="idSetor" id="idSetor" value="@Html.ValueFor(x => x.IDSETOR)" />
-                                    <div class="input-group">
-                                        <span class="input-group-addon">
-                                            <i class="ace-icon fa fa-search"></i>
-                                        </span>
-                                        <input class="col-xs-12 col-sm-6 componenteFormulario" type="text" id="setor" name="setor" placeholder="Digite o setor" value="@Html.ValueFor(x => x.SETOR.SETOR1)" />
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="col-sm-4 control-label no-padding-right" for="form-field-username">Forma de pagamento &nbsp;<span class="badge badge-important mail-tag"></span></label>
-
-                                <div class="col-sm-8">
-                                    <select class="chosen-select form-control" id="formaPagamento" name="formaPagamento" data-placeholder="Selecione um...">
-                                        @foreach (var item in todasFormasPagamento)
-                                        {
-                                            <option value="@item.IdFormaPagamento">@item.NomeFormaPagamento</option>
-                                        }
-                                    </select>
-                                </div>
                                 <script type="text/javascript">
-                                                    $('#formaPagamento').val('@Html.ValueFor(x => x.IDFORPAG)');
+                                        $('#referente').val('@Html.ValueFor(x => x.IDREF)');
                                 </script>
                             </div>
+                        </div>
 
-                            <div class="form-group">
-                                <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Entregue</label>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label no-padding-right" for="form-field-date">Data &nbsp;<span class="badge badge-important mail-tag"></span></label>
 
-                                <div class="col-sm-8 ">
-                                    <div class="checkbox">
-                                        <label>
-                                            <input name="entregue" type="checkbox" class="ace" @checkedAtivo />
-                                            <span class="lbl"> &nbsp;</span>
-                                        </label>
+                            <div class="col-sm-8">
+                                <div class="input-medium">
+                                    <div class="input-group">
+                                        <input class="input-medium date-picker input-mask-date" id="data" name="data" type="text" data-date-format="dd/mm/yyyy" placeholder="dd/mm/aaaa" value="@(Model == null ? DateTime.Now.ToShortDateString() : Model.DATA.ToShortDateString()))" />
+                                        <span class="input-group-addon">
+                                            <i class="ace-icon fa fa-calendar"></i>
+                                        </span>
                                     </div>
                                 </div>
                             </div>
+                        </div>
 
-                            <div class="form-group">
-                                <label class="col-sm-1 control-label no-padding-right" for="form-field-first">Observação</label>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Cliente &nbsp;<span class="badge badge-important mail-tag"></span></label>
 
-                                <div class="col-sm-12">
-                                    <textarea class="col-sm-12 componenteFormulario" id="observacoes" name="observacoes" placeholder="observações adicionais">@Html.ValueFor(x => x.OBSERVACAO)</textarea>
+                            <div class="col-sm-8">
+                                <input type="hidden" name="idCliente" id="idCliente" value="@Html.ValueFor(x => x.IDCLI)" />
+                                <div class="input-group">
+                                    <span class="input-group-addon">
+                                        <i class="ace-icon fa fa-search"></i>
+                                    </span>
+                                    <input class="col-xs-12 col-sm-6 componenteFormulario" type="text" id="cliente" name="cliente" placeholder="Digite o nome do cliente" value="@Html.ValueFor(x => x.CLIENTE.RAZAOSOCIAL)" />
                                 </div>
                             </div>
+                        </div>
 
-                            <div class="row">
-                                <div class="col-xs-12 col-sm-12 pricing-box">
-                                    <div class="widget-box widget-color-dark">
-                                        <div class="widget-header">
-                                            <h5 class="widget-title bigger lighter">Mais informações deste ASO</h5>
-                                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label no-padding-right" for="form-field-username">Tabela &nbsp;<span class="badge badge-important mail-tag"></span></label>
 
-                                        <div class="widget-body">
-                                            <div class="widget-main">
-                                                <ul class="list-unstyled spaced2">
-                                                    <li>
-                                                        Total desta ASO: <b>R$ @valorTotalDaASO</b>
-                                                    </li>
+                            <div class="col-sm-8">
+                                <select class="chosen-select form-control" id="tabela" name="tabela" data-placeholder="Selecione um...">
+                                    @foreach (var item in todasTabelas)
+                                    {
+                                        <option value="@item.IdTabela">@item.NomeTabela</option>
+                                    }
+                                </select>
+                                <script type="text/javascript">
+                                        $('#tabela').val('@Html.ValueFor(x => x.TABELA.IDTAB)');
+                                </script>
 
-                                                    <li>
-                                                        Código de fechamento do caixa: <b>@Html.ValueFor(x => x.IDFCX)</b>
-                                                    </li>
+                            </div>
+                        </div>
 
-                                                    <li>
-                                                        Data do faturamento: <b>@Html.ValueFor(x => x.FATURAMENTO.DATA)</b>
-                                                    </li>
 
-                                                    <li>
-                                                        Usuário: <b>@Html.ValueFor(x => x.USUARIO)</b>
-                                                    </li>
-                                                </ul>
 
-                                                <hr />
-                                                <div class="price">
-                                                    <small>Situação do caixa:</small>
-                                                    @if (Model != null && (Model.CAIXAPENDENTE.HasValue ? Model.CAIXAPENDENTE.Value : true))
-                                                    {
-                                                        <span class="label label-danger">Pendente</span>
-                                                    }
-                                                    else if (Model != null && !(Model.CAIXAPENDENTE.HasValue ? Model.CAIXAPENDENTE.Value: true))
-                                                    {
-                                                        <span class="label label-success">Fechado</span>
-                                                    }
-                                                    else
-                                                    {
-                                                        <span class="label label-primary">Indefinido</span>
-                                                    }
-                                                </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Funcionário &nbsp;<span class="badge badge-important mail-tag"></span></label>
+
+                            <div class="col-sm-8">
+                                <input type="hidden" name="idFuncionario" id="idFuncionario" value="@Html.ValueFor(x => x.IDFUN)" />
+                                <div class="input-group">
+                                    <span class="input-group-addon">
+                                        <i class="ace-icon fa fa-search"></i>
+                                    </span>
+                                    <input class="col-xs-12 col-sm-6 componenteFormulario" type="text" id="funcionario" name="funcionario" placeholder="Digite o nome do Funcionário" value="@Html.ValueFor(x => x.FUNCIONARIO.FUNCIONARIO1)" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Cargo &nbsp;<span class="badge badge-important mail-tag"></span></label>
+
+                            <div class="col-sm-8">
+                                <input type="hidden" name="idCargo" id="idCargo" value="@Html.ValueFor(x => x.CARGO.IDCGO)" />
+                                <div class="input-group">
+                                    <span class="input-group-addon">
+                                        <i class="ace-icon fa fa-search"></i>
+                                    </span>
+                                    <input class="col-xs-12 col-sm-6 componenteFormulario" type="text" id="cargo" name="cargo" placeholder="Digite o cargo do funcionário" value="@Html.ValueFor(x => x.CARGO.CARGO1)" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Setor &nbsp;<span class="badge badge-important mail-tag"></span></label>
+
+                            <div class="col-sm-8">
+                                <input type="hidden" name="idSetor" id="idSetor" value="@Html.ValueFor(x => x.IDSETOR)" />
+                                <div class="input-group">
+                                    <span class="input-group-addon">
+                                        <i class="ace-icon fa fa-search"></i>
+                                    </span>
+                                    <input class="col-xs-12 col-sm-6 componenteFormulario" type="text" id="setor" name="setor" placeholder="Digite o setor" value="@Html.ValueFor(x => x.SETOR.SETOR1)" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label no-padding-right" for="form-field-username">Forma de pagamento &nbsp;<span class="badge badge-important mail-tag"></span></label>
+
+                            <div class="col-sm-8">
+                                <select class="chosen-select form-control" id="formaPagamento" name="formaPagamento" data-placeholder="Selecione um...">
+                                    @foreach (var item in todasFormasPagamento)
+                                    {
+                                        <option value="@item.IdFormaPagamento">@item.NomeFormaPagamento</option>
+                                    }
+                                </select>
+                            </div>
+                            <script type="text/javascript">
+                                                    $('#formaPagamento').val('@Html.ValueFor(x => x.IDFORPAG)');
+                            </script>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label no-padding-right" for="form-field-first">Entregue</label>
+
+                            <div class="col-sm-8 ">
+                                <div class="checkbox">
+                                    <label>
+                                        <input name="entregue" type="checkbox" class="ace" @checkedAtivo />
+                                        <span class="lbl"> &nbsp;</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-1 control-label no-padding-right" for="form-field-first">Observação</label>
+
+                            <div class="col-sm-12">
+                                <textarea class="col-sm-12 componenteFormulario" id="observacoes" name="observacoes" placeholder="observações adicionais">@Html.ValueFor(x => x.OBSERVACAO)</textarea>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 pricing-box">
+                                <div class="widget-box widget-color-dark">
+                                    <div class="widget-header">
+                                        <h5 class="widget-title bigger lighter">Mais informações deste ASO</h5>
+                                    </div>
+
+                                    <div class="widget-body">
+                                        <div class="widget-main">
+                                            <ul class="list-unstyled spaced2">
+                                                <li>
+                                                    Total desta ASO: <b>R$ @valorTotalDaASO</b>
+                                                </li>
+
+                                                <li>
+                                                    Código de fechamento do caixa: <b>@Html.ValueFor(x => x.IDFCX)</b>
+                                                </li>
+
+                                                <li>
+                                                    Data do faturamento: <b>@Html.ValueFor(x => x.FATURAMENTO.DATA)</b>
+                                                </li>
+
+                                                <li>
+                                                    Usuário: <b>@Html.ValueFor(x => x.USUARIO)</b>
+                                                </li>
+                                            </ul>
+
+                                            <hr />
+                                            <div class="price">
+                                                <small>Situação do caixa:</small>
+                                                @if (Model != null && (Model.CAIXAPENDENTE.HasValue ? Model.CAIXAPENDENTE.Value : true))
+                                                {
+                                                    <span class="label label-danger">Pendente</span>
+                                                }
+                                                else if (Model != null && !(Model.CAIXAPENDENTE.HasValue ? Model.CAIXAPENDENTE.Value : true))
+                                                {
+                                                    <span class="label label-success">Fechado</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="label label-primary">Indefinido</span>
+                                                }
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-
                             </div>
+
                         </div>
-                        <div id="edit-settings" class="tab-pane fade">
+                    </div>
+                    <div id="edit-settings" class="tab-pane fade">
+                        <div id="procediementosupdate">
                             <div class="space-10"></div>
                             <a href="javascript:detalhamentoDoProcedimento(0)" class="btn btn-xs">+ Novo procedimento</a>
                             @if (Model != null && Model.MOVIMENTO_PROCEDIMENTO != null && Model.MOVIMENTO_PROCEDIMENTO.Any())
@@ -392,94 +393,94 @@
                                     Nenhum procedimento para ser exibido.
                                 </div>
                             }
-
                         </div>
-                        <div id="edit-files" class="tab-pane fade">
-                            <div class="space-10"></div>
-                            <div class="form-group">
-                                <div class="col-xs-12">
-                                    <input multiple="" name="arquivo" type="file" id="arquivo" />
-                                </div>
+                    </div>
+                    <div id="edit-files" class="tab-pane fade">
+                        <div class="space-10"></div>
+                        <div class="form-group">
+                            <div class="col-xs-12">
+                                <input multiple="" name="arquivo" type="file" id="arquivo" />
                             </div>
+                        </div>
 
-                            <div class="progress pos-rel hide" id="progressBarFile" data-percent="0%">
-                                <div class="progress-bar" id="InnerProgressBarFile" style="width:0%;"></div>
-                            </div>
-                            <a class="btn btn-info" href="javascript:enviarArquivo()">
-                                <i class="ace-icon fa fa-cloud-upload bigger-110"></i>
-                                Enviar arquivo
-                            </a>
+                        <div class="progress pos-rel hide" id="progressBarFile" data-percent="0%">
+                            <div class="progress-bar" id="InnerProgressBarFile" style="width:0%;"></div>
+                        </div>
+                        <a class="btn btn-info" href="javascript:enviarArquivo()">
+                            <i class="ace-icon fa fa-cloud-upload bigger-110"></i>
+                            Enviar arquivo
+                        </a>
 
-                            <h4 class="header blue bolder smaller">Arquivos</h4>
+                        <h4 class="header blue bolder smaller">Arquivos</h4>
 
-                            <div class="vspace-12-sm"></div>
+                        <div class="vspace-12-sm"></div>
 
-                            @if (Model != null && Model.MOVIMENTO_ARQUIVOS != null && Model.MOVIMENTO_ARQUIVOS.Any())
+                        @if (Model != null && Model.MOVIMENTO_ARQUIVOS != null && Model.MOVIMENTO_ARQUIVOS.Any())
+                        {
+                            foreach (var item in Model.MOVIMENTO_ARQUIVOS)
                             {
-                                foreach (var item in Model.MOVIMENTO_ARQUIVOS)
-                                {
-                            <div class="row">
-                                <div class="col-xs-12" id="@item.IDARQUIVO">
-                                    <div class="media search-media">
-                                        <div class="media-left">
-                                            <a href="#">
-                                                <img class="media-object" data-src="holder.js/72x72" alt="72x72" src="/assets/images/avatars/document-download-flat.png" data-holder-rendered="true" style="width: 72px; height: 72px;">
-                                            </a>
-                                        </div>
-                                        <div class="media-body">
-                                            <div class="container">
-                                                <h4 class="media-heading">
-                                                    <span class="blue">@item.NOMEARQUIVO </span>
-                                                </h4>
+                                <div class="row">
+                                    <div class="col-xs-12" id="@item.IDARQUIVO">
+                                        <div class="media search-media">
+                                            <div class="media-left">
+                                                <a href="#">
+                                                    <img class="media-object" data-src="holder.js/72x72" alt="72x72" src="/assets/images/avatars/document-download-flat.png" data-holder-rendered="true" style="width: 72px; height: 72px;">
+                                                </a>
                                             </div>
-                                            <p><b>Data de envio:</b><br /> @item.DATAENVIO.ToShortDateString()</p>
-
-                                            <div class="search-actions text-center">
-                                                <span class="blue bolder bigger-110">Ações</span>
-
-                                                <div class="action-buttons bigger-150">
-                                                    <a href="javascript:excluirArquivoMovimento(@item.IDARQUIVO);">
-                                                        <i class="ace-icon fa fa-trash"></i>
-                                                    </a>
+                                            <div class="media-body">
+                                                <div class="container">
+                                                    <h4 class="media-heading">
+                                                        <span class="blue">@item.NOMEARQUIVO </span>
+                                                    </h4>
                                                 </div>
-                                                <a href="javascript:baixarArquivoMovimento(@item.IDARQUIVO)" class="search-btn-action btn btn-sm btn-block btn-info"><i class="ace-icon fa fa-arrow-down"></i>Baixar</a>
+                                                <p><b>Data de envio:</b><br /> @item.DATAENVIO.ToShortDateString()</p>
+
+                                                <div class="search-actions text-center">
+                                                    <span class="blue bolder bigger-110">Ações</span>
+
+                                                    <div class="action-buttons bigger-150">
+                                                        <a href="javascript:excluirArquivoMovimento(@item.IDARQUIVO);">
+                                                            <i class="ace-icon fa fa-trash"></i>
+                                                        </a>
+                                                    </div>
+                                                    <a href="javascript:baixarArquivoMovimento(@item.IDARQUIVO)" class="search-btn-action btn btn-sm btn-block btn-info"><i class="ace-icon fa fa-arrow-down"></i>Baixar</a>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                                }
                             }
-                            else
-                            {
+                        }
+                        else
+                        {
                             <div class="alert alert-block alert-info">
                                 Nenhum arquivo para ser exibido.
                             </div>
-                            }
-
-                        </div>
+                        }
 
                     </div>
-                    <div class="clearfix form-actions">
-                        <div class="col-md-offset-3 col-md-9">
-                            <button class="btn btn-info" type="submit">
-                                <i class="ace-icon fa fa-check bigger-110"></i>
-                                Salvar
+
+                </div>
+                <div class="clearfix form-actions">
+                    <div class="col-md-offset-3 col-md-9">
+                        <button class="btn btn-info" type="submit">
+                            <i class="ace-icon fa fa-check bigger-110"></i>
+                            Salvar
+                        </button>
+                        @if (ASONovo)
+                        {
+                            <span>&nbsp; &nbsp;</span>
+                            <button class="btn" type="reset" id="limparForm">
+                                <i class="ace-icon fa fa-undo bigger-110"></i>
+                                Limpar
                             </button>
-                            @if (ASONovo)
-                            {
-                                <span>&nbsp; &nbsp;</span>
-                                <button class="btn" type="reset" id="limparForm">
-                                    <i class="ace-icon fa fa-undo bigger-110"></i>
-                                    Limpar
-                                </button>
-                            }
-                        </div>
+                        }
                     </div>
-                </form>
-            </div><!-- /.span -->
-        </div>
+                </div>
+            </form>
+        </div><!-- /.span -->
     </div>
+</div>
 </div>
 
 <div id="confirm" class="modal fade">
@@ -588,20 +589,20 @@
                         </div>
                     </div>
 
-                        <div class="form-group">
-                            <label class="col-sm-4 control-label no-padding-right" for="form-field-date">Data do exame &nbsp;<span class="badge badge-important mail-tag"></span></label>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label no-padding-right" for="form-field-date">Data do exame &nbsp;<span class="badge badge-important mail-tag"></span></label>
 
-                            <div class="col-sm-8">
-                                <div class="input-medium">
-                                    <div class="input-group">
-                                        <input class="input-medium date-picker input-mask-date" id="dataExame" name="dataExame" type="text" data-date-format="dd/mm/yyyy" placeholder="dd/mm/aaaa" value="" />
-                                        <span class="input-group-addon">
-                                            <i class="ace-icon fa fa-calendar"></i>
-                                        </span>
-                                    </div>
+                        <div class="col-sm-8">
+                            <div class="input-medium">
+                                <div class="input-group">
+                                    <input class="input-medium date-picker input-mask-date" id="dataExame" name="dataExame" type="text" data-date-format="dd/mm/yyyy" placeholder="dd/mm/aaaa" value="" />
+                                    <span class="input-group-addon">
+                                        <i class="ace-icon fa fa-calendar"></i>
+                                    </span>
                                 </div>
                             </div>
                         </div>
+                    </div>
 
                     <div class="form-group">
                         <label class="col-sm-4 control-label no-padding-right" for="form-field-date">Data do próximo exame </label>
@@ -706,8 +707,13 @@
 <script type="text/javascript">
                                                     function submitProcedimento() {
 
-                                                        $('form#formProcedimentoASO').submit();
-                                                        $('#detalhamentoProcedimento').modal('toggle');
+                                                        //$('form#formProcedimentoASO').submit();
+                                                        $.post('@Url.Content("~/ASO/SalvarProcedimentoMovimento")', $('form#formProcedimentoASO').serialize(), function () {
+                                                            $('#detalhamentoProcedimento').modal('toggle');
+                                                            $('#procediementosupdate').load("/ASO/DetalhamentoASO?codigoASO=" + @Model.IDMOV + ' #procediementosupdate');
+                                                            limparComponentesProcedimentoMovimento();
+                                                        });
+
                                                     }
 
                                                     $(".tooltipASO").tooltip({
@@ -744,7 +750,7 @@
                                                                 var tipoAlert;
                                                                 if (savingStatus.acaoBemSucedida) {
                                                                     tipoAlert = 'alert-success';
-                                                                    $("#" + codigo).remove();
+                                                                    $('#procediementosupdate').load("/ASO/DetalhamentoASO?codigoASO=" + @Model.IDMOV + ' #procediementosupdate');
                                                                 }
                                                                 else
                                                                     tipoAlert = 'alert-danger';
