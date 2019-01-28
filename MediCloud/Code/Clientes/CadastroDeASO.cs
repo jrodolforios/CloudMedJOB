@@ -198,6 +198,8 @@ namespace MediCloud.Code.Clientes
             MOVIMENTO ASODAO = injetarEmUsuarioDAO(usuarioModel);
             ASODAO = ControleDeASO.SalvarASO(ASODAO);
 
+            ASODAO = ControleDeASO.buscarASOPorId((int)ASODAO.IDMOV);
+
             if (gerarProcedimentosAutomaticamente)
             {
                 ControleDeASO.CriarProcedimentosAPartirDeRecomendacao((int)ASODAO.IDMOV);
