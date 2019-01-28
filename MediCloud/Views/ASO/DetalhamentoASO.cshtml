@@ -158,7 +158,7 @@
                             <div class="col-sm-8">
                                 <div class="input-medium">
                                     <div class="input-group">
-                                        <input class="input-medium date-picker input-mask-date" id="data" name="data" type="text" data-date-format="dd/mm/yyyy" placeholder="dd/mm/aaaa" value="@(Model == null ? DateTime.Now.ToShortDateString() : Model.DATA.ToShortDateString()))" />
+                                        <input class="input-medium date-picker input-mask-date" id="data" name="data" type="text" data-date-format="dd/mm/yyyy" placeholder="dd/mm/aaaa" value="@(Model == null ? DateTime.Now.ToShortDateString() : Model.DATA.ToShortDateString())" />
                                         <span class="input-group-addon">
                                             <i class="ace-icon fa fa-calendar"></i>
                                         </span>
@@ -332,7 +332,7 @@
                     <div id="edit-settings" class="tab-pane fade">
                         <div id="procediementosupdate">
                             <div class="space-10"></div>
-                            <a href="javascript:detalhamentoDoProcedimento(0)" class="btn btn-xs">+ Novo procedimento</a>
+                            <a href="javascript:detalhamentoDoProcedimento(0);" class="btn btn-xs">+ Novo procedimento</a>
                             @if (Model != null && Model.MOVIMENTO_PROCEDIMENTO != null && Model.MOVIMENTO_PROCEDIMENTO.Any())
                             {
                                 string nomeProfissional = string.Empty;
@@ -379,7 +379,7 @@
                                                                 <i class="ace-icon fa fa-trash"></i>
                                                             </a>
                                                         </div>
-                                                        <a href="javascript:detalhamentoDoProcedimento(@item.IDMOVPRO)" class="search-btn-action btn btn-sm btn-block btn-info">Editar</a>
+                                                        <a href="javascript:detalhamentoDoProcedimento(@item.IDMOVPRO);" class="search-btn-action btn btn-sm btn-block btn-info">Editar</a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -710,7 +710,7 @@
                                                         //$('form#formProcedimentoASO').submit();
                                                         $.post('@Url.Content("~/ASO/SalvarProcedimentoMovimento")', $('form#formProcedimentoASO').serialize(), function () {
                                                             $('#detalhamentoProcedimento').modal('toggle');
-                                                            $('#procediementosupdate').load("/ASO/DetalhamentoASO?codigoASO=" + @Model.IDMOV + ' #procediementosupdate');
+                                                            $('#procediementosupdate').load("/ASO/DetalhamentoASO?codigoASO=" + @(Model?.IDMOV) + ' #procediementosupdate');
                                                             limparComponentesProcedimentoMovimento();
                                                         });
 
@@ -750,7 +750,7 @@
                                                                 var tipoAlert;
                                                                 if (savingStatus.acaoBemSucedida) {
                                                                     tipoAlert = 'alert-success';
-                                                                    $('#procediementosupdate').load("/ASO/DetalhamentoASO?codigoASO=" + @Model.IDMOV + ' #procediementosupdate');
+                                                                    $('#procediementosupdate').load("/ASO/DetalhamentoASO?codigoASO=" + @(Model?.IDMOV) + ' #procediementosupdate');
                                                                 }
                                                                 else
                                                                     tipoAlert = 'alert-danger';
