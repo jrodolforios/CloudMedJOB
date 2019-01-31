@@ -383,25 +383,25 @@
                                                             <i class="green ace-icon fa fa-check"></i>
                                                         </a>
 
-                                                        <a class="tooltipASO" title="Excluir" href="javascript:excluirProcedimento(@item.IDMOVPRO);">
-                                                            <i class="ace-icon fa fa-trash"></i>
-                                                        </a>
+                                                            <a class="tooltipASO" title="Excluir" href="javascript:excluirProcedimento(@item.IDMOVPRO);">
+                                                                <i class="ace-icon fa fa-trash"></i>
+                                                            </a>
+                                                        </div>
+                                                        <a href="javascript:detalhamentoDoProcedimento(@item.IDMOVPRO);" class="search-btn-action btn btn-sm btn-block btn-info">Editar</a>
                                                     </div>
-                                                    <a href="javascript:detalhamentoDoProcedimento(@item.IDMOVPRO)" class="search-btn-action btn btn-sm btn-block btn-info">Editar</a>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
+                                }
+                            }
+                            else
+                            {
+                                <div class="alert alert-block alert-info">
+                                    Nenhum procedimento para ser exibido.
                                 </div>
                             }
-                        }
-                        else
-                        {
-                            <div class="alert alert-block alert-info">
-                                Nenhum procedimento para ser exibido.
-                            </div>
-                        }
-
+                        </div>
                     </div>
                     <div id="edit-files" class="tab-pane fade">
                         <div class="space-10"></div>
@@ -800,9 +800,14 @@
 <script type="text/javascript">
     function submitProcedimento() {
 
-        $('form#formProcedimentoASO').submit();
-        $('#detalhamentoProcedimento').modal('toggle');
-    }
+                                                        //$('form#formProcedimentoASO').submit();
+                                                        $.post('@Url.Content("~/ASO/SalvarProcedimentoMovimento")', $('form#formProcedimentoASO').serialize(), function () {
+                                                            $('#detalhamentoProcedimento').modal('toggle');
+                                                            $('#procediementosupdate').load("/ASO/DetalhamentoASO?codigoASO=" + @(Model?.IDMOV) + ' #procediementosupdate');
+                                                            limparComponentesProcedimentoMovimento();
+                                                        });
+
+                                                    }
 
     $(".tooltipASO").tooltip({
         show: null,

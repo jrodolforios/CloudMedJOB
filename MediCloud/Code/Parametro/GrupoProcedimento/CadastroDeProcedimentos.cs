@@ -12,7 +12,7 @@ namespace MediCloud.Code.Parametro.GrupoProcedimento
     {
         #region Public Methods
 
-        public static ProcedimentoModel injetarEmUsuarioModel(PROCEDIMENTO x)
+        public static ProcedimentoModel injetarEmUsuarioModel(PROCEDIMENTO x, bool carregarClasses = true)
         {
             if (x == null)
                 return null;
@@ -27,8 +27,8 @@ namespace MediCloud.Code.Parametro.GrupoProcedimento
                     Sigla = x.ABREVIADO,
                     ZeraAutomaticamente = x.ZERAAUTOMATICO,
 
-                    Profissional = CadastroDeProfissional.GetProfissionalPorID(x.IDPRF),
-                    SubGrupo = CadastroDeSubGrupo.GetSubGrupoPorID((int)x.IDSUBGRUPRO)
+                    Profissional = carregarClasses ? CadastroDeProfissional.GetProfissionalPorID(x.IDPRF) : new Models.Parametro.ProfissionalModel(),
+                    SubGrupo = carregarClasses ? CadastroDeSubGrupo.GetSubGrupoPorID((int)x.IDSUBGRUPRO) : new SubGrupoModel()
                 };
         }
 
@@ -68,7 +68,7 @@ namespace MediCloud.Code.Parametro.GrupoProcedimento
 
             contadoresEncontrados.ForEach(x =>
             {
-                resultados.Add(injetarEmUsuarioModel(x));
+                resultados.Add(injetarEmUsuarioModel(x, false));
             });
 
             return resultados;
