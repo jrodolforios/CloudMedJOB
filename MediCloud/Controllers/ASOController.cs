@@ -3,6 +3,7 @@ using MediCloud.BusinessProcess.Util;
 using MediCloud.Code;
 using MediCloud.Code.Clientes;
 using MediCloud.Code.Financeiro;
+using MediCloud.Code.Laudo;
 using MediCloud.Code.Parametro;
 using MediCloud.Code.Recomendacao;
 using MediCloud.DatabaseModels;
@@ -15,6 +16,7 @@ using MediCloud.Models.Seguranca;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -334,6 +336,96 @@ namespace MediCloud.Controllers
                 Response.Redirect("/ASO");
                 return null;
             }
+        }
+
+        public FileResult ImprimirComMultiplas(int codigoASO, int AsoNormal, int AsoSemMedico, int FichaClinica, int Audiometria)
+        {
+            ASOModel aso = null;
+            Dictionary<string, byte[]> arquivos = new Dictionary<string, byte[]>();
+            try
+            {
+                base.EstahLogado();
+
+                aso = CadastroDeASO.RecuperarASOPorID(codigoASO, false);
+
+                if (AsoNormal > 0)
+                {
+                    for (int i = 1; i <= AsoNormal; i++)
+                    {
+                        arquivos.Add($"ASO_{aso.Funcionario.NomeCompleto}_{aso.Cliente.RazaoSocial}_{i}.pdf" ,CadastroDeASO.ImprimirASOComMedCoord(codigoASO));
+                    }
+                }
+
+                if (AsoSemMedico > 0)
+                {
+                    for (int i = 1; i <= AsoSemMedico; i++)
+                    {
+                        arquivos.Add($"ASOS_{aso.Funcionario.NomeCompleto}_{aso.Cliente.RazaoSocial}_{i}.pdf", CadastroDeASO.ImprimirASOSemMedCoord(codigoASO));
+                    }
+                }
+
+                if (FichaClinica > 0)
+                {
+                    for (int i = 1; i <= FichaClinica; i++)
+                    {
+                        arquivos.Add($"FichaClinica_{aso.Funcionario.NomeCompleto}_{aso.Cliente.RazaoSocial}_{i}.pdf", CadastroDeASO.ImprimirFichaClinica(codigoASO));
+                    }
+                }
+                /*
+                CadastroDeLaudoAudio.
+
+                 if (Audiometria > 0)
+                 {
+                     for (int i = 0; i <= Audiometria; i++)
+                     {
+                         arquivos.Add(CadastroDeASO.(codigoASO));
+                     }
+                 }
+                 */
+
+
+                byte[] fileBytes = Compress(arquivos);
+                string fileName = aso.toString() + ".zip";
+                return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, fileName);
+            }
+            catch (Exception ex)
+            {
+                ExceptionUtil.GerarLogDeExcecao(ex, Request.Url.ToString());
+                base.FlashMessage(Constantes.MENSAGEM_GENERICA_DE_ERRO, MessageType.Error);
+                Response.Redirect("/ASO");
+                return null;
+            }
+        }
+
+        public static byte[] Compress(Dictionary<string, byte[]> sourceFiles)
+        {
+
+            if (sourceFiles.Any())
+            {
+                using (System.IO.MemoryStream memoryStream = new System.IO.MemoryStream())
+                {
+                    // create a zip
+                    using (System.IO.Compression.ZipArchive zip = new System.IO.Compression.ZipArchive(memoryStream, System.IO.Compression.ZipArchiveMode.Create, true))
+                    {
+                        // interate through the source files
+                        foreach (KeyValuePair<string, byte[]> f in sourceFiles)
+                        {
+                            // add the item name to the zip
+                            System.IO.Compression.ZipArchiveEntry zipItem = zip.CreateEntry(f.Key.Replace("/", ""));
+                            // add the item bytes to the zip entry by opening the original file and copying the bytes 
+                            using (System.IO.MemoryStream originalFileMemoryStream = new System.IO.MemoryStream(f.Value))
+                            {
+                                using (System.IO.Stream entryStream = zipItem.Open())
+                                {
+                                    originalFileMemoryStream.CopyTo(entryStream);
+                                }
+                            }
+                        }
+                    }
+                    return memoryStream.ToArray();
+                }
+            }
+            return null;
         }
 
         public FileResult ImprimirASOSemMedCoord(int codigoASO)
