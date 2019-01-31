@@ -800,14 +800,14 @@
 <script type="text/javascript">
     function submitProcedimento() {
 
-                                                        //$('form#formProcedimentoASO').submit();
-                                                        $.post('@Url.Content("~/ASO/SalvarProcedimentoMovimento")', $('form#formProcedimentoASO').serialize(), function () {
-                                                            $('#detalhamentoProcedimento').modal('toggle');
-                                                            $('#procediementosupdate').load("/ASO/DetalhamentoASO?codigoASO=" + @(Model?.IDMOV) + ' #procediementosupdate');
-                                                            limparComponentesProcedimentoMovimento();
-                                                        });
+        //$('form#formProcedimentoASO').submit();
+        $.post('@Url.Content("~/ASO/SalvarProcedimentoMovimento")', $('form#formProcedimentoASO').serialize(), function () {
+            $('#detalhamentoProcedimento').modal('toggle');
+            $('#procediementosupdate').load("/ASO/DetalhamentoASO?codigoASO=" + @(Model?.IDMOV) + ' #procediementosupdate');
+            limparComponentesProcedimentoMovimento();
+        });
 
-                                                    }
+    }
 
     $(".tooltipASO").tooltip({
         show: null,
