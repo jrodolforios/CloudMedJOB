@@ -108,7 +108,7 @@ namespace MediCloud.BusinessProcess.Cliente.Reports
                     ordemDeServicoTemp = ordemDeServicoTemp.Replace("[%Referente%]", _movimento.MOVIMENTO_REFERENTE.NOMEREFERENCIA);
                     ordemDeServicoTemp = ordemDeServicoTemp.Replace("[%NomeProcedimento%]", x.PROCEDIMENTO.PROCEDIMENTO1);
 
-                   
+
                     ordemDeServicoTemp = ordemDeServicoTemp.Replace("[%DataAgora%]", x.DATAEXAME.Value.ToShortDateString());
 
                     ordemDeServicoTemp += "<div style=\"page-break-before:always; \"> </div>";
@@ -191,12 +191,23 @@ namespace MediCloud.BusinessProcess.Cliente.Reports
         {
             StringBuilder strRetorno = new StringBuilder();
 
-            movimentoProcedimento.ForEach(x =>
-            {
-                strRetorno.AppendLine("<br/>");
-                strRetorno.AppendLine($"{(x.DATAEXAME.HasValue ? x.DATAEXAME.Value.ToShortDateString() : string.Empty)} - {x.PROCEDIMENTO?.PROCEDIMENTO1}");
-            });
+            int PROCEDIMENTO = 0;
 
+                movimentoProcedimento.ForEach(x =>
+                {
+                    if(PROCEDIMENTO<= 8)
+                    {
+                        strRetorno.AppendLine("<br/>");
+                        strRetorno.AppendLine($"{(x.DATAEXAME.HasValue ? x.DATAEXAME.Value.ToShortDateString() : string.Empty)} - {x.PROCEDIMENTO?.PROCEDIMENTO1}");
+                    }
+                    else
+                    {
+                        strRetorno.AppendLine($"{(x.DATAEXAME.HasValue ? x.DATAEXAME.Value.ToShortDateString() : string.Empty)} - {x.PROCEDIMENTO?.PROCEDIMENTO1}");
+                    }
+
+                    PROCEDIMENTO++;
+                });
+            
             return strRetorno.ToString();
         }
 

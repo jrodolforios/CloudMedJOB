@@ -101,6 +101,22 @@
         .alignRight {
             float: right;
         }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        .column {
+            float: left;
+            width: 50%;
+            padding: 10px;
+        }
+
+        .row:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
     </style>
 </head>
 <body>
@@ -171,9 +187,13 @@
             <hr class="line" />
 
             <p><b>SENDO SUBMETIDO AOS SEGUINTES EXAMES COMPLEMENTARES:</b></p>
-            <p>
-                [%procedimentos%]
-            </p>
+            <div>
+                <div class="row">
+                    <div class="column"><p>[%procedimentos%]</p></div>
+                    <div class="column"><p>[%procedimentos%]</p></div>
+                </div>
+            </div>
+           
 
             <hr class="dotted" />
 
