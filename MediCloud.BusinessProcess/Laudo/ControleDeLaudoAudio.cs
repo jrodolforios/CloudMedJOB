@@ -169,6 +169,24 @@ namespace MediCloud.BusinessProcess.Laudo
             }
         }
 
+        public static List<LAUDOAUD> buscarPorProcedimentoMovimento(int idMovimentoProcedimento)
+        {
+            CloudMedContext contexto = new CloudMedContext();
+            try
+            {
+                return contexto.LAUDOAUD.Where(x => x.IDMOVPRO == idMovimentoProcedimento).ToList();
+            }
+            catch (DbEntityValidationException ex)
+            {
+                ExceptionUtil.TratarErrosDeValidacaoDoBanco(ex);
+                return new List<LAUDOAUD>();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         #endregion Public Methods
     }
 }

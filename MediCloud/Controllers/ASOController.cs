@@ -1,4 +1,6 @@
 ﻿using MediCloud.App_Code;
+using MediCloud.BusinessProcess.Laudo;
+using MediCloud.BusinessProcess.Laudo.Reports;
 using MediCloud.BusinessProcess.Util;
 using MediCloud.Code;
 using MediCloud.Code.Clientes;
@@ -348,7 +350,7 @@ namespace MediCloud.Controllers
             {
                 base.EstahLogado();
 
-                aso = CadastroDeASO.RecuperarASOPorID(codigoASO, false);
+                aso = CadastroDeASO.RecuperarASOPorID(codigoASO, true);
 
                 if (AsoNormal > 0)
                 {
@@ -373,17 +375,32 @@ namespace MediCloud.Controllers
                         arquivos.Add($"FichaClinica_{aso.Funcionario.NomeCompleto}_{aso.Cliente.RazaoSocial}_{i}.pdf", CadastroDeASO.ImprimirFichaClinica(codigoASO));
                     }
                 }
-                /*
-                CadastroDeLaudoAudio.
 
                  if (Audiometria > 0)
                  {
-                     for (int i = 0; i <= Audiometria; i++)
+                    int idlaudoAudio = 0;
+                    if (CadastroDeLaudoAudio.buscarPorProcedimentoMovimento(aso.ProcedimentosMovimento.FirstOrDefault(x => x.Procedimento?.Nome?.ToLower() == "audiometria")?.IdMovimentoProcedimento ?? 0).Any())
+                        idlaudoAudio = CadastroDeLaudoAudio.buscarPorProcedimentoMovimento(aso.ProcedimentosMovimento.FirstOrDefault(x => x.Procedimento?.Nome?.ToLower() == "audiometria")?.IdMovimentoProcedimento ?? 0).FirstOrDefault().IdLaudoAudio;
+                    else
+                    {
+                        if(aso.ProcedimentosMovimento.FirstOrDefault(x => x.Procedimento?.Nome?.ToLower() == "audiometria") != null) { 
+                        idlaudoAudio = (int)ControleDeLaudoAudio.SalvarLaudoAudio(
+                            new LAUDOAUD()
+                            {
+                                IDMOVPRO = aso.ProcedimentosMovimento.FirstOrDefault(x => x.Procedimento?.Nome?.ToLower() == "audiometria")?.IdMovimentoProcedimento ?? 0,
+                            }).IDLAUDO;
+                        }
+                        else
+                        {
+                            throw new Exception("Este ASO não possui audiometrica cadastrada");
+                        }
+                    }
+
+                     for (int i = 1; i <= Audiometria; i++)
                      {
-                         arquivos.Add(CadastroDeASO.(codigoASO));
+                         arquivos.Add($"Audiometria_{aso.Funcionario.NomeCompleto}_{aso.Cliente.RazaoSocial}_{i}.pdf", CadastroDeLaudoAudio.ImprimirAudiometria(idlaudoAudio));
                      }
                  }
-                 */
 
 
                 byte[] fileBytes = Compress(arquivos);

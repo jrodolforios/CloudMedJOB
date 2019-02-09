@@ -101,39 +101,39 @@
                     <div id="edit-basic" class="tab-pane in active fade">
                         @if (Model != null && Model.IDMOV > 0)
                         {
-                        <div class="action-buttons bigger-150">
-                            <a href="javascript:imprimirASO(@Html.ValueFor(x => x.IDMOV));" class="tooltipASO" title="Imprimir (C/ Médico Coord)">
-                                <i class="ace-icon purple fa fa-file-text-o"></i>
-                            </a>
-                            &nbsp;&nbsp;
-                            <a href="javascript:imprimirASOSemMedCoord(@Html.ValueFor(x => x.IDMOV));" class="tooltipASO" title="Imprimir (S/ Médico Coord)">
-                                <i class="ace-icon purple fa fa-file-o"></i>
-                            </a>
-                            &nbsp;&nbsp;
-                            <a href="javascript:GerarRecibo(@Html.ValueFor(x => x.IDMOV));" class="tooltipASO" title="Gerar recibo">
-                                <i class="ace-icon orange fa fa-file-excel-o"></i>
-                            </a>
-                            &nbsp;&nbsp;
-                            <a href="javascript:GerarFichaClinica(@Html.ValueFor(x => x.IDMOV));" class="tooltipASO" title="Ficha Clínica">
-                                <i class="ace-icon green fa fa-clipboard"></i>
-                            </a>
-                            &nbsp;&nbsp;
-                            <a href="javascript:GerarListaDeProcedimentos(@Html.ValueFor(x => x.IDMOV));" class="tooltipASO" title="Lista de procedimentos">
-                                <i class="ace-icon blue fa fa-list"></i>
-                            </a>
-                            &nbsp;&nbsp;
-                            <a href="javascript:GerarOrdemDeServico(@Html.ValueFor(x => x.IDMOV));" class="tooltipASO" title="Ordem de Serviço">
-                                <i class="ace-icon blue fa fa-calculator "></i>
-                            </a>
-                            &nbsp;&nbsp;
-                            <a href="javascript:ConfirmarASO(@Html.ValueFor(x => x.IDMOV));" class="tooltipASO" title="Confirmar exames deste ASO">
-                                <i class="ace-icon green fa fa-check"></i>
-                            </a>
-                            &nbsp;&nbsp;
-                            <a href="javascript:MultiplasImpressoes(@Html.ValueFor(x => x.IDMOV));" class="tooltipASO" title="Confirmar exames deste ASO">
-                                <i class="ace-icon red fa fa-print"></i>
-                            </a>
-                        </div>
+                            <div class="action-buttons bigger-150">
+                                <a href="javascript:imprimirASO(@Html.ValueFor(x => x.IDMOV));" class="tooltipASO" title="Imprimir (C/ Médico Coord)">
+                                    <i class="ace-icon purple fa fa-file-text-o"></i>
+                                </a>
+                                &nbsp;&nbsp;
+                                <a href="javascript:imprimirASOSemMedCoord(@Html.ValueFor(x => x.IDMOV));" class="tooltipASO" title="Imprimir (S/ Médico Coord)">
+                                    <i class="ace-icon purple fa fa-file-o"></i>
+                                </a>
+                                &nbsp;&nbsp;
+                                <a href="javascript:GerarRecibo(@Html.ValueFor(x => x.IDMOV));" class="tooltipASO" title="Gerar recibo">
+                                    <i class="ace-icon orange fa fa-file-excel-o"></i>
+                                </a>
+                                &nbsp;&nbsp;
+                                <a href="javascript:GerarFichaClinica(@Html.ValueFor(x => x.IDMOV));" class="tooltipASO" title="Ficha Clínica">
+                                    <i class="ace-icon green fa fa-clipboard"></i>
+                                </a>
+                                &nbsp;&nbsp;
+                                <a href="javascript:GerarListaDeProcedimentos(@Html.ValueFor(x => x.IDMOV));" class="tooltipASO" title="Lista de procedimentos">
+                                    <i class="ace-icon blue fa fa-list"></i>
+                                </a>
+                                &nbsp;&nbsp;
+                                <a href="javascript:GerarOrdemDeServico(@Html.ValueFor(x => x.IDMOV));" class="tooltipASO" title="Ordem de Serviço">
+                                    <i class="ace-icon blue fa fa-calculator "></i>
+                                </a>
+                                &nbsp;&nbsp;
+                                <a href="javascript:ConfirmarASO(@Html.ValueFor(x => x.IDMOV));" class="tooltipASO" title="Confirmar exames deste ASO">
+                                    <i class="ace-icon green fa fa-check"></i>
+                                </a>
+                                &nbsp;&nbsp;
+                                <a href="javascript:MultiplasImpressoes(@Html.ValueFor(x => x.IDMOV));" class="tooltipASO" title="Confirmar exames deste ASO">
+                                    <i class="ace-icon red fa fa-print"></i>
+                                </a>
+                            </div>
                         }
 
 
@@ -340,48 +340,50 @@
                     <!--essa div -->
                     <div id="edit-settings" class="tab-pane fade">
                         <div class="space-10"></div>
-                        <a href="javascript:detalhamentoDoProcedimento(0)" class="btn btn-xs">+ Novo procedimento</a>
-                        @if (Model != null && Model.MOVIMENTO_PROCEDIMENTO != null && Model.MOVIMENTO_PROCEDIMENTO.Any())
-                        {
-                            string nomeProfissional = string.Empty;
-                            string nomeProcedimento = string.Empty;
-                            foreach (var item in Model.MOVIMENTO_PROCEDIMENTO)
+                        <div id="procediementosupdate">
+
+                            <a href="javascript:detalhamentoDoProcedimento(0)" class="btn btn-xs">+ Novo procedimento</a>
+                            @if (Model != null && Model.MOVIMENTO_PROCEDIMENTO != null && Model.MOVIMENTO_PROCEDIMENTO.Any())
                             {
-                                if (item.PROFISSIONAIS != null)
+                                string nomeProfissional = string.Empty;
+                                string nomeProcedimento = string.Empty;
+                                foreach (var item in Model.MOVIMENTO_PROCEDIMENTO)
                                 {
-                                    nomeProfissional = item.PROFISSIONAIS.PROFISSIONAL;
-                                }
-                                else
-                                {
-                                    nomeProfissional = string.Empty;
-                                }
+                                    if (item.PROFISSIONAIS != null)
+                                    {
+                                        nomeProfissional = item.PROFISSIONAIS.PROFISSIONAL;
+                                    }
+                                    else
+                                    {
+                                        nomeProfissional = string.Empty;
+                                    }
 
-                                if (item.PROCEDIMENTO != null)
-                                {
-                                    nomeProcedimento = item.PROCEDIMENTO.PROCEDIMENTO1;
-                                }
-                                else
-                                {
-                                    nomeProcedimento = string.Empty;
-                                }
-                                <div class="row">
-                                    <div class="col-xs-12" id="@item.IDPRF">
-                                        <div class="media search-media">
-                                            <div class="media-body">
-                                                <div class="container">
-                                                    <h4 class="media-heading">
-                                                        <span class="blue">@nomeProcedimento </span>
-                                                    </h4>
-                                                </div>
-                                                <p><b>Profissional:</b> @nomeProfissional <br /> <b>Valor:</b>R$ @item.TOTAL</p>
+                                    if (item.PROCEDIMENTO != null)
+                                    {
+                                        nomeProcedimento = item.PROCEDIMENTO.PROCEDIMENTO1;
+                                    }
+                                    else
+                                    {
+                                        nomeProcedimento = string.Empty;
+                                    }
+                                    <div class="row">
+                                        <div class="col-xs-12" id="@item.IDMOVPRO">
+                                            <div class="media search-media">
+                                                <div class="media-body">
+                                                    <div class="container">
+                                                        <h4 class="media-heading">
+                                                            <span class="blue">@nomeProcedimento </span>
+                                                        </h4>
+                                                    </div>
+                                                    <p><b>Profissional:</b> @nomeProfissional <br /> <b>Valor:</b>R$ @item.TOTAL</p>
 
-                                                <div class="search-actions text-center">
-                                                    <span class="blue bolder bigger-110">Ações</span>
+                                                    <div class="search-actions text-center">
+                                                        <span class="blue bolder bigger-110">Ações</span>
 
-                                                    <div class="action-buttons bigger-150">
-                                                        <a class="tooltipASO" title="Confirmar Exame" href="javascript:confirmarExame(@item.IDMOVPRO);">
-                                                            <i class="green ace-icon fa fa-check"></i>
-                                                        </a>
+                                                        <div class="action-buttons bigger-150">
+                                                            <a class="tooltipASO" title="Confirmar Exame" href="javascript:confirmarExame(@item.IDMOVPRO);">
+                                                                <i class="green ace-icon fa fa-check"></i>
+                                                            </a>
 
                                                             <a class="tooltipASO" title="Excluir" href="javascript:excluirProcedimento(@item.IDMOVPRO);">
                                                                 <i class="ace-icon fa fa-trash"></i>
@@ -403,91 +405,92 @@
                             }
                         </div>
                     </div>
-                    <div id="edit-files" class="tab-pane fade">
-                        <div class="space-10"></div>
-                        <div class="form-group">
-                            <div class="col-xs-12">
-                                <input multiple="" name="arquivo" type="file" id="arquivo" />
-                            </div>
+                </div>
+                <div id="edit-files" class="tab-pane fade">
+                    <div class="space-10"></div>
+                    <div class="form-group">
+                        <div class="col-xs-12">
+                            <input multiple="" name="arquivo" type="file" id="arquivo" />
                         </div>
+                    </div>
 
-                        <div class="progress pos-rel hide" id="progressBarFile" data-percent="0%">
-                            <div class="progress-bar" id="InnerProgressBarFile" style="width:0%;"></div>
-                        </div>
-                        <a class="btn btn-info" href="javascript:enviarArquivo()">
-                            <i class="ace-icon fa fa-cloud-upload bigger-110"></i>
-                            Enviar arquivo
-                        </a>
+                    <div class="progress pos-rel hide" id="progressBarFile" data-percent="0%">
+                        <div class="progress-bar" id="InnerProgressBarFile" style="width:0%;"></div>
+                    </div>
+                    <a class="btn btn-info" href="javascript:enviarArquivo()">
+                        <i class="ace-icon fa fa-cloud-upload bigger-110"></i>
+                        Enviar arquivo
+                    </a>
 
-                        <h4 class="header blue bolder smaller">Arquivos</h4>
+                    <h4 class="header blue bolder smaller">Arquivos</h4>
 
-                        <div class="vspace-12-sm"></div>
+                    <div class="vspace-12-sm"></div>
 
-                        @if (Model != null && Model.MOVIMENTO_ARQUIVOS != null && Model.MOVIMENTO_ARQUIVOS.Any())
+                    @if (Model != null && Model.MOVIMENTO_ARQUIVOS != null && Model.MOVIMENTO_ARQUIVOS.Any())
+                    {
+                        foreach (var item in Model.MOVIMENTO_ARQUIVOS)
                         {
-                            foreach (var item in Model.MOVIMENTO_ARQUIVOS)
-                            {
-                                <div class="row">
-                                    <div class="col-xs-12" id="@item.IDARQUIVO">
-                                        <div class="media search-media">
-                                            <div class="media-left">
-                                                <a href="#">
-                                                    <img class="media-object" data-src="holder.js/72x72" alt="72x72" src="/assets/images/avatars/document-download-flat.png" data-holder-rendered="true" style="width: 72px; height: 72px;">
-                                                </a>
+                            <div class="row">
+                                <div class="col-xs-12" id="@item.IDARQUIVO">
+                                    <div class="media search-media">
+                                        <div class="media-left">
+                                            <a href="#">
+                                                <img class="media-object" data-src="holder.js/72x72" alt="72x72" src="/assets/images/avatars/document-download-flat.png" data-holder-rendered="true" style="width: 72px; height: 72px;">
+                                            </a>
+                                        </div>
+                                        <div class="media-body">
+                                            <div class="container">
+                                                <h4 class="media-heading">
+                                                    <span class="blue">@item.NOMEARQUIVO </span>
+                                                </h4>
                                             </div>
-                                            <div class="media-body">
-                                                <div class="container">
-                                                    <h4 class="media-heading">
-                                                        <span class="blue">@item.NOMEARQUIVO </span>
-                                                    </h4>
-                                                </div>
-                                                <p><b>Data de envio:</b><br /> @item.DATAENVIO.ToShortDateString()</p>
+                                            <p><b>Data de envio:</b><br /> @item.DATAENVIO.ToShortDateString()</p>
 
-                                                <div class="search-actions text-center">
-                                                    <span class="blue bolder bigger-110">Ações</span>
+                                            <div class="search-actions text-center">
+                                                <span class="blue bolder bigger-110">Ações</span>
 
-                                                    <div class="action-buttons bigger-150">
-                                                        <a href="javascript:excluirArquivoMovimento(@item.IDARQUIVO);">
-                                                            <i class="ace-icon fa fa-trash"></i>
-                                                        </a>
-                                                    </div>
-                                                    <a href="javascript:baixarArquivoMovimento(@item.IDARQUIVO)" class="search-btn-action btn btn-sm btn-block btn-info"><i class="ace-icon fa fa-arrow-down"></i>Baixar</a>
+                                                <div class="action-buttons bigger-150">
+                                                    <a href="javascript:excluirArquivoMovimento(@item.IDARQUIVO);">
+                                                        <i class="ace-icon fa fa-trash"></i>
+                                                    </a>
                                                 </div>
+                                                <a href="javascript:baixarArquivoMovimento(@item.IDARQUIVO)" class="search-btn-action btn btn-sm btn-block btn-info"><i class="ace-icon fa fa-arrow-down"></i>Baixar</a>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            }
-                        }
-                        else
-                        {
-                            <div class="alert alert-block alert-info">
-                                Nenhum arquivo para ser exibido.
                             </div>
                         }
-
-                    </div>
+                    }
+                    else
+                    {
+                        <div class="alert alert-block alert-info">
+                            Nenhum arquivo para ser exibido.
+                        </div>
+                    }
 
                 </div>
-                <div class="clearfix form-actions">
-                    <div class="col-md-offset-3 col-md-9">
-                        <button class="btn btn-info" type="submit">
-                            <i class="ace-icon fa fa-check bigger-110"></i>
-                            Salvar
-                        </button>
-                        @if (ASONovo)
-                        {
-                            <span>&nbsp; &nbsp;</span>
-                            <button class="btn" type="reset" id="limparForm">
-                                <i class="ace-icon fa fa-undo bigger-110"></i>
-                                Limpar
-                            </button>
-                        }
-                    </div>
-                </div>
-            </form>
-        </div><!-- /.span -->
-    </div>
+
+        </div>
+        <div class="clearfix form-actions">
+            <div class="col-md-offset-3 col-md-9">
+                <button class="btn btn-info" type="submit">
+                    <i class="ace-icon fa fa-check bigger-110"></i>
+                    Salvar
+                </button>
+                @if (ASONovo)
+                {
+                    <span>&nbsp; &nbsp;</span>
+                    <button class="btn" type="reset" id="limparForm">
+                        <i class="ace-icon fa fa-undo bigger-110"></i>
+                        Limpar
+                    </button>
+                }
+            </div>
+        </div>
+        </form>
+    </div><!-- /.span -->
+</div>
 </div>
 </div>
 
@@ -799,13 +802,19 @@
 
 <script type="text/javascript">
     function submitProcedimento() {
-
-        //$('form#formProcedimentoASO').submit();
-        $.post('@Url.Content("~/ASO/SalvarProcedimentoMovimento")', $('form#formProcedimentoASO').serialize(), function () {
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Content("~/ASO/SalvarProcedimentoMovimento")',
+            data: $('form#formProcedimentoASO').serialize(),
+            success: function () {
             $('#detalhamentoProcedimento').modal('toggle');
             $('#procediementosupdate').load("/ASO/DetalhamentoASO?codigoASO=" + @(Model?.IDMOV) + ' #procediementosupdate');
             limparComponentesProcedimentoMovimento();
+            },
+            async: false
         });
+
+
 
     }
 
@@ -831,7 +840,7 @@
             keyboard: false
         })
     }
-    
+
     function confirmDeleteModal(codigo) {
         $('#confirm').modal({
             backdrop: 'static',

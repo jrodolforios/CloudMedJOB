@@ -212,6 +212,19 @@ namespace MediCloud.Code.Laudo
             };
         }
 
+        internal static List<LaudoAudioModel> buscarPorProcedimentoMovimento(int idMovimentoProcedimento)
+        {
+            List<LaudoAudioModel> laudoAudio = new List<LaudoAudioModel>();
+            var listaAudios = ControleDeLaudoAudio.buscarPorProcedimentoMovimento(idMovimentoProcedimento);
+
+            listaAudios.ForEach(x => 
+            {
+                laudoAudio.Add(InjetarEmUsuarioModel(x, false));
+            });
+
+            return laudoAudio;
+        }
+
         #endregion Private Methods
     }
 }
