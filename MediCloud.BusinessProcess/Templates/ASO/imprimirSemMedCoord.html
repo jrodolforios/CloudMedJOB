@@ -101,6 +101,22 @@
         .alignRight {
             float: right;
         }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        .column {
+            float: left;
+            width: 50%;
+            padding: 10px;
+        }
+
+        .row:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
     </style>
 </head>
 <body>
@@ -156,22 +172,25 @@
             <span class="opcoes">(&nbsp;&nbsp;) APTO</span>
             <span class="opcoes">(&nbsp;&nbsp;) INAPTO</span>
             <span class="opcoes">(&nbsp;&nbsp;) APTO COM RESTRIÇÕES</span>
-			<span class="opcoes">(&nbsp;&nbsp;) APTO PARA TRABALHO EM ALTURA</span>
+            <span class="opcoes">(&nbsp;&nbsp;) APTO PARA TRABALHO EM ALTURA</span>
             <p><b>EXAME CLÍNICO REALIZADO EM: [%DataExame%]</b> </p>
             <hr class="line" />
 
             <p><b>ESTARÁ EXPOSTO(A) AOS SEGUINTES RISCOS OCUPACIONAIS ESPECÍFICOS (ACIMA DOS NÍVEIS DE AÇÃO FIXADOS PELO MTE).</b></p>
-			<div>
-				<p>
-					[%exposicao%]
-				</p>
-			</div>
+            <div>
+                <p>
+                    [%exposicao%]
+                </p>
+            </div>
             <hr class="line" />
 
             <p><b>SENDO SUBMETIDO AOS SEGUINTES EXAMES COMPLEMENTARES:</b></p>
-            <p>
-                [%procedimentos%]
-            </p>
+            <div>
+                <div class="row">
+                    <div class="column"><p>[%procedimentos%]</p></div>
+                    <div class="column"><p>[%procedimentos%]</p></div>
+                </div>
+            </div>
 
             <hr class="dotted" />
 

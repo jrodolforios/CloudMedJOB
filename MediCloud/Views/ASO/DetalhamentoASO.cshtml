@@ -130,7 +130,7 @@
                                     <i class="ace-icon green fa fa-check"></i>
                                 </a>
                                 &nbsp;&nbsp;
-                                <a href="javascript:MultiplasImpressoes(@Html.ValueFor(x => x.IDMOV));" class="tooltipASO" title="Confirmar exames deste ASO">
+                                <a href="javascript:MultiplasImpressoes(@Html.ValueFor(x => x.IDMOV));" class="tooltipASO" title="Impressões Miltiplas">
                                     <i class="ace-icon red fa fa-print"></i>
                                 </a>
                             </div>
@@ -340,72 +340,69 @@
                     <!--essa div -->
                     <div id="edit-settings" class="tab-pane fade">
                         <div class="space-10"></div>
-                        <div id="procediementosupdate">
-
-                            <a href="javascript:detalhamentoDoProcedimento(0)" class="btn btn-xs">+ Novo procedimento</a>
-                            @if (Model != null && Model.MOVIMENTO_PROCEDIMENTO != null && Model.MOVIMENTO_PROCEDIMENTO.Any())
+                        <a href="javascript:detalhamentoDoProcedimento(0)" class="btn btn-xs">+ Novo procedimento</a>
+                        @if (Model != null && Model.MOVIMENTO_PROCEDIMENTO != null && Model.MOVIMENTO_PROCEDIMENTO.Any())
+                        {
+                            string nomeProfissional = string.Empty;
+                            string nomeProcedimento = string.Empty;
+                            foreach (var item in Model.MOVIMENTO_PROCEDIMENTO)
                             {
-                                string nomeProfissional = string.Empty;
-                                string nomeProcedimento = string.Empty;
-                                foreach (var item in Model.MOVIMENTO_PROCEDIMENTO)
+                                if (item.PROFISSIONAIS != null)
                                 {
-                                    if (item.PROFISSIONAIS != null)
-                                    {
-                                        nomeProfissional = item.PROFISSIONAIS.PROFISSIONAL;
-                                    }
-                                    else
-                                    {
-                                        nomeProfissional = string.Empty;
-                                    }
+                                    nomeProfissional = item.PROFISSIONAIS.PROFISSIONAL;
+                                }
+                                else
+                                {
+                                    nomeProfissional = string.Empty;
+                                }
 
-                                    if (item.PROCEDIMENTO != null)
-                                    {
-                                        nomeProcedimento = item.PROCEDIMENTO.PROCEDIMENTO1;
-                                    }
-                                    else
-                                    {
-                                        nomeProcedimento = string.Empty;
-                                    }
-                                    <div class="row">
-                                        <div class="col-xs-12" id="@item.IDMOVPRO">
-                                            <div class="media search-media">
-                                                <div class="media-body">
-                                                    <div class="container">
-                                                        <h4 class="media-heading">
-                                                            <span class="blue">@nomeProcedimento </span>
-                                                        </h4>
+                                if (item.PROCEDIMENTO != null)
+                                {
+                                    nomeProcedimento = item.PROCEDIMENTO.PROCEDIMENTO1;
+                                }
+                                else
+                                {
+                                    nomeProcedimento = string.Empty;
+                                }
+                                <div class="row">
+                                    <div class="col-xs-12" id="@item.IDPRF">
+                                        <div class="media search-media">
+                                            <div class="media-body">
+                                                <div class="container">
+                                                    <h4 class="media-heading">
+                                                        <span class="blue">@nomeProcedimento </span>
+                                                    </h4>
+                                                </div>
+                                                <p><b>Profissional:</b> @nomeProfissional <br /> <b>Valor:</b>R$ @item.TOTAL</p>
+
+                                                <div class="search-actions text-center">
+                                                    <span class="blue bolder bigger-110">Ações</span>
+
+                                                    <div class="action-buttons bigger-150">
+                                                        <a class="tooltipASO" title="Confirmar Exame" href="javascript:confirmarExame(@item.IDMOVPRO);">
+                                                            <i class="green ace-icon fa fa-check"></i>
+                                                        </a>
+
+                                                        <a class="tooltipASO" title="Excluir" href="javascript:excluirProcedimento(@item.IDMOVPRO);">
+                                                            <i class="ace-icon fa fa-trash"></i>
+                                                        </a>
                                                     </div>
-                                                    <p><b>Profissional:</b> @nomeProfissional <br /> <b>Valor:</b>R$ @item.TOTAL</p>
-
-                                                    <div class="search-actions text-center">
-                                                        <span class="blue bolder bigger-110">Ações</span>
-
-                                                        <div class="action-buttons bigger-150">
-                                                            <a class="tooltipASO" title="Confirmar Exame" href="javascript:confirmarExame(@item.IDMOVPRO);">
-                                                                <i class="green ace-icon fa fa-check"></i>
-                                                            </a>
-
-                                                            <a class="tooltipASO" title="Excluir" href="javascript:excluirProcedimento(@item.IDMOVPRO);">
-                                                                <i class="ace-icon fa fa-trash"></i>
-                                                            </a>
-                                                        </div>
-                                                        <a href="javascript:detalhamentoDoProcedimento(@item.IDMOVPRO);" class="search-btn-action btn btn-sm btn-block btn-info">Editar</a>
-                                                    </div>
+                                                    <a href="javascript:detalhamentoDoProcedimento(@item.IDMOVPRO);" class="search-btn-action btn btn-sm btn-block btn-info">Editar</a>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                }
-                            }
-                            else
-                            {
-                                <div class="alert alert-block alert-info">
-                                    Nenhum procedimento para ser exibido.
                                 </div>
                             }
-                        </div>
+                        }
+                        else
+                        {
+                            <div class="alert alert-block alert-info">
+                                Nenhum procedimento para ser exibido.
+                            </div>
+                        }
                     </div>
-                </div>
+
                 <div id="edit-files" class="tab-pane fade">
                     <div class="space-10"></div>
                     <div class="form-group">
@@ -470,7 +467,8 @@
                     }
 
                 </div>
-
+                    </div>
+</form>
         </div>
         <div class="clearfix form-actions">
             <div class="col-md-offset-3 col-md-9">
@@ -488,11 +486,11 @@
                 }
             </div>
         </div>
-        </form>
+
     </div><!-- /.span -->
 </div>
-</div>
-</div>
+
+
 
 <div id="confirm" class="modal fade">
     <div class="modal-dialog">
@@ -709,7 +707,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h3 class="smaller lighter blue no-margin">Procedimento</h3>
+                <h3 class="smaller lighter blue no-margin">Impressões Miltiplas</h3>
             </div>
             <div class="modal-body">
                 <ul>
@@ -802,19 +800,13 @@
 
 <script type="text/javascript">
     function submitProcedimento() {
-        $.ajax({
-            type: 'POST',
-            url: '@Url.Content("~/ASO/SalvarProcedimentoMovimento")',
-            data: $('form#formProcedimentoASO').serialize(),
-            success: function () {
+
+        //$('form#formProcedimentoASO').submit();
+        $.post('@Url.Content("~/ASO/SalvarProcedimentoMovimento")', $('form#formProcedimentoASO').serialize(), function () {
             $('#detalhamentoProcedimento').modal('toggle');
             $('#procediementosupdate').load("/ASO/DetalhamentoASO?codigoASO=" + @(Model?.IDMOV) + ' #procediementosupdate');
             limparComponentesProcedimentoMovimento();
-            },
-            async: false
         });
-
-
 
     }
 
