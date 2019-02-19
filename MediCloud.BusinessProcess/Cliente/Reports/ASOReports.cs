@@ -137,7 +137,7 @@ namespace MediCloud.BusinessProcess.Cliente.Reports
             template = template.Replace("[%DataNacimentoFuncionario%]", _movimento.FUNCIONARIO.NASCIMENTO.HasValue ? _movimento.FUNCIONARIO.NASCIMENTO.Value.ToShortDateString() : string.Empty);
             template = template.Replace("[%CalculoIdade%]", Util.Util.CalcularIdade(_movimento.FUNCIONARIO.NASCIMENTO).ToString());
             template = template.Replace("[%exposicao%]", PreencherRiscosENaturezas(_riscosENaturezas));
-            template = template.Replace("[%procedimentos%]", PreencherProcedimentos(_movimento.MOVIMENTO_PROCEDIMENTO.ToList()));
+            template = template.Replace("[%Procedimentos%]", PreencherProcedimentos(_movimento.MOVIMENTO_PROCEDIMENTO.ToList()));
             template = template.Replace("[%Referencia%]", _movimento.MOVIMENTO_REFERENTE.NOMEREFERENCIA);
 
             template = template.Replace("[%DadosEmpresaCabecalho%]", _infoClinica.DADOSCABECALHOREL);
@@ -191,23 +191,39 @@ namespace MediCloud.BusinessProcess.Cliente.Reports
         {
             StringBuilder strRetorno = new StringBuilder();
 
-            int PROCEDIMENTO = 0;
+            if (movimentoProcedimento.Count > 1)
+            {
 
+                strRetorno.AppendLine("<div class=\"column\"><p>");
+                movimentoProcedimento.Take(movimentoProcedimento.Count / 2).ToList().ForEach(x =>
+                  {
+                      strRetorno.AppendLine("<br/>");
+                      strRetorno.AppendLine($"{(x.DATAEXAME.HasValue ? x.DATAEXAME.Value.ToShortDateString() : string.Empty)} - {x.PROCEDIMENTO?.PROCEDIMENTO1}");
+
+                  });
+                strRetorno.AppendLine("</p></div>");
+
+                strRetorno.AppendLine("<div class=\"column\"><p>");
+                movimentoProcedimento.Skip(movimentoProcedimento.Count / 2).Take(movimentoProcedimento.Count / 2).ToList().ForEach(x =>
+                {
+                    strRetorno.AppendLine("<br/>");
+                    strRetorno.AppendLine($"{(x.DATAEXAME.HasValue ? x.DATAEXAME.Value.ToShortDateString() : string.Empty)} - {x.PROCEDIMENTO?.PROCEDIMENTO1}");
+
+                });
+                strRetorno.AppendLine("</p></div>");
+            }
+            else if (movimentoProcedimento.Count == 1)
+            {
+                strRetorno.AppendLine("<div class=\"column\"><p>");
                 movimentoProcedimento.ForEach(x =>
                 {
-                    if(PROCEDIMENTO<= 8)
-                    {
-                        strRetorno.AppendLine("<br/>");
-                        strRetorno.AppendLine($"{(x.DATAEXAME.HasValue ? x.DATAEXAME.Value.ToShortDateString() : string.Empty)} - {x.PROCEDIMENTO?.PROCEDIMENTO1}");
-                    }
-                    else
-                    {
-                        strRetorno.AppendLine($"{(x.DATAEXAME.HasValue ? x.DATAEXAME.Value.ToShortDateString() : string.Empty)} - {x.PROCEDIMENTO?.PROCEDIMENTO1}");
-                    }
+                    strRetorno.AppendLine("<br/>");
+                    strRetorno.AppendLine($"{(x.DATAEXAME.HasValue ? x.DATAEXAME.Value.ToShortDateString() : string.Empty)} - {x.PROCEDIMENTO?.PROCEDIMENTO1}");
 
-                    PROCEDIMENTO++;
                 });
-            
+                strRetorno.AppendLine("</p></div>");
+            }
+
             return strRetorno.ToString();
         }
 
@@ -245,7 +261,7 @@ namespace MediCloud.BusinessProcess.Cliente.Reports
             template = template.Replace("[%DataNacimentoFuncionario%]", _movimento.FUNCIONARIO.NASCIMENTO.HasValue ? _movimento.FUNCIONARIO.NASCIMENTO.Value.ToShortDateString() : string.Empty);
             template = template.Replace("[%CalculoIdade%]", Util.Util.CalcularIdade(_movimento.FUNCIONARIO.NASCIMENTO).ToString());
             template = template.Replace("[%exposicao%]", PreencherRiscosENaturezas(_riscosENaturezas));
-            template = template.Replace("[%procedimentos%]", PreencherProcedimentos(_movimento.MOVIMENTO_PROCEDIMENTO.ToList()));
+            template = template.Replace("[%Procedimentos%]", PreencherProcedimentos(_movimento.MOVIMENTO_PROCEDIMENTO.ToList()));
             template = template.Replace("[%Referencia%]", _movimento.MOVIMENTO_REFERENTE.NOMEREFERENCIA);
 
             template = template.Replace("[%DadosEmpresaCabecalho%]", _infoClinica.DADOSCABECALHOREL);
