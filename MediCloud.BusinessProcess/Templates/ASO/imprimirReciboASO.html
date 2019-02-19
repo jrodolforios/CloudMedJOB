@@ -100,6 +100,22 @@
         .alignRight {
             float: right;
         }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        .column {
+            float: left;
+            width: 50%;
+            padding: 10px;
+        }
+
+        .row:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
     </style>
 </head>
 <body>
@@ -120,9 +136,12 @@
 
     <p><b>REFERENTE:</b></p>
     <p><b>IDMOV:</b> [%IdMov%] &nbsp; &nbsp; <b>FUNCIONÁRIO:</b> [%NomeFuncionario%]</p>
-    <p>
-        [%Procedimentos%]
-    </p>
+    <div>
+        <div class="row">
+            [%Procedimentos%]
+        </div>
+    </div>
+
 
     <hr class="line" />
 
