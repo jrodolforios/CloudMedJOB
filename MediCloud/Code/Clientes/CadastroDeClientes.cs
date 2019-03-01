@@ -294,7 +294,7 @@ namespace MediCloud.Code.Clientes
                 Bairro = string.IsNullOrEmpty(form["bairro"]) ? string.Empty : form["bairro"],
                 CEP = string.IsNullOrEmpty(form["CEP"]) ? string.Empty : form["CEP"],
                 Cidade = string.IsNullOrEmpty(form["cidade"]) ? string.Empty : form["cidade"],
-                CNPJ = string.IsNullOrEmpty(form["CNPJ"]) ? string.Empty : form["CNPJ"],
+                CNPJ = string.IsNullOrEmpty(form["CNPJ"]) ? string.Empty : Util.ApenasNumeros(form["CNPJ"]),
                 Contador = CadastroDeContador.InjetarEmUsuarioModel(ControleDeContador.buscarContadorPorID(string.IsNullOrEmpty(form["idContador"]) ? 0 : Convert.ToInt32(form["idContador"]))),
                 ElaboradorDoPCMSO = CadastroDeElaboradorPCMSO.InjetarEmUsuarioModel(ControleDeElaboradorPCMSO.BuscarElaboradorPorID(string.IsNullOrEmpty(form["idElaboradorPCMSO"]) ? 0 : Convert.ToInt32(form["idElaboradorPCMSO"]))),
                 ElaboradorDoPPRA = CadastroDeElaboradorPPRA.InjetarEmUsuarioModel(ControleDeElaboradorPPRA.BuscarElaboradorPorID(string.IsNullOrEmpty(form["idElaboradorPPRA"]) ? 0 : Convert.ToInt32(form["idElaboradorPPRA"]))),

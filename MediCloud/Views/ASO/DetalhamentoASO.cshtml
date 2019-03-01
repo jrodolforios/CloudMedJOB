@@ -403,72 +403,71 @@
                         }
                     </div>
 
-                <div id="edit-files" class="tab-pane fade">
-                    <div class="space-10"></div>
-                    <div class="form-group">
-                        <div class="col-xs-12">
-                            <input multiple="" name="arquivo" type="file" id="arquivo" />
+                    <div id="edit-files" class="tab-pane fade">
+                        <div class="space-10"></div>
+                        <div class="form-group">
+                            <div class="col-xs-12">
+                                <input multiple="" name="arquivo" type="file" id="arquivo" />
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="progress pos-rel hide" id="progressBarFile" data-percent="0%">
-                        <div class="progress-bar" id="InnerProgressBarFile" style="width:0%;"></div>
-                    </div>
-                    <a class="btn btn-info" href="javascript:enviarArquivo()">
-                        <i class="ace-icon fa fa-cloud-upload bigger-110"></i>
-                        Enviar arquivo
-                    </a>
+                        <div class="progress pos-rel hide" id="progressBarFile" data-percent="0%">
+                            <div class="progress-bar" id="InnerProgressBarFile" style="width:0%;"></div>
+                        </div>
+                        <a class="btn btn-info" href="javascript:enviarArquivo()">
+                            <i class="ace-icon fa fa-cloud-upload bigger-110"></i>
+                            Enviar arquivo
+                        </a>
 
-                    <h4 class="header blue bolder smaller">Arquivos</h4>
+                        <h4 class="header blue bolder smaller">Arquivos</h4>
 
-                    <div class="vspace-12-sm"></div>
+                        <div class="vspace-12-sm"></div>
 
-                    @if (Model != null && Model.MOVIMENTO_ARQUIVOS != null && Model.MOVIMENTO_ARQUIVOS.Any())
-                    {
-                        foreach (var item in Model.MOVIMENTO_ARQUIVOS)
+                        @if (Model != null && Model.MOVIMENTO_ARQUIVOS != null && Model.MOVIMENTO_ARQUIVOS.Any())
                         {
-                            <div class="row">
-                                <div class="col-xs-12" id="@item.IDARQUIVO">
-                                    <div class="media search-media">
-                                        <div class="media-left">
-                                            <a href="#">
-                                                <img class="media-object" data-src="holder.js/72x72" alt="72x72" src="/assets/images/avatars/document-download-flat.png" data-holder-rendered="true" style="width: 72px; height: 72px;">
-                                            </a>
-                                        </div>
-                                        <div class="media-body">
-                                            <div class="container">
-                                                <h4 class="media-heading">
-                                                    <span class="blue">@item.NOMEARQUIVO </span>
-                                                </h4>
+                            foreach (var item in Model.MOVIMENTO_ARQUIVOS)
+                            {
+                                <div class="row">
+                                    <div class="col-xs-12" id="@item.IDARQUIVO">
+                                        <div class="media search-media">
+                                            <div class="media-left">
+                                                <a href="#">
+                                                    <img class="media-object" data-src="holder.js/72x72" alt="72x72" src="/assets/images/avatars/document-download-flat.png" data-holder-rendered="true" style="width: 72px; height: 72px;">
+                                                </a>
                                             </div>
-                                            <p><b>Data de envio:</b><br /> @item.DATAENVIO.ToShortDateString()</p>
-
-                                            <div class="search-actions text-center">
-                                                <span class="blue bolder bigger-110">Ações</span>
-
-                                                <div class="action-buttons bigger-150">
-                                                    <a href="javascript:excluirArquivoMovimento(@item.IDARQUIVO);">
-                                                        <i class="ace-icon fa fa-trash"></i>
-                                                    </a>
+                                            <div class="media-body">
+                                                <div class="container">
+                                                    <h4 class="media-heading">
+                                                        <span class="blue">@item.NOMEARQUIVO </span>
+                                                    </h4>
                                                 </div>
-                                                <a href="javascript:baixarArquivoMovimento(@item.IDARQUIVO)" class="search-btn-action btn btn-sm btn-block btn-info"><i class="ace-icon fa fa-arrow-down"></i>Baixar</a>
+                                                <p><b>Data de envio:</b><br /> @item.DATAENVIO.ToShortDateString()</p>
+
+                                                <div class="search-actions text-center">
+                                                    <span class="blue bolder bigger-110">Ações</span>
+
+                                                    <div class="action-buttons bigger-150">
+                                                        <a href="javascript:excluirArquivoMovimento(@item.IDARQUIVO);">
+                                                            <i class="ace-icon fa fa-trash"></i>
+                                                        </a>
+                                                    </div>
+                                                    <a href="javascript:baixarArquivoMovimento(@item.IDARQUIVO)" class="search-btn-action btn btn-sm btn-block btn-info"><i class="ace-icon fa fa-arrow-down"></i>Baixar</a>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+                            }
+                        }
+                        else
+                        {
+                            <div class="alert alert-block alert-info">
+                                Nenhum arquivo para ser exibido.
                             </div>
                         }
-                    }
-                    else
-                    {
-                        <div class="alert alert-block alert-info">
-                            Nenhum arquivo para ser exibido.
-                        </div>
-                    }
 
-                </div>
                     </div>
-</form>
+                </div>
         </div>
         <div class="clearfix form-actions">
             <div class="col-md-offset-3 col-md-9">
@@ -486,7 +485,7 @@
                 }
             </div>
         </div>
-
+        </form>
     </div><!-- /.span -->
 </div>
 

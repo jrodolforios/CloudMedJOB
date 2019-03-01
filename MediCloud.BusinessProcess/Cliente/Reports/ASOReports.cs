@@ -190,23 +190,43 @@ namespace MediCloud.BusinessProcess.Cliente.Reports
         private string PreencherProcedimentos(List<MOVIMENTO_PROCEDIMENTO> movimentoProcedimento)
         {
             StringBuilder strRetorno = new StringBuilder();
+            bool primeiro = true;
+            bool impar = IsOdd(movimentoProcedimento.Count);
 
             if (movimentoProcedimento.Count > 1)
             {
 
                 strRetorno.AppendLine("<div class=\"column\"><p>");
-                movimentoProcedimento.Take(movimentoProcedimento.Count / 2).ToList().ForEach(x =>
+                movimentoProcedimento.Take(movimentoProcedimento.Count / 2 + (impar ? 1 : 0)).ToList().ForEach(x =>
                   {
-                      strRetorno.AppendLine("<br/>");
+                      if (!primeiro)
+                      {
+                          strRetorno.AppendLine("<br/>");
+                      }
+                      else
+                      {
+                          primeiro = false;
+                      }
+
                       strRetorno.AppendLine($"{(x.DATAEXAME.HasValue ? x.DATAEXAME.Value.ToShortDateString() : string.Empty)} - {x.PROCEDIMENTO?.PROCEDIMENTO1}");
 
                   });
                 strRetorno.AppendLine("</p></div>");
 
                 strRetorno.AppendLine("<div class=\"column\"><p>");
-                movimentoProcedimento.Skip(movimentoProcedimento.Count / 2).Take(movimentoProcedimento.Count / 2).ToList().ForEach(x =>
+
+                primeiro = true;
+
+                movimentoProcedimento.Skip(movimentoProcedimento.Count / 2 + (impar ? 1 : 0)).ToList().ForEach(x =>
                 {
-                    strRetorno.AppendLine("<br/>");
+                    if (!primeiro)
+                    {
+                        strRetorno.AppendLine("<br/>");
+                    }
+                    else
+                    {
+                        primeiro = false;
+                    }
                     strRetorno.AppendLine($"{(x.DATAEXAME.HasValue ? x.DATAEXAME.Value.ToShortDateString() : string.Empty)} - {x.PROCEDIMENTO?.PROCEDIMENTO1}");
 
                 });
@@ -225,6 +245,11 @@ namespace MediCloud.BusinessProcess.Cliente.Reports
             }
 
             return strRetorno.ToString();
+        }
+
+        public static bool IsOdd(int value)
+        {
+            return value % 2 != 0;
         }
 
         private string PreencherRiscosENaturezas(Dictionary<NATUREZA, List<RISCO>> riscosENaturezas)
