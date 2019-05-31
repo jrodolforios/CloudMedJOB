@@ -109,7 +109,7 @@ namespace MediCloud.BusinessProcess.Cliente.Reports
                     ordemDeServicoTemp = ordemDeServicoTemp.Replace("[%NomeProcedimento%]", x.PROCEDIMENTO.PROCEDIMENTO1);
 
 
-                    ordemDeServicoTemp = ordemDeServicoTemp.Replace("[%DataAgora%]", x.DATAEXAME.Value.ToShortDateString());
+                    ordemDeServicoTemp = ordemDeServicoTemp.Replace("[%DataAgora%]", x.MOVIMENTO.DATA.ToShortDateString());
 
                     ordemDeServicoTemp += "<div style=\"page-break-before:always; \"> </div>";
 
@@ -258,14 +258,12 @@ namespace MediCloud.BusinessProcess.Cliente.Reports
 
             foreach (var item in riscosENaturezas)
             {
-                strRetorno.AppendLine($"- {item.Key.NATUREZA1}");
+                strRetorno.AppendLine($"- {item.Key.NATUREZA1}:&nbsp;");
 
                 item.Value.ForEach(x =>
                 {
-                    strRetorno.AppendLine("<br/>");
-                    strRetorno.AppendLine($"&nbsp;&nbsp;&nbsp;- {x.RISCO1}");
+                    strRetorno.AppendLine($"{x.RISCO1},&nbsp;");
                 });
-                strRetorno.AppendLine("<br/>");
                 strRetorno.AppendLine("<br/>");
                 strRetorno.AppendLine();
             }
