@@ -109,19 +109,19 @@
                                     </button>
                                     @if (TabelaDePrecoNovo)
                                     {
-                                    <span>&nbsp; &nbsp;</span>
-                                    <button class="btn" type="reset" id="limparForm">
-                                        <i class="ace-icon fa fa-undo bigger-110"></i>
-                                        Limpar
-                                    </button>
+                                        <span>&nbsp; &nbsp;</span>
+                                        <button class="btn" type="reset" id="limparForm">
+                                            <i class="ace-icon fa fa-undo bigger-110"></i>
+                                            Limpar
+                                        </button>
                                     }
                                     else
                                     {
-                                    <span>&nbsp; &nbsp;</span>
-                                    <a href="javascript:excluirTabelaDePreco(@Model.IdTabela)" class="btn btn-danger" type="reset">
-                                        <i class="ace-icon fa fa-times bigger-110"></i>
-                                        Excluir
-                                    </a>
+                                        <span>&nbsp; &nbsp;</span>
+                                        <a href="javascript:excluirTabelaDePreco(@Model.IdTabela)" class="btn btn-danger" type="reset">
+                                            <i class="ace-icon fa fa-times bigger-110"></i>
+                                            Excluir
+                                        </a>
                                     }
                                 </div>
                             </div>
@@ -138,9 +138,9 @@
                                         <div class="col-xs-12" id="@(item.GetId())">
                                             <div class="media search-media">
                                                 <div class="media-body">
-                                                        <h4 class="media-heading">
-                                                            <span class="blue">@item.Fornecedor.RazaoSocial </span>
-                                                        </h4>
+                                                    <h4 class="media-heading">
+                                                        <span class="blue">@item.Fornecedor.RazaoSocial </span>
+                                                    </h4>
                                                     <p><b>Procedimento:</b> @item.Procedimento.Nome <br /> <b>Valor:</b> R$@item.Valor</p>
 
                                                     <div class="search-actions text-center">
@@ -367,23 +367,23 @@
                     $("#idFornecedor").attr('value', data.Fornecedor.IdFornecedor);
 
                     $("#valor").attr('value', data.Valor);
-                    $("#valor").attr('value', $("#valor").attr('value').replace('.',','));
+                    $("#valor").attr('value', $("#valor").attr('value').replace('.', ','));
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
                     $('#usuarioAlerts').html('<div class="alert alert-danger"><a class="close" data-dismiss="alert">×</a><span>Ops! Não foi possível detalhar este registro no servidor. Contate-nos para que possamos te ajudar melhor.</span></div>')
                 }
             });
         }
+    }
 
-        function limparComponentesValorTabela() {
-            $("#procedimento").attr('value', '');
-            $("#idProcedimento").attr('value', '');
+    function limparComponentesValorTabela() {
+        $("#procedimento").attr('value', '');
+        $("#idProcedimento").attr('value', '');
 
-            $("#fornecedor").attr('value', '');
-            $("#idFornecedor").attr('value', '');
+        $("#fornecedor").attr('value', '');
+        $("#idFornecedor").attr('value', '');
 
-            $("#valor").attr('value', '');
-        }
+        $("#valor").attr('value', '');
     }
 
     $("#procedimento").autocomplete({

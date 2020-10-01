@@ -26,9 +26,7 @@ namespace MediCloud.BusinessProcess.Laudo
                 else
                 {
                     return contexto.LAUDOAUD.Where(x => x.MOVIMENTO_PROCEDIMENTO.MOVIMENTO.FUNCIONARIO.FUNCIONARIO1.Contains(prefix)
-                    || x.MOVIMENTO_PROCEDIMENTO.MOVIMENTO.CLIENTE.NOMEFANTASIA.Contains(prefix)
-                    || x.MOVIMENTO_PROCEDIMENTO.PROCEDIMENTO.PROCEDIMENTO1.Contains(prefix)
-                    || ((int)x.MOVIMENTO_PROCEDIMENTO.MOVIMENTO.IDMOV).ToString() == prefix).ToList();
+                    || x.MOVIMENTO_PROCEDIMENTO.MOVIMENTO.CLIENTE.NOMEFANTASIA.Contains(prefix)).ToList();
                 }
             }
             catch (DbEntityValidationException ex)
